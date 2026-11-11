@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:"Anton";src:url(anton-latin-400-normal.woff2)}
+@font-face{font-family:"JB";font-weight:800;src:url(jetbrains-mono-latin-800-normal.woff2)}
+@font-face{font-family:"Archivo";font-weight:500;src:url(archivo-latin-500-normal.woff2)}
+*{margin:0;padding:0}body{width:1080px;height:1920px;overflow:hidden;background:radial-gradient(80% 55% at 50% 52%,#1b2440 0%,#07080c 72%);font-family:Archivo;color:#f5f3ee}
+canvas{position:absolute;inset:0}
+.t{position:absolute;font-family:Anton;text-transform:uppercase;line-height:.84}
+.l{position:absolute;font-family:JB;font-weight:800;font-size:24px;letter-spacing:.2em;text-transform:uppercase}
+.noise{position:absolute;inset:0;opacity:.12;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+</style>
+<script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script></head><body>
+<div class="l" style="left:80px;top:180px;color:#fbb419">01 — wer wir sind</div>
+<div class="t" id="t1" style="left:60px;top:250px;font-size:250px;z-index:0">Dein<br><span style="color:#fbb419">Zuhause</span></div>
+<canvas id="c" width="1080" height="1920"></canvas>
+<div class="t" style="left:60px;top:1450px;font-size:250px">im Netz.</div>
+<div style="position:absolute;left:80px;top:1700px;font-size:40px;opacity:.85">Gebaut von dir. Gepflegt von dir.</div>
+<div class="noise"></div>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from './RoomEnvironment.js';
+const P = new URLSearchParams(location.search), T = parseFloat(P.get('t') || '1');
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+r.setSize(1080, 1920, false); r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 0.85; r.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture; scene.environmentIntensity = 0.45;
+const cam = new THREE.PerspectiveCamera(32, 1080 / 1920, 0.1, 100); cam.position.set(0.8, 0.2, 21); cam.lookAt(0, -0.3, 0);
+// Arm = Stadion-Form, extrudiert mit Fase
+function arm(len, w, depth, color) {
+  const s = new THREE.Shape(), rr = w / 2;
+  s.absarc(0, 0, rr, Math.PI / 2, Math.PI * 1.5, false); s.lineTo(len, -rr); s.absarc(len, 0, rr, -Math.PI / 2, Math.PI / 2, false); s.lineTo(0, rr);
+  const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: true, bevelThickness: 0.12, bevelSize: 0.1, bevelSegments: 8, curveSegments: 32 });
+  g.translate(0, 0, -depth / 2);
+  const m = new THREE.MeshPhysicalMaterial({ color, roughness: 0.32, metalness: 0.0, clearcoat: 1, clearcoatRoughness: 0.12 });
+  return new THREE.Mesh(g, m);
+}
+function chevron(cL, cR, y) {
+  const grp = new THREE.Group(), L = 2.9, W = 0.95, D = 0.9;
+  const a = arm(L, W, D, cL); a.rotation.z = Math.PI + Math.PI / 4; a.position.set(0, y, 0); // linker Arm nach unten-links
+  const b = arm(L, W, D, cR); b.rotation.z = -Math.PI / 4; b.position.set(0, y, 0.02);
+  grp.add(a, b); return grp;
+}
+const logo = new THREE.Group();
+logo.add(chevron(0x3e71b6, 0x0c9958, 1.2));
+logo.add(chevron(0xdf482b, 0xfbb419, -0.55));
+logo.position.y = -0.6; scene.add(logo);
+// Echo-Spuren (Geschwindigkeit)
+for (let i = 1; i <= 4; i++) { const e = logo.clone(); e.traverse(o => { if (o.material) { o.material = o.material.clone(); o.material.transparent = true; o.material.opacity = 0.22 / i; o.material.depthWrite = false; } }); e.position.set(0, -i * 0.75, -i * 0.9); scene.add(e); }
+logo.rotation.set(-0.35 + 0.15 * Math.sin(T), 0.5 * Math.sin(T * 0.7) - 0.25, 0.05);
+const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(4, 6, 8); scene.add(key);
+const rim = new THREE.DirectionalLight(0x6fa0ff, 3); rim.position.set(-6, 3, -4); scene.add(rim);
+const warm = new THREE.PointLight(0xffb36b, 25, 30); warm.position.set(3, -4, 5); scene.add(warm);
+r.render(scene, cam);
+window.__done = true;
+</script></body></html>
