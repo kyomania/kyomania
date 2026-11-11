@@ -1,3 +1,5 @@
 npmtmp/
 **/.hyperframes/
 *.raw.wav
+.*.hf-transaction-*/
+work-*/
