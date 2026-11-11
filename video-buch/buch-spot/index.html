@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url(assets/fonts/anton-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url(assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB"; font-weight: 800; src: url(assets/fonts/jetbrains-mono-latin-800-normal.woff2) format("woff2"); }
+      :root { --y: #f7c91e; --w: #f2f2f2; --k: #0d0d0d; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--k); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--k); color: var(--w); font-family: "Inter Tight", sans-serif; }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      .abs { position: absolute; }
+      .full { left: 0; width: 1080px; text-align: center; }
+      .a { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: .88; letter-spacing: .005em; }
+      .mono { font-family: "JB", monospace; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; }
+      .stamp { position: absolute; font-family: "Anton"; text-transform: uppercase; padding: 10px 28px; border: 8px solid currentColor; letter-spacing: .03em;
+        -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feComponentTransfer><feFuncA type='discrete' tableValues='0 1 1 1 1 1'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>"); }
+      #grain { z-index: 90; opacity: .16; mix-blend-mode: overlay; width: 2160px; height: 3840px; inset: auto; left: -540px; top: -960px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+      #vig { z-index: 89; background: radial-gradient(120% 85% at 50% 50%, transparent 50%, rgba(0,0,0,.85) 100%); }
+      #flash { z-index: 95; background: #fff; opacity: 0; }
+      .scan { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 2px, transparent 2px 4px); }
+      /* S1 */
+      #eye { position: absolute; left: -500px; top: -40px; width: 2100px; filter: grayscale(1) contrast(1.25); }
+      /* S2 */
+      #clock { font-family: "JB"; font-weight: 800; font-size: 300px; letter-spacing: -.04em; color: var(--y); text-shadow: 0 0 60px rgba(247,201,30,.55); }
+      #laptop { left: 140px; top: 1180px; width: 800px; height: 470px; border-radius: 18px; background: linear-gradient(180deg, #2b3646, #0f141c); border: 6px solid #333; box-shadow: 0 0 140px 30px rgba(120,170,255,.25); overflow: hidden; }
+      #laptop .ln { position: absolute; left: 40px; height: 14px; border-radius: 7px; background: rgba(160,200,255,.55); }
+      #cursor { width: 18px; height: 34px; background: var(--y); }
+      /* S3 */
+      .box { left: 290px; top: 980px; width: 500px; height: 420px; }
+      .box .body { position: absolute; left: 0; bottom: 0; width: 500px; height: 330px; background: linear-gradient(160deg, #c99a62, #8d6438); border-radius: 8px; box-shadow: inset 0 -30px 60px rgba(0,0,0,.35); }
+      .box .tape { position: absolute; left: 215px; bottom: 0; width: 70px; height: 330px; background: rgba(240,220,170,.7); }
+      .box .lidL, .box .lidR { position: absolute; top: 90px; width: 250px; height: 70px; background: linear-gradient(180deg, #d6aa72, #a87a46); border-radius: 6px; }
+      .box .lidL { left: 0; transform-origin: 0 100%; } .box .lidR { left: 250px; transform-origin: 100% 100%; }
+      #coin { left: 410px; top: 980px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff3b0 0%, #f7c91e 35%, #b88a0a 75%, #7a5a05 100%); box-shadow: 0 0 80px rgba(247,201,30,.7), inset 0 0 0 14px rgba(140,100,0,.55); }
+      #coin span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: "Anton"; font-size: 120px; color: rgba(120,85,0,.85); }
+      /* S4 */
+      #s4 { background: #050505; }
+      #blue, #red { position: absolute; inset: 0; opacity: 0; }
+      #blue { background: radial-gradient(70% 50% at 20% 30%, rgba(40,90,255,.9), transparent 70%); }
+      #red { background: radial-gradient(70% 50% at 80% 30%, rgba(255,30,40,.85), transparent 70%); }
+      /* S5 */
+      #bookv { z-index: 1; }
+      .rays { left: 540px; top: 960px; width: 3000px; height: 3000px; margin: -1500px 0 0 -1500px; border-radius: 50%;
+        background: repeating-conic-gradient(rgba(247,201,30,.13) 0deg 5deg, transparent 5deg 15deg);
+        -webkit-mask: radial-gradient(circle, #000 0%, transparent 52%); mask: radial-gradient(circle, #000 0%, transparent 52%); }
+      .ctaBar { left: 140px; top: 1640px; width: 800px; height: 120px; background: var(--y); color: var(--k); display: flex; align-items: center; justify-content: center; font-family: "Anton"; font-size: 64px; text-transform: uppercase; letter-spacing: .02em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20.8" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="20.8" data-volume="1"></audio>
+
+      <!-- 1 · Aus dem wird nichts -->
+      <div id="s1" class="clip" data-start="0" data-duration="1.95" style="z-index:1">
+        <img id="eye" src="assets/img/eye.jpg" alt="" />
+        <div class="scan"></div>
+        <div class="stamp" id="st1" style="left:80px;top:250px;font-size:90px;color:#ddd;transform:rotate(-8deg)">Schwierig</div>
+        <div class="stamp" id="st2" style="left:430px;top:1490px;font-size:96px;color:#ddd;transform:rotate(6deg)">Problemkind</div>
+        <div class="abs full a" id="s1t" style="top:640px;font-size:210px;color:var(--y);text-shadow:0 10px 60px rgba(0,0,0,.8)">Aus dem<br>wird<br>nichts.</div>
+      </div>
+
+      <!-- 2 · 03:00 -->
+      <div id="s2" class="clip" data-start="1.9" data-duration="3.15" style="z-index:2;background:#060708">
+        <div class="abs full mono" id="s2k" style="top:300px;font-size:40px;color:#999">Nachts. Jede Nacht.</div>
+        <div class="abs full" id="clock" style="top:430px">03:00</div>
+        <div class="abs" id="laptop">
+          <div class="ln" style="top:50px;width:420px"></div><div class="ln" style="top:90px;width:560px"></div><div class="ln" style="top:130px;width:300px"></div>
+          <div class="ln" style="top:190px;width:500px"></div><div class="ln" style="top:230px;width:380px"></div>
+          <div class="abs" id="cursor" style="left:430px;top:222px"></div>
+        </div>
+        <div class="abs full a" id="s2t" style="top:1700px;font-size:110px">Ein alter Laptop.</div>
+      </div>
+
+      <!-- 3 · Monatslohn / Münze -->
+      <div id="s3" class="clip" data-start="4.95" data-duration="4.8" style="z-index:3;background:#0b0b0b">
+        <div class="abs full a" id="s3a" style="top:260px;font-size:170px">1 Monatslohn</div>
+        <div class="abs full mono" id="s3b" style="top:470px;font-size:44px;color:#aaa">für ein Paket.</div>
+        <div class="abs box" id="box"><div class="body"></div><div class="tape"></div><div class="lidL"></div><div class="lidR"></div></div>
+        <div class="abs" id="coin"><span>1</span></div>
+        <div class="abs full a" id="s3c" style="top:1560px;font-size:220px;color:var(--y)">1 Münze.</div>
+      </div>
+
+      <!-- 4 · 07:00 Polizei -->
+      <div id="s4" class="clip" data-start="9.7" data-duration="3.35" style="z-index:4">
+        <div id="blue"></div><div id="red"></div>
+        <div class="abs full" id="clock2" style="top:330px;font-family:JB;font-weight:800;font-size:260px;color:var(--w)">07:00</div>
+        <div class="abs full a" id="s4a" style="top:700px;font-size:150px">Die Polizei</div>
+        <div class="abs full a" id="s4b" style="top:850px;font-size:150px">vor der Tür.</div>
+        <div class="abs full a" id="s4c" style="top:1330px;font-size:130px;color:var(--y)">David</div>
+        <div class="abs full mono" id="s4d" style="top:1470px;font-size:46px;color:#bbb">gegen</div>
+        <div class="abs full a" id="s4e" style="top:1540px;font-size:190px">Goliath</div>
+      </div>
+
+      <!-- 5 · Buch -->
+      <div id="s5" class="clip" data-start="12.95" data-duration="7.85" style="z-index:5;background:radial-gradient(70% 45% at 50% 52%,#2a2410 0%,#0d0d0d 70%)">
+        <div class="abs rays" id="rays"></div>
+      </div>
+      <video id="bookv" class="clip" src="assets/video/book.mp4" data-start="12.95" data-duration="7.3" muted playsinline style="z-index:6"></video>
+      <div id="s5t" class="clip" data-start="12.95" data-duration="7.85" style="z-index:7">
+        <div class="abs full a" id="q1" style="top:170px;font-size:100px;white-space:nowrap">Du siehst das Ergebnis.</div>
+        <div class="abs full a" id="q2" style="top:285px;font-size:78px;white-space:nowrap;color:var(--y)">Nicht, was es gekostet hat.</div>
+        <div class="abs full a" id="tt" style="top:1490px;font-size:118px;color:var(--y)">Die Lizenz zum Erfolg</div>
+        <div class="abs ctaBar" id="cta">Jetzt im Handel</div>
+        <div class="abs full mono" id="shops" style="top:1785px;font-size:28px;color:#ccc">Amazon · Thalia · Hugendubel · bücher.de</div>
+      </div>
+
+      <div id="vig" class="clip" data-start="0" data-duration="20.8"></div>
+      <div id="grain" class="clip" data-start="0" data-duration="20.8"></div>
+      <div id="flash" class="clip" data-start="0" data-duration="20.8"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      let seed = 3; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }; const R = (a, b) => a + (b - a) * rnd();
+      const flash = (t, o = 0.9, d = 0.18) => tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      function shake(target, t, dur = 0.3, amp = 22) { const n = Math.round(dur / 0.033); for (let i = 0; i < n; i++) { const k = 1 - i / n; tl.set(target, { x: R(-amp, amp) * k, y: R(-amp, amp) * k }, t + i * 0.033); } tl.set(target, { x: 0, y: 0 }, t + dur); }
+      const slam = (sel, t, from = 2.6) => tl.fromTo(sel, { scale: from, opacity: 0, filter: "blur(14px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.in" }, t);
+      for (let i = 0; i < 20.8 * 15; i++) tl.set("#grain", { x: Math.round(R(-500, 500)), y: Math.round(R(-900, 900)) }, i / 15);
+
+      // 1
+      tl.fromTo("#eye", { scale: 1.25 }, { scale: 1.05, duration: 2, ease: "power2.out" }, 0);
+      for (let i = 0; i < 6; i++) tl.set("#eye", { x: R(-8, 8) }, 0.1 + i * 0.27);
+      slam("#st1", 0.25); slam("#st2", 0.6); shake("#s1", 0.45, 0.2, 14);
+      slam("#s1t", 1.0, 3.2); flash(1.2, 0.6); shake("#s1", 1.2, 0.35, 26);
+      // 2
+      flash(1.9, 0.8);
+      tl.from("#s2k", { opacity: 0, duration: 0.3 }, 2.0);
+      tl.fromTo("#clock", { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "expo.out" }, 2.05);
+      [2.5, 2.62, 3.3, 3.36, 4.1].forEach((t) => { tl.set("#clock", { opacity: 0.15 }, t); tl.set("#clock", { opacity: 1 }, t + 0.05); });
+      tl.from("#laptop", { y: 300, opacity: 0, duration: 0.5, ease: "expo.out" }, 3.0);
+      tl.from("#laptop .ln", { scaleX: 0, transformOrigin: "0 50%", duration: 0.25, stagger: 0.12 }, 3.2);
+      for (let i = 0; i < 6; i++) tl.set("#cursor", { opacity: i % 2 ? 1 : 0 }, 3.2 + i * 0.25);
+      tl.fromTo("#s2t", { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.3, ease: "expo.out" }, 3.6);
+      // 3
+      flash(4.95, 0.7);
+      slam("#s3a", 5.0); tl.from("#s3b", { opacity: 0, y: 20, duration: 0.25 }, 6.5);
+      tl.from("#box", { y: 700, rotation: -12, duration: 0.45, ease: "back.out(1.6)" }, 5.4);
+      for (let i = 0; i < 10; i++) tl.set("#box", { rotation: i % 2 ? 4 : -4, x: R(-10, 10) }, 6.9 + i * 0.09);
+      tl.set("#box", { rotation: 0, x: 0 }, 7.8);
+      tl.to("#box .lidL", { rotation: -130, duration: 0.3, ease: "back.out(2)" }, 7.9);
+      tl.to("#box .lidR", { rotation: 130, duration: 0.3, ease: "back.out(2)" }, 7.9);
+      tl.fromTo("#coin", { y: 300, scale: 0.3, opacity: 0 }, { y: -180, scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 8.0);
+      tl.fromTo("#coin", { scaleX: 1 }, { scaleX: -1, duration: 0.25, ease: "none", repeat: 5, yoyo: true, immediateRender: false }, 8.05);
+      slam("#s3c", 8.8, 3.0); flash(8.8, 0.5); shake("#s3", 8.8, 0.3, 20);
+      // 4
+      for (let i = 0; i < 26; i++) { const t = 9.7 + i * 0.125; tl.set(i % 2 ? "#red" : "#blue", { opacity: 1 }, t); tl.set(i % 2 ? "#red" : "#blue", { opacity: 0 }, t + 0.09); }
+      slam("#clock2", 9.75); slam("#s4a", 11.5); slam("#s4b", 11.75); shake("#s4", 11.75, 0.3, 24);
+      slam("#s4c", 12.2, 2); tl.from("#s4d", { opacity: 0, duration: 0.1 }, 12.4); slam("#s4e", 12.55, 2.4);
+      // 5 – Drop
+      flash(12.95, 1, 0.45); shake("#s5t", 13.0, 0.4, 30);
+      tl.fromTo("#rays", { rotation: 0, scale: 0.4, opacity: 0 }, { rotation: 40, scale: 1, opacity: 1, duration: 7.8, ease: "power1.out" }, 12.95);
+      slam("#q1", 13.6, 2); slam("#q2", 15.5, 2.2); flash(15.5, 0.35);
+      tl.to(["#q1", "#q2"], { opacity: 0.35, duration: 0.4 }, 17.1);
+      slam("#tt", 17.3, 2.4); flash(17.3, 0.5);
+      tl.fromTo("#cta", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "expo.out" }, 19.4);
+      tl.from("#shops", { opacity: 0, y: 20, duration: 0.4 }, 19.7);
+      [19.95, 20.35].forEach((t) => tl.fromTo("#cta", { scale: 1.06 }, { scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, t));
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
