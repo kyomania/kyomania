@@ -26,7 +26,8 @@ def place(x, t, gain=1.0):
 
 
 # --- Sprecher: Segmente aus dem bestehenden Track-Video (Stimme mit tools/isolate_vocals.py freigestellt)
-VO_SRC = load(f"{ROOT}/dl/vo_track.wav")
+USE_VO = False  # Sprecher aus: auf True setzen, um die Stimme wieder einzublenden
+VO_SRC = load(f"{ROOT}/dl/vo_track.wav") if USE_VO else np.zeros((1, 2))
 VO = [  # (quelle_von, quelle_bis, ziel_start)  Text
     (0.12, 3.58, 0.20),    # Eine Bestellung und jede Plattform zählt was anderes?
     (6.24, 8.22, 6.55),    # Du baust ein einziges Snippet ein.
@@ -39,12 +40,12 @@ VO = [  # (quelle_von, quelle_bis, ziel_start)  Text
     (26.84, 29.14, 27.90), # Jetzt 14 Tage kostenlos testen.
 ]
 vo = np.zeros((N, 2))
-for a, b, d in VO:
+for a, b, d in (VO if USE_VO else []):
     seg = VO_SRC[int(a * SR):int(b * SR)].copy()
     f = int(0.012 * SR); ramp = np.linspace(0, 1, f)[:, None]
     seg[:f] *= ramp; seg[-f:] *= ramp[::-1]
     s0 = int(d * SR); e0 = min(N, s0 + len(seg)); vo[s0:e0] += seg[: e0 - s0]
-vo *= 0.5 / (np.sqrt((vo[np.abs(vo).max(1) > 0.01] ** 2).mean()) * 4 + 1e-9)
+if USE_VO: vo *= 0.5 / (np.sqrt((vo[np.abs(vo).max(1) > 0.01] ** 2).mean()) * 4 + 1e-9)
 env = np.abs(vo).mean(1)
 k = int(0.03 * SR); sm = np.convolve(env, np.ones(k) / k, mode="same")
 active = (sm > 0.004).astype(float)
@@ -65,8 +66,8 @@ cues = [
     (1.2, "whoosh", 0.4), (1.4, "whoosh", 0.4), (1.95, "glitch", 0.5), (2.15, "impact", 0.6),
     (2.5, "whoosh_big", 0.5),
     # S2 Probleme
-    (2.93, "blip", 0.25), (3.68, "whoosh", 0.3), (4.13, "blip", 0.25), (4.88, "whoosh", 0.3),
-    (5.33, "blip", 0.25), (6.08, "whoosh", 0.3),
+    (2.88, "blip", 0.25), (3.4, "whoosh", 0.3), (3.78, "blip", 0.25), (4.3, "whoosh", 0.3),
+    (4.68, "blip", 0.25), (5.2, "whoosh", 0.3),
     (6.0, "blip", 0.25), (6.05, "blip", 0.25), (6.1, "blip", 0.25), (6.18, "whoosh_big", 0.55),
     # S3 Snippet
     (6.5, "impact_soft", 0.45),
