@@ -1,0 +1,190 @@
+<!doctype html>
+<!--
+  HYPERPOP WARP – Startvorlage (HyperFrames, 9:16)
+  Stil aus dem fast.site-TikTok-Video. Siehe ../STYLE.md.
+  Aufbau: globale Ebenen (Hintergrund, Warp, Wipe, Grain, Flash) + Szenen (.clip mit data-start/data-duration).
+  Alle Zeiten im Script sind absolute Sekunden im Video.
+-->
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Unbounded"; font-weight: 400; src: url(assets/fonts/unbounded-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Unbounded"; font-weight: 700; src: url(assets/fonts/unbounded-latin-700-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Unbounded"; font-weight: 900; src: url(assets/fonts/unbounded-latin-900-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url(assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 900; src: url(assets/fonts/inter-tight-latin-900-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 800; src: url(assets/fonts/jetbrains-mono-latin-800-normal.woff2) format("woff2"); }
+
+      /* ===== STIL-TOKENS: hier Farben/Schriften tauschen ===== */
+      :root {
+        --uv: #0b0220;      /* Grund: Ultraviolett-Schwarz */
+        --uv2: #1a0846;
+        --violet: #6a2cff;
+        --acid: #c8ff1a;    /* Hauptakzent: Acid-Lime */
+        --hot: #ff2d8a;     /* Hot Pink */
+        --ice: #7cf6ff;     /* Ice Cyan */
+        --paper: #f6f2ff;   /* Text hell */
+        --display: "Unbounded", sans-serif;
+        --sans: "Inter Tight", sans-serif;
+        --mono: "JB Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--uv); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--uv); font-family: var(--sans); color: var(--paper); }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      .abs { position: absolute; }
+      .layer { position: absolute; inset: 0; }
+      .ch { display: inline-block; }
+      .disp { font-family: var(--display); font-weight: 900; letter-spacing: -0.04em; line-height: 0.92; text-transform: uppercase; }
+      .mono { font-family: var(--mono); font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+      .full { left: 0; width: 1080px; text-align: center; }
+
+      /* globale Ebenen */
+      #bg { z-index: 0; background: radial-gradient(120% 80% at 50% 30%, #1d0a52 0%, var(--uv) 60%); }
+      .blob { position: absolute; width: 900px; height: 900px; border-radius: 50%; filter: blur(120px); opacity: 0.55; }
+      #warp { z-index: 60; }
+      .streak { position: absolute; left: 540px; top: 960px; height: 6px; width: 520px; border-radius: 6px; transform-origin: 0 50%; opacity: 0; }
+      #wipe { z-index: 70; }
+      #vig { z-index: 89; background: radial-gradient(130% 90% at 50% 50%, rgba(0,0,0,0) 55%, rgba(5,0,20,0.75) 100%); }
+      #grain { z-index: 90; opacity: 0.11; mix-blend-mode: overlay; width: 2160px; height: 3840px; inset: auto; left: -540px; top: -960px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+      #flash { z-index: 95; background: #fff; opacity: 0; }
+
+      /* Demo-Szenen (ersetzen) */
+      #s1 { z-index: 10; background: radial-gradient(100% 70% at 50% 45%, #2a0f5e 0%, #0b0220 70%); }
+      #s2 { z-index: 20; background: var(--acid); color: var(--uv); }
+      #s3 { z-index: 30; background: var(--hot); color: var(--uv); }
+      #s4 { z-index: 40; background: radial-gradient(90% 55% at 50% 38%, #3d12b5 0%, #140540 45%, #0b0220 80%); }
+      .pill { left: 190px; width: 700px; height: 120px; border-radius: 60px; background: var(--acid); color: var(--uv); display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 900; font-size: 46px; box-shadow: 0 0 60px rgba(200,255,26,0.5); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="12" data-width="1080" data-height="1920" data-fps="30">
+      <!-- Ton: fertigen Mix (tools/mix.py) einbinden:
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="12" data-volume="1"></audio> -->
+
+      <div id="bg" class="clip" data-start="0" data-duration="12">
+        <div class="blob" id="b1" style="left:-300px;top:-200px;background:#6a2cff"></div>
+        <div class="blob" id="b2" style="left:500px;top:1200px;background:#ff2d8a"></div>
+      </div>
+
+      <!-- SZENE 1: Hook (Problem) -->
+      <div id="s1" class="clip" data-start="0" data-duration="2.7">
+        <div id="s1in" class="layer">
+          <div class="abs full" id="s1a" style="top:700px;font-weight:800;font-size:72px">Dein Problem ist</div>
+          <div class="abs full disp" id="s1b" style="top:800px;font-size:100px;white-space:nowrap;color:var(--hot)">zu langsam?</div>
+        </div>
+      </div>
+
+      <!-- SZENE 2: Big Word Slam mit RGB-Split -->
+      <div id="s2" class="clip" data-start="2.55" data-duration="2.2">
+        <div id="s2in" class="layer">
+          <div class="abs full mono" id="s2pre" style="top:600px;font-size:54px"><span>Dann</span> <span>mach</span> <span>es</span></div>
+          <div class="abs full disp rgb" id="w-c" style="top:720px;font-size:300px;color:var(--ice)">fast</div>
+          <div class="abs full disp rgb" id="w-p" style="top:720px;font-size:300px;color:var(--hot)">fast</div>
+          <div class="abs full disp rgb" id="w-m" style="top:720px;font-size:300px;color:var(--uv)">fast</div>
+        </div>
+      </div>
+
+      <!-- SZENE 3: Feature-Panel -->
+      <div id="s3" class="clip" data-start="4.5" data-duration="3.2">
+        <div class="abs mono" id="s3n" style="left:80px;top:330px;font-size:34px">01 ————</div>
+        <div class="abs disp" id="s3t" style="left:76px;top:410px;font-size:128px">Feature-<br>Name</div>
+        <div class="abs mono" id="s3g" style="left:80px;top:1500px;font-size:34px">→ Kurzer Nutzen</div>
+      </div>
+
+      <!-- SZENE 4: Logo + CTA -->
+      <div id="s4" class="clip" data-start="7.5" data-duration="4.5">
+        <div class="abs full disp" id="logo" style="top:640px;font-size:170px">LOGO</div>
+        <div class="abs full disp" id="cta1" style="top:1080px;font-size:130px"><span style="color:var(--acid)">7</span> Tage</div>
+        <div class="abs pill" id="pill" style="top:1300px">domain.de →</div>
+      </div>
+
+      <div id="wipe" class="clip" data-start="0" data-duration="12"></div>
+      <div id="warp" class="clip" data-start="0" data-duration="12"></div>
+      <div id="vig" class="clip" data-start="0" data-duration="12"></div>
+      <div id="grain" class="clip" data-start="0" data-duration="12"></div>
+      <div id="flash" class="clip" data-start="0" data-duration="12"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const DUR = 12;
+      const $ = (s) => document.querySelector(s);
+      // deterministischer Zufall (kein Math.random erlaubt)
+      let seed = 1337;
+      const rnd = () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+      const R = (a, b) => a + (b - a) * rnd();
+      const NS = "http://www.w3.org/2000/svg";
+
+      /* ================= STIL-BAUSTEINE ================= */
+      // Text in Einzelbuchstaben zerlegen (für Stagger-Animationen)
+      function split(el) { const txt = el.textContent; el.textContent = ""; return [...txt].map((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c === " " ? " " : c; el.appendChild(s); return s; }); }
+      function mk(parent, cls, css) { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css || {}); parent.appendChild(d); return d; }
+      // Weißblitz (Impact)
+      function flash(t, o = 0.9, d = 0.25, color = "#fff") { tl.set("#flash", { backgroundColor: color }, t); tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t); }
+      // Kamera-Wackler (nur auf Elemente ohne eigene x/y-Tweens)
+      function shake(target, t, dur = 0.35, amp = 26) { const n = Math.round(dur / 0.033); for (let i = 0; i < n; i++) { const k = 1 - i / n; tl.set(target, { x: R(-amp, amp) * k, y: R(-amp, amp) * k, rotation: R(-1.2, 1.2) * k }, t + i * 0.033); } tl.set(target, { x: 0, y: 0, rotation: 0 }, t + dur); }
+      // Lichtgeschwindigkeits-Streifen aus der Bildmitte
+      const warpEls = []; for (let i = 0; i < 70; i++) { const s = mk($("#warp"), "streak"); s.dataset.a = R(0, Math.PI * 2); s.style.height = R(3, 9).toFixed(1) + "px"; warpEls.push(s); }
+      function warp(t, dur = 0.45, color = "#fff", cx = 540, cy = 960) {
+        warpEls.forEach((s) => { const a = +s.dataset.a, r0 = R(40, 260), r1 = r0 + R(900, 1500), d = rnd() * 0.12;
+          tl.set(s, { left: cx, top: cy, rotation: (a * 180) / Math.PI, background: `linear-gradient(90deg, rgba(255,255,255,0), ${color})` }, t);
+          tl.fromTo(s, { x: Math.cos(a) * r0, y: Math.sin(a) * r0, scaleX: 0.05, opacity: 0 }, { x: Math.cos(a) * r1, y: Math.sin(a) * r1, scaleX: R(0.6, 1.6), opacity: 1, duration: dur, ease: "power3.in", immediateRender: false }, t + d);
+          tl.to(s, { opacity: 0, duration: 0.08, ease: "none" }, t + d + dur); });
+      }
+      // Doppel-Chevron-Wipe von unten nach oben
+      function chevWipe(t, c1, c2, dur = 0.55) {
+        const svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", "0 0 1080 1500"); svg.setAttribute("width", "1080"); svg.setAttribute("height", "1500"); svg.style.position = "absolute";
+        svg.innerHTML = `<polyline points="-260,1020 540,220 1340,1020" fill="none" stroke="${c1}" stroke-width="300" stroke-linecap="round" stroke-linejoin="round"/><polyline points="-260,1500 540,700 1340,1500" fill="none" stroke="${c2}" stroke-width="300" stroke-linecap="round" stroke-linejoin="round"/>`;
+        $("#wipe").appendChild(svg); tl.set(svg, { opacity: 0 }, 0);
+        tl.fromTo(svg, { y: 2000, opacity: 1 }, { y: -3000, duration: dur, ease: "power2.inOut", immediateRender: false }, t); tl.set(svg, { opacity: 0 }, t + dur);
+      }
+      // Wort-Slam mit RGB-Split (drei gestapelte Ebenen: cyan / pink / dunkel)
+      function rgbSlam(ids, t) {
+        ids.forEach((id, i) => tl.fromTo(id, { scale: 4, opacity: 0, filter: "blur(30px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, t + i * 0.02));
+        tl.fromTo(ids[0], { x: -40 }, { x: -12, duration: 0.6, ease: "elastic.out(1,0.4)" }, t + 0.04);
+        tl.fromTo(ids[1], { x: 40 }, { x: 12, duration: 0.6, ease: "elastic.out(1,0.4)" }, t + 0.04);
+        flash(t + 0.04, 0.85, 0.3);
+      }
+      // Panel-Whip (rein von rechts / raus nach links)
+      const whipIn = (sel, t) => tl.fromTo(sel, { x: 1200, skewX: -16 }, { x: 0, skewX: 0, duration: 0.32, ease: "power4.out" }, t);
+      const whipOut = (sel, t) => tl.to(sel, { x: -1200, skewX: 16, filter: "blur(16px)", duration: 0.3, ease: "power4.in" }, t);
+      // Implosion in die Bildmitte
+      const implode = (sel, t) => tl.to(sel, { scale: 0.15, rotation: 25, opacity: 0, filter: "blur(18px)", duration: 0.4, ease: "power4.in" }, t);
+
+      /* ================= GLOBALE BEWEGUNG ================= */
+      tl.fromTo("#b1", { x: 0, y: 0, scale: 1 }, { x: 420, y: 700, scale: 1.4, duration: DUR, ease: "sine.inOut" }, 0);
+      tl.fromTo("#b2", { x: 0, y: 0, scale: 1.2 }, { x: -520, y: -900, scale: 0.9, duration: DUR, ease: "sine.inOut" }, 0);
+      for (let i = 0; i < DUR * 15; i++) tl.set("#grain", { x: Math.round(R(-500, 500)), y: Math.round(R(-900, 900)) }, i / 15);
+
+      /* ================= DEMO-ABLAUF (ersetzen) ================= */
+      tl.from(split($("#s1a")), { y: 60, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.025 }, 0.3);
+      split($("#s1b")).forEach((c, i) => tl.fromTo(c, { y: -140, opacity: 0, rotation: R(-30, 30) }, { y: 0, opacity: 1, rotation: R(-9, 9), duration: 0.7, ease: "bounce.out" }, 0.9 + i * 0.05));
+      implode("#s1in", 2.2); warp(2.2, 0.5, "#c8ff1a"); chevWipe(2.32, "#c8ff1a", "#ff2d8a", 0.5);
+
+      tl.from("#s2pre span", { y: 80, opacity: 0, scale: 1.6, duration: 0.25, ease: "back.out(3)", stagger: 0.17 }, 2.62);
+      rgbSlam(["#w-c", "#w-p", "#w-m"], 3.1); shake("#s2in", 3.14, 0.4, 30);
+      whipOut("#s2in", 4.4);
+
+      whipIn("#s3", 4.5);
+      tl.from("#s3n", { x: -200, opacity: 0, duration: 0.35, ease: "power3.out" }, 4.65);
+      tl.from("#s3t", { y: 120, opacity: 0, skewY: 8, duration: 0.45, ease: "expo.out" }, 4.6);
+      tl.from("#s3g", { y: 40, opacity: 0, duration: 0.35, ease: "power3.out" }, 5.0);
+      tl.to("#s3", { scale: 2.6, opacity: 0, filter: "blur(20px)", duration: 0.35, ease: "power4.in" }, 7.3); warp(7.25, 0.45, "#7cf6ff");
+
+      tl.fromTo("#logo", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "elastic.out(1,0.45)" }, 7.6); flash(7.6, 0.9, 0.35);
+      tl.from("#cta1", { y: 80, opacity: 0, duration: 0.35, ease: "expo.out" }, 8.4);
+      tl.fromTo("#pill", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.4)" }, 9.0);
+      [9.8, 10.2, 10.6, 11.0].forEach((t) => tl.fromTo("#pill", { scale: 1.08 }, { scale: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t));
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
