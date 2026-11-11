@@ -326,7 +326,7 @@
       </div>
 
       <!-- ============ global overlays ============ -->
-      <div id="hud" class="clip" data-start="0.3" data-duration="19.2" data-track-index="8">
+      <div id="hud" class="clip" data-start="0.3" data-duration="3.9" data-track-index="8">
         <div class="hudbox" id="hudbox"><div class="hud-dot" id="hdot"></div><div class="hud-l">LADEZEIT</div><div class="hud-v" id="hudv">0,0 s</div></div>
       </div>
       <div id="wipe" class="clip" data-start="0" data-duration="25" data-track-index="9"></div>
@@ -402,7 +402,7 @@
       tl.set(["#hudv"], { color: "#ff2d8a" }, 0); tl.set("#hdot", { background: "#ff2d8a", boxShadow: "0 0 18px #ff2d8a" }, 0);
       tl.set(["#hudv"], { color: "#c8ff1a" }, 3.15); tl.set("#hdot", { background: "#c8ff1a", boxShadow: "0 0 18px #c8ff1a" }, 3.15);
       for (let i = 0; i < 8; i++) tl.fromTo("#hdot", { scale: 1.6 }, { scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, 3.15 + i * 0.4);
-      tl.to("#hudbox", { x: -560, opacity: 0, duration: 0.35, ease: "power3.in" }, 19.15);
+      tl.to("#hudbox", { x: -560, opacity: 0, duration: 0.35, ease: "power3.in" }, 3.85);
 
       // ============ SCENE 1 ============
       const s1w = split($("#s1l1"));
