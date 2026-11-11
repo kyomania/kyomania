@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>FUZZN – Searching for a game v3</title>
+<title>FUZZN – Searching for a game v4</title>
+<link rel="stylesheet" href="node_modules/@fontsource/noto-sans-jp/900.css">
 <style>
   @font-face { font-family: "Anton"; src: url("node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2"); }
   @font-face { font-family: "InterB"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf"); }
@@ -107,6 +108,141 @@ function sliceGlitch(amount, seed, y0 = 0, y1 = H) {
   ctx.restore();
 }
 
+
+// ================= ANIME TOOLKIT =================
+// focus / speed lines (re-jittered at 12 fps for a hand-drawn feel)
+function speedLines(t, cx, cy, alpha, n = 160, inner = 360, color = '#ece0d4') {
+  if (alpha <= .01) return;
+  const R = rng(1000 + Math.floor(t * 12));
+  ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = color;
+  for (let i = 0; i < n; i++) {
+    const a = R() * TAU, w = .002 + R() * .009, r0 = inner * (.7 + R() * .8), r1 = 2400;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
+    ctx.lineTo(cx + Math.cos(a - w) * r1, cy + Math.sin(a - w) * r1);
+    ctx.lineTo(cx + Math.cos(a + w) * r1, cy + Math.sin(a + w) * r1);
+    ctx.closePath(); ctx.fill();
+  }
+  ctx.restore();
+}
+// anime impact frame: high-contrast negative of the current image
+function impactFrame(kind = 0) {
+  const x = LAYER.getContext('2d'); x.clearRect(0, 0, W, H); x.drawImage(cv, 0, 0);
+  ctx.save();
+  ctx.filter = kind ? 'grayscale(1) contrast(5) brightness(.9)' : 'grayscale(1) invert(1) contrast(5)';
+  ctx.drawImage(LAYER, 0, 0); ctx.filter = 'none';
+  ctx.restore();
+}
+// ragged ink brush edge, covers left of edge (uncover=false) or right of edge (uncover=true)
+function inkWipe(k, uncover, seed = 3) {
+  if (k <= 0 || (uncover && k >= 1)) return;
+  if (!uncover && k >= 1) { ctx.fillStyle = '#050205'; ctx.fillRect(0, 0, W, H); return; }
+  const e = lerp(-350, W + 350, eio(k));
+  const R = rng(seed);
+  const ph1 = R() * TAU, ph2 = R() * TAU;
+  const edge = y => e + Math.sin(y * .011 + ph1) * 90 + Math.sin(y * .043 + ph2) * 35 + (y / H - .5) * 260;
+  ctx.save(); ctx.fillStyle = '#050205';
+  ctx.beginPath();
+  if (!uncover) { ctx.moveTo(-10, -10); for (let y = -10; y <= H + 10; y += 12) ctx.lineTo(edge(y), y); ctx.lineTo(-10, H + 10); }
+  else { ctx.moveTo(W + 10, -10); for (let y = -10; y <= H + 10; y += 12) ctx.lineTo(edge(y), y); ctx.lineTo(W + 10, H + 10); }
+  ctx.closePath(); ctx.fill();
+  // dry-brush streaks and splatter along the edge
+  for (let i = 0; i < 70; i++) {
+    const y = R() * H, len = 40 + R() * 260, th = 2 + R() * 9;
+    const x = edge(y) + (uncover ? -len * R() * .3 : 0);
+    ctx.fillRect(uncover ? x - len : x, y, len, th);
+  }
+  for (let i = 0; i < 40; i++) {
+    const y = R() * H, r = 2 + R() * 12, x = edge(y) + (uncover ? -1 : 1) * (20 + R() * 160);
+    ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
+  }
+  // thin red edge
+  ctx.strokeStyle = 'rgba(214,31,46,.6)'; ctx.lineWidth = 3;
+  ctx.beginPath(); for (let y = -10; y <= H + 10; y += 12) { const x = edge(y) + (uncover ? -6 : 6); y < 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke();
+  ctx.restore();
+}
+// manga panel reveal of the frame already on the canvas
+const PANELS = [
+  [[0, 0], [700, 0], [560, H], [0, H]],
+  [[700, 0], [1330, 0], [1200, H], [560, H]],
+  [[1330, 0], [W, 0], [W, H], [1200, H]]
+];
+function panelReveal(p) {
+  if (p <= 0 || p >= 1) return;
+  const x = LAYER.getContext('2d'); x.clearRect(0, 0, W, H); x.drawImage(cv, 0, 0);
+  ctx.fillStyle = '#050205'; ctx.fillRect(0, 0, W, H);
+  PANELS.forEach((poly, i) => {
+    const k = eo5(prog(p, i * .16, i * .16 + .55));
+    if (k <= 0) return;
+    const dy = (1 - k) * H * (i % 2 ? 1 : -1);
+    ctx.save();
+    ctx.translate(0, dy);
+    ctx.beginPath(); poly.forEach(([px, py], j) => j ? ctx.lineTo(px, py) : ctx.moveTo(px, py)); ctx.closePath();
+    ctx.save(); ctx.clip(); ctx.drawImage(LAYER, 0, -dy); ctx.restore();
+    ctx.strokeStyle = '#050205'; ctx.lineWidth = 22; ctx.stroke();
+    ctx.strokeStyle = `rgba(236,224,212,${.9 * (1 - prog(p, .75, 1))})`; ctx.lineWidth = 5; ctx.stroke();
+    ctx.restore();
+  });
+}
+// red lightning
+function lightning(x0, y0, x1, y1, seed, alpha) {
+  if (alpha <= .01) return;
+  const R = rng(seed);
+  let pts = [[x0, y0], [x1, y1]];
+  for (let it = 0; it < 6; it++) {
+    const np = [];
+    const d = Math.hypot(x1 - x0, y1 - y0) / Math.pow(2, it + 2);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [ax, ay] = pts[i], [bx, by] = pts[i + 1];
+      np.push([ax, ay], [(ax + bx) / 2 + (R() - .5) * d, (ay + by) / 2 + (R() - .5) * d]);
+    }
+    np.push(pts[pts.length - 1]); pts = np;
+  }
+  ctx.save(); ctx.globalAlpha = alpha; ctx.lineJoin = 'round';
+  const path = () => { ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); };
+  ctx.shadowColor = '#ff2030'; ctx.shadowBlur = 30;
+  ctx.strokeStyle = '#d61f2e'; ctx.lineWidth = 9; path(); ctx.stroke();
+  ctx.shadowBlur = 0; ctx.strokeStyle = '#ffe6e0'; ctx.lineWidth = 2.5; path(); ctx.stroke();
+  ctx.restore();
+}
+// black feathers storm (original shapes)
+let FEAT = [];
+function feathers(t, alpha, dir = 1) {
+  if (alpha <= .01) return;
+  ctx.save();
+  for (const f of FEAT) {
+    const u = ph(t + f.o, f.per);
+    const x = dir > 0 ? -200 + u * (W + 400) : W + 200 - u * (W + 400);
+    const y = f.y + Math.sin(TAU * u * f.w + f.s) * 120;
+    ctx.save(); ctx.globalAlpha = alpha * Math.sin(Math.PI * u);
+    ctx.translate(x, y); ctx.rotate(f.s + u * f.spin); ctx.scale(f.sc, f.sc * (.4 + .6 * Math.abs(Math.cos(u * f.spin * 2))));
+    ctx.fillStyle = '#0b0609';
+    ctx.beginPath(); ctx.moveTo(-60, 0); ctx.quadraticCurveTo(-10, -22, 60, -4); ctx.lineTo(48, 0); ctx.lineTo(60, 4); ctx.quadraticCurveTo(-10, 22, -60, 0); ctx.fill();
+    ctx.strokeStyle = 'rgba(214,31,46,.7)'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-70, 0); ctx.lineTo(56, 0); ctx.strokeStyle = 'rgba(236,224,212,.25)'; ctx.stroke();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+// manga halftone texture
+let HALF;
+function halftone(alpha) {
+  ctx.save(); ctx.globalAlpha = alpha; ctx.globalCompositeOperation = 'multiply';
+  ctx.fillStyle = HALF; ctx.fillRect(0, 0, W, H); ctx.restore();
+}
+// big brush-ish kanji (vertical), revealed by a rising mask
+function kanji(str, x, y, size, k, color, alpha = 1) {
+  if (k <= 0) return;
+  ctx.save(); ctx.globalAlpha = alpha;
+  ctx.font = `900 ${size}px "Noto Sans JP"`; ctx.textBaseline = 'top'; ctx.textAlign = 'center';
+  const total = str.length * size * 1.02;
+  ctx.beginPath(); ctx.rect(x - size, y, size * 2, total * k); ctx.clip();
+  ctx.shadowColor = 'rgba(214,31,46,.6)'; ctx.shadowBlur = 25;
+  ctx.fillStyle = color;
+  for (let i = 0; i < str.length; i++) ctx.fillText(str[i], x, y + i * size * 1.02);
+  ctx.restore();
+}
+
 function textW(str, font, ls = 0) { ctx.save(); ctx.font = font; ctx.letterSpacing = ls + 'px'; const w = ctx.measureText(str).width; ctx.restore(); return w; }
 
 // ================= SCENE 1 · FUZZN reveal =================
@@ -149,9 +285,11 @@ function scene1(t) {
     ctx.fillText(shown, W / 2 + 11, LY + 90);
     ctx.restore();
   });
-  // flicker + exit glitch
+  speedLines(t, W / 2, 480, .55 * (1 - prog(lt, .9, 1.7)) * (lt > .85 ? 1 : 0), 180, 520);
+  if (lt > .9 && lt < .99) impactFrame(Math.floor(lt * 30) % 2);
   if (bump(lt, 2.05, .03) > .3) { ctx.fillStyle = 'rgba(214,31,46,.18)'; ctx.fillRect(0, 0, W, H); }
-  sliceGlitch(bump(lt, 2.05, .05) * .6 + ss(prog(lt, 3.25, 3.6)), Math.floor(t * 30));
+  sliceGlitch(bump(lt, 2.05, .05) * .6, Math.floor(t * 30));
+  inkWipe(prog(lt, 3.2, 3.6), false, 3);
 }
 
 // ================= SCENE 2 · SEARCHING wall =================
@@ -186,10 +324,12 @@ function scene2(t) {
   g.addColorStop(0, 'rgba(214,31,46,0)'); g.addColorStop(.5, 'rgba(214,31,46,.28)'); g.addColorStop(1, 'rgba(214,31,46,0)');
   ctx.fillStyle = g; ctx.fillRect(0, sy2 - 80, W, 160);
   ash(t, .8);
+  speedLines(t, W / 2, H / 2, .35 * Math.exp(-ph(lt, 1) * 6), 120, 620, '#050205');
   // beat flashes
   const bf = Math.exp(-ph(lt, .5) * 12);
   ctx.fillStyle = `rgba(0,0,0,${.25 * (1 - bf)})`; ctx.fillRect(0, 0, W, H);
-  sliceGlitch(ss(prog(lt, D - .3, D)) * .9, Math.floor(t * 30));
+  sliceGlitch(ss(prog(lt, D - .25, D)) * .7, Math.floor(t * 30));
+  inkWipe(prog(lt, 0, .38), true, 5);
 }
 
 // ================= SCENE 3 · the figure under a blood moon =================
@@ -246,13 +386,17 @@ function scene3(t) {
   ctx.translate(1720, 1000 + (1 - k) * 400); ctx.rotate(-Math.PI / 2);
   ctx.strokeStyle = 'rgba(214,31,46,.85)'; ctx.lineWidth = 3; ctx.strokeText('SEARCHING', 0, 0);
   ctx.restore();
-  ctx.save();
-  ctx.font = '40px IPAPGothic'; ctx.fillStyle = C.cream; ctx.globalAlpha = .85 * prog(lt, .6, 1.2);
-  const jp = 'マッチング中';
-  for (let i = 0; i < jp.length; i++) ctx.fillText(jp[i], 1800, 260 + i * 52);
-  ctx.restore();
+  kanji('探索中', 1480, 150, 190, eo(prog(lt, .7, 1.5)), C.cream, .92);
+  // red lightning around the moon on the beat
+  [[1.55, 11], [2.9, 23], [3.65, 37]].forEach(([tb, sd]) => {
+    const a = Math.exp(-Math.max(0, lt - tb) * 10) * (lt >= tb ? 1 : 0);
+    lightning(760 + (sd % 7 - 3) * 60, 40, 760 + (sd % 5 - 2) * 220, 820, sd + Math.floor(lt * 24), a);
+    if (a > .6) { ctx.fillStyle = `rgba(214,31,46,${.15 * a})`; ctx.fillRect(0, 0, W, H); }
+  });
   fog(t, .8, true);
   ash(t, 1, 1);
+  halftone(.28);
+  if (lt > D - .14 && lt < D - .04) impactFrame(Math.floor(lt * 30) % 2);
   // flash to next scene
   const fl = bump(lt, D - .2, .1);
   ctx.fillStyle = `rgba(214,31,46,${.55 * fl})`; ctx.fillRect(0, 0, W, H);
@@ -315,10 +459,17 @@ function scene4(t) {
     });
     ctx.restore();
   });
-  // impact flashes
-  for (const [, t0] of words) { const f = bump(lt, t0 + .12, .05); if (f > .02) { ctx.fillStyle = `rgba(236,224,212,${.22 * f})`; ctx.fillRect(0, 0, W, H); } }
+  for (const [, t0] of words) {
+    const k = prog(lt, t0, t0 + .45);
+    if (k > 0 && k < 1) speedLines(t, 1330, 560, .6 * (1 - k), 200, 460);
+  }
+  lightning(1150, -20, 1500, 980, 77 + Math.floor(lt * 24), Math.exp(-Math.max(0, lt - 1.27) * 7) * (lt >= 1.27 ? 1 : 0));
+  feathers(t, ss(prog(lt, 0, .4)) * (1 - ss(prog(lt, D - .5, D))), 1);
   ash(t, 1, 1);
-  sliceGlitch(ss(prog(lt, D - .3, D)) * .9, Math.floor(t * 30));
+  halftone(.22);
+  for (const [, t0] of words) if (lt > t0 + .02 && lt < t0 + .1) impactFrame(Math.floor(lt * 30) % 2);
+  for (const [, t0] of words) { const f = bump(lt, t0 + .14, .05); if (f > .02) { ctx.fillStyle = `rgba(236,224,212,${.18 * f})`; ctx.fillRect(0, 0, W, H); } }
+  sliceGlitch(ss(prog(lt, D - .2, D)) * .6, Math.floor(t * 30));
 }
 
 // ================= SCENE 5 · hero lockup =================
@@ -344,6 +495,8 @@ function scene5(t) {
   }
   ctx.restore();
 
+  kanji('探索中', 250, 140, 250, eo(prog(lt, .2, 1.2)), 'rgba(214,31,46,1)', .16);
+  speedLines(t, W / 2, 520, .45 * (1 - prog(lt, .2, .9)) * (lt > .15 ? 1 : 0), 180, 560);
   const exitK = ss(prog(lt, D - .7, D - .15));         // collapse to black at the end
   const z = 1 + .04 * eio(prog(lt, 0, D - .7)) - .1 * exitK;
   withCam(z, 0, 0, 0, () => {
@@ -375,7 +528,20 @@ function scene5(t) {
       ctx.font = '230px Anton';
       x += ctx.measureText(w1[i]).width + 8;
     }
-    // FOR A GAME — red, wipes in from left
+    // red ink brush band under FOR A GAME
+    const bk = eo5(prog(lt, .55, 1.0));
+    if (bk > 0) {
+      const R = rng(55);
+      ctx.save(); ctx.fillStyle = 'rgba(140,15,28,.9)';
+      const bx0 = W / 2 - 640, bw = 1280 * bk;
+      ctx.beginPath(); ctx.moveTo(bx0, 640);
+      for (let x = 0; x <= bw; x += 20) ctx.lineTo(bx0 + x, 628 + Math.sin(x * .02) * 10 + R() * 8);
+      for (let x = bw; x >= 0; x -= 20) ctx.lineTo(bx0 + x, 790 + Math.sin(x * .017 + 1) * 12 + R() * 8);
+      ctx.closePath(); ctx.fill();
+      for (let i = 0; i < 26; i++) ctx.fillRect(bx0 + bw - R() * 120, 640 + R() * 140, 40 + R() * 160, 2 + R() * 6);
+      ctx.restore();
+    }
+    // FOR A GAME — wipes in from left
     const wk = eo5(prog(lt, .7, 1.3));
     ctx.save();
     ctx.beginPath(); ctx.rect(0, 560, W / 2 - 700 + 1400 * wk, 260); ctx.clip();
@@ -383,7 +549,7 @@ function scene5(t) {
     ctx.font = '180px Anton'; ctx.letterSpacing = '16px';
     const gr = ctx.createLinearGradient(W / 2 - 600, 0, W / 2 + 600, 0);
     const sh = ph(lt, 2.4);
-    gr.addColorStop(0, C.blood); gr.addColorStop(clamp(sh - .1), C.blood); gr.addColorStop(sh, '#ff6a5a'); gr.addColorStop(clamp(sh + .1), C.red); gr.addColorStop(1, C.red);
+    gr.addColorStop(0, C.cream); gr.addColorStop(clamp(sh - .1), C.cream); gr.addColorStop(sh, '#ffffff'); gr.addColorStop(clamp(sh + .1), '#f4c9c2'); gr.addColorStop(1, C.cream);
     ctx.fillStyle = gr;
     ctx.shadowColor = 'rgba(0,0,0,.8)'; ctx.shadowBlur = 0; ctx.shadowOffsetX = 8; ctx.shadowOffsetY = 8;
     ctx.fillText('FOR A GAME', W / 2 + 8, 770);
@@ -411,6 +577,9 @@ function scene5(t) {
     ctx.fillStyle = g; ctx.fillRect(0, 300, W, 500); ctx.restore();
   }
   ash(t, .9, .8);
+  feathers(t, ss(prog(lt, D - 1.6, D - 1.0)) * (1 - ss(prog(lt, D - .5, D - .1))), -1);
+  halftone(.15);
+  if (lt > 2.55 && lt < 2.63) impactFrame(1);
   sliceGlitch(bump(lt, 2.6, .06) * .8 + exitK * .7, Math.floor(t * 30), 200, 900);
   // fade to black (loop seam = scene 1 start)
   ctx.fillStyle = `rgba(4,2,5,${ss(prog(lt, D - .45, D))})`; ctx.fillRect(0, 0, W, H);
@@ -468,6 +637,8 @@ function render(t) {
   else if (t < S[3]) scene3(t);
   else if (t < S[4]) scene4(t);
   else scene5(t);
+  panelReveal(prog(t, S[2], S[2] + .6));
+  panelReveal(prog(t, S[4], S[4] + .6));
   // cut flashes on scene boundaries
   for (let i = 1; i < 5; i++) { const f = bump(t, S[i], .045); if (f > .02) { ctx.fillStyle = `rgba(236,224,212,${.35 * f})`; ctx.fillRect(0, 0, W, H); } }
   hud(t);
@@ -484,6 +655,9 @@ window.ready = (async () => {
   const s = 3.6, rw = Math.round(CROW.width * s), rh = Math.round(CROW.height * s);
   CROW_RIM = mk(rw + 80, rh + 80); { const x = CROW_RIM.getContext('2d'); x.filter = 'blur(14px)'; x.drawImage(tint(CROW, '#d61f2e', rw, rh), 40, 40); }
   FOG = puff(70, 30, 40);
+  await document.fonts.load('900 200px "Noto Sans JP"', '探索中');
+  { const c = mk(10, 10), x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 10, 10); x.fillStyle = '#000'; x.beginPath(); x.arc(5, 5, 2.2, 0, TAU); x.fill(); HALF = ctx.createPattern(c, 'repeat'); }
+  { const R2 = rng(21); for (let i = 0; i < 46; i++) FEAT.push({ y: R2() * H, per: [2.5, 5, 10][Math.floor(R2() * 3)], o: R2() * 20, w: 1 + Math.floor(R2() * 2), s: R2() * TAU, spin: 2 + R2() * 6, sc: .5 + R2() * 1.1 }); }
   LAYER = mk();
   const R = rng(9);
   for (let i = 0; i < 220; i++) ASH.push({ x: R() * (W + 300) - 300, dx: 120 + R() * 220, per: [2.5, 4, 5, 10, 20][Math.floor(R() * 5)], o: R() * 20, w: 1 + Math.floor(R() * 2), s: R() * TAU, r: 1.2 + R() * 3, a: .3 + R() * .6, red: R() < .12 });
