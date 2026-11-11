@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url(assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 900; src: url(assets/fonts/inter-tight-latin-900-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB"; font-weight: 800; src: url(assets/fonts/jetbrains-mono-latin-800-normal.woff2) format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #b4b2f4; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #b4b2f4; font-family: "Inter Tight", sans-serif; color: #fff; }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      .full { width: 1080px; height: 1920px; object-fit: cover; display: block; }
+      .abs { position: absolute; }
+      .k { font-family: "JB"; font-weight: 800; font-size: 26px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.9); }
+      .h { font-weight: 900; font-size: 116px; line-height: .96; letter-spacing: -.04em; text-shadow: 0 8px 40px rgba(70,60,160,.28); }
+      .s { font-weight: 800; font-size: 46px; line-height: 1.2; letter-spacing: -.01em; text-shadow: 0 4px 24px rgba(70,60,160,.3); }
+      .ln { display: block; overflow: hidden; padding-bottom: .06em; }
+      .ln > span { display: inline-block; }
+      svg.dd { position: absolute; inset: 0; z-index: 6; }
+      .txt { z-index: 7; }
+      #glow { z-index: 20; background: radial-gradient(70% 50% at 50% 50%, #ffffff 0%, #f1ecff 60%, #d9d3ff 100%); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="28" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="28" data-volume="1"></audio>
+
+      <video id="v1" class="clip full" src="assets/video/s1.mp4" data-start="0" data-duration="7" muted playsinline style="z-index:1"></video>
+      <video id="v2" class="clip full" src="assets/video/s2.mp4" data-start="7" data-duration="7" muted playsinline style="z-index:2"></video>
+      <video id="v3" class="clip full" src="assets/video/s3.mp4" data-start="14" data-duration="7" muted playsinline style="z-index:3"></video>
+      <video id="v4" class="clip full" src="assets/video/s4.mp4" data-start="21" data-duration="7" muted playsinline style="z-index:4"></video>
+
+      <!-- Texte & Doodles je Szene -->
+      <div id="t1" class="clip txt" data-start="0" data-duration="7">
+        <div class="abs k" style="left:84px;top:190px">fast.site — wer wir sind</div>
+        <div class="abs h" style="left:80px;top:250px"><span class="ln"><span>Dein Zuhause</span></span><span class="ln"><span>im Netz.</span></span></div>
+        <div class="abs s" style="left:80px;top:1600px"><span class="ln"><span>Aufgebaut von dir.</span></span><span class="ln"><span>Stück für Stück.</span></span></div>
+      </div>
+      <svg id="dd1" class="dd clip" data-start="0" data-duration="7" viewBox="0 0 1080 1920" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M120 1480 C 60 1340, 180 1240, 270 1300 S 300 1450, 200 1420 S 230 1200, 420 1150" /><path d="M404 1134 l 34 4 l -12 32" />
+        <path d="M880 700 C 960 760, 1000 860, 930 920 S 820 880, 860 820" />
+      </svg>
+
+      <div id="t2" class="clip txt" data-start="7" data-duration="7">
+        <div class="abs k" style="left:84px;top:190px">fast.site — unser Leitgedanke</div>
+        <div class="abs s" style="left:80px;top:250px"><span class="ln"><span>Besser werden heißt nicht,</span></span><span class="ln"><span>alles abzureißen.</span></span></div>
+        <div class="abs h" style="left:80px;top:1500px"><span class="ln"><span>Behalte, was</span></span><span class="ln"><span>funktioniert.</span></span></div>
+      </div>
+      <svg id="dd2" class="dd clip" data-start="7" data-duration="7" viewBox="0 0 1080 1920" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M150 560 C 300 470, 520 470, 640 560" /><path d="M622 540 l 22 24 l -32 10" />
+        <path d="M960 1240 C 1040 1150, 990 1060, 910 1090 S 880 1190, 950 1175" />
+      </svg>
+
+      <div id="t3" class="clip txt" data-start="14" data-duration="7">
+        <div class="abs k" style="left:84px;top:190px">fast.site — unsere Haltung</div>
+        <div class="abs s" style="left:80px;top:250px"><span class="ln"><span>Wir versprechen nichts,</span></span><span class="ln"><span>was wir nicht zeigen können.</span></span></div>
+        <div class="abs h" style="left:80px;top:1530px;font-size:108px"><span class="ln"><span>Performance</span></span><span class="ln"><span>statt Versprechen.</span></span></div>
+      </div>
+      <svg id="dd3" class="dd clip" data-start="14" data-duration="7" viewBox="0 0 1080 1920" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M770 820 C 860 760, 960 820, 930 920 S 820 960, 850 880" />
+        <path d="M150 1180 C 120 1080, 200 1020, 260 1060" /><path d="M244 1042 l 22 22 l -30 8" />
+      </svg>
+
+      <div id="t4" class="clip txt" data-start="21" data-duration="7">
+        <div class="abs h" style="left:0;width:1080px;text-align:center;top:1330px;font-size:150px"><span class="ln"><span>fast.site</span></span></div>
+        <div class="abs s" style="left:0;width:1080px;text-align:center;top:1510px;font-size:50px"><span class="ln"><span>Lass die Ergebnisse entscheiden.</span></span></div>
+        <div class="abs k" style="left:0;width:1080px;text-align:center;top:1640px;font-size:30px">fast.site/de</div>
+      </div>
+      <svg id="dd4" class="dd clip" data-start="21" data-duration="7" viewBox="0 0 1080 1920" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M200 420 C 140 330, 230 250, 300 300 S 300 420, 230 400" />
+        <path d="M860 380 C 960 330, 1010 440, 940 480" /><path d="M948 462 l -8 30 l -28 -12" />
+      </svg>
+
+      <div id="glow" class="clip" data-start="0" data-duration="28"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      const up = (sel, t, d = 0.7) => tl.from(sel, { yPercent: 110, duration: d, ease: "expo.out" }, t);
+      // Doodles zeichnen sich
+      function draw(svg, t) {
+        $$(svg + " path").forEach((p, i) => { const L = p.getTotalLength();
+          tl.set(p, { attr: { "stroke-dasharray": L, "stroke-dashoffset": L } }, 0);
+          tl.to(p, { attr: { "stroke-dashoffset": 0 }, duration: 0.9, ease: "power2.inOut" }, t + i * 0.25); });
+      }
+      // weiche Übergänge: Lichtschleier
+      [6.65, 13.65, 20.65].forEach((t) => { tl.fromTo("#glow", { opacity: 0 }, { opacity: 0.85, duration: 0.35, ease: "sine.in", immediateRender: false }, t);
+        tl.to("#glow", { opacity: 0, duration: 0.5, ease: "sine.out" }, t + 0.35); });
+      tl.fromTo("#glow", { opacity: 1 }, { opacity: 0, duration: 0.8, ease: "sine.out", immediateRender: false }, 0);
+      ["#v1", "#v2", "#v3", "#v4"].forEach((v, i) => tl.fromTo(v, { scale: 1.06 }, { scale: 1.0, duration: 7, ease: "sine.out" }, i * 7));
+
+      // 1
+      up("#t1 .k", 0.5); up("#t1 .h .ln:nth-child(1) > span", 0.7); up("#t1 .h .ln:nth-child(2) > span", 1.0);
+      up("#t1 .s .ln:nth-child(1) > span", 3.5); up("#t1 .s .ln:nth-child(2) > span", 4.85); draw("#dd1", 1.6);
+      // 2
+      up("#t2 .k", 7.3); up("#t2 .s .ln:nth-child(1) > span", 8.5); up("#t2 .s .ln:nth-child(2) > span", 9.6);
+      up("#t2 .h .ln:nth-child(1) > span", 11.9); up("#t2 .h .ln:nth-child(2) > span", 12.4); draw("#dd2", 9.0);
+      // 3
+      up("#t3 .k", 14.3); up("#t3 .s .ln:nth-child(1) > span", 14.4); up("#t3 .s .ln:nth-child(2) > span", 15.6);
+      up("#t3 .h .ln:nth-child(1) > span", 17.6); up("#t3 .h .ln:nth-child(2) > span", 18.2); draw("#dd3", 16.2);
+      // 4
+      up("#t4 .h .ln > span", 22.6, 0.8); up("#t4 .s .ln > span", 24.7); tl.from("#t4 .k", { opacity: 0, y: 20, duration: 0.6 }, 25.6); draw("#dd4", 25.0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -156,7 +156,9 @@ if SCENE == 1:  # Zuhause im Netz
     b1 = sphere(0.9, CLAY("#c6b3ff"), (3.4, 2.0, 3.6)); b2 = torus(0.6, 0.24, GLASS, (-3.1, -1.0, -6.4), (60, 20, 0)); b3 = sphere(0.4, CLAY("#9fd2ff"), (3.6, -1.5, -5.6))
     focus.location = (0, 0, -1.8)
     def a1(t):
-        k = seg(t, 0.0, 0.35); isl.location.z = -3.2 - 6 * (1 - k); h.location.z = -3.2 - 6 * (1 - seg(t, 0.08, 0.45))
+        k = seg(t, 0.0, 0.35); isl.location.z = -3.2 - 6 * (1 - k); h.location.z = isl.location.z
+        g = max(0.0, min(1.0, (t - 0.22) / 0.2)); bounce = 1 + 0.12 * math.sin(g * math.pi) if g < 1 else 1.0
+        hs = (0.05 + 0.95 * ease(g)) * bounce; h.scale = (hs, hs, hs)
         h.rotation_euler.z = math.radians(-25 + 30 * t); isl.rotation_euler.z = h.rotation_euler.z
         for i, c in enumerate(cloud): c.location.x = -3.4 + 0.6 * t + (i - 1) * 0.6
         b1.location.z = 3.6 + 0.3 * math.sin(t * 6.28); b3.location.z = -5.6 + 0.25 * math.sin(t * 6.28 + 1)
@@ -180,13 +182,13 @@ elif SCENE == 2:  # Behalte, was funktioniert – Glaskuppel schützt
 
 elif SCENE == 3:  # Performance statt Versprechen – Waage
     base = disc(1.6, 0.5, CLAY("#c9b5ff"), (0, 0, -6.0)); pole = capsule(6.2, 0.25, GLOSS("#f2eeff"), flat=1.0); pole.location = (0, 0, -2.8)
-    pivot = empty("Pivot", (0, 0, 0.4)); beam = capsule(7.6, 0.22, GLOSS("#f2eeff"), flat=1.0); beam.rotation_euler = (0, math.radians(90), 0); parent(beam, pivot)
+    pivot = empty("Pivot", (0, 0, 0.4)); beam = capsule(6.2, 0.22, GLOSS("#f2eeff"), flat=1.0); beam.rotation_euler = (0, math.radians(90), 0); parent(beam, pivot)
     knob = sphere(0.42, GLOSS("#7f8cff"), (0, 0, 0.4))
     pans = []
     for side in (-1, 1):
-        hang = empty(f"Hang{side}", (side * 3.6, 0, 0)); parent(hang, pivot)
+        hang = empty(f"Hang{side}", (side * 2.9, 0, 0)); parent(hang, pivot)
         rod = capsule(2.0, 0.05, GLOSS("#ffffff"), flat=1.0); rod.location = (0, 0, -1.0); parent(rod, hang)
-        pan = disc(1.35, 0.28, GLOSS("#f7f1ff" if side < 0 else "#ffe6f4"), (0, 0, -2.1)); parent(pan, hang)
+        pan = disc(1.15, 0.26, GLOSS("#f7f1ff" if side < 0 else "#ffe6f4"), (0, 0, -2.1)); parent(pan, hang)
         pans.append(hang)
     cloud = [sphere(r, CLAY("#ffffff"), (x, 0, z)) for r, x, z in ((0.55, -0.3, -1.4), (0.42, 0.35, -1.5), (0.38, 0.0, -1.1))]
     for c in cloud: parent(c, pans[0])
@@ -199,14 +201,14 @@ elif SCENE == 3:  # Performance statt Versprechen – Waage
         for hg in pans: hg.rotation_euler = (0, tilt, 0)  # Schalen bleiben waagerecht
         lg.rotation_euler.z = math.radians(-20 + 40 * t)
         deco[0].location.z = 4.6 + 0.3 * math.sin(t * 6.28); deco[1].rotation_euler.z = t * 3
-        camera(t, base=(0, -27, 0.2), orbit=10, push=2.0)
+        camera(t, base=(0, -28, 0.2), orbit=6, push=1.5)
     ANIM.append(a3)
 
 else:  # Szene 4 – Logo setzt sich zusammen, Band dahinter
     lg, parts = logo(1.25); lg.location = (0, 0, 0.6)
     homes = [(p.location.copy(), p.rotation_euler.copy()) for p in parts]
     starts = [(-6, -4, 7), (6, -3, 8), (-7, -2, -6), (7, -5, -7)]
-    rib = ribbon(13, 4.8, 2.0, (0, 3.0, -2.2))
+    rib = ribbon(13, 4.8, 2.0, (0, 3.5, 0.4))
     g1 = torus(0.75, 0.26, GLASS, (-3.2, -1.5, -5.0), (30, -40, 0)); g2 = sphere(0.9, CLAY("#c6b3ff"), (-3.5, 1.5, 4.6)); g3 = torus(0.6, 0.24, CLAY("#ffb5dd"), (3.4, -1, -5.6), (60, 20, 0))
     focus.location = (0, 0, 0.2)
     def a4(t):
