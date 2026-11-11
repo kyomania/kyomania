@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script type="importmap">
+      { "imports": { "three": "./assets/vendor/three/three.module.min.js", "three/addons/": "./assets/vendor/three/addons/" } }
+    </script>
+    <style>
+      @font-face { font-family: "Bricolage"; font-weight: 300; src: url(assets/fonts/bricolage-grotesque-latin-300-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Bricolage"; font-weight: 500; src: url(assets/fonts/bricolage-grotesque-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Bricolage"; font-weight: 700; src: url(assets/fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Bricolage"; font-weight: 800; src: url(assets/fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 400; src: url(assets/fonts/inter-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 500; src: url(assets/fonts/inter-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Mono"; font-weight: 400; src: url(assets/fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+
+      :root {
+        --brand: #1f4fe0;          /* Track-Logo, exakt */
+        --ink: #f3f1ec;
+        --dim: rgba(243, 241, 236, 0.55);
+        --cyan: #7fd8ff;
+        --amber: #ffb35c;
+        --red: #ff4d6a;
+        --teal: #6fffd2;
+        --bar: 138px;              /* 2.39:1 Cinemascope */
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; color: var(--ink); font-family: "Inter", sans-serif; }
+      .layer { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      #gl { position: absolute; inset: 0; width: 1920px; height: 1080px; display: block; }
+      .abs { position: absolute; }
+
+      /* Typo */
+      .title { text-shadow: 0 2px 40px rgba(0,0,0,.65), 0 0 12px rgba(0,0,0,.35); font-family: "Bricolage"; font-weight: 700; font-size: 96px; line-height: 0.98; letter-spacing: -0.035em; white-space: nowrap; }
+      .title.light { font-weight: 300; }
+      .kicker { font-family: "Mono"; font-weight: 500; font-size: 15px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
+      .mask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+      .mask > span { display: inline-block; }
+      .rule { height: 2px; width: 120px; background: var(--ink); transform-origin: 0 50%; }
+
+      /* HUD-Tags, die an 3D-Objekten kleben */
+      .tag { position: absolute; left: 0; top: 0; font-family: "Mono"; font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; opacity: 0; color: var(--ink); will-change: transform, opacity; }
+      .tag i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 10px; vertical-align: 1px; background: currentColor; box-shadow: 0 0 12px currentColor; }
+      .tag b { font-weight: 500; color: var(--dim); }
+      .tag.lead::before { content: ""; position: absolute; right: 100%; top: 50%; width: 46px; height: 1px; margin-right: 12px; background: currentColor; opacity: 0.6; }
+      .node { font-size: 15px; letter-spacing: 0.2em; }
+      .node small { display: block; font-size: 11px; letter-spacing: 0.18em; color: var(--dim); margin-top: 4px; }
+
+      /* Chrome im Bild (wie im Referenzfilm) */
+      .chrome { font-family: "Mono"; font-size: 13px; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(243,241,236,.5); white-space: nowrap; }
+
+      /* Score */
+      #score { left: 0; width: 1920px; top: 0; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #scoreNum { font-family: "Bricolage"; font-weight: 300; font-size: 210px; letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+      #scoreOf { font-family: "Mono"; font-size: 16px; letter-spacing: 0.3em; color: var(--dim); margin-top: 6px; }
+
+      /* Logo-Endkarte */
+      #logoMark { position: absolute; left: 0; top: 0; width: 100px; height: 100px; transform-origin: 0 0; opacity: 0; }
+      #logoMark svg { width: 100%; height: 100%; display: block; }
+      #wordmark { font-family: "Bricolage"; font-weight: 700; font-size: 150px; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
+
+      /* Look */
+      #vig { background: radial-gradient(120% 95% at 50% 50%, transparent 52%, rgba(0,0,0,.78) 100%); }
+      #grain { opacity: 0.09; mix-blend-mode: overlay; width: 3840px; height: 2160px; inset: auto; left: -960px; top: -540px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+      #flash { background: radial-gradient(60% 55% at 50% 50%, rgba(255,255,255,.95) 0%, rgba(200,225,255,.45) 35%, rgba(120,160,255,0) 75%); opacity: 0; mix-blend-mode: screen; }
+      #black { background: #000; opacity: 1; }
+      .bar { left: 0; width: 1920px; height: var(--bar); background: #000; }
+      #barT { top: 0; } #barB { bottom: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+
+      <!-- 3D-Welt (three.js, von der Timeline gesteuert) -->
+      <div class="layer" id="world" data-start="0" data-duration="30" style="z-index:1"><canvas id="gl" width="1920" height="1080"></canvas></div>
+
+      <!-- HUD-Tags (Position kommt aus der 3D-Welt) -->
+      <div class="layer" id="tags" data-start="0" data-duration="30" style="z-index:20">
+        <div class="tag" id="tgClick" style="color:var(--cyan)"><i></i>12:04:19 &nbsp;Purchase &nbsp;<b>Browser</b></div>
+        <div class="tag" id="tgA" style="color:var(--cyan)"><i></i>Purchase &nbsp;<b>Browser</b></div>
+        <div class="tag" id="tgB" style="color:var(--amber)"><i></i>Purchase &nbsp;<b>Server</b></div>
+        <div class="tag" id="tgM" style="color:#fff"><i></i>Event-ID geteilt &nbsp;<b>Duplikat entfernt</b></div>
+        <div class="tag" id="tgRed" style="color:var(--red)"><i></i>PageView &nbsp;<b>Blockiert durch Consent</b></div>
+        <div class="tag" id="tgGate" style="color:var(--teal)"><i></i>Consent geprüft &nbsp;<b>Freigegeben</b></div>
+        <div class="tag node" id="n0"><i></i>Meta Ads<small>Browser · Server · Offline</small></div>
+        <div class="tag node" id="n1"><i></i>Google Ads<small>Browser · Server · Offline</small></div>
+        <div class="tag node" id="n2"><i></i>TikTok Ads<small>Browser · Server · Offline</small></div>
+        <div class="tag node" id="n3"><i></i>LinkedIn Ads<small>Browser · Server · Offline</small></div>
+        <div class="tag node" id="n4"><i></i>Microsoft Ads<small>Browser · Server · Offline</small></div>
+        <div class="tag node" id="n5"><i></i>Reddit Ads<small>Browser · Server</small></div>
+        <div class="tag node" id="n6"><i></i>Pinterest Ads<small>Browser · Server · Offline</small></div>
+        <div class="tag node" id="n7"><i></i>Google Analytics 4<small>Browser · Server</small></div>
+      </div>
+
+      <!-- Typo-Ebene (alle Texte hier editierbar) -->
+      <div class="layer" id="type" data-start="0" data-duration="30" style="z-index:30">
+        <!-- Intro -->
+        <div class="abs kicker" id="presents" style="left:0;width:1920px;text-align:center;top:528px;font-size:17px;letter-spacing:.6em;color:rgba(243,241,236,.8)">Track präsentiert</div>
+
+        <!-- 01 -->
+        <div class="abs" id="s1" style="left:150px;top:640px">
+          <div class="kicker"><span class="mask"><span id="s1k">01 — Das Event</span></span></div>
+          <div class="title" style="margin-top:18px"><span class="mask"><span id="s1t">Ein Snippet.</span></span></div>
+        </div>
+
+        <!-- 02 -->
+        <div class="abs" id="s2" style="left:150px;top:590px">
+          <div class="kicker"><span class="mask"><span id="s2k">02 — Deduplizierung</span></span></div>
+          <div class="title light" style="margin-top:18px"><span class="mask"><span id="s2a">Jede Conversion</span></span></div>
+          <div class="title"><span class="mask"><span id="s2b">genau einmal gezählt.</span></span></div>
+        </div>
+
+        <!-- 03 -->
+        <div class="abs" id="s3" style="left:150px;top:590px">
+          <div class="kicker"><span class="mask"><span id="s3k">03 — Consent</span></span></div>
+          <div class="title light" style="margin-top:18px"><span class="mask"><span id="s3a">Nur, was Consent erlaubt,</span></span></div>
+          <div class="title"><span class="mask"><span id="s3b">verlässt deine Seite.</span></span></div>
+        </div>
+
+        <!-- 04 -->
+        <div class="abs" id="s4" style="left:150px;top:640px">
+          <div class="kicker"><span class="mask"><span id="s4k">04 — Serverseitige Zustellung</span></span></div>
+          <div class="title" style="margin-top:18px"><span class="mask"><span id="s4t">Jede Plattform.</span></span></div>
+        </div>
+        <div class="abs chrome" id="s4c" style="right:150px;top:190px;text-align:right">Zugestellt &nbsp;<span id="dlv" style="color:var(--ink)">0</span> / 8</div>
+
+        <!-- 05 -->
+        <div class="abs" id="score">
+          <div class="kicker" id="scoreLbl" style="margin-bottom:6px">Tracking Health Score</div>
+          <div id="scoreNum">70</div>
+          <div id="scoreOf">von 100</div>
+        </div>
+        <div class="abs" id="s5" style="left:150px;top:640px">
+          <div class="kicker"><span class="mask"><span id="s5k">05 — Datenqualität</span></span></div>
+          <div class="title light" style="margin-top:18px;font-size:72px"><span class="mask"><span id="s5a">Du weißt immer,</span></span></div>
+          <div class="title" style="font-size:72px"><span class="mask"><span id="s5b">was als Nächstes zu tun ist.</span></span></div>
+        </div>
+        <div class="abs chrome" id="s5r" style="right:150px;top:190px;text-align:right">
+          <div id="rec1" style="color:var(--amber)">Empfehlung · 1 Purchase ohne Währung</div>
+          <div id="rec2" style="color:var(--teal);margin-top:10px">✓ Behoben · Config v15 live</div>
+        </div>
+
+        <!-- Endkarte -->
+        <div id="logoMark">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="16" fill="#1f4fe0" />
+            <g transform="translate(12 12) scale(1.25)" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"><path d="M7 9.5H25" /><path d="M16 9.5V23" /></g>
+            <g transform="translate(12 12) scale(1.25)" fill="#ffffff"><circle cx="7" cy="9.5" r="3.4" /><circle cx="25" cy="9.5" r="3.4" /><circle cx="16" cy="23" r="3.4" /></g>
+          </svg>
+        </div>
+        <div class="abs" id="end" style="left:0;top:0">
+          <div id="wordmark" class="abs" style="left:0;top:0"><span class="mask"><span id="wm">Track</span></span></div>
+        </div>
+        <div class="abs" id="tag1" style="left:0;width:1920px;text-align:center;top:585px">
+          <div class="title light" style="font-size:40px;letter-spacing:-0.01em"><span class="mask"><span id="tagline">Ein Snippet. Jede Plattform. Jede Conversion genau einmal gezählt.</span></span></div>
+        </div>
+        <div class="abs kicker" id="url" style="left:0;width:1920px;text-align:center;top:660px;font-size:18px;color:var(--ink)">track.site</div>
+      </div>
+
+      <!-- Bild-Chrome wie im Referenzfilm -->
+      <div class="layer" id="chromeL" data-start="0" data-duration="30" style="z-index:40">
+        <div class="abs chrome" id="chTL" style="left:150px;top:166px">Track &nbsp;/&nbsp; Server-side Event Router</div>
+        <div class="abs chrome" id="chTR" style="right:150px;top:166px">EU · <span id="tc">12:04:19</span></div>
+      </div>
+
+      <div class="layer" id="flash" data-start="0" data-duration="30" style="z-index:80"></div>
+      <div class="layer" id="vig" data-start="0" data-duration="30" style="z-index:85"></div>
+      <div class="layer" id="grain" data-start="0" data-duration="30" style="z-index:86"></div>
+      <div class="layer" id="black" data-start="0" data-duration="30" style="z-index:88"></div>
+      <div class="layer" id="bars" data-start="0" data-duration="30" style="z-index:90">
+        <div class="abs bar" id="barT"></div><div class="abs bar" id="barB"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+      import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+      import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+      import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+      await Promise.all(["600 54px Inter", "400 30px Mono"].map((f) => document.fonts.load(f)));
+      const W = 1920, H = 1080, DUR = 30;
+      // Schnitte (Sekunden) – zentral, damit Bild, Typo und Ton zusammenpassen
+      const CUT = { s2: 5.2, s3: 10.2, s4: 15.4, s5: 21.0, s6: 24.6, logo: 25.0 };
+      const MERGE = 8.6, GATE_T = 14.45;
+
+      // ---------- Helfer ----------
+      const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+      const lerp = (a, b, u) => a + (b - a) * u;
+      const prog = (t, a, b) => clamp((t - a) / (b - a));
+      const eIO = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+      const eOut = (u) => 1 - Math.pow(1 - u, 3);
+      const eExpo = (u) => (u >= 1 ? 1 : 1 - Math.pow(2, -10 * u));
+      const V = (x, y, z) => new THREE.Vector3(x, y, z);
+      let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+      // ---------- Renderer ----------
+      const canvas = document.getElementById("gl");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+      const scene = new THREE.Scene(); scene.background = new THREE.Color(0x000000);
+      scene.fog = new THREE.FogExp2(0x02040a, 0.006);
+      const camera = new THREE.PerspectiveCamera(32, W / H, 0.1, 2000);
+      const composer = new EffectComposer(renderer);
+      composer.addPass(new RenderPass(scene, camera));
+      const bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), 0.9, 0.55, 0.22);
+      composer.addPass(bloom); composer.addPass(new OutputPass());
+
+      // ---------- Texturen ----------
+      function glowTex(power = 2.2) {
+        const c = document.createElement("canvas"); c.width = c.height = 128; const g = c.getContext("2d");
+        const img = g.createImageData(128, 128);
+        for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
+          const d = Math.hypot(x - 63.5, y - 63.5) / 63.5; const v = Math.pow(clamp(1 - d), power);
+          const i = (y * 128 + x) * 4; img.data[i] = img.data[i + 1] = img.data[i + 2] = 255; img.data[i + 3] = v * 255;
+        }
+        g.putImageData(img, 0, 0); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+      }
+      const TEX = glowTex(2.4), SOFT = glowTex(1.2);
+
+      const all = []; // alles, was pro Bild ein-/ausgeblendet wird
+      const reg = (o) => { all.push(o); o.visible = false; scene.add(o); return o; };
+      const add = THREE.AdditiveBlending;
+      function glow(color, sx, sy = sx, op = 1, map = TEX) {
+        const s = new THREE.Sprite(new THREE.SpriteMaterial({ map, color, blending: add, transparent: true, depthWrite: false, opacity: op }));
+        s.scale.set(sx, sy, 1); s.userData.base = [sx, sy, op]; return reg(s);
+      }
+      const show = (o, op) => { o.visible = op > 0.001; if (op !== undefined && o.material) o.material.opacity = op; return o; };
+
+      // ---------- Funke (Event) ----------
+      class Spark {
+        constructor(color, size = 1, n = 54) {
+          this.c = new THREE.Color(color); this.size = size; this.n = n;
+          this.core = glow(0xffffff, size * 0.7);
+          this.halo = glow(color, size * 3.4, size * 3.4, 0.65);
+          this.streak = glow(color, size * 26, size * 0.32, 0.55);
+          this.streak2 = glow(0xffffff, size * 9, size * 0.12, 0.6);
+          const g = new THREE.BufferGeometry();
+          g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+          g.setAttribute("color", new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+          this.trail = reg(new THREE.Points(g, new THREE.PointsMaterial({ size: size * 0.55, map: TEX, vertexColors: true, blending: add, transparent: true, depthWrite: false })));
+        }
+        set(fn, t, k = 1, born = -1e9, dt = 0.014) {
+          const p = fn(t), parts = [this.core, this.halo, this.streak, this.streak2];
+          const flick = 1 + 0.06 * Math.sin(t * 61) + 0.04 * Math.sin(t * 37);
+          parts.forEach((s) => { s.visible = k > 0.001; s.position.copy(p); const b = s.userData.base; s.scale.set(b[0] * k * flick, b[1] * k * flick, 1); s.material.opacity = b[2] * Math.min(1, k); });
+          const pos = this.trail.geometry.attributes.position, col = this.trail.geometry.attributes.color;
+          for (let i = 0; i < this.n; i++) {
+            const q = fn(Math.max(born, t - i * dt)); pos.setXYZ(i, q.x, q.y, q.z);
+            const f = Math.pow(1 - i / this.n, 2.2) * Math.min(1, k) * 0.9; col.setXYZ(i, this.c.r * f, this.c.g * f, this.c.b * f);
+          }
+          pos.needsUpdate = col.needsUpdate = true; this.trail.visible = k > 0.001; return p;
+        }
+      }
+
+      // ---------- Staub / Atmosphäre ----------
+      {
+        const n = 7000, a = new Float32Array(n * 3), c = new Float32Array(n * 3);
+        for (let i = 0; i < n; i++) {
+          a[i * 3] = (rnd() - 0.5) * 260; a[i * 3 + 1] = (rnd() - 0.5) * 150; a[i * 3 + 2] = 60 - rnd() * 360;
+          const w = 0.25 + rnd() * 0.75, warm = rnd() < 0.15; c[i * 3] = w * (warm ? 1 : 0.55); c[i * 3 + 1] = w * (warm ? 0.75 : 0.7); c[i * 3 + 2] = w * (warm ? 0.5 : 1);
+        }
+        const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(a, 3)); g.setAttribute("color", new THREE.BufferAttribute(c, 3));
+        var dust = reg(new THREE.Points(g, new THREE.PointsMaterial({ size: 0.32, map: TEX, vertexColors: true, blending: add, transparent: true, depthWrite: false, opacity: 0.55 })));
+      }
+      const haze = [glow(0x1b3dff, 90, 60, 0.03, SOFT), glow(0x00b3ff, 70, 40, 0.03, SOFT), glow(0xff7a2a, 60, 40, 0.02, SOFT)];
+
+      // ---------- Shot 1: die Website ----------
+      const site = new THREE.Group(); reg(site);
+      const lineMat = (c, o = 1) => new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: o, blending: add, depthWrite: false });
+      const siteLines = [];
+      function bar(x1, y1, x2, y2, th, mat) {
+        const len = Math.hypot(x2 - x1, y2 - y1), m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
+        m.userData = { x1, y1, x2, y2, len, th }; site.add(m); siteLines.push(m); return m;
+      }
+      function rect(x, y, w, h, th, mat) { return [bar(x, y + h, x + w, y + h, th, mat), bar(x + w, y + h, x + w, y, th, mat), bar(x + w, y, x, y, th, mat), bar(x, y, x, y + h, th, mat)]; }
+      const mFrame = lineMat(new THREE.Color(0.25, 0.42, 1.1), 0.9), mDim = lineMat(new THREE.Color(0.1, 0.16, 0.38), 0.6);
+      rect(-9, -5.6, 18, 11.2, 0.05, mFrame); bar(-9, 4.4, 9, 4.4, 0.04, mFrame);
+      [-8.4, -7.8, -7.2].forEach((x) => { const d = new THREE.Mesh(new THREE.CircleGeometry(0.16, 20), mFrame); d.position.set(x, 5.0, 0); site.add(d); });
+      rect(-5.6, 4.7, 11.2, 0.6, 0.03, mDim);
+      rect(-8, -4.6, 7.4, 8, 0.04, mDim);                           // Produktbild
+      for (let i = 0; i < 9; i++) bar(-8 + i * 0.95, -4.6, -8 + i * 0.95 + 0.0001, 3.4, 0.008, mDim);
+      bar(0.4, 3.0, 7.6, 3.0, 0.22, mDim); bar(0.4, 2.2, 5.6, 2.2, 0.22, mDim);       // Titelzeilen
+      bar(0.4, 0.9, 7.8, 0.9, 0.06, mDim); bar(0.4, 0.3, 7.0, 0.3, 0.06, mDim); bar(0.4, -0.3, 7.4, -0.3, 0.06, mDim);
+      bar(0.4, -1.6, 2.6, -1.6, 0.3, mFrame);                                          // Preis
+      function textTex(txt, w, h, size, color, font = "500 {s}px Inter") {
+        const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d");
+        g.fillStyle = color; g.font = font.replace("{s}", size); g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(txt, w / 2, h / 2 + 2);
+        const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+      }
+      const urlTxt = new THREE.Mesh(new THREE.PlaneGeometry(11.2, 0.6), new THREE.MeshBasicMaterial({ map: textTex("demo-shop.example", 1120, 60, 30, "#8fa6ff", "400 {s}px Mono"), transparent: true, blending: add, depthWrite: false }));
+      urlTxt.position.set(0, 5.0, 0.01); site.add(urlTxt);
+      const BTN = V(4.2, -3.6, 0);
+      const btn = new THREE.Mesh(new THREE.PlaneGeometry(7.6, 1.5), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.12, 0.31, 0.88), transparent: true, depthWrite: false }));
+      btn.position.copy(BTN); site.add(btn);
+      const btnTxt = new THREE.Mesh(new THREE.PlaneGeometry(7.6, 1.5), new THREE.MeshBasicMaterial({ map: textTex("Jetzt kaufen", 760, 150, 54, "#ffffff", "600 {s}px Inter"), transparent: true, depthWrite: false }));
+      btnTxt.position.copy(BTN).z += 0.01; site.add(btnTxt);
+      const clickRing = reg(new THREE.Mesh(new THREE.RingGeometry(0.985, 1, 128), lineMat(new THREE.Color(0.3, 0.5, 1.1), 1)));
+
+      // ---------- Funken ----------
+      const ev = new Spark(0x7fd8ff, 1.0);       // Browser-Event
+      const evB = new Spark(0xffa040, 1.0);      // Server-Event (Doppelgänger)
+      const reds = Array.from({ length: 6 }, () => new Spark(0xff3355, 0.55, 30));
+      const streams = Array.from({ length: 8 }, () => new Spark(0x8fd0ff, 0.5, 40));
+      const logoS = Array.from({ length: 3 }, () => new Spark(0xbcd2ff, 0.9, 44));
+
+      // Schockwelle (Deduplizierung)
+      const shock = reg(new THREE.Mesh(new THREE.RingGeometry(0.97, 1, 160), lineMat(new THREE.Color(1.2, 1.2, 1.6), 1)));
+      const shock2 = reg(new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 160), lineMat(new THREE.Color(0.3, 0.6, 1.6), 1)));
+
+      // ---------- Shot 3: Tunnel + Consent-Tor ----------
+      const RINGS = [-12, -24, -36, -48].map((z) => { const m = reg(new THREE.Mesh(new THREE.TorusGeometry(7.5, 0.035, 8, 160), lineMat(new THREE.Color(0.2, 0.55, 0.9), 0.7))); m.position.set(0, 0, z); return m; });
+      const GZ = -62;
+      const gate = reg(new THREE.Mesh(new THREE.TorusGeometry(9, 0.09, 12, 220), lineMat(new THREE.Color(0.4, 2.0, 1.5), 1))); gate.position.z = GZ;
+      const gate2 = reg(new THREE.Mesh(new THREE.TorusGeometry(9.6, 0.02, 8, 220), lineMat(new THREE.Color(0.3, 1.2, 1.0), 0.7))); gate2.position.z = GZ;
+      const gateDisc = reg(new THREE.Mesh(new THREE.CircleGeometry(9, 96), new THREE.MeshBasicMaterial({ map: SOFT, color: new THREE.Color(0.05, 0.4, 0.32), transparent: true, opacity: 0.5, blending: add, depthWrite: false }))); gateDisc.position.z = GZ;
+      const gateTicks = new THREE.Group(); reg(gateTicks); gateTicks.position.z = GZ;
+      for (let i = 0; i < 72; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(0.05, i % 6 ? 0.35 : 0.8), lineMat(new THREE.Color(0.3, 1.4, 1.1), 0.8)); const a = (i / 72) * Math.PI * 2; m.position.set(Math.cos(a) * 10.4, Math.sin(a) * 10.4, 0); m.rotation.z = a - Math.PI / 2; gateTicks.add(m); }
+      const ripples = Array.from({ length: 6 }, () => reg(new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 64), lineMat(new THREE.Color(2.0, 0.3, 0.5), 1))));
+      const passRing = reg(new THREE.Mesh(new THREE.RingGeometry(0.985, 1, 200), lineMat(new THREE.Color(0.3, 1.2, 0.9), 1)));
+      const REDS = [0, 1, 2, 3, 4, 5].map((i) => {
+        const a = i * 1.05 + 0.4, r = 4 + (i % 3) * 1.6; const hit = V(Math.cos(a) * r, Math.sin(a) * r, GZ);
+        const from = V(Math.cos(a + 0.6) * 22, Math.sin(a + 0.6) * 14, GZ + 30 + i * 2); return { hit, from, th: 11.0 + i * 0.42 };
+      });
+      function redPath(R) { return (t) => {
+        const u = (t - (R.th - 1.1)) / 1.1;
+        if (u <= 1) return new THREE.Vector3().lerpVectors(R.from, R.hit, eIO(clamp(u)) * 0.6 + clamp(u) * 0.4);
+        const back = R.from.clone().sub(R.hit).normalize().multiplyScalar(4).add(V(R.hit.x * 0.3, R.hit.y * 0.3, 0));
+        return R.hit.clone().add(back.multiplyScalar(eOut(clamp((t - R.th) / 0.9)))); }; }
+
+      // ---------- Shot 4: Plattformen ----------
+      const NODES = Array.from({ length: 8 }, (_, i) => {
+        const a = -2.35 + i * (4.7 / 7) + (i % 2 ? 0.08 : -0.08); const el = (i % 3 - 1) * 9 + Math.sin(i * 2.1) * 3;
+        return V(Math.sin(a) * 52, el, -Math.cos(a) * 22 - 6);
+      });
+      const nodeG = NODES.map((p) => { const s = glow(0xbfe0ff, 6, 6, 0.0); s.position.copy(p); return s; });
+      const nodeC = NODES.map((p) => { const s = glow(0xffffff, 1.6, 1.6, 0.0); s.position.copy(p); return s; });
+      const nodeR = NODES.map((p) => reg(new THREE.Mesh(new THREE.RingGeometry(0.95, 1, 96), lineMat(new THREE.Color(0.6, 1.0, 2.0), 1))));
+      const ctrl = NODES.map((p, i) => p.clone().multiplyScalar(0.5).add(V(0, (i % 2 ? 1 : -1) * 10, 8)));
+      const bez = (i, u) => { const a = V(0, 0, 0), b = ctrl[i], c = NODES[i]; const m = 1 - u; return V(m * m * a.x + 2 * m * u * b.x + u * u * c.x, m * m * a.y + 2 * m * u * b.y + u * u * c.y, m * m * a.z + 2 * m * u * b.z + u * u * c.z); };
+      const beams = NODES.map((_, i) => {
+        const pts = []; for (let k = 0; k <= 80; k++) pts.push(bez(i, k / 80));
+        const g = new THREE.BufferGeometry().setFromPoints(pts);
+        return reg(new THREE.Line(g, new THREE.LineBasicMaterial({ color: new THREE.Color(0.25, 0.5, 1.2), transparent: true, opacity: 0.8, blending: add, depthWrite: false })));
+      });
+      const hubCore = glow(0xffffff, 1.4, 1.4, 0.8), hubHalo = glow(0x4f8bff, 6, 6, 0.25);
+      const ST0 = CUT.s4 + 0.55, STD = 0.15, STL = 1.5; // Start, Versatz, Laufzeit der Streams
+
+      // ---------- Shot 5: Score-Ring ----------
+      const segs = new THREE.Group(); reg(segs);
+      const mSegOff = lineMat(new THREE.Color(0.12, 0.14, 0.22), 1), mSegAmb = lineMat(new THREE.Color(2.0, 1.05, 0.35), 1), mSegOk = lineMat(new THREE.Color(0.45, 1.9, 1.5), 1);
+      for (let i = 0; i < 100; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(0.09, 0.9), mSegOff); const a = Math.PI / 2 - (i / 100) * Math.PI * 2; m.position.set(Math.cos(a) * 7.2, Math.sin(a) * 7.2, 0); m.rotation.z = a - Math.PI / 2; segs.add(m); }
+      const scoreRing = reg(new THREE.Mesh(new THREE.RingGeometry(8.3, 8.33, 200), lineMat(new THREE.Color(0.3, 0.4, 0.8), 0.6)));
+
+      // ---------- Shot 6: das Logo ----------
+      const S = 0.25, LC = (x, y) => V((12 + 1.25 * x - 32) * S, -(12 + 1.25 * y - 32) * S, 0); // SVG -> Welt
+      const LP = [LC(7, 9.5), LC(25, 9.5), LC(16, 23)], STEM = LC(16, 9.5);
+      const LFROM = [V(-60, 22, -80), V(70, 18, -60), V(-10, -50, -40)];
+      const lMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(1.6, 1.6, 1.6), toneMapped: false });
+      const beamH = reg(new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 1, 24), lMat)); beamH.rotation.z = Math.PI / 2;
+      const beamV = reg(new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 1, 24), lMat));
+      const dots = LP.map(() => reg(new THREE.Mesh(new THREE.SphereGeometry(0.425, 32, 16), lMat)));
+      const plateShape = new THREE.Shape(); { const s = 8, r = 4; plateShape.moveTo(-s + r, -s); plateShape.lineTo(s - r, -s); plateShape.quadraticCurveTo(s, -s, s, -s + r); plateShape.lineTo(s, s - r); plateShape.quadraticCurveTo(s, s, s - r, s); plateShape.lineTo(-s + r, s); plateShape.quadraticCurveTo(-s, s, -s, s - r); plateShape.lineTo(-s, -s + r); plateShape.quadraticCurveTo(-s, -s, -s + r, -s); }
+      const plate = reg(new THREE.Mesh(new THREE.ShapeGeometry(plateShape, 24), new THREE.MeshBasicMaterial({ color: 0x1f4fe0, transparent: true, toneMapped: false })));
+      plate.position.z = -0.6;
+      const plateGlow = glow(0x2a5cff, 34, 34, 0.0, SOFT);
+      const sweep = glow(0xffffff, 40, 0.35, 0.0);
+
+      // ---------- HUD ----------
+      const tagEl = (id) => document.getElementById(id);
+      const T = { click: tagEl("tgClick"), A: tagEl("tgA"), B: tagEl("tgB"), M: tagEl("tgM"), red: tagEl("tgRed"), gate: tagEl("tgGate"), n: NODES.map((_, i) => tagEl("n" + i)) };
+      const allTags = [T.click, T.A, T.B, T.M, T.red, T.gate, ...T.n];
+      const tmp = new THREE.Vector3();
+      function pin(el, p, op, dx = 26, dy = -10) {
+        tmp.copy(p).project(camera);
+        const x = (tmp.x * 0.5 + 0.5) * W + dx, y = (-tmp.y * 0.5 + 0.5) * H + dy;
+        el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; el.style.opacity = tmp.z < 1 ? op.toFixed(3) : 0;
+      }
+      const look = (pos, tgt, roll = 0) => { camera.position.copy(pos); camera.up.set(Math.sin(roll), Math.cos(roll), 0); camera.lookAt(tgt); camera.updateMatrixWorld(true); };
+      const logoMark = document.getElementById("logoMark"), dlv = document.getElementById("dlv"), scoreNum = document.getElementById("scoreNum"), tc = document.getElementById("tc");
+
+      // ---------- Ein Bild zeichnen: alles ist eine Funktion der Zeit t ----------
+      function draw(t) {
+        all.forEach((o) => (o.visible = false));
+        allTags.forEach((e) => (e.style.opacity = 0));
+        camera.fov = 32; bloom.strength = 0.9; renderer.toneMappingExposure = 1.0;
+        dust.visible = true; dust.material.opacity = 0.55;
+        dust.rotation.y = t * 0.004;
+        tc.textContent = "12:04:" + String(19 + Math.floor(t / 2.5)).padStart(2, "0");
+
+        if (t < CUT.s2) {
+          // ===== 1 · Die Website, der Klick =====
+          const u = prog(t, 0, 2.7);
+          const camP = V(lerp(-3, 3.6, eIO(u)), lerp(1.5, -2.6, eIO(u)), lerp(34, 13, eIO(u)));
+          const fly = prog(t, 2.75, CUT.s2);
+          const evFn = (x) => { const k = eIO(prog(x, 2.75, CUT.s2 + 0.4)); return V(BTN.x + Math.sin(k * 2.2) * 6 - k * 10, BTN.y + k * 7 + Math.sin(k * 5) * 0.6, 0.4 + k * 20); };
+          const camT = V(lerp(0, BTN.x, eIO(u)), lerp(0, BTN.y, eIO(u)), 0);
+          if (t > 2.75) { const e = evFn(t); camP.lerp(V(e.x + 2, e.y + 1.5, e.z + 11), eIO(fly) * 0.85); camT.lerp(e, eIO(fly)); }
+          look(camP, camT, -0.04 + 0.05 * eIO(u));
+          show(site, 1); const draw1 = eOut(prog(t, 1.1, 2.6));
+          siteLines.forEach((m, i) => { const d = m.userData, k = clamp(draw1 * 1.6 - (i / siteLines.length) * 0.6); const cx = d.x1 + (d.x2 - d.x1) * k / 2, cy = d.y1 + (d.y2 - d.y1) * k / 2; m.position.set(cx, cy, 0); m.rotation.z = Math.atan2(d.y2 - d.y1, d.x2 - d.x1); m.scale.set(Math.max(0.0001, d.len * k), d.th, 1); m.visible = k > 0; });
+          const press = prog(t, 2.55, 2.75), rel = prog(t, 2.75, 3.3);
+          btn.scale.setScalar(1 - 0.06 * Math.sin(press * Math.PI));
+          const hot = (press > 0) * (1 - rel); btn.material.color.setRGB(0.05 + 0.18 * hot, 0.13 + 0.25 * hot, 0.42 + 0.3 * hot);
+          btn.material.opacity = btnTxt.material.opacity = clamp(draw1 * 2 - 0.6);
+          urlTxt.material.opacity = clamp(draw1 * 2 - 0.8);
+          site.children.forEach((m) => { if (m.material && m.material !== btn.material && m.material !== btnTxt.material) m.material.opacity = m.material === mDim ? 0.6 * (1 - 0.6 * fly) : 0.9 * (1 - 0.5 * fly); });
+          if (t > 2.72) { const r = prog(t, 2.72, 3.6); show(clickRing, (1 - r) * 0.6); clickRing.position.copy(BTN).z += 0.05; clickRing.scale.setScalar(0.5 + eOut(r) * 9); }
+          if (t > 2.72) { const k = 0.75 * Math.min(1, prog(t, 2.72, 2.95)) * (1 + 0.3 * (1 - prog(t, 2.72, 3.3))); const p = ev.set(evFn, t, k, 2.72); pin(T.click, p, prog(t, 3.0, 3.4) * (1 - prog(t, 4.7, 5.1))); }
+          haze[0].position.set(0, 0, -30); show(haze[0], 0.025 * eOut(prog(t, 1, 2.5)));
+          haze[1].position.set(BTN.x, BTN.y, -8); show(haze[1], 0.012); bloom.strength = 0.7;
+          dust.material.opacity = 0.2 + 0.3 * prog(t, 0.5, 3);
+        } else if (t < CUT.s3) {
+          // ===== 2 · Zwei Funken, ein Event =====
+          const u = prog(t, CUT.s2, MERGE);
+          const orb = (x, s) => { const v = prog(x, CUT.s2 - 0.4, MERGE); const r = 15 * Math.pow(1 - v, 1.25); const th = s * Math.PI + 7.5 * Math.pow(v, 1.6); return V(r * Math.cos(th), r * 0.22 * Math.sin(th * 0.9) + (1 - v) * s * 1.5, r * Math.sin(th) * 0.8); };
+          const camP = V(lerp(-2, 1, u), lerp(5, 2.2, eIO(u)), lerp(38, 19, eIO(u)));
+          const after = prog(t, MERGE, CUT.s3);
+          camP.z -= 4 * eOut(after); look(camP, V(0, 0, 0), 0.06 - 0.12 * u);
+          if (t < MERGE) {
+            const k = 1 + 0.8 * Math.pow(u, 4);
+            const a = ev.set((x) => orb(x, 0), t, k), b = evB.set((x) => orb(x, 1), t, k);
+            pin(T.A, a, prog(t, CUT.s2 + 0.3, CUT.s2 + 0.7) * (1 - prog(t, MERGE - 0.7, MERGE - 0.3)));
+            pin(T.B, b, prog(t, CUT.s2 + 0.5, CUT.s2 + 0.9) * (1 - prog(t, MERGE - 0.7, MERGE - 0.3)));
+          } else {
+            const pulse = 1 + 2.4 * Math.exp(-(t - MERGE) * 3.5);
+            const p = ev.set(() => V(0, 0, 0), t, 1.5 * pulse, MERGE);
+            const r = prog(t, MERGE, MERGE + 1.3), r2 = prog(t, MERGE + 0.08, MERGE + 1.6);
+            show(shock, (1 - r) * 1.0); shock.scale.setScalar(0.3 + eExpo(r) * 26); shock.lookAt(camera.position);
+            show(shock2, (1 - r2) * 0.8); shock2.scale.setScalar(0.3 + eExpo(r2) * 16); shock2.lookAt(camera.position);
+            pin(T.M, p, prog(t, MERGE + 0.35, MERGE + 0.7), 40, -40);
+          }
+          haze[0].position.set(0, 0, -40); show(haze[0], 0.03); haze[2].position.set(0, -10, -50); show(haze[2], 0.015 + 0.06 * Math.exp(-Math.max(0, t - MERGE) * 2) * (t > MERGE));
+        } else if (t < CUT.s4) {
+          // ===== 3 · Durch das Consent-Tor =====
+          const v = 15.5, S0 = CUT.s3;
+          const evFn = (x) => { const z = -(x - S0) * v + 6; return V(Math.sin(x * 1.3) * 0.5, Math.cos(x * 1.1) * 0.35 - 0.4, z); };
+          const p = ev.set(evFn, t, 1.25, S0 - 1);
+          const camP = p.clone().add(V(2.6 - 1.6 * prog(t, S0, GATE_T), 1.6, 9.5)); look(camP, p.clone().add(V(0, 0.6, -14)), 0.05 * Math.sin(t * 0.8));
+          RINGS.forEach((m) => show(m, 0.7));
+          const g = prog(t, GATE_T - 0.05, GATE_T + 0.6);
+          gate.material.color.setRGB(0.25 + 1.5 * (1 - g) * (t > GATE_T), 1.3 + 1.0 * (1 - g) * (t > GATE_T), 1.0 + 1.0 * (1 - g) * (t > GATE_T));
+          show(gate, 1); show(gate2, 0.7); show(gateDisc, (0.14 + 0.12 * (t > GATE_T) * (1 - g)) * (1 - prog(t, GATE_T - 0.4, GATE_T))); show(gateTicks, 1);
+          gateTicks.rotation.z = t * 0.25; gate2.rotation.z = -t * 0.1;
+          REDS.forEach((R, i) => {
+            const fn = redPath(R); const k = prog(t, R.th - 1.1, R.th - 0.9) * (1 - prog(t, R.th + 0.3, R.th + 0.9));
+            if (k > 0) { const q = reds[i].set(fn, t, k * 0.9, R.th - 1.1); if (i === 1) pin(T.red, q, k * prog(t, R.th - 0.6, R.th - 0.3), 26, -26); }
+            const rr = prog(t, R.th, R.th + 0.8); if (rr > 0 && rr < 1) { show(ripples[i], (1 - rr) * 0.9); ripples[i].position.copy(R.hit).z += 0.05; ripples[i].scale.setScalar(0.2 + eOut(rr) * 3.2); }
+          });
+          if (t > GATE_T) { const r = prog(t, GATE_T, GATE_T + 0.8); show(passRing, 1 - r); passRing.position.set(0, 0, GZ + 0.1); passRing.scale.setScalar(9 + eOut(r) * 12); pin(T.gate, p, prog(t, GATE_T + 0.1, GATE_T + 0.35), 34, -36); }
+          haze[1].position.set(0, 0, GZ - 140); show(haze[1], 0.03);
+          bloom.strength = 0.9 + 0.15 * (t > GATE_T) * (1 - g);
+        } else if (t < CUT.s6) {
+          // ===== 4 + 5 · Fächer zu den Plattformen, dann der Score =====
+          const pull = eIO(prog(t, CUT.s4, 20.4));
+          const ang = lerp(-0.35, 0.18, pull), dist = lerp(18, 118, pull);
+          let camP = V(Math.sin(ang) * dist, lerp(0.6, 24, pull), Math.cos(ang) * dist);
+          let camT = V(0, lerp(0, 2, pull), lerp(0, -8, pull));
+          const inS5 = t >= CUT.s5; const s5 = prog(t, CUT.s5, CUT.s6);
+          if (inS5) { const a = 0.18 + 0.12 * s5; camP = V(Math.sin(a) * 118, 24 + 4 * s5, Math.cos(a) * 118); }
+          look(camP, camT, -0.03);
+          // Hub
+          const hb = 1 + 0.7 * Math.exp(-Math.max(0, t - CUT.s4) * 4);
+          hubCore.position.set(0, 0, 0); hubHalo.position.set(0, 0, 0);
+          hubCore.visible = hubHalo.visible = true; hubCore.scale.setScalar(1.4 * hb); hubHalo.scale.setScalar(6 * hb); hubHalo.material.opacity = 0.25;
+          if (t < CUT.s4 + 0.6) ev.set(() => V(0, 0, 0), t, 1.1 * hb * (1 - prog(t, CUT.s4 + 0.3, CUT.s4 + 0.6)), CUT.s4);
+          let delivered = 0;
+          NODES.forEach((P, i) => {
+            const s0 = ST0 + i * STD, u = prog(t, s0, s0 + STL);
+            if (u > 0 && u < 1) streams[i].set((x) => bez(i, eIO(prog(x, s0, s0 + STL))), t, 1.3, s0, 0.02);
+            const arr = prog(t, s0 + STL, s0 + STL + 0.25), fade = inS5 ? 1 - 0.55 * s5 : 1;
+            beams[i].visible = u > 0; beams[i].geometry.setDrawRange(0, Math.floor(eIO(u) * 81)); beams[i].material.opacity = 0.55 * fade;
+            show(nodeC[i], (0.25 + 0.75 * arr) * fade); nodeC[i].scale.setScalar(1.6 + 2.2 * (1 - arr) * (arr > 0));
+            show(nodeG[i], (0.12 + 0.5 * arr) * fade);
+            if (arr > 0) { delivered++; const r = prog(t, s0 + STL, s0 + STL + 1.0); show(nodeR[i], (1 - r) * 0.9); nodeR[i].position.copy(P); nodeR[i].lookAt(camera.position); nodeR[i].scale.setScalar(0.5 + eOut(r) * 5); }
+            pin(T.n[i], P, prog(t, s0 + STL, s0 + STL + 0.4) * (inS5 ? 1 - prog(t, CUT.s5, CUT.s5 + 0.4) : 1) * 0.95, 22, -12);
+          });
+          dlv.textContent = delivered;
+          haze[0].position.set(0, 0, -60); show(haze[0], 0.035); haze[1].position.set(-30, 10, -40); show(haze[1], 0.02);
+          if (inS5) {
+            // Score-Ring vor der Kamera
+            const fwd = new THREE.Vector3(); camera.getWorldDirection(fwd);
+            const ringPos = camera.position.clone().add(fwd.multiplyScalar(lerp(34, 30, s5)));
+            segs.position.copy(ringPos); segs.quaternion.copy(camera.quaternion); segs.rotateX(0.22 - 0.1 * s5); segs.rotateY(-0.12);
+            scoreRing.position.copy(segs.position); scoreRing.quaternion.copy(segs.quaternion);
+            const app = eOut(prog(t, CUT.s5, CUT.s5 + 0.9));
+            const sc = Math.round(lerp(0, 70, app) + 30 * eIO(prog(t, 22.6, 23.5)));
+            const done = sc >= 100;
+            segs.visible = true; segs.children.forEach((m, i) => (m.material = i < sc ? (done ? mSegOk : mSegAmb) : mSegOff));
+            show(scoreRing, 0.6 * app); scoreNum.textContent = sc;
+            bloom.strength = 0.9 + (done ? 0.5 * (1 - prog(t, 23.5, 24.2)) : 0);
+          }
+        } else {
+          // ===== 6 · Stille, dann das Logo =====
+          const L = CUT.logo; const u = prog(t, L, L + 1.6);
+          const settle = eIO(prog(t, L, 26.95)); const orbit = lerp(0.75, 0, settle), dist = lerp(44, 70, settle);
+          look(V(Math.sin(orbit) * dist, lerp(-9, 0, settle), Math.cos(orbit) * dist), V(0, 0, 0), lerp(-0.1, 0, settle));
+          dust.material.opacity = 0.45 * prog(t, L, L + 0.6);
+          if (t < L) { dust.visible = false; renderer.setClearColor(0, 1); composer.render(); return; }
+          LP.forEach((P, i) => {
+            const s0 = L + i * 0.12, e = s0 + 1.15;
+            const fn = (x) => { const k = eExpo(prog(x, s0, e)); return new THREE.Vector3().lerpVectors(LFROM[i], P, k); };
+            if (t < e + 0.5) logoS[i].set(fn, t, (t < e ? 0.8 : 1 + 1.2 * Math.exp(-(t - e) * 6)) * (1 - prog(t, e + 0.15, e + 0.5)), s0, 0.02);
+            const d = prog(t, e - 0.05, e + 0.1); dots[i].visible = d > 0; dots[i].position.copy(P); dots[i].scale.setScalar(eOut(d) * (1 + 0.5 * (1 - prog(t, e, e + 0.5))));
+          });
+          const bh = eExpo(prog(t, L + 1.35, L + 1.85)), bv = eExpo(prog(t, L + 1.55, L + 2.05));
+          beamH.visible = bh > 0; beamH.scale.set(1, Math.max(0.001, bh * (LP[1].x - LP[0].x)), 1); beamH.position.set(0, LP[0].y, 0);
+          beamV.visible = bv > 0; beamV.scale.set(1, Math.max(0.001, bv * (STEM.y - LP[2].y)), 1); beamV.position.set(0, STEM.y - bv * (STEM.y - LP[2].y) / 2, 0);
+          const pl = eExpo(prog(t, L + 1.6, L + 1.95));
+          plate.visible = pl > 0; plate.scale.setScalar(0.85 + 0.15 * pl); plate.material.opacity = pl;
+          show(plateGlow, 0.12 * pl * (1 - 0.6 * prog(t, 27.4, 28.2))); plateGlow.position.set(0, 0, -1);
+          const sw = prog(t, L + 2.2, L + 3.0); if (sw > 0 && sw < 1) { show(sweep, Math.sin(sw * Math.PI) * 0.8); sweep.position.set(0, lerp(9, -9, eIO(sw)), 0.3); }
+          lMat.color.setScalar(1.0 + 0.8 * (1 - prog(t, L + 1.6, 27.6)));
+          bloom.strength = lerp(1.1, 0.0, prog(t, 27.0, 27.6));
+          // Exaktes SVG-Logo deckungsgleich über die 3D-Platte legen
+          const c1 = V(-8, 8, -0.6).project(camera), c2 = V(8, -8, -0.6).project(camera);
+          const x1 = (c1.x * 0.5 + 0.5) * W, y1 = (-c1.y * 0.5 + 0.5) * H, x2 = (c2.x * 0.5 + 0.5) * W;
+          logoMark.dataset.x = x1; logoMark.dataset.y = y1; logoMark.dataset.s = (x2 - x1) / 100;
+          haze[0].position.set(0, 0, -40); show(haze[0], 0.03 * prog(t, L, L + 1));
+          if (t > 27.36) [plate, plateGlow, beamH, beamV, ...dots].forEach((o) => (o.visible = false));
+        }
+        renderer.toneMapping = t > 27.0 && t >= CUT.s6 ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
+        composer.render();
+      }
+
+      // ---------- Timeline ----------
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      let ready = false;
+      const clock = { _t: -1 }; Object.defineProperty(clock, "t", { get() { return this._t; }, set(v) { if (v !== this._t) { this._t = v; draw(v); if (ready) placeLogo(); } } });
+      tl.fromTo(clock, { t: 0 }, { t: DUR, duration: DUR, ease: "none", immediateRender: false }, 0);
+
+      const up = (sel, t, d = 0.9) => tl.fromTo(sel, { yPercent: 110 }, { yPercent: 0, duration: d, ease: "expo.out", immediateRender: false }, t);
+      const out = (sel, t, d = 0.35) => tl.to(sel, { opacity: 0, duration: d, ease: "power2.in" }, t);
+      const flash = (t, o = 0.8, d = 0.35) => tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t);
+      const blurIn = (sel, t, d = 1.2) => tl.fromTo(sel, { opacity: 0, filter: "blur(14px)", letterSpacing: "0.9em" }, { opacity: 1, filter: "blur(0px)", letterSpacing: "0.6em", duration: d, ease: "power3.out", immediateRender: false }, t);
+      ["#s1k", "#s1t", "#s2k", "#s2a", "#s2b", "#s3k", "#s3a", "#s3b", "#s4k", "#s4t", "#s5k", "#s5a", "#s5b", "#wm", "#tagline"].forEach((s) => tl.set(s, { yPercent: 110 }, 0));
+      tl.set(["#presents", "#s4c", "#score", "#s5r", "#rec2", "#url", "#chromeL"], { opacity: 0 }, 0);
+      for (let i = 0; i < DUR * 24; i++) tl.set("#grain", { x: Math.round((rnd() - 0.5) * 900), y: Math.round((rnd() - 0.5) * 500) }, i / 24);
+
+      // Auf aus Schwarz, Balken atmen kurz
+      tl.fromTo("#black", { opacity: 1 }, { opacity: 0, duration: 1.4, ease: "sine.inOut", immediateRender: false }, 0.1);
+      tl.fromTo(".bar", { height: 540 }, { height: 138, duration: 2.2, ease: "expo.inOut", immediateRender: false }, 0.0);
+      blurIn("#presents", 0.3, 1.2); out("#presents", 1.55, 0.45);
+      tl.to("#chromeL", { opacity: 1, duration: 1.0 }, 2.4);
+
+      // 01
+      flash(2.74, 0.35, 0.5);
+      up("#s1k", 3.25, 0.8); up("#s1t", 3.4, 1.0); out("#s1", 4.75, 0.3);
+      // 02
+      flash(CUT.s2, 0.25, 0.25);
+      up("#s2k", MERGE + 0.05, 0.8); flash(MERGE, 0.6, 0.7); up("#s2a", MERGE + 0.2, 1.0); up("#s2b", MERGE + 0.38, 1.0); out("#s2", CUT.s3 - 0.3, 0.25);
+      // 03
+      flash(CUT.s3, 0.2, 0.25);
+      up("#s3k", 10.9, 0.8); up("#s3a", 11.05, 1.0); up("#s3b", 11.25, 1.0); out("#s3", 13.9, 0.4);
+      flash(GATE_T, 0.18, 0.4);
+      // 04
+      flash(CUT.s4, 0.3, 0.5);
+      up("#s4k", 17.3, 0.8); up("#s4t", 17.45, 1.0); tl.to("#s4c", { opacity: 1, duration: 0.5 }, 16.2);
+      out(["#s4", "#s4c"], CUT.s5 - 0.25, 0.25);
+      // 05
+      tl.fromTo("#score", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.9, ease: "expo.out", immediateRender: false }, CUT.s5 + 0.15);
+      tl.to("#s5r", { opacity: 1, duration: 0.4 }, 21.6); tl.to("#rec1", { opacity: 0.35, duration: 0.3 }, 23.5); tl.to("#rec2", { opacity: 1, duration: 0.3 }, 23.5);
+      tl.fromTo("#scoreNum", { color: "#ffb35c" }, { color: "#ffb35c", duration: 0.01, immediateRender: false }, CUT.s5);
+      tl.to("#scoreNum", { color: "#a8ffe2", duration: 0.25 }, 23.5); flash(23.5, 0.35, 0.5);
+      up("#s5k", 21.9, 0.8); up("#s5a", 22.05, 1.0); up("#s5b", 22.25, 1.0);
+      out(["#s5", "#score", "#s5r", "#chromeL"], CUT.s6 - 0.3, 0.3);
+      // 06 – Stille, Schlag, Logo
+      tl.to("#black", { opacity: 1, duration: 0.12 }, CUT.s6 - 0.05); tl.to("#black", { opacity: 0, duration: 0.25 }, CUT.logo);
+      flash(CUT.logo + 1.35, 0.15, 0.35);
+      // Logo: SVG übernimmt die 3D-Platte, dann nach links; Wortmarke erscheint
+      const logoPos = { _k: 0 }; Object.defineProperty(logoPos, "k", { get() { return this._k; }, set(v) { this._k = v; if (ready) placeLogo(); } });
+      tl.fromTo(logoPos, { k: 0 }, { k: 1, duration: 0.95, ease: "expo.inOut", immediateRender: false }, 27.55);
+      tl.fromTo("#logoMark", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "none", immediateRender: false }, 27.0);
+      up("#wm", 28.4, 0.9); up("#tagline", 28.7, 0.9); tl.to("#url", { opacity: 1, duration: 0.5 }, 28.95);
+      tl.to("#black", { opacity: 1, duration: 0.35, ease: "power2.in" }, 29.65);
+
+      const wmEl = document.getElementById("wordmark"); const END_SIZE = 150, GAP = 44;
+      function placeLogo() {
+        const x = +logoMark.dataset.x || 0, y = +logoMark.dataset.y || 0, s = +logoMark.dataset.s || 1;
+        const k = logoPos.k, size0 = s * 100;
+        const wmW = wmEl.firstElementChild.firstElementChild.getBoundingClientRect().width / (1) || 380;
+        const total = END_SIZE + GAP + 392; const ex = (W - total) / 2, ey = 360;
+        const cx = lerp(x, ex, k), cy = lerp(y, ey, k), sz = lerp(size0, END_SIZE, k);
+        logoMark.style.transform = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) scale(${(sz / 100).toFixed(4)})`;
+        wmEl.style.transform = `translate(${(ex + END_SIZE + GAP).toFixed(1)}px, ${(ey - 3).toFixed(1)}px)`;
+      }
+      window.__timelines["main"] = tl;
+      ready = true; tl.seek(0); draw(0); placeLogo();
+    </script>
+  </body>
+</html>
