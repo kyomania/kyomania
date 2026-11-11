@@ -2,14 +2,14 @@
 
 **Regeln für alle Grafiken**
 - **Kein Text in den Bildern.** Alle Wörter und Zitate kommen als echte AE-Textebenen dazu, damit sie editierbar bleiben und korrekt geschrieben sind.
-- **Transparenter Hintergrund (PNG)**, außer bei G01. Klappt das nicht, auf Weiß generieren und danach mit Higgsfield `remove_background` freistellen.
+- **Reinweißer Hintergrund.** Seedream 4.5 kann keine Transparenz. In After Effects die Ebenen auf Blend-Mode **„Multiplizieren“** stellen, dann verschwindet das Weiß auf dem Whiteboard von selbst. Freistellen ist nur bei G02 und G03 nötig (dort per `remove_background`).
 - **Keine Logos echter Firmen** (z. B. kein Microsoft-Logo bei „Goliath“) und **kein Porträt von Soheil** generieren. Für ihn nehmen wir echte Fotos (siehe „Von dir“).
 - Modell: GPT Image 2 (Higgsfield-Standard), 1:1 für Objekte, 16:9 für Plates. Die Figur zuerst als Referenz erstellen (G10) und bei G11–G14 als Referenzbild mitgeben, damit sie gleich aussieht.
 
 **Stil-Baustein** (an jeden Prompt anhängen):
 
 ```
-STYLE: hand-drawn whiteboard marker illustration, confident black dry-erase marker lines with slight wobble, minimal flat fill, single accent color warm yellow #F5C400 used sparingly, no other colors, no shading gradients, clean isolated object, transparent background, no text, no letters, no logos
+STYLE: hand-drawn whiteboard marker illustration, confident black dry-erase marker lines with slight wobble, minimal flat fill, single accent color warm yellow #F5C400 used sparingly, no other colors, no shading gradients, clean isolated object, on a pure white background, no text, no letters, no logos
 ```
 
 ---
@@ -34,13 +34,13 @@ A large clean white whiteboard surface seen straight on, filling the entire fram
 
 **G02 – Sticky Notes, 4 Varianten** (je 1:1, einzeln generieren)
 ```
-A single square sticky note, [VARIANT], seen from the front, slight paper texture, soft drop shadow, isolated on transparent background, no text, no writing, photographic but clean
+A single square sticky note, [VARIANT], seen from the front, slight paper texture, soft drop shadow, isolated on a pure white background, no text, no writing, photographic but clean
 ```
 Varianten: `bright yellow #F5C400, flat` · `bright yellow #F5C400, bottom right corner slightly curled up` · `plain white, flat` · `plain white, slightly rotated with a small piece of clear tape on top`
 
 **G03 – Marker-Hand** (1:1)
 ```
-A realistic right hand holding a black whiteboard marker, pen tip pointing down-left as if drawing, cut off at the wrist, neutral skin, isolated on transparent background, soft studio light, photographic, no text
+A realistic right hand holding a black whiteboard marker, pen tip pointing down-left as if drawing, cut off at the wrist, neutral skin, isolated on a pure white background, soft studio light, photographic, no text
 ```
 
 **G04 – Annotations-Pack** (16:9, ein Sheet, danach in AE ausschneiden – oder in AE selbst als Shapes zeichnen)
