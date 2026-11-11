@@ -1,0 +1,575 @@
+<!doctype html>
+<!--
+  TRACK – TikTok-Spot (HyperFrames, 9:16, 32 s)
+  Stil: SaaS-Showreel (Graphit, Riesen-Grotesk, Auswahlrahmen, Multiplayer-Cursor, Glas-Kacheln).
+  Logo (blaue Kachel + Knoten-Glyphe + Wortmarke „Track“) exakt wie auf track.site.
+  Alle Zeiten im Script sind absolute Sekunden. Musik-Drops: 12,8 s und 25,6 s.
+-->
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bricolage"; font-weight: 500; src: url(assets/fonts/bricolage-grotesque-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Bricolage"; font-weight: 700; src: url(assets/fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Bricolage"; font-weight: 800; src: url(assets/fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 500; src: url(assets/fonts/inter-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url(assets/fonts/inter-latin-600-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 700; src: url(assets/fonts/inter-latin-700-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 800; src: url(assets/fonts/jetbrains-mono-latin-800-normal.woff2) format("woff2"); }
+
+      :root {
+        --ink: #0d0e11;      /* Graphit-Grund */
+        --panel: #16181d;
+        --panel2: #1d2027;
+        --line: #2b2f38;
+        --paper: #eceae4;    /* Papier-Szene */
+        --white: #f5f5f2;
+        --mute: #8b8f99;
+        --mint: #3df5a2;     /* Erfolg / Hauptakzent */
+        --coral: #ff5b3a;    /* Problem */
+        --lilac: #9d8cff;    /* Glow / AI */
+        --sun: #ffc23d;      /* Cursor / Highlights */
+        --brand: #1f4fe0;    /* Track-Logo (fix) */
+        --display: "Bricolage", "Inter", sans-serif;
+        --sans: "Inter", sans-serif;
+        --mono: "JB Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); font-family: var(--sans); color: var(--white); }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      .abs { position: absolute; }
+      .layer { position: absolute; inset: 0; }
+      .full { left: 0; width: 1080px; text-align: center; }
+      .disp { font-family: var(--display); font-weight: 800; letter-spacing: -0.045em; line-height: 0.95; white-space: nowrap; }
+      .mono { font-family: var(--mono); font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+      .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 0.04em 0.12em; margin: 0 -0.02em -0.12em; }
+      .wi { display: inline-block; }
+      .grad .wi { background: linear-gradient(180deg, #5d6069 0%, #f5f5f2 62%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .ch { display: inline-block; white-space: pre; }
+
+      /* globale Ebenen */
+      #bg { z-index: 0; background: var(--ink); }
+      .blob { position: absolute; width: 1000px; height: 1000px; border-radius: 50%; filter: blur(150px); opacity: 0.3; }
+      #loop { position: absolute; left: -380px; top: -260px; width: 1300px; height: 1300px; opacity: 0.9; }
+      #fx { z-index: 80; pointer-events: none; }
+      #vig { z-index: 89; background: radial-gradient(130% 90% at 50% 50%, rgba(0,0,0,0) 58%, rgba(0,0,0,0.6) 100%); }
+      #grain { z-index: 90; opacity: 0.07; mix-blend-mode: overlay; width: 2160px; height: 3840px; inset: auto; left: -540px; top: -960px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+      #flash { z-index: 95; background: #fff; opacity: 0; }
+
+      /* Bausteine */
+      .sel { position: absolute; border: 3px solid var(--mint); background: rgba(61,245,162,0.08); }
+      .sel i { position: absolute; width: 22px; height: 22px; background: var(--ink); border: 3px solid var(--mint); }
+      .sel i:nth-child(1) { left: -12px; top: -12px; } .sel i:nth-child(2) { right: -12px; top: -12px; }
+      .sel i:nth-child(3) { left: -12px; bottom: -12px; } .sel i:nth-child(4) { right: -12px; bottom: -12px; }
+      .cur { position: absolute; left: 0; top: 0; z-index: 50; }
+      .cur svg { display: block; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4)); }
+      .cur b { position: absolute; left: 30px; top: 40px; padding: 10px 22px; border-radius: 30px; font: 600 30px var(--sans); color: var(--ink); white-space: nowrap; border: 3px solid rgba(255,255,255,0.85); }
+      .card { position: absolute; background: var(--panel); border: 2px solid var(--line); border-radius: 30px; box-shadow: 0 30px 80px rgba(0,0,0,0.45); }
+      .ev { height: 116px; width: 760px; left: 160px; display: flex; align-items: center; gap: 24px; padding: 0 34px; font: 600 40px var(--sans); }
+      .ev .dot { width: 22px; height: 22px; border-radius: 50%; }
+      .ev .chip { padding: 8px 20px; border-radius: 18px; font: 600 28px var(--sans); background: var(--panel2); color: var(--mute); border: 2px solid var(--line); }
+      .ev .tm { margin-left: auto; font: 500 28px var(--mono); color: var(--mute); }
+      .tile { position: absolute; width: 150px; height: 150px; border-radius: 42px; display: flex; align-items: center; justify-content: center;
+        font: 800 62px var(--display); letter-spacing: -0.04em; color: #fff; box-shadow: inset 0 2px 0 rgba(255,255,255,0.35), inset 0 -10px 30px rgba(0,0,0,0.25), 0 24px 60px rgba(0,0,0,0.45); }
+      .tile s { position: absolute; top: 166px; left: -60px; width: 270px; text-align: center; font: 600 24px var(--sans); color: var(--mute); text-decoration: none; white-space: nowrap; }
+      .pillbtn { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 80px; font: 700 52px var(--display); letter-spacing: -0.02em; }
+      .logo-tile { position: absolute; background: var(--brand); display: flex; align-items: center; justify-content: center; box-shadow: 0 30px 90px rgba(31,79,224,0.55); }
+
+      /* Szenen */
+      #s1 { z-index: 10; }
+      #s2 { z-index: 20; background: var(--paper); color: var(--ink); }
+      #s3 { z-index: 30; }
+      #s4 { z-index: 31; }
+      #s5 { z-index: 32; }
+      #s6 { z-index: 33; }
+      #s7 { z-index: 34; }
+      #s8 { z-index: 35; }
+      #s9 { z-index: 36; }
+      #s10 { z-index: 37; }
+      #s12 { z-index: 40; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="32" data-volume="1"></audio>
+
+      <!-- ============ HINTERGRUND ============ -->
+      <div id="bg" class="clip" data-start="0" data-duration="32">
+        <div class="blob" id="b1" style="left:-420px;top:-300px;background:#3df5a2"></div>
+        <div class="blob" id="b2" style="left:420px;top:1150px;background:#ff5b3a"></div>
+        <div class="blob" id="b3" style="left:300px;top:300px;background:#6b55ff;opacity:0.22"></div>
+        <svg id="loop" viewBox="0 0 1300 1300">
+          <path id="loopP" d="M180,1220 C60,900 120,520 420,360 C700,210 980,330 960,560 C940,800 620,860 560,640 C500,420 760,140 1060,120 C1250,110 1320,260 1300,380"
+            fill="none" stroke="#1b1d23" stroke-width="86" stroke-linecap="round" />
+        </svg>
+      </div>
+
+      <!-- ============ S1: HOOK – 1 Bestellung, 2 Conversions ============ -->
+      <div id="s1" class="clip" data-start="0" data-duration="2.95">
+        <div id="s1in" class="layer">
+          <div class="abs mono" id="s1lab" style="left:0;width:1080px;text-align:center;top:300px;font-size:30px;color:var(--mute)">demo-shop · 12:04</div>
+          <div class="abs full disp grad" id="s1num" style="top:360px;font-size:430px;line-height:1">1</div>
+          <div class="abs full disp" id="s1num2" style="top:360px;font-size:430px;line-height:1;color:var(--coral);opacity:0">2</div>
+          <div class="abs full disp grad" id="s1t" style="top:800px;font-size:124px">Bestellung.</div>
+          <div class="abs sel" id="s1sel" style="left:380px;top:400px;width:0;height:0"><i></i><i></i><i></i><i></i></div>
+          <div class="card ev" id="s1e1" style="top:1080px"><span class="dot" style="background:var(--sun)"></span>Purchase<span class="chip">Browser</span><span class="tm">12:04:17</span></div>
+          <div class="card ev" id="s1e2" style="top:1220px"><span class="dot" style="background:var(--lilac)"></span>Purchase<span class="chip">Server</span><span class="tm">12:04:19</span></div>
+          <div class="abs disp" id="s1stamp" style="left:0;width:1080px;text-align:center;top:1400px;font-size:96px;color:var(--coral)">Doppelt gezählt.</div>
+          <div class="cur" id="cur1"></div>
+        </div>
+      </div>
+
+      <!-- ============ S2: PROBLEME (Papier) ============ -->
+      <div id="s2" class="clip" data-start="2.8" data-duration="3.75">
+        <div id="s2in" class="layer">
+          <div class="abs mono" style="left:90px;top:250px;font-size:30px;color:#77736a">Was dein Tracking heute kann</div>
+          <div class="abs" id="p1" style="left:90px;top:360px">
+            <div class="mono" style="font-size:28px;color:var(--coral)">01 ——</div>
+            <div class="disp" style="font-size:112px;margin-top:20px">Pixel verlieren<br>Events.</div>
+            <div class="abs strike" style="left:-10px;top:150px;width:860px;height:16px;border-radius:8px;background:var(--coral);transform-origin:0 50%"></div>
+          </div>
+          <div class="abs" id="p2" style="left:90px;top:760px">
+            <div class="mono" style="font-size:28px;color:var(--coral)">02 ——</div>
+            <div class="disp" style="font-size:112px;margin-top:20px">Server-Side<br>braucht Devs.</div>
+            <div class="abs strike" style="left:-10px;top:150px;width:840px;height:16px;border-radius:8px;background:var(--coral);transform-origin:0 50%"></div>
+          </div>
+          <div class="abs" id="p3" style="left:90px;top:1160px">
+            <div class="mono" style="font-size:28px;color:var(--coral)">03 ——</div>
+            <div class="disp" style="font-size:112px;margin-top:20px">Consent ist<br>nur ein Banner.</div>
+            <div class="abs strike" style="left:-10px;top:150px;width:900px;height:16px;border-radius:8px;background:var(--coral);transform-origin:0 50%"></div>
+          </div>
+          <div class="cur" id="cur2"></div>
+        </div>
+        <!-- Netz-Glyphe als Übergang -->
+        <svg id="glyph" class="abs" viewBox="0 0 32 32" style="left:390px;top:780px;width:300px;height:300px;overflow:visible">
+          <path id="gl1" d="M7 9.5H25" fill="none" stroke="#0d0e11" stroke-width="3.2" stroke-linecap="round" />
+          <path id="gl2" d="M16 9.5V23" fill="none" stroke="#0d0e11" stroke-width="3.2" stroke-linecap="round" />
+          <circle id="gc1" cx="7" cy="9.5" r="3.4" fill="#0d0e11" />
+          <circle id="gc2" cx="25" cy="9.5" r="3.4" fill="#0d0e11" />
+          <circle id="gc3" cx="16" cy="23" r="3.4" fill="#0d0e11" />
+        </svg>
+      </div>
+
+      <!-- ============ S3: EIN SNIPPET ============ -->
+      <div id="s3" class="clip" data-start="6.45" data-duration="2.6" style="perspective:1600px">
+        <div id="s3in" class="layer">
+          <div class="abs full disp grad" id="s3h" style="top:250px;font-size:150px">Ein Snippet.</div>
+          <div class="card" id="code" style="left:80px;top:620px;width:920px;height:480px;overflow:hidden">
+            <div style="height:84px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 32px">
+              <span style="width:20px;height:20px;border-radius:50%;background:#ff5b3a"></span>
+              <span style="width:20px;height:20px;border-radius:50%;background:#ffc23d"></span>
+              <span style="width:20px;height:20px;border-radius:50%;background:#3df5a2"></span>
+              <span class="mono" style="margin-left:20px;font-size:24px;color:var(--mute)">tracker.js</span>
+              <span class="mono" style="margin-left:auto;font-size:22px;padding:6px 16px;border-radius:12px;border:2px solid var(--line);color:var(--mint)">EU</span>
+            </div>
+            <pre id="codeTxt" style="padding:40px 40px;font:500 34px/1.6 var(--mono);color:#cfd2da;white-space:pre"></pre>
+          </div>
+          <div class="abs full" id="s3sub" style="top:1180px;font:600 40px var(--sans);color:var(--mute)">Blockiert nie das Rendering. Fail-safe.</div>
+          <div class="abs sel" id="s3sel" style="left:64px;top:604px;width:952px;height:512px;opacity:0"><i></i><i></i><i></i><i></i></div>
+          <div class="cur" id="cur3"></div>
+        </div>
+      </div>
+
+      <!-- ============ S4: JEDE PLATTFORM ============ -->
+      <div id="s4" class="clip" data-start="8.8" data-duration="2.6">
+        <div id="s4in" class="layer">
+          <div class="abs full disp grad" id="s4h" style="top:190px;font-size:132px">Jede Plattform.</div>
+          <svg id="s4lines" class="abs" width="1080" height="1920" style="left:0;top:0"></svg>
+          <div id="s4tiles" class="layer"></div>
+          <div class="logo-tile" id="hub" style="left:450px;top:930px;width:180px;height:180px;border-radius:45px">
+            <svg viewBox="0 0 32 32" width="112" height="112"><path d="M7 9.5H25" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><path d="M16 9.5V23" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><circle cx="7" cy="9.5" r="3.4" fill="#fff"/><circle cx="25" cy="9.5" r="3.4" fill="#fff"/><circle cx="16" cy="23" r="3.4" fill="#fff"/></svg>
+          </div>
+          <div class="abs full mono" id="s4sub" style="top:1640px;font-size:30px;color:var(--mint)">Browser · Server · Offline</div>
+        </div>
+      </div>
+
+      <!-- ============ S5: BREAK – Jede Conversion … ============ -->
+      <div id="s5" class="clip" data-start="11.15" data-duration="1.75">
+        <div class="abs full disp grad" id="s5a" style="top:720px;font-size:128px">Jede Conversion</div>
+        <div class="abs full mono" id="s5b" style="top:900px;font-size:34px;color:var(--mute)">wird gezählt …</div>
+      </div>
+
+      <!-- ============ S6: DROP – GENAU EINMAL ============ -->
+      <div id="s6" class="clip" data-start="12.8" data-duration="2.55">
+        <div id="s6in" class="layer">
+          <div class="abs full disp" id="s6x" style="top:560px;font-size:760px;line-height:1;color:transparent;-webkit-text-stroke:3px rgba(61,245,162,0.35)">1×</div>
+          <div class="abs full disp" id="s6a" style="top:250px;font-size:200px;color:var(--white)">GENAU</div>
+          <div class="abs full disp" id="s6b" style="top:440px;font-size:200px;color:var(--mint)">EINMAL.</div>
+          <div class="card ev" id="s6e1" style="top:1000px"><span class="dot" style="background:var(--sun)"></span>Purchase<span class="chip">Browser</span><span class="tm">ord_48213</span></div>
+          <div class="card ev" id="s6e2" style="top:1000px"><span class="dot" style="background:var(--lilac)"></span>Purchase<span class="chip">Server</span><span class="tm">ord_48213</span></div>
+          <div class="card ev" id="s6e3" style="top:1000px;border-color:var(--mint);box-shadow:0 0 80px rgba(61,245,162,0.35)"><span class="dot" style="background:var(--mint)"></span>Purchase<span class="chip" style="color:var(--mint);border-color:rgba(61,245,162,0.5)">1 Conversion</span><span class="tm" style="color:var(--mint)">✓ event_id</span></div>
+          <div class="abs full" id="s6c" style="top:1180px"><span style="display:inline-block;padding:14px 34px;border-radius:40px;background:rgba(61,245,162,0.12);border:2px solid rgba(61,245,162,0.5);font:600 36px var(--sans);color:var(--mint)">Duplikat entfernt</span></div>
+          <div id="s6p" class="layer"></div>
+        </div>
+      </div>
+
+      <!-- ============ S7: CONSENT ============ -->
+      <div id="s7" class="clip" data-start="15.2" data-duration="2.55">
+        <div id="s7in" class="layer">
+          <div class="abs disp grad" id="s7h" style="left:80px;top:200px;font-size:128px">Kein Consent?</div>
+          <div class="abs disp" id="s7h2" style="left:80px;top:340px;font-size:128px;color:var(--coral)">Kein Event.</div>
+          <div id="s7flow" class="layer"></div>
+        </div>
+      </div>
+
+      <!-- ============ S8: TRACK AI ============ -->
+      <div id="s8" class="clip" data-start="17.6" data-duration="2.55">
+        <div id="s8in" class="layer">
+          <div class="abs mono" style="left:90px;top:220px;font-size:30px;color:var(--lilac)">Geführte Einrichtung</div>
+          <div class="abs disp grad" id="s8h" style="left:84px;top:270px;font-size:124px">Mit Track AI.</div>
+          <div class="card" id="b1c" style="left:80px;top:500px;width:820px;padding:34px 40px;border-radius:34px 34px 34px 8px">
+            <div class="mono" style="font-size:22px;color:var(--lilac);margin-bottom:14px">Track AI</div>
+            <div id="b1t" style="font:500 38px/1.38 var(--sans);color:#dfe1e7"></div>
+          </div>
+          <div class="abs" id="b2c" style="right:80px;top:900px;padding:28px 40px;border-radius:34px 34px 8px 34px;background:var(--lilac);color:var(--ink);font:700 40px var(--sans)">Nimm EUR.</div>
+          <div class="card" id="diff" style="left:80px;top:1060px;width:920px;padding:34px 40px">
+            <div class="mono" style="font-size:22px;color:var(--mute);margin-bottom:18px">Entwurf v15 – vor der Veröffentlichung prüfen</div>
+            <div style="font:500 32px/1.6 var(--mono);color:var(--mint)">+ purchase.currency: EUR</div>
+            <div style="font:500 32px/1.6 var(--mono);color:var(--mint)">+ meta.value_currency: EUR</div>
+            <div style="font:500 32px/1.6 var(--mono);color:#cfd2da">= 1 Event wird zugestellt</div>
+          </div>
+          <div class="pillbtn" id="s8btn" style="left:80px;top:1400px;width:560px;height:120px;background:var(--mint);color:var(--ink);font-size:42px">v15 veröffentlichen</div>
+          <div class="abs" id="s8rip" style="left:360px;top:1460px;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:var(--mint);opacity:0"></div>
+          <div class="cur" id="cur4"></div>
+        </div>
+      </div>
+
+      <!-- ============ S9: HEALTH SCORE ============ -->
+      <div id="s9" class="clip" data-start="20.0" data-duration="2.55">
+        <div id="s9in" class="layer">
+          <div class="abs full mono" style="top:230px;font-size:30px;color:var(--mute)">Tracking Health Score</div>
+          <svg class="abs" width="640" height="640" style="left:220px;top:330px" viewBox="0 0 640 640">
+            <circle cx="320" cy="320" r="270" fill="none" stroke="#1d2027" stroke-width="44" />
+            <circle id="gauge" cx="320" cy="320" r="270" fill="none" stroke="url(#gg)" stroke-width="44" stroke-linecap="round" transform="rotate(-90 320 320)" stroke-dasharray="1696.5" stroke-dashoffset="1696.5" />
+            <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3df5a2"/><stop offset="1" stop-color="#9d8cff"/></linearGradient></defs>
+          </svg>
+          <div class="abs disp" id="score" style="left:220px;width:640px;text-align:center;top:520px;font-size:230px;color:var(--white)">70</div>
+          <div class="abs full mono" id="scoreL" style="top:790px;font-size:28px;color:var(--mute)">von 100</div>
+          <div id="bars" class="abs" style="left:110px;top:1060px;width:860px"></div>
+        </div>
+      </div>
+
+      <!-- ============ S10: RECAP ============ -->
+      <div id="s10" class="clip" data-start="22.4" data-duration="2.6">
+        <div id="s10in" class="layer">
+          <div id="marq" class="layer" style="transform:rotate(-9deg)"></div>
+          <div class="abs full disp grad" id="r1" style="top:560px;font-size:150px">Ein Snippet.</div>
+          <div class="abs full disp grad" id="r2" style="top:740px;font-size:150px">Jede Plattform.</div>
+          <div class="abs full disp" id="r3" style="top:920px;font-size:150px;color:var(--mint)">Genau einmal.</div>
+        </div>
+      </div>
+
+      <!-- ============ S12: LOGO + CTA ============ -->
+      <div id="s12" class="clip" data-start="24.9" data-duration="7.1">
+        <div id="s12in" class="layer">
+          <div class="abs" id="ring" style="left:540px;top:760px;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:4px solid var(--brand);opacity:0"></div>
+          <div id="logo" class="abs" style="left:0;top:640px;width:1080px;height:240px">
+            <div class="logo-tile" id="ltile" style="left:178px;top:0;width:240px;height:240px;border-radius:60px">
+              <svg viewBox="0 0 32 32" width="150" height="150" style="overflow:visible">
+                <path id="lg1" d="M7 9.5H25" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+                <path id="lg2" d="M16 9.5V23" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+                <circle id="lc1" cx="7" cy="9.5" r="3.4" fill="#fff"/><circle id="lc2" cx="25" cy="9.5" r="3.4" fill="#fff"/><circle id="lc3" cx="16" cy="23" r="3.4" fill="#fff"/>
+              </svg>
+            </div>
+            <div class="abs" id="lword" style="left:458px;top:10px;font:700 210px/1 var(--display);letter-spacing:-0.035em;color:var(--white);white-space:nowrap">Track</div>
+          </div>
+          <div class="abs full mono" id="l2" style="top:930px;font-size:34px;color:var(--mute)">AI-first Tag Manager</div>
+          <div class="abs full disp" id="l3" style="top:1080px;font-size:76px;line-height:1.08;color:var(--white)">Jede Conversion<br><span style="color:var(--mint)">genau einmal gezählt.</span></div>
+          <div class="pillbtn" id="cta" style="left:170px;top:1330px;width:740px;height:136px;background:var(--white);color:var(--ink)">Kostenlos starten&nbsp;→</div>
+          <div class="abs full mono" id="url" style="top:1500px;font-size:34px;color:var(--white);letter-spacing:0.2em">track.site</div>
+          <div class="abs" id="ctarip" style="left:700px;top:1400px;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:4px solid var(--white);opacity:0"></div>
+          <div class="cur" id="cur5"></div>
+        </div>
+      </div>
+
+      <div id="fx" class="clip" data-start="0" data-duration="32">
+        <div id="pill" class="abs" style="left:440px;top:920px;width:200px;height:80px;border-radius:40px;background:var(--paper);opacity:0"></div>
+        <div id="sweep" class="abs" style="left:-200px;top:0;width:1480px;height:1920px;border-radius:740px;background:var(--lilac);opacity:0"></div>
+      </div>
+      <div id="vig" class="clip" data-start="0" data-duration="32"></div>
+      <div id="grain" class="clip" data-start="0" data-duration="32"></div>
+      <div id="flash" class="clip" data-start="0" data-duration="32"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const DUR = 32;
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => [...document.querySelectorAll(s)];
+      let seed = 4242;
+      const rnd = () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+      const R = (a, b) => a + (b - a) * rnd();
+      const NS = "http://www.w3.org/2000/svg";
+      function mk(parent, cls, css, html) { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css || {}); if (html) d.innerHTML = html; parent.appendChild(d); return d; }
+
+      /* ===== Bausteine ===== */
+      // Wörter in Masken legen (Reveal von unten)
+      function words(el) { const parts = el.innerHTML.split(/(<br>)/); el.innerHTML = parts.map((p) => p === "<br>" ? p : p.split(" ").filter(Boolean).map((w) => `<span class="w"><span class="wi">${w}</span></span>`).join(" ")).join(""); return [...el.querySelectorAll(".wi")]; }
+      function reveal(sel, t, st = 0.08, d = 0.6) { const ws = words($(sel)); tl.fromTo(ws, { yPercent: 115, rotation: 6 }, { yPercent: 0, rotation: 0, duration: d, ease: "expo.out", stagger: st }, t); return ws; }
+      function hide(sel, t, d = 0.35) { tl.to($(sel).querySelectorAll(".wi"), { yPercent: -115, duration: d, ease: "power3.in", stagger: 0.03 }, t); }
+      function chars(el) { const txt = el.textContent; el.textContent = ""; return [...txt].map((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; el.appendChild(s); return s; }); }
+      function flash(t, o = 0.85, d = 0.3, color = "#fff") { tl.set("#flash", { backgroundColor: color }, t); tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t); }
+      function shake(target, t, dur = 0.35, amp = 22) { const n = Math.round(dur / 0.033); for (let i = 0; i < n; i++) { const k = 1 - i / n; tl.set(target, { x: R(-amp, amp) * k, y: R(-amp, amp) * k }, t + i * 0.033); } tl.set(target, { x: 0, y: 0 }, t + dur); }
+      // Multiplayer-Cursor
+      const ARROW = (c) => `<svg width="44" height="54" viewBox="0 0 44 54"><path d="M3 3 L3 44 L14 34 L22 51 L30 47 L22 31 L37 31 Z" fill="${c}" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>`;
+      function cursor(sel, name, c) { const el = $(sel); el.innerHTML = ARROW(c) + `<b style="background:${c}">${name}</b>`; return el; }
+      function click(sel, t) { tl.to(sel + " svg", { scale: 0.78, duration: 0.08, ease: "power2.in", transformOrigin: "10% 10%" }, t); tl.to(sel + " svg", { scale: 1, duration: 0.25, ease: "back.out(3)" }, t + 0.08); }
+      function counter(el, a, b, t, d, ease = "power2.out") { const o = { v: a }; tl.fromTo(o, { v: a }, { v: b, duration: d, ease, immediateRender: false, onUpdate: () => (el.textContent = Math.round(o.v)) }, t); }
+      // Partikel-Explosion
+      function burst(layer, cx, cy, t, n = 36, colors = ["#3df5a2", "#f5f5f2", "#9d8cff"]) {
+        for (let i = 0; i < n; i++) { const s = R(8, 22); const p = mk(layer, "abs", { left: cx - s / 2 + "px", top: cy - s / 2 + "px", width: s + "px", height: s + "px", borderRadius: rnd() < 0.5 ? "50%" : "4px", background: colors[i % colors.length], opacity: 0 });
+          const a = R(0, Math.PI * 2), r = R(220, 620);
+          tl.fromTo(p, { x: 0, y: 0, opacity: 1, scale: 1, rotation: 0 }, { x: Math.cos(a) * r, y: Math.sin(a) * r, opacity: 0, scale: 0.3, rotation: R(-200, 200), duration: R(0.7, 1.2), ease: "expo.out", immediateRender: false }, t); }
+      }
+
+      /* ===== GLOBAL ===== */
+      tl.fromTo("#b1", { x: 0, y: 0, scale: 1 }, { x: 460, y: 900, scale: 1.3, duration: DUR, ease: "sine.inOut" }, 0);
+      tl.fromTo("#b2", { x: 0, y: 0, scale: 1.1 }, { x: -620, y: -900, scale: 0.9, duration: DUR, ease: "sine.inOut" }, 0);
+      tl.fromTo("#b3", { x: 0, y: 0 }, { x: -200, y: 600, duration: DUR, ease: "sine.inOut" }, 0);
+      const LP = $("#loopP"), LL = LP.getTotalLength();
+      tl.fromTo(LP, { strokeDasharray: LL, strokeDashoffset: LL }, { strokeDashoffset: 0, duration: 2.2, ease: "power2.inOut" }, 0);
+      tl.fromTo("#loop", { rotation: 0, scale: 1 }, { rotation: 40, scale: 1.25, duration: DUR, ease: "none", transformOrigin: "50% 50%" }, 0);
+      for (let i = 0; i < DUR * 12; i++) tl.set("#grain", { x: Math.round(R(-500, 500)), y: Math.round(R(-900, 900)) }, i / 12);
+
+      /* ===== S1 HOOK (0 – 2.95) ===== */
+      cursor("#cur1", "Mia", "#ffc23d");
+      tl.fromTo("#s1lab", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0.05);
+      tl.fromTo("#s1num", { yPercent: 40, opacity: 0, scale: 0.8, filter: "blur(20px)" }, { yPercent: 0, opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "expo.out" }, 0.0);
+      reveal("#s1t", 0.2, 0.08, 0.7);
+      // Cursor zieht Auswahlrahmen um die "1"
+      tl.fromTo("#cur1", { x: 1100, y: 200 }, { x: 380, y: 400, duration: 0.45, ease: "power3.out" }, 0.3);
+      tl.to("#cur1", { x: 700, y: 790, duration: 0.45, ease: "power2.inOut" }, 0.78);
+      tl.to("#s1sel", { width: 320, height: 390, duration: 0.45, ease: "power2.inOut" }, 0.78);
+      // Event-Karten
+      tl.fromTo("#s1e1", { x: -1000, rotation: -6 }, { x: 0, rotation: 0, duration: 0.5, ease: "expo.out" }, 1.2);
+      tl.fromTo("#s1e2", { x: 1000, rotation: 6 }, { x: 0, rotation: 0, duration: 0.5, ease: "expo.out" }, 1.4);
+      tl.to("#cur1", { x: 860, y: 1180, duration: 0.5, ease: "power2.inOut" }, 1.3);
+      // 1 -> 2 (Problem)
+      tl.to("#s1num", { yPercent: -60, opacity: 0, duration: 0.25, ease: "power3.in" }, 1.8);
+      tl.fromTo("#s1num2", { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }, 1.95);
+      tl.to("#s1sel", { borderColor: "#ff5b3a", backgroundColor: "rgba(255,91,58,0.1)", duration: 0.1 }, 1.95);
+      tl.to("#s1sel i", { borderColor: "#ff5b3a", duration: 0.1 }, 1.95);
+      tl.fromTo("#s1stamp", { scale: 2.6, opacity: 0, rotation: -14 }, { scale: 1, opacity: 1, rotation: -5, duration: 0.35, ease: "expo.out" }, 2.15);
+      shake("#s1in", 2.18, 0.3, 18);
+      // Übergang: Papier-Pill wächst bildfüllend
+      tl.set("#pill", { opacity: 1, scale: 0 }, 2.5);
+      tl.to("#pill", { scale: 1, duration: 0.12, ease: "back.out(3)" }, 2.5);
+      tl.to("#pill", { scale: 30, duration: 0.3, ease: "expo.in" }, 2.56);
+      tl.to("#s1in", { scale: 0.9, filter: "blur(8px)", duration: 0.3, ease: "power2.in" }, 2.56);
+      tl.set("#pill", { opacity: 0 }, 2.9);
+
+      /* ===== S2 PROBLEME (2.8 – 6.55) ===== */
+      cursor("#cur2", "Jonas", "#ff5b3a");
+      const prob = [["#p1", 2.9], ["#p2", 4.1], ["#p3", 5.3]];
+      prob.forEach(([id, t], i) => {
+        const big = $(id + " .disp"); const ws = words(big);
+        tl.fromTo($(id + " .mono"), { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, t);
+        tl.fromTo(ws, { yPercent: 115 }, { yPercent: 0, duration: 0.55, ease: "expo.out", stagger: 0.06 }, t + 0.03);
+        tl.to("#cur2", { x: 110, y: parseInt($(id).style.top) + 170, duration: 0.35, ease: "power3.out" }, t + 0.4);
+        tl.to("#cur2", { x: 940, duration: 0.35, ease: "power2.inOut" }, t + 0.78);
+        tl.fromTo($(id + " .strike"), { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.inOut" }, t + 0.78);
+        tl.to(id, { opacity: 0.32, duration: 0.3 }, t + 1.15);
+      });
+      tl.set("#cur2", { x: 1150, y: 200 }, 0);
+      tl.to("#cur2", { x: 1200, y: 1700, duration: 0.3, ease: "power3.in" }, 6.25);
+      // Netz-Glyphe baut sich auf, dann Zoom hindurch
+      tl.to("#s2in", { opacity: 0, scale: 0.94, duration: 0.25, ease: "power2.in" }, 5.95);
+      ["#gc1", "#gc2", "#gc3"].forEach((c, i) => tl.fromTo(c, { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.25, ease: "back.out(3)" }, 6.0 + i * 0.05));
+      ["#gl1", "#gl2"].forEach((l, i) => tl.fromTo(l, { strokeDasharray: 20, strokeDashoffset: 20 }, { strokeDashoffset: 0, duration: 0.2, ease: "power2.out" }, 6.08 + i * 0.05));
+      tl.set("#glyph", { opacity: 0 }, 0);
+      tl.set("#glyph", { opacity: 1 }, 5.99);
+      tl.to("#glyph", { scale: 28, duration: 0.3, ease: "expo.in", transformOrigin: "50% 71.9%" }, 6.18);
+
+      /* ===== S3 SNIPPET (6.45 – 9.05) ===== */
+      cursor("#cur3", "Du", "#3df5a2");
+      reveal("#s3h", 6.5, 0.1, 0.6);
+      tl.fromTo("#code", { y: 300, rotationX: 35, opacity: 0, scale: 0.9 }, { y: 0, rotationX: 0, opacity: 1, scale: 1, duration: 0.64, ease: "expo.out" }, 6.55);
+      tl.to("#code", { rotationY: -7, rotationX: 5, duration: 1.3, ease: "sine.inOut" }, 7.2);
+      const code = [
+        ['<', '#9d8cff'], ['script ', '#ff7a5c'], ['async\n', '#ffc23d'],
+        ['  src', '#ffc23d'], ['=', '#cfd2da'], ['"cdn.track.site/\n   v1/tracker.js"\n', '#3df5a2'],
+        ['  data-site-id', '#ffc23d'], ['=', '#cfd2da'], ['"482913"', '#3df5a2'], ['>\n', '#9d8cff'],
+        ['</', '#9d8cff'], ['script', '#ff7a5c'], ['>', '#9d8cff']];
+      const cEls = [];
+      code.forEach(([txt, col]) => [...txt].forEach((c) => { const s = document.createElement("span"); s.textContent = c; s.style.color = col; $("#codeTxt").appendChild(s); cEls.push(s); }));
+      tl.fromTo(cEls, { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 1.15 / cEls.length, ease: "none" }, 6.9);
+      tl.fromTo("#s3sel", { opacity: 0, scale: 1.06 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }, 8.05);
+      tl.fromTo("#cur3", { x: 1150, y: 1500 }, { x: 980, y: 1170, duration: 0.45, ease: "power3.out" }, 7.85);
+      click("#cur3", 8.3);
+      reveal("#s3sub", 8.05, 0.04, 0.5);
+      // Übergang: Code-Karte schrumpft in den Hub
+      tl.to("#cur3", { opacity: 0, duration: 0.15 }, 8.55);
+      tl.to(["#s3h", "#s3sub", "#s3sel"], { opacity: 0, duration: 0.2 }, 8.55);
+      tl.to("#code", { scale: 0.2, rotationY: 0, rotationX: 0, y: 120, borderRadius: 150, opacity: 0, duration: 0.35, ease: "power4.in" }, 8.55);
+
+      /* ===== S4 PLATTFORMEN (8.8 – 11.4) ===== */
+      const plats = [["M", "Meta Ads"], ["G", "Google Ads"], ["T", "TikTok Ads"], ["in", "LinkedIn Ads"], ["MS", "Microsoft Ads"], ["R", "Reddit Ads"],
+        ["P", "Pinterest"], ["S", "Snapchat"], ["GA", "GA4"], ["Sh", "Shopify"], ["Wo", "WooCommerce"], ["Sw", "Shopware 6"]];
+      const grads = [["#3df5a2", "#0f8f5a"], ["#9d8cff", "#4b38c9"], ["#ff5b3a", "#b8241a"], ["#ffc23d", "#d97a00"], ["#f5f5f2", "#9a9ca3"], ["#58d6ff", "#1e6fd9"]];
+      const svgL = $("#s4lines"); const cx = 540, cy = 1020;
+      plats.forEach(([m, n], i) => {
+        const a = -Math.PI / 2 + (i / plats.length) * Math.PI * 2 + 0.26, x = cx + Math.cos(a) * 375, y = cy + Math.sin(a) * 455;
+        const g = grads[i % grads.length]; const dark = g[0] === "#f5f5f2" || g[0] === "#ffc23d";
+        const tEl = mk($("#s4tiles"), "tile", { left: x - 75 + "px", top: y - 75 + "px", background: `linear-gradient(145deg, ${g[0]}, ${g[1]})`, color: dark ? "#0d0e11" : "#fff" }, `${m}<s>${n}</s>`);
+        const ln = document.createElementNS(NS, "line"); ln.setAttribute("x1", cx); ln.setAttribute("y1", cy); ln.setAttribute("x2", x); ln.setAttribute("y2", y);
+        ln.setAttribute("stroke", "#2f333d"); ln.setAttribute("stroke-width", "4"); svgL.appendChild(ln);
+        const L = Math.hypot(x - cx, y - cy);
+        const pk = document.createElementNS(NS, "circle"); pk.setAttribute("r", "9"); pk.setAttribute("fill", g[0]); svgL.appendChild(pk);
+        const t0 = 9.05 + i * 0.045;
+        tl.fromTo(tEl, { x: cx - x, y: cy - y, scale: 0.2, opacity: 0, rotation: R(-40, 40) }, { x: 0, y: 0, scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: "expo.out" }, t0);
+        tl.fromTo(ln, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.5, ease: "expo.out" }, t0);
+        tl.fromTo(tEl, { y: 0 }, { y: R(-18, 18), duration: 1.4, ease: "sine.inOut", immediateRender: false }, t0 + 0.6);
+        // Events laufen vom Hub zu den Zielen
+        [0, 0.5, 1.0].forEach((o) => tl.fromTo(pk, { attr: { cx, cy }, opacity: 1 }, { attr: { cx: x, cy: y }, opacity: 0.2, duration: 0.45, ease: "power1.in", immediateRender: false }, 9.6 + o + i * 0.03));
+        tl.set(pk, { opacity: 0 }, 0);
+      });
+      tl.fromTo("#hub", { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: 0.55, ease: "back.out(2.2)" }, 8.85);
+      [9.6, 10.0, 10.4, 10.8].forEach((t) => tl.fromTo("#hub", { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, t));
+      reveal("#s4h", 8.9, 0.1, 0.6);
+      tl.fromTo("#s4sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, 9.4);
+      tl.to("#s4in", { scale: 0.7, opacity: 0, filter: "blur(16px)", duration: 0.45, ease: "power3.in" }, 10.95);
+
+      /* ===== S5 BREAK (11.15 – 12.9) ===== */
+      reveal("#s5a", 11.35, 0.18, 0.9);
+      const s5c = chars($("#s5b"));
+      tl.fromTo(s5c, { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 0.045 }, 11.9);
+      tl.to("#s5a", { scale: 1.08, duration: 1.4, ease: "none" }, 11.4);
+      tl.to(["#s5a", "#s5b"], { scale: 3, opacity: 0, filter: "blur(20px)", duration: 0.25, ease: "power4.in" }, 12.55);
+
+      /* ===== S6 DROP – GENAU EINMAL (12.8 – 15.35) ===== */
+      tl.fromTo("#s6a", { scale: 3, opacity: 0, filter: "blur(30px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 12.8);
+      tl.fromTo("#s6b", { scale: 3, opacity: 0, filter: "blur(30px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 12.92);
+      flash(12.8, 0.9, 0.35); shake("#s6in", 12.82, 0.4, 28);
+      tl.fromTo("#s6x", { scale: 0.6, opacity: 0, rotation: -8 }, { scale: 1, opacity: 1, rotation: 0, duration: 1.2, ease: "expo.out" }, 13.0);
+      tl.fromTo("#s6e1", { y: -760, rotation: -10, opacity: 0 }, { y: -80, rotation: -3, opacity: 1, duration: 0.4, ease: "expo.out" }, 13.15);
+      tl.fromTo("#s6e2", { y: 900, rotation: 10, opacity: 0 }, { y: 80, rotation: 3, opacity: 1, duration: 0.4, ease: "expo.out" }, 13.3);
+      tl.to("#s6e1", { y: 0, rotation: 0, duration: 0.22, ease: "power4.in" }, 13.75);
+      tl.to("#s6e2", { y: 0, rotation: 0, duration: 0.22, ease: "power4.in" }, 13.75);
+      tl.set(["#s6e1", "#s6e2"], { opacity: 0 }, 13.97);
+      tl.fromTo("#s6e3", { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "elastic.out(1,0.5)" }, 13.97);
+      flash(13.97, 0.6, 0.25, "#3df5a2"); burst($("#s6p"), 540, 1058, 13.97, 40);
+      tl.fromTo("#s6c", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(2)" }, 14.2);
+      tl.fromTo("#s6in", { x: 0, skewX: 0 }, { x: -1200, skewX: 14, filter: "blur(14px)", duration: 0.3, ease: "power4.in", immediateRender: false }, 15.0);
+
+      /* ===== S7 CONSENT (15.2 – 17.75) ===== */
+      tl.fromTo("#s7in", { x: 1200, skewX: -14 }, { x: 0, skewX: 0, duration: 0.35, ease: "power4.out" }, 15.2);
+      const words7 = words($("#s7h")); tl.fromTo(words7, { yPercent: 115 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.06 }, 15.3);
+      const words7b = words($("#s7h2")); tl.fromTo(words7b, { yPercent: 115 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.06 }, 15.6);
+      // Flow: Website -> Track -> Consent-Prüfung -> Ziele
+      const F = $("#s7flow"); const nodes = [["Website", 720, "#f5f5f2"], ["Track", 960, "#1f4fe0"], ["Consent-Prüfung", 1200, "#ffc23d"], ["Ziele", 1440, "#3df5a2"]];
+      const rail = mk(F, "abs", { left: "538px", top: "720px", width: "4px", height: "720px", background: "#2b2f38", transformOrigin: "50% 0" });
+      tl.fromTo(rail, { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "expo.out" }, 15.4);
+      nodes.forEach(([n, y, c], i) => {
+        const el = mk(F, "abs", { left: "220px", top: y - 55 + "px", width: "640px", height: "110px", borderRadius: "55px", background: "#16181d", border: `3px solid ${c}`, display: "flex", alignItems: "center", justifyContent: "center", font: "600 44px Inter", color: "#f5f5f2", gap: "18px" },
+          `<span style="width:18px;height:18px;border-radius:50%;background:${c}"></span>${n}`);
+        tl.fromTo(el, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.4)" }, 15.45 + i * 0.1);
+      });
+      // drei Events fallen durch; das mittlere wird geblockt
+      [["PageView", 15.95, true], ["AddToCart", 16.35, false], ["Purchase", 16.75, true]].forEach(([n, t, ok], i) => {
+        const side = i % 2 ? 1 : -1;
+        const e = mk(F, "abs", { left: "540px", top: "580px", padding: "12px 30px", borderRadius: "30px", background: "#f5f5f2", color: "#0d0e11", font: "700 36px Inter", whiteSpace: "nowrap" }, n);
+        tl.set(e, { xPercent: -50 }, 0); tl.fromTo(e, { y: -100, opacity: 0 }, { y: 0, opacity: 1, duration: 0.15 }, t);
+        tl.to(e, { y: ok ? 600 : 470, duration: 0.35, ease: "power2.in" }, t + 0.12);
+        if (ok) { tl.to(e, { y: 830, background: "#3df5a2", duration: 0.25, ease: "power2.out" }, t + 0.47); tl.to(e, { opacity: 0, x: 120, duration: 0.2 }, t + 0.8); }
+        else { tl.to(e, { background: "#ff5b3a", color: "#fff", duration: 0.05 }, t + 0.47); tl.to(e, { x: 40, duration: 0.05, yoyo: true, repeat: 5 }, t + 0.47);
+          const tag = mk(F, "abs", { left: "0px", width: "1080px", textAlign: "center", top: "1290px", font: "700 30px JB Mono", color: "#ff5b3a", letterSpacing: "0.1em", whiteSpace: "nowrap" }, "BLOCKIERT · KEIN CONSENT");
+          tl.fromTo(tag, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25 }, t + 0.5); tl.to(e, { opacity: 0.35, duration: 0.3 }, t + 0.9); }
+      });
+      tl.set("#sweep", { opacity: 1, y: 2100 }, 17.4);
+      tl.to("#sweep", { y: -2100, duration: 0.5, ease: "power2.inOut" }, 17.4);
+      tl.set("#sweep", { opacity: 0 }, 17.92);
+
+      /* ===== S8 TRACK AI (17.6 – 20.15) ===== */
+      cursor("#cur4", "Du", "#3df5a2");
+      reveal("#s8h", 17.7, 0.08, 0.6);
+      tl.fromTo("#b1c", { scale: 0.6, opacity: 0, transformOrigin: "0% 100%" }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }, 17.75);
+      const b1 = "Purchase kommt ohne Währung an – Meta & TikTok zählen keinen Umsatz.";
+      const b1c = [...b1].map((c) => { const s = document.createElement("span"); s.textContent = c; $("#b1t").appendChild(s); return s; });
+      tl.fromTo(b1c, { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 0.75 / b1c.length }, 17.95);
+      tl.fromTo("#b2c", { scale: 0.5, opacity: 0, transformOrigin: "100% 100%" }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.4)" }, 18.75);
+      tl.fromTo("#diff", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "expo.out" }, 19.0);
+      tl.fromTo("#s8btn", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.4)" }, 19.2);
+      tl.fromTo("#cur4", { x: 1150, y: 1750 }, { x: 350, y: 1450, duration: 0.4, ease: "power3.out" }, 19.25);
+      click("#cur4", 19.62);
+      tl.to("#s8btn", { scale: 0.94, duration: 0.08, yoyo: true, repeat: 1 }, 19.62);
+      tl.set("#s8rip", { opacity: 1 }, 19.68);
+      tl.fromTo("#s8rip", { scale: 0 }, { scale: 110, duration: 0.45, ease: "power3.in", immediateRender: false }, 19.68);
+
+      /* ===== S9 HEALTH SCORE (20.0 – 22.55) ===== */
+      tl.fromTo("#s9in", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 20.0);
+      tl.fromTo("#s9", { clipPath: "circle(0px at 360px 1460px)" }, { clipPath: "circle(2300px at 360px 1460px)", duration: 0.45, ease: "power2.in" }, 20.0);
+      const C = 1696.5;
+      tl.fromTo("#gauge", { strokeDashoffset: C }, { strokeDashoffset: C * 0.3, duration: 0.6, ease: "expo.out" }, 20.3);
+      counter($("#score"), 0, 70, 20.3, 0.6, "expo.out");
+      tl.to("#gauge", { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, 21.05);
+      counter($("#score"), 70, 100, 21.05, 0.9, "power2.inOut");
+      tl.to("#score", { color: "#3df5a2", duration: 0.2 }, 21.9);
+      tl.fromTo("#score", { scale: 1.25 }, { scale: 1, duration: 0.5, ease: "elastic.out(1,0.4)", immediateRender: false }, 21.95);
+      flash(21.95, 0.35, 0.25, "#3df5a2");
+      const bars = [["Consent-Entscheidungen", 100, 100], ["Browser/Server-Paarung", 100, 100], ["Purchase-Parameter", 0, 100], ["Zustellung", 80, 100]];
+      bars.forEach(([n, a, b], i) => {
+        const row = mk($("#bars"), "", { position: "relative", height: "96px" },
+          `<div style="font:600 30px Inter;color:#cfd2da">${n}</div><div class="mono" style="position:absolute;right:0;top:0;font-size:28px;color:#8b8f99"><span>${a}</span></div><div style="position:absolute;left:0;top:50px;width:860px;height:14px;border-radius:7px;background:#1d2027"></div><div class="fill" style="position:absolute;left:0;top:50px;width:860px;height:14px;border-radius:7px;background:linear-gradient(90deg,#3df5a2,#9d8cff);transform-origin:0 50%"></div>`);
+        tl.fromTo(row, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 20.45 + i * 0.08);
+        tl.fromTo(row.querySelector(".fill"), { scaleX: 0 }, { scaleX: a / 100, duration: 0.5, ease: "expo.out" }, 20.5 + i * 0.08);
+        if (b !== a) { tl.to(row.querySelector(".fill"), { scaleX: 1, duration: 0.6, ease: "power2.inOut" }, 21.2 + i * 0.05); counter(row.querySelector("span"), a, b, 21.2 + i * 0.05, 0.6); }
+      });
+      tl.to("#s9in", { scale: 3, opacity: 0, filter: "blur(20px)", duration: 0.35, ease: "power4.in" }, 22.2);
+
+      /* ===== S10 RECAP + MARQUEE (22.4 – 25.0) ===== */
+      const chipsTxt = ["EU-Datenregion", "Consent Mode v2", "Signierte Konfigurationen", "Kein Custom HTML", "Dedupliziert", "Server-Side", "Rollback per Klick", "Offline-Conversions", "Event-Debugger", "Shopify · WooCommerce · Shopware"];
+      for (let r = 0; r < 9; r++) {
+        const row = mk($("#marq"), "abs", { left: "-900px", top: 120 + r * 200 + "px", whiteSpace: "nowrap", display: "flex", gap: "22px" });
+        for (let k = 0; k < 10; k++) { const tx = chipsTxt[(k * 3 + r * 7) % chipsTxt.length]; mk(row, "", { padding: "18px 34px", borderRadius: "50px", border: "2px solid #2b2f38", font: "600 36px Inter", color: r % 3 === 1 ? "#3df5a2" : "#5b5f69", background: "#121418" }, tx); }
+        const dir = r % 2 ? 1 : -1;
+        tl.fromTo(row, { x: dir * 300 }, { x: dir * -300, duration: 2.6, ease: "none" }, 22.4);
+      }
+            [22.4, 23.2, 24.0].forEach((t) => tl.fromTo("#marq", { opacity: 1 }, { opacity: 0.6, duration: 0.3, immediateRender: false }, t));
+      tl.fromTo("#r1", { scale: 1.6, opacity: 0, filter: "blur(16px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 22.45);
+      tl.fromTo("#r2", { scale: 1.6, opacity: 0, filter: "blur(16px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 23.2);
+      tl.fromTo("#r3", { scale: 1.6, opacity: 0, filter: "blur(16px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 24.0);
+      flash(24.0, 0.5, 0.25);
+      // Implosion in einen Punkt
+      tl.to("#s10in", { scale: 0.02, opacity: 0, rotation: 30, duration: 0.45, ease: "power4.in", transformOrigin: "540px 960px" }, 24.55);
+
+      /* ===== S12 LOGO + CTA (24.9 – 32) ===== */
+      cursor("#cur5", "Du", "#3df5a2");
+      tl.set("#logo", { opacity: 0 }, 0);
+      // Punkt im Dunkeln, dann Explosion auf dem Drop
+      tl.fromTo("#ring", { opacity: 0, scale: 1 }, { opacity: 1, scale: 2, duration: 0.3, ease: "power2.out" }, 25.0);
+      tl.to("#ring", { scale: 1, duration: 0.3, ease: "power2.in" }, 25.3);
+      tl.to("#ring", { scale: 260, opacity: 0, borderWidth: 1, duration: 0.8, ease: "expo.out" }, 25.6);
+      tl.set("#logo", { opacity: 1 }, 25.6);
+      flash(25.6, 0.9, 0.4); shake("#s12in", 25.62, 0.35, 24);
+      tl.fromTo("#ltile", { scale: 0, rotation: -120 }, { scale: 1, rotation: 0, duration: 0.7, ease: "back.out(1.8)" }, 25.6);
+      ["#lc1", "#lc2", "#lc3"].forEach((c, i) => tl.fromTo(c, { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(3)" }, 25.85 + i * 0.07));
+      ["#lg1", "#lg2"].forEach((l, i) => tl.fromTo(l, { strokeDasharray: 20, strokeDashoffset: 20 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 25.95 + i * 0.08));
+      const wc = chars($("#lword"));
+      tl.fromTo(wc, { yPercent: 100, opacity: 0, rotation: 12 }, { yPercent: 0, opacity: 1, rotation: 0, duration: 0.6, ease: "expo.out", stagger: 0.05 }, 25.9);
+      tl.fromTo("#logo", { scale: 1.15 }, { scale: 1, duration: 1.4, ease: "expo.out", immediateRender: false }, 25.6);
+      const l2c = chars($("#l2"));
+      tl.fromTo(l2c, { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 0.025 }, 26.5);
+      tl.fromTo("#l3", { y: 60, opacity: 0, filter: "blur(10px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 27.2);
+      tl.fromTo("#cta", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(2.2)" }, 28.0);
+      tl.fromTo("#url", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, 28.3);
+      tl.fromTo("#cur5", { x: 1150, y: 1800 }, { x: 690, y: 1390, duration: 0.55, ease: "power3.out" }, 28.6);
+      click("#cur5", 29.35);
+      tl.to("#cta", { scale: 0.95, duration: 0.08, yoyo: true, repeat: 1 }, 29.35);
+      tl.to("#cta", { background: "#3df5a2", duration: 0.15 }, 29.4);
+      tl.set("#ctarip", { opacity: 1 }, 29.42);
+      tl.fromTo("#ctarip", { scale: 0, opacity: 1 }, { scale: 14, opacity: 0, duration: 0.7, ease: "expo.out", immediateRender: false }, 29.42);
+      [30.0, 30.4, 30.8].forEach((t) => tl.fromTo("#cta", { scale: 1.05 }, { scale: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t));
+      tl.to("#cur5", { x: 1150, y: 1800, duration: 0.5, ease: "power3.in" }, 30.0);
+      tl.to("#s12in", { opacity: 0, duration: 0.6, ease: "power2.in" }, 31.35);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
