@@ -10,11 +10,12 @@ m=load(f"{FS}/dl/music.mp3",ss=4.3)[:N]; t=np.arange(len(m))/SR
 fade=np.clip(t/0.9,0,1)*np.clip((DUR-t)/0.8,0,1)
 pre=np.where(t<12.9,0.8,1.0)
 mix[:len(m)]+=m*(0.62*pre*fade)[:,None]
-S={n:load(f"{FS}/sfx/{n}.wav") for n in ["impact","impact_soft","whoosh","whoosh_big","riser","glitch","tick","blip"]}
+S={n:load(f"{FS}/sfx/{n}.wav") for n in ["whoosh","whoosh_big","riser","blip"]}
+S.update({n:load(f"sfx/{n}.wav") for n in ["air_hit","air_hit_big","swell","tap"]})
 cuts=[9.52,9.92,10.32,10.72,11.12,11.52,11.92,12.12,12.32,12.52,12.72]
-cues=[(0.1,"impact_soft",0.45),(3.25,"whoosh",0.45),(3.32,"impact",0.75),(6.45,"whoosh",0.45),(6.52,"impact",0.75),
-      *[(c,"impact_soft" if c<11.9 else "tick",0.45) for c in cuts],(11.0,"riser",0.6),(9.52,"impact",0.6),
-      (12.85,"whoosh_big",0.65),(12.95,"impact",1.0),(17.3,"impact_soft",0.55),(19.6,"blip",0.4)]
+cues=[(0.1,"air_hit",0.35),(2.45,"swell",0.4),(3.32,"air_hit",0.55),(5.65,"swell",0.4),(6.52,"air_hit",0.55),
+      (8.65,"swell",0.4),(9.52,"air_hit",0.45),*[(c,"tap",0.32 if c<11.9 else 0.24) for c in cuts[1:]],(11.2,"riser",0.4),
+      (12.05,"swell",0.55),(12.95,"air_hit_big",0.85),(17.3,"air_hit",0.3),(19.6,"blip",0.25)]
 for tt,n,g in cues: place(mix,S[n],tt,g)
 mix*=min(1,0.98/np.abs(mix).max())
 with wave.open("mix.raw.wav","wb") as w:
