@@ -1,0 +1,118 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><title>fast.site Messlabor Styleframes</title><style>
+@font-face{font-family:"Archivo";font-weight:500;src:url(assets/archivo-latin-500-normal.woff2)}
+@font-face{font-family:"Archivo";font-weight:800;src:url(assets/archivo-latin-800-normal.woff2)}
+@font-face{font-family:"JB";font-weight:500;src:url(assets/jetbrains-mono-latin-500-normal.woff2)}
+@font-face{font-family:"JB";font-weight:800;src:url(assets/jetbrains-mono-latin-800-normal.woff2)}
+:root{--paper:#efece4;--ink:#121212;--mute:#8a867c;--blue:#3e71b6;--green:#0c9958;--red:#df482b;--yellow:#fbb419}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;background:var(--paper);font-family:"Archivo",sans-serif;color:var(--ink)}
+.f{position:relative;width:1080px;height:1920px;overflow:hidden;display:none;background:var(--paper)}
+.f.on{display:block}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(18,18,18,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(18,18,18,.06) 1px,transparent 1px);background-size:60px 60px}
+.paper{position:absolute;inset:0;opacity:.35;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.42 0 0 0 0 0.38 0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.abs{position:absolute}
+.mono{font-family:"JB";font-weight:500;font-size:22px;letter-spacing:.12em;text-transform:uppercase}
+.monob{font-family:"JB";font-weight:800;font-size:22px;letter-spacing:.12em;text-transform:uppercase}
+.h{font-weight:800;font-size:102px;line-height:.98;letter-spacing:-.04em}
+.h em{font-style:normal;color:var(--blue)}
+.sub{font-weight:500;font-size:40px;line-height:1.3;letter-spacing:-.01em;color:#3a3833}
+.crop{position:absolute;width:40px;height:40px;border-color:var(--ink);border-style:solid}
+.stripe{display:flex;height:10px;width:200px}.stripe i{flex:1}
+svg text{font-family:"JB";font-size:20px;letter-spacing:.1em;text-transform:uppercase}
+</style></head><body>
+
+<!-- Gemeinsamer Rahmen wird per JS in jede Szene kopiert -->
+<template id="frame">
+ <div class="grid"></div>
+ <div class="crop" style="left:50px;top:50px;border-width:3px 0 0 3px"></div><div class="crop" style="right:50px;top:50px;border-width:3px 3px 0 0"></div>
+ <div class="crop" style="left:50px;bottom:50px;border-width:0 0 3px 3px"></div><div class="crop" style="right:50px;bottom:50px;border-width:0 3px 3px 0"></div>
+ <div class="abs monob" style="left:80px;top:190px">fast.site<span style="color:var(--mute)"> — </span><span class="sec"></span></div>
+ <div class="abs mono" style="right:80px;top:190px;color:var(--mute)"><span class="num"></span></div>
+ <div class="abs stripe" style="left:80px;top:240px"><i style="background:var(--blue)"></i><i style="background:var(--green)"></i><i style="background:var(--red)"></i><i style="background:var(--yellow)"></i></div>
+ <div class="paper"></div>
+</template>
+
+<!-- 1 · Wer wir sind -->
+<section class="f" id="f1" data-sec="Wer wir sind" data-num="Blatt 01 / 03">
+ <div class="abs h" style="left:80px;top:330px">Deine Website<br>ist dein Zuhause<br>im Netz.</div>
+ <svg class="abs" style="left:0;top:820px" width="1080" height="900" viewBox="0 0 1080 900">
+  <g fill="none" stroke="#121212" stroke-width="3">
+   <rect x="160" y="120" width="760" height="560" rx="14"/>
+   <line x1="160" y1="180" x2="920" y2="180"/>
+   <circle cx="200" cy="150" r="9"/><circle cx="232" cy="150" r="9"/><circle cx="264" cy="150" r="9"/>
+   <rect x="210" y="230" width="660" height="170" rx="6"/>
+   <rect x="210" y="430" width="200" height="110" rx="6"/><rect x="440" y="430" width="200" height="110" rx="6"/><rect x="670" y="430" width="200" height="110" rx="6"/>
+   <line x1="210" y1="590" x2="700" y2="590"/><line x1="210" y1="625" x2="560" y2="625"/>
+  </g>
+  <!-- Bemaßungen -->
+  <g stroke="#3e71b6" stroke-width="2" fill="#3e71b6">
+   <line x1="160" y1="80" x2="920" y2="80"/><path d="M160 80 l16 -8 v16z"/><path d="M920 80 l-16 -8 v16z"/>
+   <line x1="160" y1="70" x2="160" y2="110"/><line x1="920" y1="70" x2="920" y2="110"/>
+   <line x1="960" y1="230" x2="960" y2="400"/><path d="M960 230 l-8 16 h16z"/><path d="M960 400 l-8 -16 h16z"/>
+   <line x1="120" y1="430" x2="120" y2="540"/><path d="M120 430 l-8 16 h16z"/><path d="M120 540 l-8 -16 h16z"/>
+  </g>
+  <g fill="#121212"><text x="420" y="64">deine domain</text></g>
+  <g fill="#121212"><text x="975" y="320" transform="rotate(90 975 320)">deine inhalte</text></g>
+  <g fill="#121212"><text x="102" y="560" transform="rotate(-90 102 560)">dein shop</text></g>
+  <g stroke="#121212" stroke-width="3" fill="none"><line x1="160" y1="760" x2="920" y2="760"/><line x1="540" y1="680" x2="540" y2="760"/></g>
+  <g fill="#121212"><text x="160" y="805">fundament: dein hosting</text></g>
+ </svg>
+ <div class="abs sub" style="left:80px;top:1700px">Gebaut von dir. Gepflegt von dir.</div>
+</section>
+
+<!-- 2 · Leitgedanke -->
+<section class="f" id="f2" data-sec="Leitgedanke" data-num="Blatt 02 / 03">
+ <div class="abs h" style="left:80px;top:330px">Behalte,<br>was <em>funktioniert.</em></div>
+ <div class="abs sub" style="left:80px;top:590px">Schneller werden heißt nicht,<br>alles neu zu bauen.</div>
+ <svg class="abs" style="left:0;top:800px" width="1080" height="900" viewBox="0 0 1080 900">
+  <g fill="none" stroke="#121212" stroke-width="3">
+   <rect x="90" y="140" width="400" height="300" rx="10"/><line x1="90" y1="175" x2="490" y2="175"/>
+   <rect x="120" y="200" width="340" height="90" rx="4"/><rect x="120" y="310" width="100" height="60" rx="4"/><rect x="240" y="310" width="100" height="60" rx="4"/><rect x="360" y="310" width="100" height="60" rx="4"/>
+   <rect x="590" y="140" width="400" height="300" rx="10"/><line x1="590" y1="175" x2="990" y2="175"/>
+   <rect x="620" y="200" width="340" height="90" rx="4"/><rect x="620" y="310" width="100" height="60" rx="4"/><rect x="740" y="310" width="100" height="60" rx="4"/><rect x="860" y="310" width="100" height="60" rx="4"/>
+  </g>
+  <g fill="#121212"><text x="90" y="110">vorher</text><text x="590" y="110">mit fast.site</text></g>
+  <!-- Speed-Linien durch die rechte Seite -->
+  <g stroke-width="8" stroke-linecap="round">
+   <line x1="560" y1="225" x2="1040" y2="225" stroke="#3e71b6"/><line x1="580" y1="255" x2="1040" y2="255" stroke="#0c9958"/>
+   <line x1="560" y1="340" x2="1040" y2="340" stroke="#df482b"/><line x1="600" y1="370" x2="1040" y2="370" stroke="#fbb419"/>
+  </g>
+  <g fill="#121212"><text x="90" y="520">diff</text></g>
+  <g font-family="JB" font-weight="800" fill="#121212">
+   <text x="90" y="575" style="font-size:30px">design ......... unverändert</text>
+   <text x="90" y="625" style="font-size:30px">inhalte ........ unverändert</text>
+   <text x="90" y="675" style="font-size:30px">hosting ........ unverändert</text>
+   <text x="90" y="725" style="font-size:30px" fill="#3e71b6">auslieferung ... schneller</text>
+  </g>
+ </svg>
+</section>
+
+<!-- 3 · Haltung -->
+<section class="f" id="f3" data-sec="Haltung" data-num="Blatt 03 / 03">
+ <div class="abs h" style="left:80px;top:330px">Performance<br>statt <em>Versprechen.</em></div>
+ <div class="abs sub" style="left:80px;top:590px">Gemessen auf deinen eigenen Seiten.<br>Mit deinem echten Traffic.</div>
+ <svg class="abs" style="left:0;top:780px" width="1080" height="820" viewBox="0 0 1080 820">
+  <g stroke="#121212" stroke-width="2"><line x1="120" y1="560" x2="960" y2="560"/><line x1="120" y1="80" x2="120" y2="560"/></g>
+  <g stroke="rgba(18,18,18,.18)" stroke-width="2" stroke-dasharray="6 8"><line x1="120" y1="200" x2="960" y2="200"/><line x1="120" y1="320" x2="960" y2="320"/><line x1="120" y1="440" x2="960" y2="440"/></g>
+  <rect x="220" y="140" width="220" height="420" fill="none" stroke="#121212" stroke-width="3" stroke-dasharray="10 8"/>
+  <rect x="620" y="330" width="220" height="230" fill="#121212"/>
+  <rect x="620" y="330" width="220" height="10" fill="#3e71b6"/>
+  <g fill="#121212"><text x="220" y="610">vorher</text><text x="620" y="610">nachher</text><text x="120" y="60">deine messung</text></g>
+  <g stroke="#3e71b6" stroke-width="2" fill="#3e71b6"><line x1="900" y1="140" x2="900" y2="330"/><path d="M900 330 l-8 -16 h16z"/></g>
+  <g fill="#3e71b6"><text x="912" y="250">δ</text></g>
+  <g fill="#8a867c"><text x="120" y="700" style="font-size:19px">* ergebnisse hängen von ursprung, cache-regeln und inhalten ab.</text><text x="120" y="735" style="font-size:19px">  ein cdn garantiert kein google-ranking.</text></g>
+ </svg>
+ <div class="abs" style="left:80px;top:1650px;display:flex;align-items:center;gap:26px">
+  <img src="assets/icon.svg" style="width:110px;height:110px"><img src="assets/wordmark.svg" style="height:84px">
+ </div>
+ <div class="abs monob" style="right:80px;top:1690px">Lass die Ergebnisse<br>entscheiden.</div>
+</section>
+
+<script>
+const f=new URLSearchParams(location.search).get('f')||'1';const el=document.getElementById('f'+f);el.classList.add('on');
+const t=document.getElementById('frame').content.cloneNode(true);el.prepend(t);
+el.querySelector('.sec').textContent=el.dataset.sec;el.querySelector('.num').textContent=el.dataset.num;
+// Papier-Ebene ganz nach oben
+el.appendChild(el.querySelector('.paper'));
+</script>
+</body></html>
