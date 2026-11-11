@@ -2,3 +2,8 @@ blender/frames/
 blender/render.log
 blender/qc*.jpg
 **/.hyperframes/
+blender/frames_eye/
+blender/frames_spine/
+blender/frames_title/
+blender/render_macros.log
+mix.raw.wav

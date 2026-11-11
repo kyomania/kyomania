@@ -6,10 +6,11 @@ import bpy, math, sys, os, time, addon_utils
 from mathutils import Vector
 
 MODE, OUT = sys.argv[1], sys.argv[2]
+SHOT = os.environ.get("SHOT", "hero")
 SAMPLES = int(sys.argv[3]) if len(sys.argv) > 3 else 48
 SCALE = int(sys.argv[4]) if len(sys.argv) > 4 else 50
 EXTRA = float(sys.argv[5]) if len(sys.argv) > 5 else None
-DUR = 7.3
+DUR = 7.3 if os.environ.get("SHOT", "hero") == "hero" else float(os.environ.get("SHOT_DUR", "3.5"))
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 addon_utils.enable("cycles", default_set=True)
@@ -84,6 +85,39 @@ def anim(t):
     g = clamp((s - 1.8) / 1.6); sweep.data.energy = 900 * math.sin(math.pi * g)
     sweep.location = (-6 + 12 * g, -4, 0.5)
     sweep.rotation_euler = (Vector((0, 0, 0)) - sweep.location).to_track_quat("-Z", "Y").to_euler()
+
+def look(cam_obj, target):
+    cam_obj.rotation_euler = (Vector(target) - cam_obj.location).to_track_quat("-Z", "Y").to_euler()
+if SHOT != "hero":
+    cd.lens = 85; cd.dof.use_dof = True; cd.dof.aperture_fstop = 1.6
+    foc = bpy.data.objects.new("F", None); sc.collection.objects.link(foc); cd.dof.focus_object = foc
+    sweep.data.size = 1.2
+    def anim(t):
+        s = DUR * t; e = t * t * (3 - 2 * t)
+        pivot.location = (0, 0, 0)
+        if SHOT == "eye":       # Fahrt über das Auge auf dem Cover
+            pivot.rotation_euler = (0, 0, math.radians(-8))
+            ex, ez = -0.62, 0.42
+            cam.location = (ex - 0.55 + 0.75 * e, -2.0 + 0.25 * e, ez + 0.06 - 0.12 * e)
+            look(cam, (ex - 0.15 + 0.45 * e, 0, ez)); foc.location = (ex - 0.1 + 0.45 * e, -0.16, ez)
+            g = e; sweep.location = (-3 + 6 * g, -3, 1.0); sweep.data.energy = 500
+            look(sweep, (0, 0, 0))
+        elif SHOT == "spine":   # Kamera gleitet am Rücken entlang
+            ang = math.radians(78); pivot.rotation_euler = (0, 0, ang)
+            c = Vector((-Wd / 2, 0, 0)); c.rotate(pivot.rotation_euler); nrm = Vector((-1, 0, 0)); nrm.rotate(pivot.rotation_euler)
+            side = Vector((-nrm.y, nrm.x, 0))
+            cz = -1.5 + 2.6 * e
+            cam.location = c + nrm * 1.75 + side * 0.7 + Vector((0, 0, cz - 0.45))
+            look(cam, c + Vector((0, 0, cz + 0.15))); foc.location = c + nrm * 0.02 + Vector((0, 0, cz + 0.1))
+            key.data.energy = 80; top.data.energy = 0
+            sweep.location = c + nrm * 3.0 - side * 1.5 + Vector((0, 0, cz + 1.0)); sweep.data.energy = 120; look(sweep, c + Vector((0, 0, cz)))
+        else:                   # Makro über den gelben Titel
+            pivot.rotation_euler = (0, 0, math.radians(10))
+            tx = 0.5; tz = -0.75 + 1.5 * e
+            cam.location = (tx - 0.35 + 0.2 * e, -1.9, tz - 0.25)
+            look(cam, (tx, 0, tz)); foc.location = (tx, -0.16, tz)
+            key.data.energy = 350
+            sweep.location = (-2.5 + 5 * e, -3, tz + 0.8); sweep.data.energy = 140; look(sweep, (tx, 0, tz))
 
 if MODE == "still":
     anim(EXTRA if EXTRA is not None else 0.5); sc.render.filepath = OUT
