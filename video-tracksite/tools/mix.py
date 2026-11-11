@@ -1,4 +1,4 @@
-"""Mix music + SFX into the 32 s track for the Track TikTok spot (no voiceover)."""
+"""Mix music + voiceover + SFX into the 32 s track for the Track TikTok spot."""
 import subprocess, sys, wave
 import numpy as np
 
@@ -25,10 +25,37 @@ def place(x, t, gain=1.0):
         mix[s:e] += x[: e - s] * gain
 
 
+# --- Sprecher: Segmente aus dem bestehenden Track-Video (Stimme mit tools/isolate_vocals.py freigestellt)
+VO_SRC = load(f"{ROOT}/dl/vo_track.wav")
+VO = [  # (quelle_von, quelle_bis, ziel_start)  Text
+    (0.12, 3.58, 0.20),    # Eine Bestellung und jede Plattform zählt was anderes?
+    (6.24, 8.22, 6.55),    # Du baust ein einziges Snippet ein.
+    (19.48, 22.66, 8.85),  # serverseitig an Meta, Google, TikTok und mehr.
+    (4.61, 6.24, 12.06),   # jede Conversion genau einmal.  ("genau" auf dem Drop 12,8)
+    (16.03, 17.76, 15.40), # Ohne Ja geht nichts raus.
+    (17.76, 18.94, 17.15), # Alles in der EU.
+    (22.68, 26.20, 18.30), # Fehlt etwas, fixt es Track AI nach deiner Freigabe.
+    (26.22, 26.82, 25.75), # Track.
+    (26.84, 29.14, 27.90), # Jetzt 14 Tage kostenlos testen.
+]
+vo = np.zeros((N, 2))
+for a, b, d in VO:
+    seg = VO_SRC[int(a * SR):int(b * SR)].copy()
+    f = int(0.012 * SR); ramp = np.linspace(0, 1, f)[:, None]
+    seg[:f] *= ramp; seg[-f:] *= ramp[::-1]
+    s0 = int(d * SR); e0 = min(N, s0 + len(seg)); vo[s0:e0] += seg[: e0 - s0]
+vo *= 0.5 / (np.sqrt((vo[np.abs(vo).max(1) > 0.01] ** 2).mean()) * 4 + 1e-9)
+env = np.abs(vo).mean(1)
+k = int(0.03 * SR); sm = np.convolve(env, np.ones(k) / k, mode="same")
+active = (sm > 0.004).astype(float)
+rel = int(0.3 * SR); active = np.convolve(active, np.ones(rel) / rel, mode="same").clip(0, 1)
+
 music = load(f"{ROOT}/dl/music.mp3")[:N]
 t = np.arange(len(music)) / SR
 fade = np.clip((DUR - t) / 1.0, 0, 1)
-mix[: len(music)] += music * (0.62 * fade)[:, None]
+duck = 1.0 - 0.55 * active[: len(music)]
+mix[: len(music)] += music * (0.62 * fade * duck)[:, None]
+mix += vo * 1.6
 
 S = {n: load(f"{ROOT}/sfx/{n}.wav") for n in
      ["whoosh", "whoosh_big", "impact", "impact_soft", "riser", "glitch", "blip", "tick"]}

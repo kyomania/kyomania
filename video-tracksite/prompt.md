@@ -15,7 +15,7 @@ Farben frei (nicht an die Webseite gebunden). Das Logo (blaue Kachel mit
 Knoten-Glyphe + Wortmarke „Track“) bleibt exakt so wie auf der Seite.
 Echte Inhalte und Claims von der Seite.
 
-Ton: keine Sprecherstimme (kein Higgsfield-Guthaben) · vorhandene instrumentale
+Ton: deutsche Sprecherstimme aus dem bestehenden Track-Video (freigestellt) · vorhandene instrumentale
 Musik aus dem fast.site-Projekt · synthetisierte Soundeffekte, Schnitte auf Beat
 und Drops (12,8 s und 25,6 s).
 
