@@ -1,0 +1,87 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><title>fast.site Chevrons Styleframes</title><style>
+@font-face{font-family:"Anton";src:url(assets/anton-latin-400-normal.woff2)}
+@font-face{font-family:"Archivo";font-weight:500;src:url(assets/archivo-latin-500-normal.woff2)}
+@font-face{font-family:"Archivo";font-weight:800;src:url(assets/archivo-latin-800-normal.woff2)}
+@font-face{font-family:"JB";font-weight:800;src:url(assets/jetbrains-mono-latin-800-normal.woff2)}
+:root{--bk:#07080c;--blue:#3e71b6;--green:#0c9958;--red:#df482b;--yellow:#fbb419;--white:#f5f3ee}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;background:var(--bk);font-family:"Archivo",sans-serif;color:var(--white)}
+.f{position:relative;width:1080px;height:1920px;overflow:hidden;display:none;background:radial-gradient(90% 60% at 50% 55%,#151a2a 0%,#07080c 70%)}
+.f.on{display:block}
+.abs{position:absolute}
+.mega{font-family:"Anton";text-transform:uppercase;line-height:.84;letter-spacing:-.01em}
+.label{font-family:"JB";font-weight:800;font-size:24px;letter-spacing:.2em;text-transform:uppercase}
+.noise{position:absolute;inset:0;opacity:.14;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.glow{filter:drop-shadow(0 0 40px currentColor) drop-shadow(0 0 120px currentColor)}
+.vig{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 50%,transparent 55%,rgba(0,0,0,.8) 100%)}
+</style></head><body>
+
+<!-- 1 · Zuhause -->
+<section class="f" id="f1">
+ <div class="abs label" style="left:80px;top:180px;color:var(--yellow)">01 — wer wir sind</div>
+ <!-- Chevron-Dach mit Echo-Spuren -->
+ <svg class="abs" style="left:0;top:520px" width="1080" height="900" viewBox="0 0 1080 900">
+  <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3e71b6"/><stop offset="1" stop-color="#0c9958"/></linearGradient></defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <polyline points="140,520 540,120 940,520" stroke="#3e71b6" stroke-width="24" opacity=".12" transform="translate(0,-150)"/>
+   <polyline points="140,520 540,120 940,520" stroke="#3e71b6" stroke-width="40" opacity=".25" transform="translate(0,-90)"/>
+   <polyline points="140,520 540,120 940,520" stroke="url(#g1)" stroke-width="120" class="glow" style="color:#3e71b6"/>
+  </g>
+  <!-- Haus = Browserfenster -->
+  <rect x="250" y="500" width="580" height="360" rx="22" fill="#f5f3ee"/>
+  <rect x="250" y="500" width="580" height="54" rx="22" fill="#dcd8cf"/><rect x="250" y="530" width="580" height="24" fill="#dcd8cf"/>
+  <circle cx="290" cy="527" r="10" fill="#df482b"/><circle cx="322" cy="527" r="10" fill="#fbb419"/><circle cx="354" cy="527" r="10" fill="#0c9958"/>
+  <rect x="290" y="590" width="500" height="110" rx="10" fill="#07080c" opacity=".85"/>
+  <rect x="290" y="725" width="150" height="100" rx="10" fill="#3e71b6"/><rect x="465" y="725" width="150" height="100" rx="10" fill="#fbb419"/><rect x="640" y="725" width="150" height="100" rx="10" fill="#df482b"/>
+ </svg>
+ <div class="abs mega" style="left:60px;top:250px;font-size:250px">Dein<br><span style="color:var(--yellow)">Zuhause</span></div>
+ <div class="abs mega" style="left:60px;top:1420px;font-size:250px;white-space:nowrap">im Netz.</div>
+ <div class="abs" style="left:80px;top:1680px;font-weight:500;font-size:40px;opacity:.85">Gebaut von dir. Gepflegt von dir.</div>
+ <div class="vig"></div><div class="noise"></div>
+</section>
+
+<!-- 2 · Leitgedanke -->
+<section class="f" id="f2" style="background:radial-gradient(90% 60% at 50% 55%,#0e2a20 0%,#07080c 70%)">
+ <div class="abs label" style="left:80px;top:180px;color:var(--green)">02 — unser leitgedanke</div>
+ <div class="abs mega" style="left:50px;top:250px;font-size:300px;line-height:.82">Behalte,</div>
+ <!-- Speed-Echo: Doppel-Chevrons rasen nach oben, die Seite bleibt -->
+ <svg class="abs" style="left:0;top:520px" width="1080" height="1000" viewBox="0 0 1080 1000">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <g opacity=".14"><polyline points="230,330 540,40 850,330" stroke="#0c9958" stroke-width="70"/><polyline points="230,470 540,180 850,470" stroke="#fbb419" stroke-width="70"/></g>
+   <g opacity=".3" transform="translate(0,90)"><polyline points="230,330 540,40 850,330" stroke="#0c9958" stroke-width="80"/><polyline points="230,470 540,180 850,470" stroke="#fbb419" stroke-width="80"/></g>
+   <g transform="translate(0,200)" class="glow" style="color:#0c9958"><polyline points="230,330 540,40 850,330" stroke="#0c9958" stroke-width="100"/><polyline points="230,470 540,180 850,470" stroke="#fbb419" stroke-width="100"/></g>
+  </g>
+  <rect x="310" y="620" width="460" height="300" rx="20" fill="#f5f3ee"/>
+  <rect x="310" y="620" width="460" height="46" rx="20" fill="#dcd8cf"/><rect x="310" y="645" width="460" height="21" fill="#dcd8cf"/>
+  <circle cx="345" cy="643" r="9" fill="#df482b"/><circle cx="373" cy="643" r="9" fill="#fbb419"/><circle cx="401" cy="643" r="9" fill="#0c9958"/>
+  <rect x="345" y="695" width="390" height="90" rx="8" fill="#07080c" opacity=".85"/>
+  <rect x="345" y="805" width="115" height="80" rx="8" fill="#3e71b6"/><rect x="483" y="805" width="115" height="80" rx="8" fill="#fbb419"/><rect x="620" y="805" width="115" height="80" rx="8" fill="#df482b"/>
+  <text x="540" y="975" text-anchor="middle" font-family="JB" font-weight="800" font-size="26" letter-spacing="5" fill="#f5f3ee">UNVERÄNDERT. NUR SCHNELLER.</text>
+ </svg>
+ <div class="abs mega" style="left:50px;top:1540px;font-size:150px;white-space:nowrap">was <span style="color:var(--green)">funktioniert.</span></div>
+ <div class="vig"></div><div class="noise"></div>
+</section>
+
+<!-- 3 · Haltung -->
+<section class="f" id="f3" style="background:radial-gradient(90% 60% at 50% 45%,#2c0f0a 0%,#07080c 70%)">
+ <div class="abs label" style="left:80px;top:180px;color:var(--red)">03 — unsere haltung</div>
+ <div class="abs mega" style="left:50px;top:250px;font-size:186px;white-space:nowrap">Performance</div>
+ <div class="abs mega" style="left:50px;top:440px;font-size:110px">statt</div>
+ <div class="abs mega" style="left:50px;top:560px;font-size:186px;white-space:nowrap;color:rgba(245,243,238,.28)">Versprechen</div>
+ <svg class="abs" style="left:0;top:560px" width="1080" height="200" viewBox="0 0 1080 200"><defs><filter id="gl" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="14"/></filter></defs><path d="M40 120 C 300 80, 700 150, 1040 70" stroke="#df482b" stroke-width="40" fill="none" stroke-linecap="round" filter="url(#gl)" opacity=".8"/><path d="M40 120 C 300 80, 700 150, 1040 70" stroke="#df482b" stroke-width="26" fill="none" stroke-linecap="round"/></svg>
+ <!-- Chevron als steigender Messpfeil -->
+ <svg class="abs" style="left:0;top:860px" width="1080" height="760" viewBox="0 0 1080 760">
+  <g stroke="rgba(245,243,238,.2)" stroke-width="2"><line x1="90" y1="700" x2="990" y2="700"/><line x1="90" y1="560" x2="990" y2="560" stroke-dasharray="6 10"/><line x1="90" y1="420" x2="990" y2="420" stroke-dasharray="6 10"/><line x1="90" y1="280" x2="990" y2="280" stroke-dasharray="6 10"/></g>
+  <polyline points="90,640 330,560 520,600 760,330" fill="none" stroke="#f5f3ee" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
+  <defs><filter id="gl2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter></defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#gl2)" opacity=".9"><polyline points="680,260 820,120 960,260" stroke="#df482b" stroke-width="70"/><polyline points="680,360 820,220 960,360" stroke="#fbb419" stroke-width="70"/></g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="680,260 820,120 960,260" stroke="#df482b" stroke-width="56"/><polyline points="680,360 820,220 960,360" stroke="#fbb419" stroke-width="56"/></g>
+  <text x="90" y="745" font-family="JB" font-weight="800" font-size="22" letter-spacing="4" fill="rgba(245,243,238,.6)">DEINE SEITEN · DEIN TRAFFIC · DEINE MESSUNG</text>
+ </svg>
+ <div class="abs" style="left:80px;top:1680px;display:flex;align-items:center;gap:22px;background:#f5f3ee;border-radius:24px;padding:22px 34px"><img src="assets/icon.svg" style="width:84px;height:84px"><img src="assets/wordmark.svg" style="height:64px"></div>
+ <div class="abs label" style="right:80px;top:1700px;text-align:right;line-height:1.6">Lass die Ergebnisse<br><span style="color:var(--yellow)">entscheiden.</span></div>
+ <div class="vig"></div><div class="noise"></div>
+</section>
+
+<script>const f=new URLSearchParams(location.search).get('f')||'1';document.getElementById('f'+f).classList.add('on')</script>
+</body></html>
