@@ -1,0 +1,562 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FUZZN – Searching for a game</title>
+<style>
+  @font-face { font-family: "InterD"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-Bold.otf"); }
+  html, body { margin: 0; background: #000; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+// ------------------------------------------------------------------
+// FUZZN "SEARCHING FOR A GAME" – deterministic loop, render(t) for t in [0,T)
+// ------------------------------------------------------------------
+const W = 1920, H = 1080, T = 18;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+
+// ---------- helpers ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;   // easeInOutCubic
+const eo = k => 1 - Math.pow(1 - k, 3);
+const ei = k => k * k * k;
+const ss = k => k * k * (3 - 2 * k);
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const TAU = Math.PI * 2;
+
+function loadImg(src) { return new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; }); }
+
+let IMG = {};
+// rooftop image is 2000x1125 -> canvas factor
+const RF = W / 2000;
+
+// draw an image cover-fit with zoom s around canvas point (fx,fy) and pan (px,py)
+function drawCam(img, s = 1, fx = W / 2, fy = H / 2, px = 0, py = 0, rot = 0) {
+  const base = Math.max(W / img.width, H / img.height);
+  const w = img.width * base, h = img.height * base;
+  ctx.save();
+  ctx.translate(fx + px, fy + py);
+  ctx.rotate(rot);
+  ctx.scale(s, s);
+  ctx.translate(-fx, -fy);
+  ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+  ctx.restore();
+}
+function camApply(s, fx, fy, px = 0, py = 0, rot = 0) {
+  ctx.translate(fx + px, fy + py); ctx.rotate(rot); ctx.scale(s, s); ctx.translate(-fx, -fy);
+}
+
+// ---------- crow (procedural silhouette) ----------
+// wing outline in (u along span 0..1, v toward trailing edge px)
+const WING = [[0,-6],[.3,-10],[.55,-8],[.8,-1],[1,8],[.97,24],[.9,19],[.92,38],[.84,31],[.85,50],[.76,43],[.75,60],[.6,57],[.45,66],[.25,62],[.1,56],[0,46]];
+const CROW_DARK = '#0b090d';
+
+function wingPath(shx, shy, dirx, diry, len, back, widthMul) {
+  // back = unit vector toward trailing edge
+  ctx.beginPath();
+  WING.forEach(([u, v], i) => {
+    const x = shx + dirx * u * len + back[0] * v * widthMul;
+    const y = shy + diry * u * len + back[1] * v * widthMul;
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+  });
+  ctx.closePath();
+}
+
+// side view, facing +x. flap: angle in radians (+ up)
+function crowSide(x, y, s, flap, rot = 0, alpha = 1, rim = true) {
+  ctx.save();
+  ctx.globalAlpha *= alpha;
+  ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
+  const L = 175;
+  const sn = Math.sin(flap);
+  const fore = .38 + .62 * Math.abs(sn);
+  // far wing (behind body)
+  ctx.fillStyle = '#1b161d';
+  wingPath(4, -12, -.18, -sn, L * .82 * fore, [-1, 0], .85);
+  ctx.fill();
+  // body
+  ctx.fillStyle = CROW_DARK;
+  ctx.beginPath(); ctx.ellipse(0, 0, 62, 21, 0, 0, TAU); ctx.fill();
+  // head
+  ctx.beginPath(); ctx.ellipse(64, -9, 22, 18, -.2, 0, TAU); ctx.fill();
+  // beak
+  ctx.beginPath(); ctx.moveTo(78, -16); ctx.quadraticCurveTo(102, -14, 116, -4); ctx.lineTo(80, 0); ctx.closePath(); ctx.fill();
+  // tail
+  ctx.beginPath(); ctx.moveTo(-48, -9); ctx.lineTo(-122, -24); ctx.lineTo(-134, -4); ctx.lineTo(-126, 16); ctx.lineTo(-48, 9); ctx.closePath(); ctx.fill();
+  // near wing
+  wingPath(8, -6, -.12, -sn, L * fore, [-1, 0], 1);
+  ctx.fill();
+  if (rim) {
+    ctx.strokeStyle = 'rgba(255,160,90,.35)'; ctx.lineWidth = 1.6 / s; ctx.stroke();
+  }
+  // eye glint
+  ctx.fillStyle = 'rgba(255,90,70,.9)';
+  ctx.beginPath(); ctx.arc(70, -13, 2.4, 0, TAU); ctx.fill();
+  ctx.restore();
+}
+
+// top view, facing +x (rotate for direction). flap phase -> span foreshortening
+function crowTop(x, y, s, flap, rot = 0, color = CROW_DARK, alpha = 1) {
+  ctx.save();
+  ctx.globalAlpha *= alpha;
+  ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
+  ctx.fillStyle = color;
+  const span = 175 * (.55 + .45 * Math.cos(flap));
+  wingPath(6, -6, 0, -1, span, [-1, 0], .9); ctx.fill();
+  wingPath(6, 6, 0, 1, span, [-1, 0], .9); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(0, 0, 60, 17, 0, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(60, 0, 18, 14, 0, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(74, -6); ctx.lineTo(104, 0); ctx.lineTo(74, 6); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-46, -8); ctx.lineTo(-128, -20); ctx.lineTo(-128, 20); ctx.lineTo(-46, 8); ctx.fill();
+  ctx.restore();
+}
+
+// ---------- smoke sprites ----------
+function makePuff(r, g, b, size = 128) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const x = c.getContext('2d');
+  const gr = x.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  gr.addColorStop(0, `rgba(${r},${g},${b},1)`);
+  gr.addColorStop(.35, `rgba(${r},${g},${b},.55)`);
+  gr.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  x.fillStyle = gr; x.fillRect(0, 0, size, size);
+  return c;
+}
+let PUFF_D, PUFF_L, PUFF_M;
+
+// ---------- text target points ----------
+const TEXT = 'SEARCHING FOR A GAME';
+const TEXT_Y = 540;
+let TPTS = [];
+function setupText() {
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  styleText(x);
+  x.fillStyle = '#fff';
+  x.fillText(TEXT, W / 2, TEXT_Y);
+  const d = x.getImageData(0, 0, W, H).data;
+  const pts = [];
+  for (let yy = 0; yy < H; yy += 4) for (let xx = 0; xx < W; xx += 4) if (d[(yy * W + xx) * 4 + 3] > 140) pts.push([xx, yy]);
+  TPTS = pts;
+}
+function styleText(x) {
+  x.font = '700 94px InterD';
+  x.letterSpacing = '22px';
+  x.textAlign = 'center';
+  x.textBaseline = 'middle';
+}
+
+// ---------- particles ----------
+const NP = 2600;
+let P = [];
+function setupParticles() {
+  const R = rng(7);
+  for (let i = 0; i < NP; i++) {
+    const tgt = TPTS[Math.floor(R() * TPTS.length)];
+    P.push({
+      // birth offset relative to crow body (in crow-local, scale 1)
+      bx: (R() - .5) * 220, by: (R() - .5) * 60 - (R() < .4 ? R() * 120 : 0),
+      vx: (R() - .3) * 2, vy: (R() - .5) * 2,
+      delay: R() * .35,
+      conv: .9 + R() * .6,
+      tx: tgt[0] + (R() - .5) * 3, ty: tgt[1] + (R() - .5) * 3,
+      sw: R() * TAU, swA: 30 + R() * 90,
+      size: 10 + R() * 26,
+      // dissolve (S5)
+      dx: 300 + R() * 900, dy: -150 + (R() - .5) * 700, dsz: 60 + R() * 260,
+      hx: (R() - .5) * 200, hy: (R() - .5) * 140,
+      ux: -120 + R() * (W + 240), uy: -120 + R() * (H + 240),
+      r: R()
+    });
+  }
+}
+
+// ---------- ambient motes (periodic over T) ----------
+const NM = 70;
+let M = [];
+function setupMotes() {
+  const R = rng(3);
+  for (let i = 0; i < NM; i++) M.push({ x: R() * W, y: R() * H, ax: 20 + R() * 60, ay: 10 + R() * 40, k: 1 + Math.floor(R() * 3), ph: R() * TAU, s: 1 + R() * 2.5, a: .25 + R() * .5 });
+}
+function drawMotes(t, alpha) {
+  if (alpha <= 0) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const m of M) {
+    const w = TAU * m.k * t / T + m.ph;
+    const x = m.x + Math.sin(w) * m.ax, y = m.y + Math.cos(w * 1.3 + m.ph) * m.ay;
+    const tw = .6 + .4 * Math.sin(w * 3);
+    ctx.globalAlpha = alpha * m.a * tw;
+    ctx.fillStyle = '#ffcf9a';
+    ctx.beginPath(); ctx.arc(x, y, m.s, 0, TAU); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// ---------- grain / vignette ----------
+let GRAIN = [];
+function setupGrain() {
+  const R = rng(11);
+  for (let g = 0; g < 6; g++) {
+    const c = document.createElement('canvas'); c.width = 480; c.height = 270;
+    const x = c.getContext('2d'); const id = x.createImageData(480, 270);
+    for (let i = 0; i < id.data.length; i += 4) { const v = R() * 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 255; }
+    x.putImageData(id, 0, 0); GRAIN.push(c);
+  }
+}
+function post(t) {
+  // vignette
+  const g = ctx.createRadialGradient(W / 2, H / 2, H * .35, W / 2, H / 2, H * 1.05);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(10,0,20,.55)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // grain (periodic)
+  ctx.save();
+  ctx.globalAlpha = .045; ctx.globalCompositeOperation = 'overlay';
+  ctx.drawImage(GRAIN[Math.floor(t * 12) % 6], 0, 0, W, H);
+  ctx.restore();
+  // letterbox hint
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, 0);
+}
+
+function lightLeak(t, a) {
+  if (a <= 0) return;
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  const p = .5 + .5 * Math.sin(TAU * t / T);
+  const g = ctx.createRadialGradient(W * .95, H * .55, 0, W * .95, H * .55, W * .7);
+  g.addColorStop(0, `rgba(255,140,60,${.28 * a * (.7 + .3 * p)})`); g.addColorStop(1, 'rgba(255,120,60,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+
+// motion-blur draw for whip pans: call fn(offset) several times
+function smear(n, dx, dy, fn) {
+  ctx.save();
+  for (let i = 0; i < n; i++) {
+    const k = i / (n - 1) - .5;
+    ctx.globalAlpha = i === 0 ? 1 : 1 / (i + 1);
+    ctx.save(); ctx.translate(dx * k, dy * k); fn(); ctx.restore();
+  }
+  ctx.restore();
+}
+
+// ------------------------------------------------------------------
+// SCENES
+// ------------------------------------------------------------------
+// crow perch point (canvas coords, from rooftop image)
+const PERCH = { x: 1205 * RF, y: 470 * RF };
+const CUT = { x: 1095 * RF, y: 380 * RF, w: 240 * RF, h: 195 * RF };
+const S1_END = 4.6, S2_END = 8.4, S3_END = 11.6, S4_END = 16.3;
+
+function s1Cam(t) {
+  // slow push-in during S1, exactly 1.0 at t=0 (= loop end state)
+  const k = eio(prog(t, 0, S1_END + .35));
+  return { s: 1 + .07 * k, fx: PERCH.x - 120, fy: PERCH.y + 40 };
+}
+const TAKE = 3.3;   // crow take-off moment
+
+// ===================== backgrounds (ox, oy = screen offset) =====================
+function bgS1(t, ox = 0, oy = 0) {
+  const c = s1Cam(t);
+  ctx.save(); ctx.translate(ox, oy); camApply(c.s, c.fx, c.fy);
+  ctx.drawImage(IMG.clean, 0, 0, W, H);
+  if (t < TAKE + .12) {
+    // perched crow: small crouch, hop, vanishes inside the smoke burst
+    const crouch = Math.sin(Math.PI * prog(t, TAKE - .3, TAKE - .05)) * .07;
+    const hop = ei(prog(t, TAKE - .05, TAKE + .12)) * 34;
+    ctx.save();
+    ctx.globalAlpha = 1 - ss(prog(t, TAKE + .03, TAKE + .11));
+    ctx.translate(CUT.x + CUT.w / 2, CUT.y + CUT.h - hop);
+    ctx.scale(1, 1 - crouch);
+    ctx.drawImage(IMG.crowcut, -CUT.w / 2, -CUT.h, CUT.w, CUT.h);
+    ctx.restore();
+  }
+  ctx.restore();
+}
+function bgS2(t, ox = 0, oy = 0) {
+  const k = (t - S1_END) / (S2_END - S1_END);
+  drawCam(IMG.sky, 1.12 + .05 * k, W / 2, H * .45, -80 + 160 * k + ox, oy);
+}
+function bgS3(t, ox = 0, oy = 0) {
+  const k = clamp((t - S2_END) / (S3_END - S2_END), 0, 1.2);
+  drawCam(IMG.top, 1.04 + .09 * eio(clamp(k)), 860, 420, ox, oy, -.012 + .02 * k);
+}
+function bgS4(t, ox = 0, oy = 0) {
+  const lt = t - S3_END;
+  drawCam(IMG.sky, 1.35, W / 2, H * .2, ox + lt * 18, oy);
+  ctx.fillStyle = `rgba(25,10,30,${.24 * ss(prog(lt, .6, 2.2))})`;
+  ctx.fillRect(ox, oy, W, H);
+}
+
+// whip transition: draws two backgrounds side by side with directional smear
+function whip(t, t0, t1, bgA, bgB, vertical) {
+  const k = prog(t, t0, t1), u = eio(k);
+  const L = vertical ? H : W;
+  const speed = Math.sin(Math.PI * k);
+  const draw = () => {
+    if (vertical) { bgA(t, 0, u * L); bgB(t, 0, u * L - L); }
+    else { bgA(t, -u * L, 0); bgB(t, L - u * L, 0); }
+  };
+  const amt = 170 * speed;
+  if (amt > 4) smear(13, vertical ? 0 : -amt, vertical ? amt : 0, draw); else draw();
+  return vertical ? u * L - L : L - u * L;   // offset of incoming scene
+}
+
+// ===================== foregrounds =====================
+function fgS1(t, fade = 1) {
+  const c = s1Cam(t);
+  const sx = PERCH.x * c.s + (1 - c.s) * c.fx, sy = PERCH.y * c.s + (1 - c.s) * c.fy;
+  if (t >= TAKE + .06) {
+    const k = prog(t, TAKE + .06, 4.4), ek = ei(k);
+    const x = lerp(sx, W + 320, ek) + Math.sin(k * 3) * 40;
+    const y = lerp(sy - 40, -420, eo(k) * .35 + ek * .65);
+    const s = lerp(.7, 2.8, ek);
+    const flap = .5 + 1.0 * Math.sin(TAU * 3.4 * (t - TAKE));
+    crowSide(x, y, s, flap, lerp(-.25, -.5, k), 1);
+  }
+  puffBurst(sx, sy - 30, prog(t, TAKE, TAKE + 1.1), 21, 1.0);
+  drawMotes(t, fade);
+  lightLeak(t, fade);
+}
+
+function puffBurst(x, y, k, seed, power) {
+  if (k <= 0 || k >= 1) return;
+  const R = rng(seed);
+  ctx.save();
+  for (let i = 0; i < 46; i++) {
+    const a = R() * TAU, d = (30 + R() * 190) * eo(k) + 25;
+    const s = (30 + R() * 80) * (1 + k * 1.8) * power;
+    const dl = R() * .15;
+    const kk = clamp((k - dl) / (1 - dl));
+    if (kk <= 0) continue;
+    ctx.globalAlpha = Math.pow(1 - kk, 1.8) * .55 * clamp(kk * 12);
+    ctx.drawImage(i % 3 ? PUFF_D : PUFF_M, x + Math.cos(a) * d - s / 2, y + Math.sin(a) * d * .6 - s / 2 - kk * 60, s, s);
+  }
+  // a few feathers
+  for (let i = 0; i < 7; i++) {
+    const a = R() * TAU, d = (40 + R() * 160) * eo(k);
+    ctx.globalAlpha = (1 - k);
+    ctx.save();
+    ctx.translate(x + Math.cos(a) * d, y + Math.sin(a) * d * .5 + k * k * 120);
+    ctx.rotate(a + k * 6);
+    ctx.fillStyle = CROW_DARK;
+    ctx.beginPath(); ctx.ellipse(0, 0, 11, 3, 0, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+// distant crows
+function flock(t, t0, n, seed, ys, scale, oy = 0) {
+  const R = rng(seed);
+  for (let i = 0; i < n; i++) {
+    const sp = 180 + R() * 160, ph = R();
+    const x = -100 + ((t - t0) * sp + ph * 900);
+    const y = ys + R() * 160 + Math.sin((t - t0) * 2 + i) * 10 + oy;
+    crowSide(x, y, scale * (.6 + R() * .5), .3 + .9 * Math.sin(TAU * (3 + R()) * (t - t0) + i), -.05, .75, false);
+  }
+}
+
+function fgS2(t, oy = 0) {
+  const lt = t - S1_END, D = S2_END - S1_END;
+  flock(t, S1_END - .4, 5, 41, 200, .22, oy);
+  // hero crow: we follow it, it floats in frame, rises in from below with the whip
+  const x = lerp(520, 1100, eio(prog(lt, 0, 3.2))) + Math.sin(lt * 1.7) * 30;
+  let y = 430 + Math.sin(lt * 2.3) * 26 + oy * .6;
+  const dive = ei(prog(lt, 3.05, D));
+  y += dive * 900;
+  const glide = prog(lt, 1.6, 2.4) * (1 - prog(lt, 2.4, 2.9));
+  const amp = 1.05 - .75 * glide;
+  crowSide(x, y, 1.55 + dive * .6, .25 + amp * Math.sin(TAU * 2.6 * lt), lerp(-.05, .9, dive), 1);
+  // speed streaks
+  ctx.save(); ctx.strokeStyle = 'rgba(255,230,210,.16)'; ctx.lineWidth = 2;
+  const R = rng(5);
+  for (let i = 0; i < 18; i++) {
+    const yy = R() * H, len = 80 + R() * 220, sp = 1400 + R() * 900;
+    const xx = W + 200 - ((lt * sp + R() * 2400) % (W + 600));
+    ctx.beginPath(); ctx.moveTo(xx, yy + oy); ctx.lineTo(xx + len, yy + oy); ctx.stroke();
+  }
+  ctx.restore();
+  lightLeak(t, .8);
+}
+
+function wingWipe(t, t0, dur) {
+  const k = prog(t, t0, t0 + dur);
+  if (k <= 0 || k >= 1) return;
+  crowSide(lerp(-1600, W + 1600, eio(k)), H * .55, 11, .4 + .9 * Math.sin(k * 5), .1, 1, false);
+}
+
+function fgS3(t, ox = 0) {
+  const lt = t - S2_END, D = S3_END - S2_END;
+  // crow shadow sweeping over roof & figure
+  const sk = prog(lt, .25, 1.55);
+  if (sk > 0 && sk < 1) {
+    ctx.save(); ctx.filter = 'blur(10px)';
+    crowTop(lerp(-300, W + 300, sk) + ox, lerp(120, 760, sk), 1.5, TAU * 2.6 * lt, .42, '#120a10', .4);
+    ctx.restore();
+  }
+  // crow itself, seen from above, arcs out over the street
+  const ck = prog(lt, 1.0, D + .3);
+  if (ck > 0 && ck < 1) {
+    const ang = lerp(-2.6, .9, eio(ck));
+    crowTop(880 + Math.cos(ang) * 560 + ox, 470 + Math.sin(ang) * 300, .62, TAU * 2.8 * lt, ang + Math.PI / 2, CROW_DARK, 1);
+  }
+  lightLeak(t, .6);
+}
+
+const BURST = 1.3;
+function fgS4(t, ox = 0) {
+  const lt = t - S3_END;
+  const cx = u => lerp(-250, W / 2 - 40, eo(u));
+  const cy = u => 560 + Math.sin(u * 5) * 30;
+  if (lt < BURST + .3) {
+    const u = prog(lt, -.2, BURST);
+    crowSide(cx(u) + ox, cy(u), 1.25, .3 + Math.sin(TAU * 2.8 * lt), -.04, 1 - prog(lt, BURST, BURST + .25));
+  }
+  smokeToText(t, lt - BURST, cx(1), cy(1));
+}
+
+// crow -> smoke -> text
+function smokeToText(t, st, bx, by) {
+  if (st < 0) return;
+  const showP = t < S4_END;
+  const textA = ss(prog(st, 1.45, 2.05)) * (1 - ss(prog(t, S4_END + .02, S4_END + .45)));
+  ctx.save();
+  for (const p of (showP ? P : [])) {
+    const s = st - p.delay;
+    if (s < 0) continue;
+    const e = eo(clamp(s / .7));
+    const ex = bx + p.bx * 1.3 + p.vx * 170 * e + Math.sin(p.sw + s * 3) * 26 * e;
+    const ey = by + p.by * 1.3 + p.vy * 130 * e - 50 * e;
+    const c = eio(clamp((s - .3) / p.conv));
+    const sw = Math.sin(p.sw + s * 2.2) * p.swA * (1 - c);
+    let x = lerp(ex, p.tx, c) + sw;
+    let y = lerp(ey, p.ty, c) + Math.cos(p.sw + s * 1.7) * p.swA * .5 * (1 - c);
+    const lightK = clamp((s - .25) / .9);
+    const size = lerp(p.size * 2.1, p.size * .55, c);
+    const a = clamp(s / .12) * lerp(.4, .5, c) * (1 - textA * .85);
+    if (c >= 1) { x += Math.sin(t * 1.3 + p.sw) * 1.5; y += Math.cos(t * 1.1 + p.sw) * 1.5; }
+    ctx.globalAlpha = a * (1 - lightK);
+    ctx.drawImage(PUFF_D, x - size / 2, y - size / 2, size, size);
+    ctx.globalAlpha = a * lightK;
+    ctx.drawImage(PUFF_L, x - size / 2, y - size / 2, size, size);
+  }
+  ctx.restore();
+  if (textA > 0) drawText(textA, st);
+  wisps(t, textA);
+}
+
+function drawText(a, st) {
+  ctx.save();
+  styleText(ctx);
+  ctx.globalAlpha = a;
+  ctx.shadowColor = 'rgba(255,190,150,.65)'; ctx.shadowBlur = 28;
+  ctx.fillStyle = '#fff6ee';
+  ctx.fillText(TEXT, W / 2, TEXT_Y);
+  ctx.shadowBlur = 0;
+  const lk = eo(prog(st, 1.9, 2.6));
+  ctx.fillStyle = '#c8202c';
+  const lw = 160 * lk;
+  ctx.fillRect(W / 2 - lw / 2, TEXT_Y + 78, lw, 5);
+  ctx.restore();
+}
+
+function wisps(t, a) {
+  if (a <= 0) return;
+  const R = rng(99);
+  ctx.save();
+  for (let i = 0; i < 90; i++) {
+    const p = TPTS[Math.floor(R() * TPTS.length)];
+    const per = 2 + R() * 1.5, ph = R() * per;
+    const u = ((t + ph) % per) / per;
+    const s = 18 + u * 70;
+    ctx.globalAlpha = a * .22 * Math.sin(Math.PI * u);
+    ctx.drawImage(PUFF_M, p[0] - s / 2 + Math.sin(u * 4 + i) * 20, p[1] - s / 2 - u * 110, s, s);
+  }
+  ctx.restore();
+}
+
+// S5: text -> smoke fills the screen -> rooftop, smoke gathers into the crow on the hand
+const SWAP = .8;
+function scene5(t) {
+  const lt = t - S4_END, D = T - S4_END;
+  if (lt < SWAP) { bgS4(t); fgS4(t); }
+  else {
+    ctx.drawImage(IMG.clean, 0, 0, W, H);      // = bgS1(0) without the crow
+    ctx.save(); ctx.globalAlpha = ss(prog(lt, 1.05, 1.62));
+    ctx.drawImage(IMG.crowcut, CUT.x, CUT.y, CUT.w, CUT.h);
+    ctx.restore();
+    const f = ss(prog(lt, SWAP, D));
+    drawMotes(t, f); lightLeak(t, f);
+  }
+  // full-screen smoke veil peaking at SWAP to hide the cut
+  const veil = Math.exp(-Math.pow((lt - SWAP) / .2, 2));
+  ctx.fillStyle = `rgba(22,15,24,${.55 * veil})`; ctx.fillRect(0, 0, W, H);
+  ctx.save();
+  for (const p of P) {
+    const dl = (p.tx / W) * .25;                       // sweeps left -> right
+    const k1 = eio(clamp((lt - dl) / (SWAP - dl + .05)));
+    const k2 = eo(prog(lt, SWAP, D - .25));
+    let x = lerp(p.tx, p.ux, k1), y = lerp(p.ty, p.uy, k1);
+    let size = lerp(p.size * .55, p.dsz, k1);
+    x = lerp(x, PERCH.x + p.hx * .45, k2);
+    y = lerp(y, PERCH.y - 12 + p.hy * .45, k2);
+    size = lerp(size, 6 + p.size * .6, k2);
+    const a = lerp(.075, .5, k1) * (1 - ss(prog(lt, SWAP + .15, D - .2)));
+    const dark = clamp(k1 * 1.3);
+    ctx.globalAlpha = a * (1 - dark);
+    ctx.drawImage(PUFF_L, x - size / 2, y - size / 2, size, size);
+    ctx.globalAlpha = a * dark;
+    ctx.drawImage(p.r < .6 ? PUFF_D : PUFF_M, x - size / 2, y - size / 2, size, size);
+  }
+  ctx.restore();
+}
+
+// ===================== main =====================
+function render(t) {
+  t = ((t % T) + T) % T;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const A0 = 4.25, A1 = 4.95, C0 = 11.3, C1 = 11.95;
+  if (t < A0) { bgS1(t); fgS1(t); }
+  else if (t < A1) {
+    const oy = whip(t, A0, A1, bgS1, bgS2, true);
+    if (t < S1_END) fgS1(t, 1 - prog(t, A0, S1_END)); else fgS2(t, oy);
+  }
+  else if (t < S2_END) { bgS2(t); fgS2(t); }
+  else if (t < C0) { bgS3(t); fgS3(t); }
+  else if (t < C1) {
+    const ox = whip(t, C0, C1, bgS3, bgS4, false);
+    fgS3(t, ox - W);
+    if (t >= S3_END - .2) fgS4(t, ox);
+  }
+  else if (t < S4_END) { bgS4(t); fgS4(t); }
+  else scene5(t);
+  wingWipe(t, S2_END - .3, .6);
+  post(t);
+}
+
+window.ready = (async () => {
+  [IMG.roof, IMG.clean, IMG.crowcut, IMG.top, IMG.sky] = await Promise.all([
+    loadImg('assets/rooftop.webp'), loadImg('assets/rooftop_clean.png'), loadImg('assets/crow_cut.png'),
+    loadImg('assets/topdown.png'), loadImg('assets/skyline.png')]);
+  await document.fonts.load('700 94px InterD');
+  PUFF_D = makePuff(28, 20, 28); PUFF_L = makePuff(245, 232, 225); PUFF_M = makePuff(200, 180, 190);
+  setupText(); setupParticles(); setupMotes(); setupGrain();
+  window.render = render; window.T = T;
+  return true;
+})();
+
+// live preview when opened directly in a browser
+if (!navigator.webdriver) {
+  window.ready.then(() => { const t0 = performance.now(); const loop = () => { render((performance.now() - t0) / 1000); requestAnimationFrame(loop); }; loop(); });
+}
+</script>
+</body>
+</html>
