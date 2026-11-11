@@ -1,0 +1,502 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FUZZN – Searching for a game v3</title>
+<style>
+  @font-face { font-family: "Anton"; src: url("node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2"); }
+  @font-face { font-family: "InterB"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf"); }
+  @font-face { font-family: "InterM"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-Medium.otf"); }
+  html, body { margin: 0; background: #000; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+// =====================================================================
+// FUZZN — "SEARCHING FOR A GAME" v3 · dark, 5 scenes, 20 s seamless loop
+// =====================================================================
+const W = 1920, H = 1080, T = 20, TAU = Math.PI * 2;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+
+const C = { black: '#040205', crimson: '#4a0911', blood: '#8c0f1c', red: '#d61f2e', ember: '#c4502a', cream: '#ece0d4', ash: '#8d8288' };
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eo = k => 1 - Math.pow(1 - k, 3);
+const eo5 = k => 1 - Math.pow(1 - k, 5);
+const ei = k => k * k * k;
+const eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const ss = k => k * k * (3 - 2 * k);
+const ph = (t, p) => ((t % p) + p) % p / p;
+const bump = (t, c, w) => Math.exp(-Math.pow((t - c) / w, 2));
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const loadImg = s => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = s; });
+function mk(w = W, h = H) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function tint(img, color, w = img.width, h = img.height) {
+  const c = mk(w, h), x = c.getContext('2d');
+  x.drawImage(img, 0, 0, w, h); x.globalCompositeOperation = 'source-in'; x.fillStyle = color; x.fillRect(0, 0, w, h); return c;
+}
+function puff(r, g, b, size = 256) {
+  const c = mk(size, size), x = c.getContext('2d');
+  const gr = x.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  gr.addColorStop(0, `rgba(${r},${g},${b},1)`); gr.addColorStop(.4, `rgba(${r},${g},${b},.45)`); gr.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  x.fillStyle = gr; x.fillRect(0, 0, size, size); return c;
+}
+
+// scene boundaries
+const S = [0, 3.6, 7.4, 11.8, 15.4, 20];
+let CHAR, CHAR_DARK, CHAR_RIM, CROW, CROW_RIM, FOG, LAYER, GRAIN = [];
+
+// ---------------- shared atmosphere ----------------
+let ASH = [], FOGP = [];
+function ash(t, a = 1, dens = 1) {
+  ctx.save();
+  const n = Math.floor(ASH.length * dens);
+  for (let i = 0; i < n; i++) {
+    const p = ASH[i];
+    const u = ph(t + p.o, p.per);
+    const x = p.x + u * p.dx + Math.sin(TAU * (u * p.w) + p.s) * 18;
+    const y = -30 + u * (H + 60);
+    ctx.globalAlpha = a * p.a * Math.sin(Math.PI * u);
+    ctx.fillStyle = p.red ? '#b0303a' : C.ash;
+    ctx.fillRect(x, y, p.r, p.r * (p.red ? 1 : 1.6));
+  }
+  ctx.restore();
+}
+function fog(t, a = 1, low = false) {
+  ctx.save();
+  for (const f of FOGP) {
+    const u = ph(t + f.o, T / f.k);
+    const x = -500 + u * (W + 1000);
+    const y = (low ? H * .62 : f.y) + Math.sin(TAU * u + f.s) * 30;
+    ctx.globalAlpha = a * f.a;
+    ctx.drawImage(FOG, x - f.r, y - f.r * .5, f.r * 2, f.r);
+  }
+  ctx.restore();
+}
+function bgDark(t, glowX = W / 2, glowY = H / 2, gA = .5) {
+  ctx.fillStyle = C.black; ctx.fillRect(0, 0, W, H);
+  const r = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, 1100);
+  r.addColorStop(0, `rgba(110,14,26,${gA})`); r.addColorStop(.5, `rgba(50,6,14,${gA * .6})`); r.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = r; ctx.fillRect(0, 0, W, H);
+}
+
+function withCam(s, rot, dx, dy, fn) {
+  ctx.save(); ctx.translate(W / 2 + dx, H / 2 + dy); ctx.rotate(rot); ctx.scale(s, s); ctx.translate(-W / 2, -H / 2); fn(); ctx.restore();
+}
+function shake(t, t0, amp) { const k = prog(t, t0, t0 + .35); if (k <= 0 || k >= 1) return [0, 0]; const a = amp * Math.pow(1 - k, 2); return [Math.sin(t * 93) * a, Math.cos(t * 71) * a]; }
+
+// slice-glitch the current canvas region (in place)
+function sliceGlitch(amount, seed, y0 = 0, y1 = H) {
+  if (amount <= 0) return;
+  const R = rng(seed);
+  const snap = LAYER.getContext('2d'); snap.clearRect(0, 0, W, H); snap.drawImage(cv, 0, 0);
+  for (let y = y0; y < y1;) {
+    const h = 4 + R() * 40; const dx = (R() - .5) * 220 * amount;
+    if (R() < .55) ctx.drawImage(LAYER, 0, y, W, h, dx, y, W, h);
+    y += h + R() * 30;
+  }
+  // rgb split
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .35 * amount;
+  ctx.filter = 'sepia(1) saturate(9) hue-rotate(-40deg)'; ctx.drawImage(LAYER, -14 * amount, 0);
+  ctx.filter = 'sepia(1) saturate(9) hue-rotate(150deg)'; ctx.drawImage(LAYER, 14 * amount, 0);
+  ctx.restore();
+}
+
+function textW(str, font, ls = 0) { ctx.save(); ctx.font = font; ctx.letterSpacing = ls + 'px'; const w = ctx.measureText(str).width; ctx.restore(); return w; }
+
+// ================= SCENE 1 · FUZZN reveal =================
+function scene1(t) {
+  const lt = t;
+  bgDark(t, W / 2, H / 2, .35 + .25 * prog(lt, .3, 1.4));
+  fog(t, .5);
+  ash(t, .7, .6);
+  const z = 1 + .05 * eio(prog(lt, 0, 3.6));
+  withCam(z, 0, 0, 0, () => {
+    // red slash line
+    const lw = 1500 * eo5(prog(lt, .05, .55));
+    const LY = 600;
+    ctx.save();
+    ctx.shadowColor = C.red; ctx.shadowBlur = 30;
+    ctx.fillStyle = C.red; ctx.fillRect(W / 2 - lw / 2, LY, lw, 6);
+    ctx.restore();
+    // FUZZN letters rise from behind the line
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, W, LY); ctx.clip();
+    ctx.font = '400px Anton'; ctx.textBaseline = 'alphabetic';
+    const word = 'FUZZN', ls = 26;
+    const total = textW(word, '400px Anton', ls);
+    let x = W / 2 - total / 2;
+    for (let i = 0; i < word.length; i++) {
+      const k = eo5(prog(lt, .35 + i * .08, .95 + i * .08));
+      const y = LY - 22 + (1 - k) * 420;
+      // glow copy
+      ctx.save(); ctx.shadowColor = 'rgba(214,31,46,.85)'; ctx.shadowBlur = 50 * (.6 + .4 * Math.sin(TAU * lt / 1.2));
+      ctx.fillStyle = C.cream; ctx.fillText(word[i], x, y); ctx.restore();
+      x += ctx.measureText(word[i]).width + ls;
+    }
+    ctx.restore();
+    // typewriter subtitle under the line
+    const sub = 'SEARCHING FOR A GAME';
+    const n = Math.floor(sub.length * prog(lt, 1.3, 2.3));
+    ctx.save();
+    ctx.font = '40px InterB'; ctx.letterSpacing = '22px'; ctx.textAlign = 'center'; ctx.fillStyle = C.cream;
+    const shown = sub.slice(0, n) + (n < sub.length && ph(lt, .2) < .5 ? '▌' : '');
+    ctx.fillText(shown, W / 2 + 11, LY + 90);
+    ctx.restore();
+  });
+  // flicker + exit glitch
+  if (bump(lt, 2.05, .03) > .3) { ctx.fillStyle = 'rgba(214,31,46,.18)'; ctx.fillRect(0, 0, W, H); }
+  sliceGlitch(bump(lt, 2.05, .05) * .6 + ss(prog(lt, 3.25, 3.6)), Math.floor(t * 30));
+}
+
+// ================= SCENE 2 · SEARCHING wall =================
+function scene2(t) {
+  const lt = t - S[1], D = S[2] - S[1];
+  bgDark(t, W / 2, H / 2, .45);
+  const z = 1.25 + .15 * eio(prog(lt, 0, D));
+  const rot = -.14 + .05 * prog(lt, 0, D);
+  const [sx, sy] = shake(t, S[1], 22);
+  withCam(z, rot, sx, sy, () => {
+    ctx.font = '170px Anton'; ctx.textBaseline = 'middle'; ctx.letterSpacing = '8px';
+    const word = 'SEARCHING  ';
+    const ww = ctx.measureText(word).width;
+    const hl = Math.floor(lt / .5) % 9;                // highlighted row changes on the beat
+    for (let r = -5; r <= 5; r++) {
+      const y = H / 2 + r * 150;
+      const dir = r % 2 ? 1 : -1;
+      const speed = 380 + Math.abs(r) * 70;
+      const off = ((lt * speed * dir) % ww + ww) % ww;
+      const filled = (r + 5) % 9 === hl;
+      for (let k = -3; k < 6; k++) {
+        const x = -ww + off + k * ww - 400;
+        if (filled) { ctx.fillStyle = C.red; ctx.fillText(word, x, y); }
+        else if (r === 0) { ctx.fillStyle = C.cream; ctx.fillText(word, x, y); }
+        else { ctx.strokeStyle = `rgba(236,224,212,${.18 + .1 * (r % 3 === 0)})`; ctx.lineWidth = 2; ctx.strokeText(word, x, y); }
+      }
+    }
+  });
+  // scanning bar sweeps down
+  const sy2 = ph(lt, 1.25) * (H + 200) - 100;
+  const g = ctx.createLinearGradient(0, sy2 - 80, 0, sy2 + 80);
+  g.addColorStop(0, 'rgba(214,31,46,0)'); g.addColorStop(.5, 'rgba(214,31,46,.28)'); g.addColorStop(1, 'rgba(214,31,46,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, sy2 - 80, W, 160);
+  ash(t, .8);
+  // beat flashes
+  const bf = Math.exp(-ph(lt, .5) * 12);
+  ctx.fillStyle = `rgba(0,0,0,${.25 * (1 - bf)})`; ctx.fillRect(0, 0, W, H);
+  sliceGlitch(ss(prog(lt, D - .3, D)) * .9, Math.floor(t * 30));
+}
+
+// ================= SCENE 3 · the figure under a blood moon =================
+function scene3(t) {
+  const lt = t - S[2], D = S[3] - S[2];
+  bgDark(t, 760, 430, .7);
+  const z = 1.02 + .08 * eio(prog(lt, 0, D));
+  withCam(z, 0, -20 * prog(lt, 0, D), 10, () => {
+    // blood moon with stripes
+    const M = { x: 760, y: 440, r: 360 };
+    ctx.save();
+    ctx.beginPath(); ctx.arc(M.x, M.y, M.r, 0, TAU); ctx.clip();
+    const g = ctx.createLinearGradient(0, M.y - M.r, 0, M.y + M.r);
+    g.addColorStop(0, '#b32233'); g.addColorStop(.6, '#6e0b17'); g.addColorStop(1, '#2a0408');
+    ctx.fillStyle = g; ctx.fillRect(M.x - M.r, M.y - M.r, 2 * M.r, 2 * M.r);
+    ctx.globalCompositeOperation = 'destination-out';
+    const p = ph(lt, 2);
+    for (let i = -1; i < 14; i++) { const v = (i + p) / 13; if (v < 0) continue; ctx.fillRect(M.x - M.r, M.y + v * M.r, 2 * M.r, 1.5 + v * v * 30); }
+    ctx.restore();
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    const h = ctx.createRadialGradient(M.x, M.y, M.r * .85, M.x, M.y, M.r * 1.6);
+    h.addColorStop(0, 'rgba(200,30,45,.45)'); h.addColorStop(1, 'rgba(200,30,45,0)');
+    ctx.fillStyle = h; ctx.beginPath(); ctx.arc(M.x, M.y, M.r * 1.6, 0, TAU); ctx.fill(); ctx.restore();
+    // radar rings
+    for (let i = 0; i < 3; i++) {
+      const q = ph(lt + i * .6, 1.8);
+      ctx.strokeStyle = `rgba(236,224,212,${.35 * Math.pow(1 - q, 2)})`; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(M.x, M.y, M.r + 20 + eo(q) * 600, 0, TAU); ctx.stroke();
+    }
+    // figure: dark with red rim
+    const CS = 1.27, cw = CHAR.width * CS, ch = CHAR.height * CS;
+    const cx = 120, cy = H + 40 - ch;
+    const br = Math.sin(TAU * lt / 2.2) * .005;
+    ctx.save();
+    ctx.translate(cx + cw / 2, cy + ch); ctx.scale(1 + br, 1 + br * 1.6); ctx.translate(-cw / 2, -ch);
+    ctx.globalCompositeOperation = 'screen'; ctx.drawImage(CHAR_RIM, -50, -50, cw + 100, ch + 100);
+    ctx.globalCompositeOperation = 'source-over'; ctx.drawImage(CHAR_DARK, 0, 0, cw, ch);
+    // crow eye glints
+    const eg = Math.max(bump(lt, 1.6, .08), bump(lt, D - .35, .12));
+    if (eg > .01) {
+      const ex = 498 * CS, ey = 186 * CS;
+      ctx.globalCompositeOperation = 'lighter';
+      const rg = ctx.createRadialGradient(ex, ey, 0, ex, ey, 90 + 400 * bump(lt, D - .35, .12));
+      rg.addColorStop(0, `rgba(255,40,40,${eg})`); rg.addColorStop(.12, `rgba(255,20,30,${.5 * eg})`); rg.addColorStop(1, 'rgba(255,0,0,0)');
+      ctx.fillStyle = rg; ctx.fillRect(ex - 500, ey - 500, 1000, 1000);
+      ctx.fillStyle = `rgba(255,140,130,${eg})`; ctx.fillRect(ex - 160 * eg, ey - 1.5, 320 * eg, 3);
+    }
+    ctx.restore();
+  });
+  // vertical katakana + big outline word on the right
+  ctx.save();
+  ctx.font = '210px Anton'; ctx.letterSpacing = '6px'; ctx.textBaseline = 'alphabetic';
+  const k = eo5(prog(lt, .2, 1.0));
+  ctx.translate(1720, 1000 + (1 - k) * 400); ctx.rotate(-Math.PI / 2);
+  ctx.strokeStyle = 'rgba(214,31,46,.85)'; ctx.lineWidth = 3; ctx.strokeText('SEARCHING', 0, 0);
+  ctx.restore();
+  ctx.save();
+  ctx.font = '40px IPAPGothic'; ctx.fillStyle = C.cream; ctx.globalAlpha = .85 * prog(lt, .6, 1.2);
+  const jp = 'マッチング中';
+  for (let i = 0; i < jp.length; i++) ctx.fillText(jp[i], 1800, 260 + i * 52);
+  ctx.restore();
+  fog(t, .8, true);
+  ash(t, 1, 1);
+  // flash to next scene
+  const fl = bump(lt, D - .2, .1);
+  ctx.fillStyle = `rgba(214,31,46,${.55 * fl})`; ctx.fillRect(0, 0, W, H);
+}
+
+// ================= SCENE 4 · crow close-up + FOR A GAME slams =================
+function scene4(t) {
+  const lt = t - S[3], D = S[4] - S[3];
+  bgDark(t, 520, 520, .55);
+  fog(t, .6);
+  const z = 1 + .06 * prog(lt, 0, D);
+  const words = [['FOR', .35], ['A', .8], ['GAME', 1.25]];
+  let shx = 0, shy = 0;
+  for (const [, t0] of words) { const [a, b] = shake(lt, t0, 26); shx += a; shy += b; }
+  withCam(z, 0, shx, shy, () => {
+    // crow huge, dark silhouette with red rim; eye glows
+    const s = 3.6, cw = CROW.width * s, ch = CROW.height * s;
+    const x = 40 - 60 * prog(lt, 0, D), y = 120;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = .9;
+    ctx.drawImage(CROW_RIM, x - 40, y - 40, cw + 80, ch + 80);
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+    ctx.filter = 'brightness(.55) contrast(1.2)';
+    ctx.drawImage(CROW, x, y, cw, ch);
+    ctx.filter = 'none';
+    // eye (crow eye at ~ (55,31) in cutout px)
+    const ex = x + 55 * s, ey = y + 31 * s;
+    const pulse = .6 + .4 * Math.sin(TAU * lt / 1.1);
+    ctx.globalCompositeOperation = 'lighter';
+    const rg = ctx.createRadialGradient(ex, ey, 0, ex, ey, 140);
+    rg.addColorStop(0, `rgba(255,50,50,${pulse})`); rg.addColorStop(.1, `rgba(255,20,30,${.6 * pulse})`); rg.addColorStop(1, 'rgba(255,0,0,0)');
+    ctx.fillStyle = rg; ctx.fillRect(ex - 140, ey - 140, 280, 280);
+    ctx.restore();
+    // slamming words, stacked right
+    ctx.save();
+    ctx.font = '250px Anton'; ctx.textBaseline = 'alphabetic'; ctx.letterSpacing = '10px';
+    const X = 1080;
+    words.forEach(([w, t0], i) => {
+      const k = prog(lt, t0, t0 + .22);
+      if (k <= 0) return;
+      const sc = lerp(2.2, 1, eo5(k));
+      const y = 350 + i * 255;
+      ctx.save();
+      ctx.translate(X, y); ctx.scale(sc, sc);
+      ctx.globalAlpha = clamp(k * 3);
+      ctx.shadowColor = 'rgba(214,31,46,.9)'; ctx.shadowBlur = 40;
+      ctx.fillStyle = i === 2 ? C.red : C.cream;
+      ctx.fillText(w, 0, 0);
+      ctx.restore();
+      // impact lines
+      const il = prog(lt, t0 + .1, t0 + .5);
+      if (il > 0 && il < 1) {
+        ctx.strokeStyle = `rgba(236,224,212,${.6 * (1 - il)})`; ctx.lineWidth = 3;
+        for (let j = 0; j < 10; j++) {
+          const a = j / 10 * TAU, r0 = 120 + il * 300, r1 = r0 + 60;
+          const cx0 = X + 250, cy0 = y - 100;
+          ctx.beginPath(); ctx.moveTo(cx0 + Math.cos(a) * r0, cy0 + Math.sin(a) * r0 * .5); ctx.lineTo(cx0 + Math.cos(a) * r1, cy0 + Math.sin(a) * r1 * .5); ctx.stroke();
+        }
+      }
+    });
+    ctx.restore();
+  });
+  // impact flashes
+  for (const [, t0] of words) { const f = bump(lt, t0 + .12, .05); if (f > .02) { ctx.fillStyle = `rgba(236,224,212,${.22 * f})`; ctx.fillRect(0, 0, W, H); } }
+  ash(t, 1, 1);
+  sliceGlitch(ss(prog(lt, D - .3, D)) * .9, Math.floor(t * 30));
+}
+
+// ================= SCENE 5 · hero lockup =================
+function scene5(t) {
+  const lt = t - S[4], D = S[5] - S[4];
+  bgDark(t, W / 2, H / 2, .6);
+  fog(t, .7);
+  // rotating radar behind
+  ctx.save();
+  const R = 430;
+  ctx.strokeStyle = 'rgba(214,31,46,.35)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(W / 2, H / 2, R, 0, TAU); ctx.stroke();
+  ctx.beginPath(); ctx.arc(W / 2, H / 2, R + 60, 0, TAU); ctx.setLineDash([4, 14]); ctx.stroke(); ctx.setLineDash([]);
+  const a = lt * 2.2;
+  for (let k = 0; k < 50; k++) {
+    ctx.strokeStyle = `rgba(214,31,46,${.7 * (1 - k / 50)})`; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(W / 2, H / 2, R, a - k * .02 - .02, a - k * .02); ctx.stroke();
+  }
+  for (let i = 0; i < 2; i++) {
+    const q = ph(lt + i * .9, 1.8);
+    ctx.strokeStyle = `rgba(236,224,212,${.3 * Math.pow(1 - q, 2)})`; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(W / 2, H / 2, R + eo(q) * 700, 0, TAU); ctx.stroke();
+  }
+  ctx.restore();
+
+  const exitK = ss(prog(lt, D - .7, D - .15));         // collapse to black at the end
+  const z = 1 + .04 * eio(prog(lt, 0, D - .7)) - .1 * exitK;
+  withCam(z, 0, 0, 0, () => {
+    ctx.save();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    // FUZZN kicker with lines
+    const kk = eo5(prog(lt, .1, .6));
+    ctx.font = '44px InterB'; ctx.letterSpacing = '30px'; ctx.fillStyle = C.cream; ctx.globalAlpha = kk;
+    ctx.fillText('FUZZN', W / 2 + 15, 330);
+    ctx.fillStyle = C.red;
+    const ll = 260 * kk;
+    ctx.fillRect(W / 2 - 170 - ll, 314, ll, 4); ctx.fillRect(W / 2 + 170, 314, ll, 4);
+    ctx.globalAlpha = 1;
+    // SEARCHING — letters drop in
+    ctx.font = '230px Anton'; ctx.letterSpacing = '0px';
+    const w1 = 'SEARCHING';
+    const tw = textW(w1, '230px Anton', 8);
+    let x = W / 2 - tw / 2;
+    ctx.textAlign = 'left';
+    for (let i = 0; i < w1.length; i++) {
+      const k = eo5(prog(lt, .15 + i * .05, .55 + i * .05));
+      const wave = bump(ph(lt - i * .07, 1.8), .15, .05) * 18;
+      ctx.save();
+      ctx.globalAlpha = clamp(k * 2);
+      ctx.shadowColor = 'rgba(214,31,46,.7)'; ctx.shadowBlur = 35;
+      ctx.fillStyle = C.cream;
+      ctx.fillText(w1[i], x, 580 - (1 - k) * 120 - wave);
+      ctx.restore();
+      ctx.font = '230px Anton';
+      x += ctx.measureText(w1[i]).width + 8;
+    }
+    // FOR A GAME — red, wipes in from left
+    const wk = eo5(prog(lt, .7, 1.3));
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 560, W / 2 - 700 + 1400 * wk, 260); ctx.clip();
+    ctx.textAlign = 'center';
+    ctx.font = '180px Anton'; ctx.letterSpacing = '16px';
+    const gr = ctx.createLinearGradient(W / 2 - 600, 0, W / 2 + 600, 0);
+    const sh = ph(lt, 2.4);
+    gr.addColorStop(0, C.blood); gr.addColorStop(clamp(sh - .1), C.blood); gr.addColorStop(sh, '#ff6a5a'); gr.addColorStop(clamp(sh + .1), C.red); gr.addColorStop(1, C.red);
+    ctx.fillStyle = gr;
+    ctx.shadowColor = 'rgba(0,0,0,.8)'; ctx.shadowBlur = 0; ctx.shadowOffsetX = 8; ctx.shadowOffsetY = 8;
+    ctx.fillText('FOR A GAME', W / 2 + 8, 770);
+    ctx.restore();
+    // loader + dots
+    const ly = 840, lw = 900;
+    ctx.fillStyle = 'rgba(236,224,212,.14)'; ctx.fillRect(W / 2 - lw / 2, ly, lw, 3);
+    const q = ph(lt, 1.4);
+    const a0 = clamp(eo(q) * 1.3 - .3) * lw, a1 = clamp(eo(q) * 1.1) * lw;
+    ctx.fillStyle = C.red; ctx.fillRect(W / 2 - lw / 2 + a0, ly - 1, Math.max(0, a1 - a0), 5);
+    for (let k = 0; k < 3; k++) {
+      const p = ph(lt - k * .15, 1.2), s = 1 + bump(p, .15, .08);
+      ctx.fillStyle = C.cream; ctx.globalAlpha = .4 + .6 * (s - 1);
+      ctx.beginPath(); ctx.arc(W / 2 - 24 + k * 24, ly + 44, 5 * s, 0, TAU); ctx.fill();
+    }
+    ctx.restore();
+  });
+  // light sweep
+  const swp = ph(lt, 2.4);
+  if (swp < .4) {
+    ctx.save(); ctx.globalCompositeOperation = 'overlay';
+    const sx = lerp(-300, W + 300, swp / .4);
+    const g = ctx.createLinearGradient(sx - 200, 0, sx + 200, 0);
+    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,240,230,.35)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 300, W, 500); ctx.restore();
+  }
+  ash(t, .9, .8);
+  sliceGlitch(bump(lt, 2.6, .06) * .8 + exitK * .7, Math.floor(t * 30), 200, 900);
+  // fade to black (loop seam = scene 1 start)
+  ctx.fillStyle = `rgba(4,2,5,${ss(prog(lt, D - .45, D))})`; ctx.fillRect(0, 0, W, H);
+}
+
+// ================= persistent HUD =================
+function hud(t) {
+  ctx.save();
+  ctx.globalAlpha = .85;
+  ctx.font = '22px InterB'; ctx.letterSpacing = '8px'; ctx.fillStyle = C.cream; ctx.textBaseline = 'middle';
+  ctx.fillText('FUZZN', 70, 64);
+  ctx.font = '18px InterM'; ctx.letterSpacing = '6px'; ctx.globalAlpha = .55;
+  ctx.fillText('/  MATCHMAKING', 196, 64);
+  // pulsing red dot top-right
+  const p = ph(t, 1);
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = `rgba(214,31,46,${.5 + .5 * Math.cos(TAU * p)})`;
+  ctx.beginPath(); ctx.arc(W - 78, 64, 7, 0, TAU); ctx.fill();
+  ctx.strokeStyle = `rgba(214,31,46,${.7 * (1 - p)})`; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(W - 78, 64, 7 + 16 * p, 0, TAU); ctx.stroke();
+  ctx.font = '20px IPAPGothic'; ctx.letterSpacing = '4px'; ctx.fillStyle = C.cream; ctx.globalAlpha = .7; ctx.textAlign = 'right';
+  ctx.fillText('マッチング中', W - 104, 65);
+  // corner brackets
+  ctx.strokeStyle = 'rgba(236,224,212,.35)'; ctx.lineWidth = 2; ctx.globalAlpha = 1;
+  const m = 34, l = 40;
+  [[m, m, 1, 1], [W - m, m, -1, 1], [m, H - m, 1, -1], [W - m, H - m, -1, -1]].forEach(([x, y, dx, dy]) => {
+    ctx.beginPath(); ctx.moveTo(x, y + dy * l); ctx.lineTo(x, y); ctx.lineTo(x + dx * l, y); ctx.stroke();
+  });
+  // bottom loader line
+  const q = ph(t, 2.5);
+  ctx.fillStyle = 'rgba(236,224,212,.12)'; ctx.fillRect(70, H - 64, 360, 2);
+  ctx.fillStyle = C.red; ctx.fillRect(70 + clamp(eo(q) * 1.3 - .3) * 360, H - 65, (clamp(eo(q) * 1.1) - clamp(eo(q) * 1.3 - .3)) * 360, 4);
+  ctx.font = '16px InterM'; ctx.letterSpacing = '6px'; ctx.textAlign = 'right'; ctx.fillStyle = C.cream; ctx.globalAlpha = .45;
+  ctx.fillText('SEARCHING FOR A GAME', W - 70, H - 63);
+  ctx.restore();
+}
+
+function post(t) {
+  const v = ctx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * 1.05);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.82)');
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(0,0,0,.08)';
+  for (let y = 0; y < H; y += 3) ctx.fillRect(0, y, W, 1);
+  ctx.save(); ctx.globalAlpha = .09; ctx.globalCompositeOperation = 'overlay';
+  ctx.drawImage(GRAIN[Math.floor(t * 24) % GRAIN.length], 0, 0, W, H); ctx.restore();
+}
+
+function render(t) {
+  t = ((t % T) + T) % T;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none'; ctx.letterSpacing = '0px';
+  ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0; ctx.textAlign = 'left';
+  if (t < S[1]) scene1(t);
+  else if (t < S[2]) scene2(t);
+  else if (t < S[3]) scene3(t);
+  else if (t < S[4]) scene4(t);
+  else scene5(t);
+  // cut flashes on scene boundaries
+  for (let i = 1; i < 5; i++) { const f = bump(t, S[i], .045); if (f > .02) { ctx.fillStyle = `rgba(236,224,212,${.35 * f})`; ctx.fillRect(0, 0, W, H); } }
+  hud(t);
+  post(t);
+}
+
+window.ready = (async () => {
+  [CHAR, CROW] = await Promise.all([loadImg('assets/character.png'), loadImg('assets/crow_cut.png')]);
+  await Promise.all(['400px Anton', '40px InterB', '18px InterM', '40px IPAPGothic'].map(f => document.fonts.load(f, 'FUZZNSEARCHINGマッチング中')));
+  // darkened figure + red rim
+  const cw = Math.round(CHAR.width * 1.27), ch = Math.round(CHAR.height * 1.27);
+  CHAR_DARK = mk(cw, ch); { const x = CHAR_DARK.getContext('2d'); x.filter = 'brightness(.64) contrast(1.2) saturate(.9)'; x.drawImage(CHAR, 0, 0, cw, ch); }
+  CHAR_RIM = mk(cw + 100, ch + 100); { const x = CHAR_RIM.getContext('2d'); x.filter = 'blur(16px)'; x.drawImage(tint(CHAR, '#d61f2e', cw, ch), 50, 50); x.filter = 'blur(3px)'; x.drawImage(tint(CHAR, '#ff4a4a', cw, ch), 50, 50); }
+  const s = 3.6, rw = Math.round(CROW.width * s), rh = Math.round(CROW.height * s);
+  CROW_RIM = mk(rw + 80, rh + 80); { const x = CROW_RIM.getContext('2d'); x.filter = 'blur(14px)'; x.drawImage(tint(CROW, '#d61f2e', rw, rh), 40, 40); }
+  FOG = puff(70, 30, 40);
+  LAYER = mk();
+  const R = rng(9);
+  for (let i = 0; i < 220; i++) ASH.push({ x: R() * (W + 300) - 300, dx: 120 + R() * 220, per: [2.5, 4, 5, 10, 20][Math.floor(R() * 5)], o: R() * 20, w: 1 + Math.floor(R() * 2), s: R() * TAU, r: 1.2 + R() * 3, a: .3 + R() * .6, red: R() < .12 });
+  for (let i = 0; i < 16; i++) FOGP.push({ y: R() * H, k: 1 + Math.floor(R() * 2), o: R() * 20, s: R() * TAU, r: 500 + R() * 600, a: .12 + R() * .2 });
+  for (let i = 0; i < 6; i++) {
+    const c = mk(480, 270), x = c.getContext('2d'), id = x.createImageData(480, 270);
+    for (let j = 0; j < id.data.length; j += 4) { const v = R() * 255; id.data[j] = id.data[j + 1] = id.data[j + 2] = v; id.data[j + 3] = 255; }
+    x.putImageData(id, 0, 0); GRAIN.push(c);
+  }
+  window.render = render; window.T = T;
+  return true;
+})();
+if (!navigator.webdriver) window.ready.then(() => { const t0 = performance.now(); const loop = () => { render((performance.now() - t0) / 1000); requestAnimationFrame(loop); }; loop(); });
+</script>
+</body>
+</html>
