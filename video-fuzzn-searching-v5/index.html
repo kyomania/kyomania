@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FUZZN – Searching for a game v5</title>
+<style>
+  @font-face { font-family: "IDBold"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-Bold.otf"); }
+  @font-face { font-family: "IDSemi"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-SemiBold.otf"); }
+  @font-face { font-family: "IDMed"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-Medium.otf"); }
+  @font-face { font-family: "IDLight"; src: url("file:///usr/share/fonts/opentype/inter/InterDisplay-Light.otf"); }
+  html, body { margin: 0; background: #000; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+// =====================================================================
+// FUZZN — "SEARCHING FOR A GAME" v5 · clean & premium · 16 s seamless loop
+// =====================================================================
+const W = 1920, H = 1080, T = 16, TAU = Math.PI * 2;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+
+const COL = { bg: '#060606', ink: '#f3efe8', mute: '#8c867e', orange: '#ff7a1a', orangeSoft: 'rgba(255,122,26,' };
+const HY = 600;   // horizon line y
+const CXc = W / 2;
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const expo = k => k >= 1 ? 1 : 1 - Math.pow(2, -10 * k);           // easeOutExpo
+const expoIn = k => k <= 0 ? 0 : Math.pow(2, 10 * k - 10);
+const eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const ss = k => k * k * (3 - 2 * k);
+const ph = (t, p) => ((t % p) + p) % p / p;
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function mk(w = W, h = H) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+
+let TXT, TX, REF, GRAIN = [], DUST = [];
+
+// ---------------------------------------------------------------- background
+function background(t) {
+  ctx.fillStyle = COL.bg; ctx.fillRect(0, 0, W, H);
+  // warm key light drifting slowly behind the horizon
+  const a = TAU * t / T;
+  const lx = CXc + Math.sin(a) * 260, ly = HY - 40 + Math.cos(a) * 30;
+  const g = ctx.createRadialGradient(lx, ly, 0, lx, ly, 1000);
+  g.addColorStop(0, 'rgba(255,122,26,.13)'); g.addColorStop(.35, 'rgba(120,50,20,.06)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // cool fill from top
+  const g2 = ctx.createRadialGradient(CXc, -300, 0, CXc, -300, 1200);
+  g2.addColorStop(0, 'rgba(180,190,210,.07)'); g2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+  // slow volumetric beam
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  ctx.translate(CXc + Math.sin(a) * 120, -120); ctx.rotate(.18 + Math.sin(a) * .05);
+  const b = ctx.createLinearGradient(-260, 0, 260, 0);
+  b.addColorStop(0, 'rgba(255,255,255,0)'); b.addColorStop(.5, 'rgba(255,236,220,.035)'); b.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = b; ctx.fillRect(-260, 0, 520, 1600);
+  ctx.restore();
+}
+
+function dust(t, alpha) {
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  for (const d of DUST) {
+    const u = ph(t + d.o, d.per);
+    const x = d.x + Math.sin(TAU * u + d.s) * d.ax, y = d.y - u * d.dy;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, d.r);
+    const c = d.warm ? '255,150,80' : '240,236,230';
+    const al = alpha * d.a * Math.sin(Math.PI * u);
+    g.addColorStop(0, `rgba(${c},${al})`); g.addColorStop(1, `rgba(${c},0)`);
+    ctx.fillStyle = g; ctx.fillRect(x - d.r, y - d.r, 2 * d.r, 2 * d.r);
+  }
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- typography helpers
+// draws a word letter by letter into TX. reveal(i) -> {a, blur, dy}
+function wordLetters(str, font, size, tracking, cx, baseline, color, reveal) {
+  TX.font = `${size}px ${font}`;
+  TX.textBaseline = 'alphabetic';
+  const widths = [...str].map(ch => TX.measureText(ch).width);
+  const total = widths.reduce((a, b) => a + b, 0) + tracking * (str.length - 1);
+  let x = cx - total / 2;
+  for (let i = 0; i < str.length; i++) {
+    const r = reveal(i);
+    if (r.a > .003 && str[i] !== ' ') {
+      TX.save();
+      TX.globalAlpha = r.a;
+      if (r.blur > .3) TX.filter = `blur(${r.blur}px)`;
+      TX.fillStyle = color;
+      TX.fillText(str[i], x, baseline + r.dy);
+      TX.restore();
+    }
+    x += widths[i] + tracking;
+  }
+  return total;
+}
+function sweep(t0, period, x0, x1, y0, y1, t) {
+  const u = ph(t - t0, period);
+  if (u > .35) return;
+  const x = lerp(x0, x1, ss(u / .35));
+  TX.save(); TX.globalCompositeOperation = 'source-atop';
+  const g = TX.createLinearGradient(x - 220, y0, x + 220, y1);
+  g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.45, 'rgba(255,200,150,.0)');
+  g.addColorStop(.5, 'rgba(255,214,170,.95)'); g.addColorStop(.55, 'rgba(255,200,150,0)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  TX.fillStyle = g; TX.fillRect(0, 0, W, H); TX.restore();
+}
+
+// paints TX onto the screen with a soft floor reflection under the horizon
+function commit(reflect = true, glow = .25) {
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = glow;
+  ctx.filter = 'blur(24px)'; ctx.drawImage(TXT, 0, 0); ctx.filter = 'none'; ctx.restore();
+  ctx.drawImage(TXT, 0, 0);
+  if (reflect) {
+    // reflection rendered into its own layer and faded with an alpha mask (no hard edges)
+    const x = REF.getContext('2d');
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, W, H);
+    x.save(); x.translate(0, 2 * HY + 4); x.scale(1, -1); x.filter = 'blur(4px)'; x.drawImage(TXT, 0, 0); x.restore();
+    x.globalCompositeOperation = 'destination-in';
+    const m = x.createLinearGradient(0, HY + 2, 0, HY + 170);
+    m.addColorStop(0, 'rgba(0,0,0,.09)'); m.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = m; x.fillRect(0, 0, W, H);
+    x.globalCompositeOperation = 'source-over';
+    ctx.drawImage(REF, 0, 0);
+  }
+}
+
+// ---------------------------------------------------------------- elements
+function horizon(t, len, alpha) {
+  if (alpha <= 0 || len <= 0) return;
+  ctx.save();
+  const g = ctx.createLinearGradient(CXc - len, 0, CXc + len, 0);
+  g.addColorStop(0, COL.orangeSoft + '0)'); g.addColorStop(.5, COL.orangeSoft + alpha + ')'); g.addColorStop(1, COL.orangeSoft + '0)');
+  ctx.fillStyle = g; ctx.fillRect(CXc - len, HY, len * 2, 2);
+  ctx.globalCompositeOperation = 'screen'; ctx.filter = 'blur(10px)'; ctx.globalAlpha = .7 * alpha;
+  ctx.fillRect(CXc - len, HY - 3, len * 2, 8); ctx.filter = 'none';
+  ctx.restore();
+}
+
+// search ring: thin circle with a gap and an orbiting orange dot (period 3 s)
+function searchRing(t, alpha, r = 400, cy = HY - 70) {
+  if (alpha <= .005) return;
+  ctx.save(); ctx.globalAlpha = alpha;
+  const rot = ph(t, 8) * TAU;
+  ctx.strokeStyle = 'rgba(243,239,232,.14)'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(CXc, cy, r, rot + .25, rot + TAU - .25); ctx.stroke();
+  ctx.strokeStyle = 'rgba(243,239,232,.06)';
+  ctx.beginPath(); ctx.arc(CXc, cy, r + 26, 0, TAU); ctx.stroke();
+  // ticks
+  for (let i = 0; i < 4; i++) {
+    const a = rot + i * TAU / 4;
+    ctx.strokeStyle = 'rgba(243,239,232,.3)';
+    ctx.beginPath(); ctx.moveTo(CXc + Math.cos(a) * (r + 14), cy + Math.sin(a) * (r + 14)); ctx.lineTo(CXc + Math.cos(a) * (r + 38), cy + Math.sin(a) * (r + 38)); ctx.stroke();
+  }
+  // orbiting comet
+  const p = ph(t, 3), a = -Math.PI / 2 + eio(p) * TAU;
+  for (let k = 0; k < 30; k++) {
+    const aa = a - k * .022 * (.4 + Math.sin(Math.PI * p));
+    ctx.strokeStyle = COL.orangeSoft + (.55 * (1 - k / 30)) + ')'; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.arc(CXc, cy, r, aa - .024, aa); ctx.stroke();
+  }
+  const dx = CXc + Math.cos(a) * r, dy = cy + Math.sin(a) * r;
+  const g = ctx.createRadialGradient(dx, dy, 0, dx, dy, 26);
+  g.addColorStop(0, 'rgba(255,170,100,1)'); g.addColorStop(.25, 'rgba(255,122,26,.7)'); g.addColorStop(1, 'rgba(255,122,26,0)');
+  ctx.fillStyle = g; ctx.fillRect(dx - 26, dy - 26, 52, 52);
+  ctx.fillStyle = '#fff4ea'; ctx.beginPath(); ctx.arc(dx, dy, 3.2, 0, TAU); ctx.fill();
+  ctx.restore();
+}
+
+function fuzznMark(t, alpha, y = H - 92, size = 22) {
+  if (alpha <= 0) return;
+  ctx.save(); ctx.globalAlpha = alpha;
+  ctx.font = `${size}px IDSemi`; ctx.letterSpacing = `${size * .5}px`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = COL.ink; ctx.fillText('FUZZN', CXc + size * .25, y);
+  const w = ctx.measureText('FUZZN').width;
+  const pulse = .55 + .45 * Math.cos(TAU * t / 2);
+  ctx.fillStyle = COL.orangeSoft + pulse + ')';
+  ctx.beginPath(); ctx.arc(CXc + w / 2 + size * .6, y - size * .28, size * .16, 0, TAU); ctx.fill();
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- timeline
+function render(t) {
+  t = ((t % T) + T) % T;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none'; ctx.letterSpacing = '0px';
+  background(t);
+
+  // global camera drift (slow push in, resets during the dark moment at the loop point)
+  const cam = 1 + .035 * ss(prog(t, 0, T - .4));
+  ctx.save(); ctx.translate(CXc, HY); ctx.scale(cam, cam); ctx.translate(-CXc, -HY);
+
+  // fade-out to loop
+  const outK = ss(prog(t, T - 1.0, T - .15));
+
+  // ---- horizon line
+  const lineIn = expo(prog(t, .3, 1.5));
+  const lineShrink = eio(prog(t, 6.6, 7.4)) * .55 - eio(prog(t, 7.6, 8.4)) * .55;  // breathes during the swap
+  horizon(t, 560 * lineIn * (1 - lineShrink) * (1 - .6 * outK), .9 * (1 - outK));
+
+  // ---- search ring
+  const ringA = ss(prog(t, 2.4, 3.6)) * (1 - ss(prog(t, 11.6, 12.4))) + ss(prog(t, 13.2, 14)) * (1 - outK) * .7;
+  searchRing(t, ringA, lerp(400, 430, ss(prog(t, 12, 13.5))));
+
+  dust(t, 1);
+
+  // ---- type layer
+  TX.clearRect(0, 0, W, H);
+  // Act 1: SEARCHING (big) + FOR A GAME (small)
+  if (t < 8) {
+    const track = lerp(48, 10, expo(prog(t, .8, 4)));
+    wordLetters('SEARCHING', 'IDBold', 196, track, CXc, HY - 34, COL.ink, i => {
+      const k = expo(prog(t, .8 + i * .07, 1.9 + i * .07));
+      const o = eio(prog(t, 6.5 + i * .045, 7.2 + i * .045));          // exit up
+      return { a: k * (1 - o), blur: (1 - k) * 22 + o * 14, dy: (1 - k) * 30 - o * 70 };
+    });
+    sweep(3.0, 2.6, CXc - 900, CXc + 900, 0, 0, t);
+    wordLetters('FOR A GAME', 'IDMed', 34, 26, CXc, HY + 96, COL.mute, i => {
+      const k = expo(prog(t, 2.0 + i * .03, 2.9 + i * .03));
+      const o = ss(prog(t, 6.2, 6.8));
+      return { a: k * (1 - o), blur: (1 - k) * 8, dy: (1 - k) * 14 };
+    });
+  }
+  // Act 2: FOR A GAME. (big) + SEARCHING (small kicker)
+  if (t > 7 && t < 12.4) {
+    const words = ['FOR', 'A', 'GAME'];
+    TX.font = '196px IDBold';
+    const sp = 56, trk = 8;
+    const ws = words.map(w => TX.measureText(w).width + trk * (w.length - 1));
+    const total = ws.reduce((a, b) => a + b, 0) + sp * 2 + 60;
+    let x = CXc - total / 2;
+    words.forEach((w, wi) => {
+      const k = expo(prog(t, 7.3 + wi * .16, 8.5 + wi * .16));
+      const o = eio(prog(t, 11.4 + wi * .08, 12.1 + wi * .08));
+      TX.save();
+      TX.beginPath(); TX.rect(0, HY - 240, W, 240); TX.clip();           // mask: rises out of the horizon
+      TX.globalAlpha = 1 - o;
+      TX.letterSpacing = trk + 'px';
+      TX.fillStyle = COL.ink;
+      TX.fillText(w, x, HY - 34 + (1 - k) * 200 + o * 200);
+      TX.restore();
+      x += ws[wi] + sp;
+    });
+    // the orange full stop
+    const dk = expo(prog(t, 8.3, 8.9)) * (1 - eio(prog(t, 11.7, 12.1)));
+    TX.save(); TX.fillStyle = COL.orange; TX.globalAlpha = dk;
+    TX.beginPath(); TX.arc(x - sp + 30, HY - 50, 20 * (0.4 + .6 * dk), 0, TAU); TX.fill(); TX.restore();
+    sweep(9.3, 3.0, CXc - 900, CXc + 900, 0, 0, t);
+    wordLetters('SEARCHING', 'IDMed', 34, 26, CXc, HY - 290, COL.mute, i => {
+      const k = expo(prog(t, 8.0 + i * .03, 8.9 + i * .03));
+      const o = ss(prog(t, 11.2, 11.8));
+      return { a: k * (1 - o), blur: (1 - k) * 8, dy: (1 - k) * -14 };
+    });
+  }
+  // Act 3: FUZZN lockup
+  if (t > 12) {
+    const k0 = 12.4;
+    wordLetters('FUZZN', 'IDBold', 150, lerp(70, 34, expo(prog(t, k0, k0 + 2.5))), CXc, HY - 44, COL.ink, i => {
+      const k = expo(prog(t, k0 + i * .08, k0 + 1.1 + i * .08));
+      return { a: k * (1 - outK), blur: (1 - k) * 24 + outK * 16, dy: (1 - k) * 24 };
+    });
+    sweep(13.6, 6, CXc - 700, CXc + 700, 0, 0, t);
+    wordLetters('SEARCHING FOR A GAME', 'IDMed', 30, 18, CXc, HY + 96, COL.mute, i => {
+      const k = expo(prog(t, k0 + .9 + i * .02, k0 + 1.8 + i * .02));
+      return { a: k * (1 - outK), blur: (1 - k) * 8 + outK * 6, dy: (1 - k) * 12 };
+    });
+  }
+  commit(true, .22);
+  ctx.restore();
+
+  // ---- quiet branding (not in the lockup)
+  fuzznMark(t, ss(prog(t, 3, 4)) * (1 - ss(prog(t, 11.8, 12.4))));
+
+  // ---- finishing: vignette, grain, letterbox
+  const v = ctx.createRadialGradient(CXc, H / 2, H * .35, CXc, H / 2, H * 1.0);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.7)');
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.globalAlpha = .035; ctx.globalCompositeOperation = 'overlay';
+  ctx.drawImage(GRAIN[Math.floor(t * 24) % GRAIN.length], 0, 0, W, H); ctx.restore();
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, 54); ctx.fillRect(0, H - 54, W, 54);
+}
+
+window.ready = (async () => {
+  await Promise.all(['196px IDBold', '30px IDSemi', '34px IDMed', '20px IDLight'].map(f => document.fonts.load(f, 'SEARCHINGFUZZN')));
+  TXT = mk(); TX = TXT.getContext('2d'); REF = mk();
+  const R = rng(12);
+  for (let i = 0; i < 26; i++) DUST.push({ x: R() * W, y: 200 + R() * 900, dy: 120 + R() * 260, ax: 20 + R() * 60, per: [4, 8, 16][Math.floor(R() * 3)], o: R() * 16, s: R() * TAU, r: 3 + R() * 14, a: .15 + R() * .35, warm: R() < .5 });
+  for (let i = 0; i < 6; i++) {
+    const c = mk(480, 270), x = c.getContext('2d'), id = x.createImageData(480, 270);
+    for (let j = 0; j < id.data.length; j += 4) { const v = R() * 255; id.data[j] = id.data[j + 1] = id.data[j + 2] = v; id.data[j + 3] = 255; }
+    x.putImageData(id, 0, 0); GRAIN.push(c);
+  }
+  window.render = render; window.T = T;
+  return true;
+})();
+if (!navigator.webdriver) window.ready.then(() => { const t0 = performance.now(); const loop = () => { render((performance.now() - t0) / 1000); requestAnimationFrame(loop); }; loop(); });
+</script>
+</body>
+</html>
