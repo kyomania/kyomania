@@ -1,1 +1,6 @@
 src/
+cut/
+snaps/
+.hyperframes/
+renders/
+__pycache__/
