@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Papier-Skyline Styleframes</title>
+<style>
+  @font-face { font-family: Anton; src: url(assets/fonts/anton-latin-400-normal.woff2); }
+  @font-face { font-family: Archivo; font-weight: 800; src: url(assets/fonts/archivo-latin-800-normal.woff2); }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #161514; }
+  svg { display: block; }
+  text { font-family: Anton, sans-serif; }
+</style>
+</head>
+<body>
+<svg id="s" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+/* ---------- Farben (aus dem Cover) ---------- */
+const C = {
+  bg: '#1b1a19', board: '#262422', dark: '#33302d', mid: '#5b5753', grey: '#8d8983',
+  news: '#d9d4c8', paper: '#efebe2', white: '#f7f4ee', kraft: '#b08a5c', ink: '#141312',
+  yel: '#f3c936', yelD: '#c99b1b'
+};
+
+/* ---------- Zufall, deterministisch ---------- */
+let seed = 7;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const rr = (a, b) => a + rnd() * (b - a);
+
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('s');
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  (parent || svg).appendChild(e);
+  return e;
+}
+function g(attrs, parent) { return el('g', attrs || {}, parent); }
+
+/* ---------- Gerissene Kanten ---------- */
+function tornPath(pts, amp, step) {
+  const out = [];
+  for (let i = 0; i < pts.length; i++) {
+    const [x1, y1] = pts[i], [x2, y2] = pts[(i + 1) % pts.length];
+    const len = Math.hypot(x2 - x1, y2 - y1), n = Math.max(1, Math.round(len / step));
+    const nx = -(y2 - y1) / len, ny = (x2 - x1) / len;
+    for (let k = 0; k < n; k++) {
+      const t = k / n, j = k === 0 ? 0 : rr(-amp, amp);
+      out.push([x1 + (x2 - x1) * t + nx * j, y1 + (y2 - y1) * t + ny * j]);
+    }
+  }
+  return 'M' + out.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z';
+}
+const rect = (x, y, w, h) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
+const circ = (cx, cy, r, n = 18) => Array.from({ length: n }, (_, i) => [cx + Math.cos(i / n * 6.283) * r, cy + Math.sin(i / n * 6.283) * r]);
+function grow(pts, d) {
+  const cx = pts.reduce((a, p) => a + p[0], 0) / pts.length, cy = pts.reduce((a, p) => a + p[1], 0) / pts.length;
+  return pts.map(([x, y]) => { const l = Math.hypot(x - cx, y - cy) || 1; return [x + (x - cx) / l * d, y + (y - cy) / l * d]; });
+}
+/* Ein Papierstück: weiße Faserkante unten, Farbe oben, Papierstruktur + Schatten */
+function piece(pts, fill, parent, o = {}) {
+  const grp = g({ filter: o.flat ? '' : 'url(#shadow)' }, parent);
+  const amp = o.amp ?? 2.2, step = o.step ?? 7;
+  if (o.fiber !== false) el('path', { d: tornPath(grow(pts, o.fiberW ?? 3.5), amp * 1.4, step), fill: o.fiberCol || C.white }, grp);
+  el('path', { d: tornPath(pts, amp, step), fill, filter: 'url(#paper)' }, grp);
+  return grp;
+}
+
+/* ---------- Filter: Papierstruktur, Schatten, Korn ---------- */
+const defs = el('defs', {});
+defs.innerHTML = `
+  <filter id="paper" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.9 0.55" result="dots"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="2" seed="9" result="m"/>
+    <feColorMatrix in="m" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.5 0.32" result="mott"/>
+    <feComposite in="dots" in2="SourceAlpha" operator="in" result="d2"/>
+    <feComposite in="mott" in2="SourceAlpha" operator="in" result="m2"/>
+    <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="m2"/><feMergeNode in="d2"/></feMerge>
+  </filter>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="5" dy="8" stdDeviation="5" flood-color="#000" flood-opacity="0.55"/>
+  </filter>
+  <filter id="shadowBig" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="14" dy="22" stdDeviation="14" flood-color="#000" flood-opacity="0.6"/>
+  </filter>
+  <filter id="blur6"><feGaussianBlur stdDeviation="6"/></filter>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="4"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.09 0"/>
+  </filter>
+  <filter id="board" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.0035 0.006" numOctaves="3" seed="2"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.2  0 0 0 0 0.19  0 0 0 0 0.17  0 0 0 0.45 -0.05"/>
+  </filter>
+  <radialGradient id="vig" cx="50%" cy="45%" r="75%">
+    <stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.7"/>
+  </radialGradient>
+  <pattern id="halftone" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+    <circle cx="7" cy="7" r="3.2" fill="${C.yelD}"/>
+  </pattern>
+  <clipPath id="coverClip"></clipPath>
+`;
+
+/* ---------- Hintergrund ---------- */
+function background(tone = C.bg) {
+  el('rect', { width: 1080, height: 1920, fill: tone });
+  el('rect', { width: 1080, height: 1920, filter: 'url(#board)' });
+}
+function finish() {
+  el('rect', { width: 1080, height: 1920, fill: 'url(#vig)' });
+  el('rect', { width: 1080, height: 1920, filter: 'url(#grain)', style: 'mix-blend-mode:overlay' });
+}
+/* Zeitungsfetzen mit Pseudo-Textzeilen */
+function newspaper(x, y, w, h, rot, parent, tone = C.news) {
+  const grp = g({ transform: `translate(${x},${y}) rotate(${rot})` }, parent);
+  piece(rect(0, 0, w, h), tone, grp, { amp: 4, step: 9 });
+  const lines = g({ opacity: 0.38 }, grp);
+  for (let yy = 22; yy < h - 14; yy += 15) {
+    const cols = w > 260 ? 2 : 1, cw = (w - 36 - (cols - 1) * 16) / cols;
+    for (let c = 0; c < cols; c++) el('rect', { x: 18 + c * (cw + 16), y: yy, width: cw * rr(0.7, 1), height: 6, fill: C.ink }, lines);
+  }
+  return grp;
+}
+/* Klebeband */
+function tape(x, y, w, rot, parent) {
+  el('path', { d: tornPath(rect(-w / 2, -14, w, 28), 1.5, 5), fill: '#e9dfb8', opacity: 0.72,
+               transform: `translate(${x},${y}) rotate(${rot})` }, parent);
+}
+/* Ausgeschnittene Wörter (Erpresserbrief-Stil, aber ruhig) */
+function wordStrip(txt, x, y, size, rot, parent, o = {}) {
+  const grp = g({ transform: `translate(${x},${y}) rotate(${rot})` }, parent);
+  const w = txt.length * size * (o.k ?? 0.5) + size * 0.7, h = size * 1.32;
+  piece(rect(-w / 2, -h / 2, w, h), o.bg || C.paper, grp, { amp: 2.5, step: 8 });
+  el('text', { x: 0, y: size * 0.4, 'font-size': size, 'text-anchor': 'middle', fill: o.col || C.ink,
+               'letter-spacing': 1 }, grp).textContent = txt;
+  return grp;
+}
+
+/* ---------- Der Papiermensch (Split-Pin-Rig) ---------- */
+/* pose: Winkel in Grad: {la1,la2,ra1,ra2,ll1,ll2,rl1,rl2,head,body} ; Ursprung = Hüfte */
+function paperMan(x, y, s, pose, col, parent, o = {}) {
+  const P = Object.assign({ la1: 8, la2: 6, ra1: -8, ra2: -6, ll1: 4, ll2: 0, rl1: -4, rl2: 0, head: 0, body: 0 }, pose);
+  const root = g({ transform: `translate(${x},${y}) scale(${s})`, filter: 'url(#shadow)' }, parent);
+  const tone = col, fiber = C.white, brad = o.brad || C.yelD;
+  const W = 18;
+  function seg(par, len, ang) {
+    const sg = g({ transform: `rotate(${ang})` }, par);
+    el('path', { d: tornPath(grow(rect(-W / 2, -4, W, len + 8), 2.5), 1.6, 6), fill: fiber }, sg);
+    el('path', { d: tornPath(rect(-W / 2, -4, W, len + 8), 1.2, 6), fill: tone, filter: 'url(#paper)' }, sg);
+    return sg;
+  }
+  function brad_(par, cx, cy) {
+    el('circle', { cx, cy, r: 3.4, fill: brad }, par);
+    el('circle', { cx: cx - 1, cy: cy - 1, r: 1.2, fill: '#fff6cf', opacity: 0.8 }, par);
+  }
+  function limb(par, px, py, a1, a2, l1 = 34, l2 = 34, back) {
+    const base = g({ transform: `translate(${px},${py})` }, par);
+    const up = seg(base, l1, a1);
+    const low = g({ transform: `translate(0,${l1})` }, up);
+    seg(low, l2, a2);
+    brad_(low, 0, 0);
+    if (back) base.setAttribute('opacity', 1);
+    return base;
+  }
+  const body = g({ transform: `rotate(${P.body})` }, root);
+  // hintere Gliedmaßen
+  limb(body, -7, 0, P.rl1, P.rl2, 36, 36, true);
+  limb(body, 0, -62, P.ra1, P.ra2, 30, 30, true);
+  // Torso
+  const torso = [[-18, -66], [18, -66], [13, 2], [-13, 2]];
+  el('path', { d: tornPath(grow(torso, 3), 2.6, 6), fill: fiber }, body);
+  el('path', { d: tornPath(torso, 1.6, 6), fill: tone, filter: 'url(#paper)' }, body);
+  // Kopf
+  const head = g({ transform: `translate(0,-66) rotate(${P.head})` }, body);
+  el('path', { d: tornPath(circ(0, -27, 26.5, 22), 2, 5), fill: fiber }, head);
+  el('path', { d: tornPath(circ(0, -27, 24, 22), 1.4, 5), fill: tone, filter: 'url(#paper)' }, head);
+  el('rect', { x: -5, y: -6, width: 10, height: 10, fill: tone }, head); // Hals
+  // vordere Gliedmaßen
+  limb(body, 7, 0, P.ll1, P.ll2, 36, 36);
+  limb(body, 0, -62, P.la1, P.la2, 30, 30);
+  brad_(body, 0, -62); brad_(body, 0, 0);
+  return root;
+}
+
+/* ---------- Gebäude (Pop-up) ---------- */
+function building(x, base, w, h, tone, parent, o = {}) {
+  const grp = g({}, parent);
+  piece(rect(x, base - h, w, h), tone, grp, { amp: 1.8, step: 10 });
+  // Faltkante: rechte Hälfte dunkler
+  el('path', { d: tornPath(rect(x + w * 0.62, base - h + 2, w * 0.38 - 2, h - 4), 1.2, 10), fill: '#000', opacity: 0.18 }, grp);
+  el('line', { x1: x + w * 0.62, y1: base - h + 4, x2: x + w * 0.62, y2: base - 2, stroke: '#000', 'stroke-opacity': 0.25, 'stroke-width': 1.5 }, grp);
+  // Fenster
+  const ww = o.win ?? 16, gap = o.gap ?? 14, lit = o.lit ?? 0.12;
+  for (let yy = base - h + 26; yy < base - 40; yy += ww + gap) {
+    for (let xx = x + 16; xx < x + w - ww - 10; xx += ww + gap) {
+      const on = rnd() < lit;
+      el('rect', { x: xx, y: yy, width: ww, height: ww + 4, fill: on ? C.yel : (o.winCol || C.ink), opacity: on ? 1 : 0.55 }, grp);
+    }
+  }
+  // Pop-up-Lasche am Boden
+  el('path', { d: tornPath([[x + 6, base], [x + w - 6, base], [x + w + 10, base + 16], [x - 10, base + 16]], 1.2, 8), fill: tone, opacity: 0.85, filter: 'url(#paper)' }, grp);
+  return grp;
+}
+function cloud(x, y, s, parent) {
+  const grp = g({ transform: `translate(${x},${y}) scale(${s})` }, parent);
+  const pts = [];
+  for (let i = 0; i <= 12; i++) { const a = Math.PI + i / 12 * Math.PI; const r = 60 + Math.sin(i * 1.7) * 18; pts.push([Math.cos(a) * r * 1.8, Math.sin(a) * r * 0.9]); }
+  piece(pts, C.paper, grp, { amp: 3, step: 8 });
+  return grp;
+}
+
+/* ================= Styleframes ================= */
+const frames = {
+  /* 1 — 0:02  Ganz klein: Papiermensch auf einem Schnipsel, im Dunkeln */
+  1() {
+    seed = 11; background();
+    // ferne Zeitungsfetzen (Parallax-Ebene hinten)
+    const back = g({ opacity: 0.35, filter: 'url(#blur6)' });
+    newspaper(-80, 240, 420, 300, -8, back, C.mid);
+    newspaper(720, 1180, 460, 340, 6, back, C.mid);
+    // Wörter
+    const words = g({});
+    wordStrip('AUS DEM', 470, 470, 120, -4, words);
+    wordStrip('WIRD', 600, 640, 120, 3, words, { bg: C.news });
+    wordStrip('NICHTS.', 520, 815, 150, -2, words, { bg: C.ink, col: C.paper });
+    tape(330, 425, 110, -30, words); tape(760, 770, 100, 22, words);
+    // Schnipsel + Figur
+    const mid = g({ transform: 'translate(540,1330) rotate(-3)' });
+    newspaper(-230, 0, 440, 160, 0, mid, C.news);
+    paperMan(60, -2, 2.3, { body: -4, ll1: -84, ll2: 88, rl1: -76, rl2: 84, la1: -38, la2: -52, ra1: -30, ra2: -58, head: 22 }, C.grey, mid);
+    // Vordergrund-Kante (unscharf, Parallax vorne)
+    const fg = g({ filter: 'url(#blur6)' });
+    piece([[-40, 1750], [1120, 1690], [1120, 1990], [-40, 1990]], C.dark, fg, { amp: 10, step: 16, fiberCol: C.mid });
+    finish();
+  },
+
+  /* 2 — 0:09  Der Schnipsel wird zum Kiosk, 03:00 Uhr */
+  2() {
+    seed = 23; background();
+    // Mond + Sterne
+    const sky = g({});
+    piece(circ(820, 330, 95, 26), C.paper, sky, { amp: 2.5, step: 7 });
+    el('path', { d: tornPath(circ(865, 300, 85, 26), 2.5, 7), fill: C.bg }, sky);
+    for (let i = 0; i < 14; i++) piece(circ(rr(60, 1020), rr(120, 760), rr(4, 8), 6), C.paper, sky, { amp: 1, step: 4, flat: true, fiber: false });
+    // ferne Silhouette (hinten)
+    const far = g({ opacity: 0.55 });
+    let xx = -20; while (xx < 1100) { const w = rr(90, 170), h = rr(180, 420); piece(rect(xx, 1360 - h, w, h + 40), C.dark, far, { amp: 2, step: 12, fiberCol: C.mid }); xx += w - 6; }
+    // Straße
+    piece(rect(-40, 1360, 1160, 600), '#2c2a27', null, { amp: 5, step: 14, fiberCol: C.mid });
+    // Kiosk
+    const k = g({ transform: 'translate(300,1000)' });
+    building(0, 360, 330, 260, C.news, k, { win: 0, lit: 0 });
+    piece(rect(40, 175, 250, 120), C.ink, k, { amp: 1.5, step: 8 });
+    piece(rect(56, 190, 218, 92), C.yel, k, { amp: 1.4, step: 8, fiber: false });       // erleuchtetes Fenster
+    // Markise, gestreift
+    for (let i = 0; i < 7; i++) piece([[-20 + i * 53, 90], [33 + i * 53, 90], [33 + i * 53, 150], [-20 + i * 53, 150]], i % 2 ? C.paper : C.ink, k, { amp: 1.3, step: 7, fiber: i % 2 === 1 });
+    wordStrip('03:00', 165, 40, 70, -2, k, { bg: C.ink, col: C.yel });
+    // Papiermensch arbeitet am Laptop (Laptop = Pappstreifen)
+    const man = g({});
+    piece(rect(700, 1250, 150, 120), C.kraft, man, { amp: 1.5, step: 8 });
+    const pm = paperMan(740, 1250, 2, { body: 4, head: 24, ll1: -84, ll2: 86, rl1: -78, rl2: 82, la1: -40, la2: -48, ra1: -34, ra2: -52 }, C.grey, man);
+    const lap = g({ transform: 'translate(22,-16)' }, pm);
+    el('path', { d: 'M62,-48 L64,-6 L-34,-50 L-20,-104 Z', fill: C.yel, opacity: 0.16 }, lap);
+    piece(rect(0, -6, 64, 7), C.ink, lap, { amp: 0.8, step: 6 });
+    piece([[58, -2], [70, -52], [76, -52], [64, -2]], C.ink, lap, { amp: 0.6, step: 6 });
+    // Vordergrund
+    const fg = g({ filter: 'url(#blur6)' });
+    newspaper(-60, 1640, 420, 380, -9, fg, C.mid);
+    finish();
+  },
+
+  /* 3 — 0:20  Höhepunkt: Pop-up-Skyline, der Papiermensch ganz oben, jetzt gelb */
+  3() {
+    seed = 41; background('#1f1d1b');
+    // Sonne als gelbes Halbtonpapier
+    const sun = g({});
+    piece(circ(540, 470, 250, 34), C.paper, sun, { amp: 3, step: 8 });
+    el('circle', { cx: 540, cy: 470, r: 246, fill: 'url(#halftone)', opacity: 0.18 }, sun);
+    // Wolken (Parallax)
+    cloud(170, 430, 0.9, null); cloud(930, 760, 0.75, null);
+    // hintere Reihe
+    const back = g({ opacity: 0.75 });
+    [[-30, 130, 520], [90, 120, 640], [690, 150, 600], [830, 140, 760], [960, 150, 520]].forEach(([x, w, h]) => building(x, 1500, w, h, C.mid, back, { lit: 0.08, win: 12, gap: 12 }));
+    // mittlere Reihe
+    const mid = g({});
+    building(20, 1560, 170, 560, C.news, mid, { lit: 0.15 });
+    building(180, 1560, 150, 420, C.kraft, mid, { lit: 0.1 });
+    building(700, 1560, 160, 480, C.paper, mid, { lit: 0.18 });
+    building(850, 1560, 210, 640, C.news, mid, { lit: 0.12 });
+    // der Turm
+    const tower = g({});
+    building(380, 1560, 280, 980, C.ink, tower, { lit: 0.35, winCol: '#3a3734' });
+    // Papiermensch oben, Arme hoch
+    paperMan(520, 434, 2, { la1: 128, la2: 22, ra1: -128, ra2: -22, ll1: 14, ll2: -4, rl1: -14, rl2: 4, head: -6 }, C.yel, tower, { brad: C.ink });
+    // Untertitel-Stempel
+    const st = g({});
+    wordStrip('KEIN PLAN.', 300, 1690, 84, -3, st, { bg: C.paper });
+    wordStrip('KEINE AUSREDEN.', 600, 1790, 84, 2, st, { bg: C.news });
+    // Vordergrund-Kante
+    const fg = g({ filter: 'url(#blur6)' });
+    piece([[-40, 1860], [1120, 1830], [1120, 1990], [-40, 1990]], C.dark, fg, { amp: 8, step: 16, fiberCol: C.mid });
+    finish();
+  },
+
+  /* 4 — 0:27  Die Stadt klappt zusammen: das Buch */
+  4() {
+    seed = 57; background();
+    // Reste der Stadt als flach liegende Faltteile im Hintergrund
+    const back = g({ opacity: 0.4, filter: 'url(#blur6)' });
+    newspaper(-60, 180, 380, 260, -10, back, C.mid);
+    newspaper(760, 160, 400, 280, 8, back, C.mid);
+    newspaper(700, 1500, 440, 320, -5, back, C.mid);
+    // Buch-Cover als aufgeklebtes Papier
+    const book = g({ transform: 'translate(540,880) rotate(-2.5)' });
+    const W = 600, H = 954;
+    el('rect', { x: -W / 2 + 10, y: -H / 2 + 14, width: W, height: H, fill: '#000', opacity: 0.6, filter: 'url(#blur6)' }, book);
+    el('path', { d: tornPath(rect(-W / 2 - 8, -H / 2 - 8, W + 16, H + 16), 2.5, 8), fill: C.white }, book);
+    el('image', { href: 'assets/img/cover.jpg', x: -W / 2, y: -H / 2, width: W, height: H, preserveAspectRatio: 'xMidYMid slice' }, book);
+    el('rect', { x: -W / 2, y: -H / 2, width: W, height: H, filter: 'url(#grain)', style: 'mix-blend-mode:overlay' }, book);
+    tape(-W / 2 + 30, -H / 2 + 10, 130, -38, book); tape(W / 2 - 30, H / 2 - 10, 130, -38, book);
+    // kleiner gelber Papiermensch sitzt oben auf dem Buch
+    paperMan(120, -H / 2 - 4, 1.7, { body: -2, ll1: -86, ll2: 88, rl1: -80, rl2: 84, la1: -30, la2: -40, ra1: -138, ra2: -34, head: -12 }, C.yel, book, { brad: C.ink });
+    // CTA
+    const cta = g({});
+    wordStrip('JETZT ERHÄLTLICH', 540, 1520, 92, -1.5, cta, { bg: C.yel, k: 0.47 });
+    const shops = g({ transform: 'translate(540,1650) rotate(1)' });
+    piece(rect(-390, -40, 780, 80), C.paper, shops, { amp: 2, step: 8 });
+    el('text', { x: 0, y: 14, 'font-size': 38, 'text-anchor': 'middle', fill: C.ink, style: 'font-family:Archivo;font-weight:800;letter-spacing:2px' }, shops).textContent = 'AMAZON · THALIA · HUGENDUBEL';
+    finish();
+  }
+};
+
+const f = new URLSearchParams(location.search).get('f') || '1';
+document.fonts.ready.then(() => { frames[f](); document.title = 'ready'; });
+</script>
+</body>
+</html>
