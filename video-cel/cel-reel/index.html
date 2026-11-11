@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; font-weight: 400; src: url(assets/fonts/inter-tight-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url(assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 900; src: url(assets/fonts/inter-tight-latin-900-normal.woff2) format("woff2"); }
+      :root { --coral: #e04b4f; --teal: #2c6f73; --cream: #f7f4ee; --ink: #1b2a2b; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--coral); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--coral); font-family: "Inter Tight", sans-serif; color: #fff; }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      .abs { position: absolute; }
+      .full { width: 1080px; height: 1920px; object-fit: cover; display: block; }
+      .card { font-weight: 800; font-size: 74px; line-height: 1.02; letter-spacing: -0.025em; }
+      .card sup { font-size: 0.45em; font-weight: 400; vertical-align: top; }
+      .big { font-weight: 900; font-size: 120px; line-height: 0.95; letter-spacing: -0.035em; }
+      .corner { font-weight: 800; font-size: 46px; letter-spacing: -0.01em; }
+      .ln { display: block; overflow: hidden; }
+      .ln > span { display: inline-block; }
+      .logo { display: flex; align-items: center; gap: 28px; background: var(--cream); border-radius: 36px; padding: 40px 56px; box-shadow: 0 30px 60px rgba(60,10,10,0.25); }
+      #grain { z-index: 90; opacity: 0.18; mix-blend-mode: multiply; width: 2160px; height: 3840px; inset: auto; left: -540px; top: -960px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.4  0 0 0 0 0.35  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="25" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="25" data-volume="1"></audio>
+
+      <video id="vA" class="full abs clip" style="z-index:1" src="assets/video/clip0.mp4" data-start="0" data-duration="5.04" muted playsinline></video>
+      <!-- A · Intro -->
+      <div id="sA" class="clip" data-start="0" data-duration="5.2" style="z-index:1">
+        <div class="abs card" id="tA" style="left:80px;top:200px">
+          <span class="ln"><span>fast.site<sup>®</sup></span></span>
+          <span class="ln"><span>Mach deine</span></span>
+          <span class="ln"><span>Website schneller.</span></span>
+        </div>
+        <div class="abs corner" id="yA" style="right:80px;top:212px">©2026</div>
+        <div class="abs logo" id="lgA" style="left:80px;top:1420px">
+          <img src="assets/img/icon.svg" style="width:150px;height:150px" alt="" />
+          <img src="assets/img/wordmark.svg" style="height:110px" alt="" />
+        </div>
+      </div>
+
+      <video id="vB" class="full abs clip" style="z-index:2" src="assets/video/clip1.mp4" data-start="4.95" data-duration="5.04" muted playsinline></video>
+      <!-- B · Features -->
+      <div id="sB" class="clip" data-start="4.95" data-duration="5.1" style="z-index:2">
+        <div class="abs big" style="left:80px;top:200px">
+          <span class="ln"><span id="w1">Edge-Caching.</span></span>
+          <span class="ln"><span id="w2">Bildoptimierung.</span></span>
+          <span class="ln"><span id="w3">DDoS-Schutz.</span></span>
+        </div>
+      </div>
+
+      <!-- C · Hosting bleibt -->
+      <div id="sC" class="clip" data-start="9.85" data-duration="4.6" style="z-index:3">
+        <img id="iC" class="full abs" src="assets/img/img2.png" alt="" />
+        <div class="abs big" style="left:80px;top:1460px">
+          <span class="ln"><span id="c1">Dein Hosting</span></span>
+          <span class="ln"><span id="c2">bleibt.</span></span>
+        </div>
+        <div class="abs card" id="tC" style="left:80px;top:200px;font-size:56px"><span class="ln"><span>Verbinde einfach</span></span><span class="ln"><span>deine Domain.</span></span></div>
+      </div>
+
+      <video id="vD" class="full abs clip" style="z-index:4" src="assets/video/clip2.mp4" data-start="14.25" data-duration="5.04" muted playsinline></video>
+      <!-- D · Speed -->
+      <div id="sD" class="clip" data-start="14.25" data-duration="5.15" style="z-index:4">
+        <div class="abs big" style="left:80px;top:200px;font-size:170px">
+          <span class="ln"><span id="d1">Mach sie</span></span>
+          <span class="ln"><span id="d2">fast.</span></span>
+        </div>
+      </div>
+
+      <!-- E · Outro -->
+      <div id="sE" class="clip" data-start="19.2" data-duration="5.8" style="z-index:5">
+        <img id="iE" class="full abs" src="assets/img/img4.png" alt="" />
+        <div class="abs logo" id="lgE" style="left:190px;top:640px;padding:46px 64px">
+          <img src="assets/img/icon.svg" style="width:190px;height:190px" alt="" />
+          <img src="assets/img/wordmark.svg" style="height:140px" alt="" />
+        </div>
+        <div class="abs big" style="left:0;width:1080px;text-align:center;top:1000px;color:var(--coral);font-size:112px">
+          <span class="ln"><span id="e1">7 Tage</span></span>
+          <span class="ln"><span id="e2">kostenlos testen</span></span>
+        </div>
+        <div class="abs" id="e3" style="left:0;width:1080px;text-align:center;top:1300px"><span style="display:inline-block;background:var(--teal);color:var(--cream);border-radius:999px;padding:24px 56px;font-weight:800;font-size:56px">fast.site/de →</span></div>
+      </div>
+
+      <!-- Farb-Wipe: gemalte Teal-Welle -->
+      <div id="wipe" class="clip" data-start="0" data-duration="25" style="z-index:20;pointer-events:none"><img id="wimg" src="assets/img/img5.png" style="position:absolute;left:0;top:0;width:1300px;height:1920px;object-fit:cover" alt="" /></div>
+      <div id="grain" class="clip" data-start="0" data-duration="25"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      let seed = 21; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }; const R = (a, b) => a + (b - a) * rnd();
+      const FPS = 12;
+      const step = (dur, base = "power3.out") => { const e = gsap.parseEase(base), n = Math.max(1, Math.round(dur * FPS)); return (p) => e(Math.min(1, Math.floor(p * n + 1e-6) / n)); };
+      // Zeile von unten einblenden (Maske), auf Zweiern
+      const lineIn = (sel, t, d = 0.42) => tl.from(sel, { yPercent: 110, duration: d, ease: step(d, "power3.out") }, t);
+
+      // Papierkorn
+      for (let i = 0; i < 25 * FPS; i++) tl.set("#grain", { x: Math.round(R(-500, 500)), y: Math.round(R(-900, 900)) }, i / FPS);
+
+      // Teal-Wipes zwischen den Szenen (malerische Welle fegt von rechts nach links)
+      tl.set("#wimg", { x: 1200 }, 0);
+      [4.75, 9.65, 14.05, 19.0].forEach((t) => tl.fromTo("#wimg", { x: 1200 }, { x: -1500, duration: 0.6, ease: step(0.6, "power2.inOut"), immediateRender: false }, t));
+
+      // A
+      tl.from("#vA", { scale: 1.08, duration: 5.2, ease: "none" }, 0);
+      lineIn("#tA .ln:nth-child(1) > span", 0.7);
+      lineIn("#yA", 0.85);
+      lineIn("#tA .ln:nth-child(2) > span", 2.7);
+      lineIn("#tA .ln:nth-child(3) > span", 3.05);
+      tl.from("#lgA", { y: 300, rotation: -8, opacity: 0, duration: 0.5, ease: step(0.5, "back.out(1.6)") }, 1.15);
+      // B
+      lineIn("#w1", 5.4); lineIn("#w2", 6.8); lineIn("#w3", 8.15);
+      // C (Standbild, lebendig gemacht: langsamer Zoom + 12-fps-Boil)
+      tl.fromTo("#iC", { scale: 1.12 }, { scale: 1.0, duration: 4.6, ease: "sine.out" }, 9.85);
+      for (let f = Math.ceil(9.85 * FPS); f < 14.45 * FPS; f++) tl.set("#iC", { x: R(-3, 3), y: R(-3, 3), rotation: R(-0.25, 0.25) }, f / FPS);
+      lineIn("#tC .ln:nth-child(1) > span", 10.1); lineIn("#tC .ln:nth-child(2) > span", 10.3);
+      lineIn("#c1", 10.6); lineIn("#c2", 11.4);
+      // D
+      lineIn("#d1", 14.6, 0.5); lineIn("#d2", 15.2, 0.5);
+      tl.to("#d2", { color: "#f5d04a", duration: 0.01 }, 15.7);
+      // E
+      for (let f = Math.ceil(19.2 * FPS); f < 25 * FPS; f++) tl.set("#iE", { x: R(-2.5, 2.5), y: R(-2.5, 2.5) }, f / FPS);
+      tl.from("#lgE", { scale: 0.4, rotation: -10, opacity: 0, duration: 0.55, ease: step(0.55, "back.out(1.8)") }, 19.6);
+      lineIn("#e1", 20.4); lineIn("#e2", 21.3);
+      tl.from("#e3", { y: 60, opacity: 0, duration: 0.4, ease: step(0.4, "power3.out") }, 22.2);
+      [22.9, 23.5, 24.1].forEach((t) => tl.fromTo("#e3 span", { scale: 1.06 }, { scale: 1, duration: 0.42, ease: step(0.42, "power2.out"), immediateRender: false }, t));
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
