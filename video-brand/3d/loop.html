@@ -1,0 +1,81 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
+@font-face{font-family:"Inter Tight";font-weight:800;src:url(inter-tight-latin-800-normal.woff2)}
+@font-face{font-family:"Inter Tight";font-weight:900;src:url(inter-tight-latin-900-normal.woff2)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;font-family:"Inter Tight",sans-serif;
+ background:linear-gradient(165deg,#b9b4f5 0%,#a7b8f7 38%,#8fc2f2 70%,#c9b6f2 100%)}
+canvas{position:absolute;inset:0;z-index:0}
+.h,.k,.bub,.logo,svg.doodle{z-index:2}
+.h{position:absolute;left:80px;top:220px;font-weight:900;font-size:120px;line-height:.95;letter-spacing:-.04em;color:#fff;text-shadow:0 6px 40px rgba(70,60,160,.25)}
+.k{position:absolute;left:84px;top:170px;font-weight:800;font-size:28px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.bub{position:absolute;display:flex;align-items:center;gap:14px;padding:16px 26px;border-radius:999px;background:rgba(255,255,255,.92);color:#2b2a52;font-weight:800;font-size:30px;box-shadow:0 14px 30px rgba(60,50,150,.25)}
+.dot{width:38px;height:38px;border-radius:50%}
+svg.doodle{position:absolute;inset:0}
+.logo{position:absolute;left:80px;bottom:130px;display:flex;align-items:center;gap:20px;padding:22px 34px;border-radius:26px;background:rgba(255,255,255,.75);backdrop-filter:blur(8px)}
+</style><script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script></head><body>
+<div class="k">fast.site — Unser Leitgedanke</div>
+<div class="h">Behalte,<br>was funktioniert.</div>
+<canvas id="c" width="1080" height="1920"></canvas>
+<svg class="doodle" viewBox="0 0 1080 1920" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M150 1300 C 70 1150, 210 1020, 300 1090 S 330 1260, 220 1230 S 250 990, 450 930"/>
+ <path d="M436 915 l 34 4 l -12 32"/>
+ <path d="M960 1720 C 1030 1620, 980 1540, 905 1565 S 880 1660, 950 1645 S 1050 1540, 1000 1440"/>
+ <path d="M985 1455 l 16 -30 l 22 28"/>
+</svg>
+<div class="bub" style="left:470px;top:880px"><div class="dot" style="background:linear-gradient(135deg,#3e71b6,#0c9958)"></div>Dein Hosting bleibt ✓</div>
+<div class="bub" style="left:110px;top:1560px"><div class="dot" style="background:linear-gradient(135deg,#df482b,#fbb419)"></div>Nur schneller ⚡</div>
+<div class="logo"><img src="icon.svg" style="width:84px;height:84px"><img src="wordmark.svg" style="height:62px"></div>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from './RoomEnvironment.js';
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+r.setSize(1080, 1920, false); r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.0; r.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture; scene.environmentIntensity = 0.9;
+const cam = new THREE.PerspectiveCamera(30, 1080 / 1920, 0.1, 100); cam.position.set(0, 0, 34); cam.lookAt(0, 0, 0);
+scene.add(new THREE.HemisphereLight(0xf3eaff, 0x8fa6ff, 1.2));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(5, 8, 10); scene.add(key);
+
+const tex = await new THREE.TextureLoader().loadAsync('site_hero.png'); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+// gebogene Seite: Plane um einen Zylinder gewickelt
+function page(w, h, bend, mat) {
+  const g = new THREE.PlaneGeometry(w, h, 64, 1), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) { const x = p.getX(i), a = x / bend; p.setX(i, Math.sin(a) * bend); p.setZ(i, (Math.cos(a) - 1) * bend); }
+  g.computeVertexNormals(); return new THREE.Mesh(g, mat);
+}
+const pal = [0xb8a6ff, 0x9fc3ff, 0xffb3e1, 0xa9e7ff, 0xc9b5ff];
+const fan = new THREE.Group();
+for (let i = 0; i < 9; i++) {
+  const front = i === 8;
+  const mat = front ? new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.35, clearcoat: 1, side: THREE.DoubleSide })
+                    : new THREE.MeshPhysicalMaterial({ color: pal[i % pal.length], roughness: 0.25, iridescence: 1, iridescenceIOR: 1.35, iridescenceThicknessRange: [200, 600], clearcoat: 1, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
+  const m = front ? page(5.2, 3.65, 9, mat) : page(3.4, 2.4, 3.5 + i * 0.3, mat);
+  if (front) { m.position.set(0.5, -2.6, 2.4); m.rotation.set(0.12, -0.32, 0.04); }
+  else { m.position.set(-3.6 + i * 0.95, -0.6 + 1.1 * Math.sin(i * 0.9), -1.5 + i * 0.25); m.rotation.set(0.2, -1.0 + i * 0.22, -0.35 + 0.08 * i); }
+  fan.add(m);
+}
+fan.position.set(0, -0.6, 0); scene.add(fan);
+
+// schillernde 3D-Chevrons (Logo)
+function arm(len, w, d, color) {
+  const s = new THREE.Shape(), rr = w / 2; s.absarc(0, 0, rr, Math.PI / 2, Math.PI * 1.5, false); s.lineTo(len, -rr); s.absarc(len, 0, rr, -Math.PI / 2, Math.PI / 2, false); s.lineTo(0, rr);
+  const g = new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: true, bevelThickness: 0.14, bevelSize: 0.12, bevelSegments: 10, curveSegments: 32 }); g.translate(0, 0, -d / 2);
+  return new THREE.Mesh(g, new THREE.MeshPhysicalMaterial({ color, roughness: 0.15, iridescence: 0.6, iridescenceIOR: 1.4, clearcoat: 1, clearcoatRoughness: 0.05 }));
+}
+const logo = new THREE.Group();
+[[0x3e71b6, 0x0c9958, 0.75], [0xdf482b, 0xfbb419, -0.4]].forEach(([a, b, y]) => { const l = arm(1.7, 0.6, 0.6, a); l.rotation.z = Math.PI * 1.25; l.position.y = y; const q = arm(1.7, 0.6, 0.6, b); q.rotation.z = -Math.PI / 4; q.position.set(0, y, 0.02); logo.add(l, q); });
+logo.position.set(2.3, 3.1, 1); logo.scale.setScalar(0.95); logo.rotation.set(-0.2, -0.22, 0.05); scene.add(logo);
+
+// weiche Pastell-Formen
+const clay = (c) => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.45, sheen: 1, sheenColor: new THREE.Color(0xffffff), iridescence: 0.4, clearcoat: 0.5 });
+const glass = new THREE.MeshPhysicalMaterial({ color: 0xdfe8ff, roughness: 0.05, transmission: 1, thickness: 0.8, ior: 1.4, iridescence: 0.7 });
+const add = (geo, mat, x, y, z, rx = 0, ry = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.set(rx, ry, 0); scene.add(m); };
+add(new THREE.SphereGeometry(0.9, 64, 64), clay(0xc6b3ff), -3.4, 2.3, -1);
+add(new THREE.TorusGeometry(0.6, 0.26, 48, 96), clay(0xffb5dd), 3.4, -5.6, 1, 1.0, 0.4);
+add(new THREE.TorusGeometry(0.75, 0.26, 48, 96), glass, -3.3, -5.0, 2, 0.4, -0.6);
+add(new THREE.SphereGeometry(0.4, 48, 48), clay(0x9fd2ff), 4.0, -0.4, 3);
+add(new THREE.CapsuleGeometry(0.3, 1.0, 16, 32), clay(0xb0c4ff), -4.0, -3.0, 2.5, 0.3, 0.2);
+add(new THREE.SphereGeometry(0.2, 32, 32), clay(0xffffff), 1.0, -6.6, 2);
+r.render(scene, cam);
+window.__done = true;
+</script></body></html>
