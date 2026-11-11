@@ -82,7 +82,7 @@ The same doodle character as an adult with full beard standing upright and calm,
 
 ---
 
-## Story-Objekte (je 1:1, transparent)
+## Story-Objekte (je 1:1, weißer Hintergrund)
 
 **G20 – Flughafen statt Schwimmbad**
 ```
