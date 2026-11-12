@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Display"; font-weight: 500; src: url(assets/fonts/InterDisplay-Medium.otf); }
+      @font-face { font-family: "Display"; font-weight: 600; src: url(assets/fonts/InterDisplay-SemiBold.otf); }
+      @font-face { font-family: "Display"; font-weight: 700; src: url(assets/fonts/InterDisplay-Bold.otf); }
+      @font-face { font-family: "Text"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      #logo { position: absolute; inset: 0; width: 1920px; height: 1080px; mix-blend-mode: screen; transform-origin: 968px 513px; }
+      .trail { position: absolute; height: 6px; border-radius: 6px; transform-origin: 100% 50%; }
+      #brand { position: absolute; left: 0; width: 1920px; top: 330px; text-align: center; font: 700 230px/1 "Display", sans-serif; letter-spacing: -0.055em; white-space: nowrap; }
+      #brand .s { color: #86868b; }
+      #slogan { position: absolute; left: 0; width: 1920px; top: 640px; text-align: center; font: 600 64px "Display", sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
+      #slogan .g { color: #86868b; }
+      #cta { position: absolute; left: 0; width: 1920px; top: 760px; text-align: center; font: 500 32px "Text", sans-serif; color: #a1a1a6; letter-spacing: 0.01em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6.5" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="6.5" data-volume="1"></audio>
+
+      <!-- the turn (generated clip, retimed) -->
+      <video id="turn" class="clip" src="assets/clips/turn.mp4" muted playsinline data-start="0" data-duration="1.9" data-media-start="0" data-track-index="1"></video>
+
+      <!-- shoot-out + typography -->
+      <div id="stage" class="clip" data-start="1.9" data-duration="4.6" data-track-index="2">
+        <div id="brand"><span id="bw">fast<span class="s">.site</span></span></div>
+        <div id="slogan"><span id="sl">Make your website faster. <span class="g">Keep your hosting.</span></span></div>
+        <div id="cta">Try it free for 7 days</div>
+        <div class="trail" id="t0" style="background:#3e71b6"></div>
+        <div class="trail" id="t1" style="background:#0c9958"></div>
+        <div class="trail" id="t2" style="background:#df482b"></div>
+        <div class="trail" id="t3" style="background:#fbb419"></div>
+        <img id="logo" src="assets/clips/last.png" />
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const S = 1.9;               // stage start (logo now points right)
+      const FIRE = S + 0.3;         // shoot-out moment
+
+      // anticipation: tiny pull back, then fire to the right with stretch + blur
+      tl.fromTo("#logo", { x: 0, scaleX: 1, filter: "blur(0px)" }, { x: -46, scaleX: 0.97, duration: 0.3, ease: "power2.out" }, S);
+      tl.to("#logo", { x: 2300, scaleX: 1.9, filter: "blur(10px)", duration: 0.34, ease: "power4.in" }, FIRE);
+
+      tl.set("#logo", { autoAlpha: 0 }, FIRE + 0.36);
+      // colour trails left behind (thin, crisp, no glow): one per chevron bar
+      const trails = [["#t0", 425], ["#t2", 455], ["#t3", 612], ["#t1", 642]];
+      trails.forEach(([id, y], i) => {
+        tl.set(id, { left: 960, top: y, width: 1600, transformOrigin: "0% 50%", scaleX: 0, opacity: 0 }, 0);
+        tl.fromTo(id, { scaleX: 0, x: 0, opacity: 1 }, { scaleX: 1, duration: 0.34, ease: "power4.in", immediateRender: false }, FIRE + i * 0.015);
+        tl.to(id, { x: 1200, scaleX: 0.15, opacity: 0, duration: 0.4, ease: "power2.in" }, FIRE + 0.32 + i * 0.02);
+      });
+
+      // brand name pulled in from the left in the logo's slipstream
+      tl.fromTo("#bw", { x: -1700, skewX: -28, scaleX: 1.5, filter: "blur(14px)", opacity: 0 },
+        { x: 0, skewX: 0, scaleX: 1, filter: "blur(0px)", opacity: 1, duration: 0.95, ease: "expo.out" }, FIRE + 0.12);
+      tl.set("#bw", { display: "inline-block", transformOrigin: "100% 50%" }, 0);
+      // slogan follows a beat later, same direction, softer
+      tl.fromTo("#sl", { x: -900, skewX: -18, filter: "blur(8px)", opacity: 0 },
+        { x: 0, skewX: 0, filter: "blur(0px)", opacity: 1, duration: 0.9, ease: "expo.out" }, FIRE + 0.55);
+      tl.set("#sl", { display: "inline-block" }, 0);
+      tl.fromTo("#cta", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, FIRE + 1.05);
+      // gentle settle push
+      tl.fromTo(["#brand", "#slogan", "#cta"], { scale: 1 }, { scale: 1.03, duration: 4.0, ease: "none" }, FIRE + 0.2);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
