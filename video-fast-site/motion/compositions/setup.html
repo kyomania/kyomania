@@ -1,0 +1,70 @@
+<template>
+  <style>
+    
+@font-face { font-family: 'Google Sans Flex'; src: url('assets/fonts/google-sans-flex-latin-v22.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Bricolage Grotesque'; src: url('assets/fonts/bricolage-grotesque-latin-v9.woff2') format('woff2'); font-weight: 200 800; }
+
+    #root { position: absolute; inset: 0; background: #ffffff; overflow: hidden; font-family: 'Google Sans Flex', sans-serif; color: #101827; }
+    .abs { position: absolute; }
+    .eyebrow { font-family: 'Google Sans Flex'; font-weight: 600; font-size: 30px; letter-spacing: 0.14em; color: #3158EB; text-transform: uppercase; }
+    .h { font-family: 'Bricolage Grotesque'; font-weight: 600; letter-spacing: -0.03em; line-height: 1.02; }
+    
+    .lockup { position: absolute; inset: 0; transform: scale(0.93); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+    .lockup .mark { width: 300px; height: 300px; overflow: visible; }
+    .lockup .word { font-family: 'Google Sans Flex'; font-weight: 600; font-size: 150px; color: #101827; letter-spacing: -0.02em; line-height: 1; }
+
+    #s-eb { left: 0; right: 0; top: 260px; text-align: center; }
+    #s-h { left: 0; right: 0; top: 310px; text-align: center; font-size: 84px; }
+    #s-form { left: 460px; top: 500px; width: 1000px; height: 120px; border-radius: 26px; border: 3px solid #E2E8F0; background: #fff; display: flex; align-items: center; padding: 0 14px 0 40px; box-shadow: 0 20px 60px rgba(16,24,39,.10); }
+    #s-in { flex: 1; font-size: 44px; font-weight: 500; color: #101827; white-space: nowrap; overflow: hidden; }
+    #s-btn { height: 90px; padding: 0 40px; border-radius: 18px; background: #3158EB; color: #fff; font-size: 34px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+    #s-lock { opacity: 0; }
+    #s-ok { left: 0; right: 0; top: 660px; text-align: center; font-size: 34px; font-weight: 700; color: #047844; }
+    #s-pl { left: 0; right: 0; top: 770px; display: flex; justify-content: center; gap: 18px; }
+    .pl { padding: 14px 26px; border-radius: 999px; background: #F7F7F8; border: 2px solid #E2E8F0; font-size: 28px; font-weight: 600; }
+    #s-cta { left: 0; right: 0; top: 900px; text-align: center; font-size: 40px; font-weight: 700; color: #3158EB; }
+
+  </style>
+  <div id="root" data-composition-id="setup" data-width="1920" data-height="1080">
+    <div id="s-eb" class="abs eyebrow">Einrichtung</div>
+    <div id="s-h" class="abs h">Domain verbinden. Fertig.</div>
+    <div id="s-form" class="abs"><div id="s-in"></div><div id="s-btn">Verbinden ↗</div></div>
+    <div id="s-ok" class="abs">✓ Beschleunigung aktiv</div>
+    <div id="s-pl" class="abs"><span class="pl">WordPress</span><span class="pl">WooCommerce</span><span class="pl">Shopware</span><span class="pl">Shopify</span><span class="pl">Magento</span><span class="pl">TYPO3</span></div>
+    <div id="s-cta" class="abs">7 Tage kostenlos testen · keine Kreditkarte</div>
+    <div id="s-lock" class="lockup"><svg class="mark" viewBox="-40 -40 280 280" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0 0)">
+      <g id="sm-ur" class="arm"><path fill="#0c9958" d="M113.62,11.9l64.41,64.41c6.35,6.35,7.36,16.03,2.98,23.44-.17.27-.33.54-.51.8-.1.18-.23.36-.36.54-.03.03-.03.05-.05.08-.18.26-.39.51-.58.76-.46.59-.96,1.14-1.48,1.66-.23.23-.46.46-.71.68-.5.45-1,.85-1.52,1.23-1.31.95-2.7,1.72-4.14,2.32-.59.23-1.18.44-1.78.62-.9.26-1.8.46-2.73.59-.6.09-1.22.14-1.84.17-.31.03-.62.03-.93.03s-.62,0-.93-.03c-.62-.03-1.23-.08-1.84-.17-.76-.12-1.53-.27-2.28-.48-.37-.09-.75-.21-1.12-.35-.37-.12-.73-.24-1.09-.4-.58-.22-1.16-.49-1.71-.78-.55-.3-1.11-.62-1.63-.96-.31-.21-.62-.41-.9-.62-.49-.36-.95-.75-1.42-1.16-.24-.22-.49-.46-.72-.69l-38.17-38.17c-6.96-6.96-18.25-6.96-25.21,0l-38.15,38.15c-6.35,6.35-16.03,7.36-23.44,2.98-.17-.12-.33-.21-.5-.32-.27-.14-.53-.32-.76-.5-.32-.22-.62-.44-.91-.68-.59-.46-1.14-.96-1.66-1.48-3.76-3.76-5.66-8.7-5.65-13.62,0-.31,0-.62.03-.93.03-.62.08-1.23.17-1.84.22-1.53.63-3.05,1.22-4.49.23-.59.49-1.16.8-1.72.28-.57.62-1.11.96-1.63.18-.28.37-.55.55-.81.39-.51.8-1.03,1.22-1.5.22-.24.46-.49.69-.72L86.35,11.9c.24-.24.48-.48.72-.69.49-.44.99-.84,1.5-1.22.31-.23.63-.45.95-.64.48-.32.99-.6,1.49-.87.55-.3,1.13-.57,1.71-.78h.01c.42-.18.84-.33,1.26-.48.42-.14.85-.26,1.27-.37.05,0,.09-.01.13-.03.41-.1.81-.19,1.21-.26.45-.06.89-.14,1.34-.18.04-.01.06-.01.09-.01.04-.01.06-.01.09-.01h.01s.01,0,.01,0c.31-.03.6-.04.9-.05.31-.03.62-.03.93-.03.15,0,.32.01.48.01.23,0,.45.01.67.03.04-.01.06-.01.06.01.19-.01.39,0,.54.03.17.01.35.04.5.06.08,0,.17.01.23.03.41.03.81.09,1.21.18.6.12,1.2.27,1.8.44.3.09.59.18.89.3.01-.01.03,0,.04.01,0,0,.01-.01.03,0h.01s.04.03.05.04c.1.03.22.06.31.1.15.05.3.12.44.18.08.03.15.05.23.08.01.01.04.01.06.04.19.06.39.15.58.24.55.27,1.12.55,1.67.87.54.33,1.08.69,1.61,1.07.35.24.71.53,1.03.82.04.01.05.03.08.05l.05.05c.37.32.72.64,1.07.99Z"/><rect fill="#0c9958" x="67.38" y="38.45" width="129.64" height="38.56" rx="19.28" transform="translate(79.54 -76.57) rotate(45)"/><path fill="#047844" d="M119.15,27.75l-.38,2.19-6.17,35.46c-6.95-6.95-18.25-6.95-25.21,0l-1.31,1.31-5.36-1.31,16.1-15.78,22.34-21.88Z"/></g>
+      <g id="sm-ul" class="arm"><rect fill="#3e71b6" x="2.98" y="38.45" width="129.64" height="38.56" rx="19.28" transform="translate(-20.97 64.85) rotate(-45)"/></g>
+    </g>
+    <g transform="translate(0 84.53)">
+      <g id="sm-lr" class="arm"><path fill="#fbb419" d="M113.62,11.9l64.41,64.41c6.35,6.35,7.36,16.03,2.98,23.44-.17.27-.33.54-.51.8-.1.18-.23.36-.36.54-.03.03-.03.05-.05.08-.18.26-.39.51-.58.76-.46.59-.96,1.14-1.48,1.66-.23.23-.46.46-.71.68-.5.45-1,.85-1.52,1.23-1.31.95-2.7,1.72-4.14,2.32-.59.23-1.18.44-1.78.62-.9.26-1.8.46-2.73.59-.6.09-1.22.14-1.84.17-.31.03-.62.03-.93.03s-.62,0-.93-.03c-.62-.03-1.23-.08-1.84-.17-.76-.12-1.53-.27-2.28-.48-.37-.09-.75-.21-1.12-.35-.37-.12-.73-.24-1.09-.4-.58-.22-1.16-.49-1.71-.78-.55-.3-1.11-.62-1.63-.96-.31-.21-.62-.41-.9-.62-.49-.36-.95-.75-1.42-1.16-.24-.22-.49-.46-.72-.69l-38.17-38.17c-6.96-6.96-18.25-6.96-25.21,0l-38.15,38.15c-6.35,6.35-16.03,7.36-23.44,2.98-.17-.12-.33-.21-.5-.32-.27-.14-.53-.32-.76-.5-.32-.22-.62-.44-.91-.68-.59-.46-1.14-.96-1.66-1.48-3.76-3.76-5.66-8.7-5.65-13.62,0-.31,0-.62.03-.93.03-.62.08-1.23.17-1.84.22-1.53.63-3.05,1.22-4.49.23-.59.49-1.16.8-1.72.28-.57.62-1.11.96-1.63.18-.28.37-.55.55-.81.39-.51.8-1.03,1.22-1.5.22-.24.46-.49.69-.72L86.35,11.9c.24-.24.48-.48.72-.69.49-.44.99-.84,1.5-1.22.31-.23.63-.45.95-.64.48-.32.99-.6,1.49-.87.55-.3,1.13-.57,1.71-.78h.01c.42-.18.84-.33,1.26-.48.42-.14.85-.26,1.27-.37.05,0,.09-.01.13-.03.41-.1.81-.19,1.21-.26.45-.06.89-.14,1.34-.18.04-.01.06-.01.09-.01.04-.01.06-.01.09-.01h.01s.01,0,.01,0c.31-.03.6-.04.9-.05.31-.03.62-.03.93-.03.15,0,.32.01.48.01.23,0,.45.01.67.03.04-.01.06-.01.06.01.19-.01.39,0,.54.03.17.01.35.04.5.06.08,0,.17.01.23.03.41.03.81.09,1.21.18.6.12,1.2.27,1.8.44.3.09.59.18.89.3.01-.01.03,0,.04.01,0,0,.01-.01.03,0h.01s.04.03.05.04c.1.03.22.06.31.1.15.05.3.12.44.18.08.03.15.05.23.08.01.01.04.01.06.04.19.06.39.15.58.24.55.27,1.12.55,1.67.87.54.33,1.08.69,1.61,1.07.35.24.71.53,1.03.82.04.01.05.03.08.05l.05.05c.37.32.72.64,1.07.99Z"/><rect fill="#fbb419" x="67.38" y="38.45" width="129.64" height="38.56" rx="19.28" transform="translate(79.54 -76.57) rotate(45)"/><path fill="#d99e28" d="M119.15,27.75l-.38,2.19-6.17,35.46c-6.95-6.95-18.25-6.95-25.21,0l-1.31,1.31-5.36-1.31,16.1-15.78,22.34-21.88Z"/></g>
+      <g id="sm-ll" class="arm"><rect fill="#df482b" x="2.98" y="38.45" width="129.64" height="38.56" rx="19.28" transform="translate(-20.97 64.85) rotate(-45)"/></g>
+    </g>
+  </svg><div id="s-word" class="word">Fast.site</div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    const domain = "deinedomain.de";
+        tl.fromTo("#s-eb", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.0);
+    tl.fromTo("#s-h", { opacity: 0, y: -40, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "expo.out" }, 0.05);
+    tl.fromTo("#s-form", { opacity: 0, scaleX: 0.3 }, { opacity: 1, scaleX: 1, duration: 0.45, ease: "expo.out" }, 0.2);
+    const typed = { n: 0 };
+    tl.fromTo(typed, { n: 0 }, { n: domain.length, duration: 0.6, ease: "none", onUpdate: () => {
+      document.querySelector("#s-in").textContent = domain.slice(0, Math.round(typed.n));
+    } }, 0.55);
+    tl.fromTo("#s-btn", { scale: 1 }, { scale: 0.92, duration: 0.08, ease: "power2.in" }, 1.25);
+    tl.to("#s-btn", { scale: 1, backgroundColor: "#0c9958", duration: 0.25, ease: "back.out(3)" }, 1.33);
+    tl.fromTo("#s-ok", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 1.4);
+    tl.fromTo(".pl", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.06, ease: "expo.out" }, 1.55);
+    tl.fromTo("#s-cta", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 1.8);
+    // everything collapses into the centre and the lockup lands on exactly the phone-screen frame
+    tl.to("#s-eb, #s-h, #s-form, #s-ok, #s-pl, #s-cta", { scale: 0.2, opacity: 0, filter: "blur(12px)", duration: 0.35, ease: "power3.in", transformOrigin: "50% 50%" }, 3.7);
+    tl.fromTo("#s-lock", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 4.0);
+    tl.fromTo("#sm-ur, #sm-ul, #sm-lr, #sm-ll", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(1.6)", stagger: 0.04 }, 4.0);
+    tl.fromTo("#s-word", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 4.15);
+
+    window.__timelines["setup"] = tl;
+  </script>
+</template>

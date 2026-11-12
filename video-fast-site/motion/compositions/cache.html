@@ -1,0 +1,66 @@
+<template>
+  <style>
+    
+@font-face { font-family: 'Google Sans Flex'; src: url('assets/fonts/google-sans-flex-latin-v22.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Bricolage Grotesque'; src: url('assets/fonts/bricolage-grotesque-latin-v9.woff2') format('woff2'); font-weight: 200 800; }
+
+    #root { position: absolute; inset: 0; background: #ffffff; overflow: hidden; font-family: 'Google Sans Flex', sans-serif; color: #101827; }
+    .abs { position: absolute; }
+    .eyebrow { font-family: 'Google Sans Flex'; font-weight: 600; font-size: 30px; letter-spacing: 0.14em; color: #3158EB; text-transform: uppercase; }
+    .h { font-family: 'Bricolage Grotesque'; font-weight: 600; letter-spacing: -0.03em; line-height: 1.02; }
+    
+    #c-eb { left: 140px; top: 120px; }
+    #c-h { left: 140px; top: 170px; font-size: 76px; }
+    #c-h em { font-style: normal; color: #3158EB; }
+    #c-srv { left: 280px; top: 510px; width: 280px; height: 180px; border-radius: 22px; background: #F7F7F8; border: 2px solid #E2E8F0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 26px; font-weight: 600; }
+    #c-srv small { font-size: 28px; color: #73737F; font-weight: 500; }
+    .node { width: 52px; height: 52px; }
+    .node i { position: absolute; inset: 0; border-radius: 50%; background: #0c9958; box-shadow: 0 0 0 10px rgba(12,153,88,.15); }
+    .node span { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 28px; font-weight: 600; color: #101827; }
+    .vis { width: 72px; height: 72px; border-radius: 50%; background: #EEF2FF; border: 3px solid #3158EB; }
+    .vis::after { content: ""; position: absolute; left: 22px; top: 14px; width: 22px; height: 22px; border-radius: 50%; background: #3158EB; box-shadow: 0 26px 0 6px #3158EB; clip-path: inset(0 -20px -12px -20px); }
+    #c-svg { left: 0; top: 0; width: 1920px; height: 1080px; }
+    #c-svg line { stroke-width: 3; fill: none; }
+    #c-svg .up line { stroke: #CBD5E1; stroke-dasharray: 1; }
+    #c-svg .down line { stroke: #0c9958; stroke-dasharray: 1; opacity: .55; }
+    #c-svg circle { fill: #0c9958; opacity: 0; }
+    #c-tag { left: 280px; top: 860px; padding: 16px 28px; border-radius: 999px; background: #ECFDF5; color: #047844; font-size: 30px; font-weight: 600; }
+
+  </style>
+  <div id="root" data-composition-id="cache" data-width="1920" data-height="1080">
+    <div id="c-eb" class="abs eyebrow">Edge-Caching &amp; CDN</div>
+    <div id="c-h" class="abs h">Deine Seiten kommen <em>von nebenan.</em></div>
+    <svg id="c-svg" class="abs" viewBox="0 0 1920 1080"><g class="up"><line id="cl-0" x1="560" y1="600" x2="900" y2="470" pathLength="1"/><line id="cl-1" x1="560" y1="600" x2="1120" y2="400" pathLength="1"/><line id="cl-2" x1="560" y1="600" x2="1330" y2="500" pathLength="1"/><line id="cl-3" x1="560" y1="600" x2="1010" y2="680" pathLength="1"/></g><g class="down"><line id="cvl-0" x1="900" y1="470" x2="1640" y2="400" pathLength="1"/><line id="cvl-1" x1="1330" y1="500" x2="1720" y2="560" pathLength="1"/><line id="cvl-2" x1="1120" y1="400" x2="1660" y2="720" pathLength="1"/><line id="cvl-3" x1="1010" y1="680" x2="1740" y2="880" pathLength="1"/></g><circle id="cp-0" r="9" cx="0" cy="0"/><circle id="cp-1" r="9" cx="0" cy="0"/><circle id="cp-2" r="9" cx="0" cy="0"/><circle id="cp-3" r="9" cx="0" cy="0"/><circle id="cp-4" r="9" cx="0" cy="0"/><circle id="cp-5" r="9" cx="0" cy="0"/><circle id="cp-6" r="9" cx="0" cy="0"/><circle id="cp-7" r="9" cx="0" cy="0"/><circle id="cp-8" r="9" cx="0" cy="0"/><circle id="cp-9" r="9" cx="0" cy="0"/><circle id="cp-10" r="9" cx="0" cy="0"/><circle id="cp-11" r="9" cx="0" cy="0"/></svg>
+    <div id="c-srv" class="abs"><span>Dein Hosting</span><small>bleibt, wie es ist</small></div>
+    <div id="cn-0" class="abs node" style="left:874px;top:444px"><i></i><span>Nordamerika</span></div><div id="cn-1" class="abs node" style="left:1094px;top:374px"><i></i><span>Europa</span></div><div id="cn-2" class="abs node" style="left:1304px;top:474px"><i></i><span>Asien</span></div><div id="cn-3" class="abs node" style="left:984px;top:654px"><i></i><span>Südamerika</span></div><div id="cv-0" class="abs vis" style="left:1604px;top:364px">👤</div><div id="cv-1" class="abs vis" style="left:1684px;top:524px">👤</div><div id="cv-2" class="abs vis" style="left:1624px;top:684px">👤</div><div id="cv-3" class="abs vis" style="left:1704px;top:844px">👤</div>
+    <div id="c-tag" class="abs">Gecacht am Edge – nah am Besucher</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.fromTo("#c-eb", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 0.0);
+    tl.fromTo("#c-h", { opacity: 0, x: 120, filter: "blur(10px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out" }, 0.05);
+    tl.fromTo("#c-srv", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 0.35);
+    tl.fromTo("#c-svg .up line", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" }, 0.7);
+    tl.fromTo(".node", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.35, stagger: 0.08, ease: "back.out(2)" }, 1.0);
+    tl.fromTo(".vis", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.35, stagger: 0.07, ease: "expo.out" }, 1.4);
+    tl.fromTo("#c-svg .down line", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.35, stagger: 0.07, ease: "power2.out" }, 1.75);
+    
+    tl.fromTo("#cp-0", { attr: { cx: 900, cy: 470 }, opacity: 1 }, { attr: { cx: 1640, cy: 400 }, duration: 0.32, ease: "power2.in" }, 2.00);tl.to("#cp-0", { opacity: 0, duration: 0.05 }, 2.32);
+    tl.fromTo("#cp-1", { attr: { cx: 900, cy: 470 }, opacity: 1 }, { attr: { cx: 1640, cy: 400 }, duration: 0.32, ease: "power2.in" }, 2.38);tl.to("#cp-1", { opacity: 0, duration: 0.05 }, 2.70);
+    tl.fromTo("#cp-2", { attr: { cx: 900, cy: 470 }, opacity: 1 }, { attr: { cx: 1640, cy: 400 }, duration: 0.32, ease: "power2.in" }, 2.76);tl.to("#cp-2", { opacity: 0, duration: 0.05 }, 3.08);
+    tl.fromTo("#cp-3", { attr: { cx: 1330, cy: 500 }, opacity: 1 }, { attr: { cx: 1720, cy: 560 }, duration: 0.32, ease: "power2.in" }, 2.10);tl.to("#cp-3", { opacity: 0, duration: 0.05 }, 2.42);
+    tl.fromTo("#cp-4", { attr: { cx: 1330, cy: 500 }, opacity: 1 }, { attr: { cx: 1720, cy: 560 }, duration: 0.32, ease: "power2.in" }, 2.48);tl.to("#cp-4", { opacity: 0, duration: 0.05 }, 2.80);
+    tl.fromTo("#cp-5", { attr: { cx: 1330, cy: 500 }, opacity: 1 }, { attr: { cx: 1720, cy: 560 }, duration: 0.32, ease: "power2.in" }, 2.86);tl.to("#cp-5", { opacity: 0, duration: 0.05 }, 3.18);
+    tl.fromTo("#cp-6", { attr: { cx: 1120, cy: 400 }, opacity: 1 }, { attr: { cx: 1660, cy: 720 }, duration: 0.32, ease: "power2.in" }, 2.20);tl.to("#cp-6", { opacity: 0, duration: 0.05 }, 2.52);
+    tl.fromTo("#cp-7", { attr: { cx: 1120, cy: 400 }, opacity: 1 }, { attr: { cx: 1660, cy: 720 }, duration: 0.32, ease: "power2.in" }, 2.58);tl.to("#cp-7", { opacity: 0, duration: 0.05 }, 2.90);
+    tl.fromTo("#cp-8", { attr: { cx: 1120, cy: 400 }, opacity: 1 }, { attr: { cx: 1660, cy: 720 }, duration: 0.32, ease: "power2.in" }, 2.96);tl.to("#cp-8", { opacity: 0, duration: 0.05 }, 3.28);
+    tl.fromTo("#cp-9", { attr: { cx: 1010, cy: 680 }, opacity: 1 }, { attr: { cx: 1740, cy: 880 }, duration: 0.32, ease: "power2.in" }, 2.30);tl.to("#cp-9", { opacity: 0, duration: 0.05 }, 2.62);
+    tl.fromTo("#cp-10", { attr: { cx: 1010, cy: 680 }, opacity: 1 }, { attr: { cx: 1740, cy: 880 }, duration: 0.32, ease: "power2.in" }, 2.68);tl.to("#cp-10", { opacity: 0, duration: 0.05 }, 3.00);
+    tl.fromTo("#cp-11", { attr: { cx: 1010, cy: 680 }, opacity: 1 }, { attr: { cx: 1740, cy: 880 }, duration: 0.32, ease: "power2.in" }, 3.06);tl.to("#cp-11", { opacity: 0, duration: 0.05 }, 3.38);
+    tl.fromTo("#c-tag", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 1.9);
+    tl.to("#root > *", { y: -220, opacity: 0, filter: "blur(10px)", duration: 0.3, ease: "power3.in" }, 3.58);
+
+    window.__timelines["cache"] = tl;
+  </script>
+</template>

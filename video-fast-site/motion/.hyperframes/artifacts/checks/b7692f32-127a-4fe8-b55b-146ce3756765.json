@@ -1,0 +1,1349 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 40,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 0.84s and 1.05s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 0.94s and 1.05s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.04s and 1.05s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#dd-1\" for attr between 0.84s and 0.85s.",
+        "selector": "#dd-1",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 0.94s and 1.14s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.04s and 1.14s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.13s and 1.14s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.04s and 1.24s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.13s and 1.24s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.23s and 1.24s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.13s and 1.34s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.23s and 1.34s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.32s and 1.34s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.23s and 1.43s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.32s and 1.43s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.42s and 1.43s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.32s and 1.53s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.42s and 1.53s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.51s and 1.53s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.42s and 1.62s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.51s and 1.62s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.60s and 1.62s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.51s and 1.72s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.60s and 1.72s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.70s and 1.72s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.60s and 1.81s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.70s and 1.81s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.79s and 1.81s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.70s and 1.90s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.79s and 1.90s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.89s and 1.90s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.79s and 2.00s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.89s and 2.00s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.99s and 2.00s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.89s and 2.09s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.99s and 2.09s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#d-ring\" for scale, opacity between 1.99s and 2.19s.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "14 tl.fromTo() calls target \"#d-ring\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#d-ring",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to every fromTo except the earliest-positioned one (at 0.75s), so pre-first-tween seeks keep its \"from\" values. A hiding `tl.set(..., 0)` baseline trips gsap_timeline_set_initial_hide, and a `gsap.set` authored before the fromTo calls is overwritten by them."
+      },
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"#d-svg circle\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "#d-svg circle",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/ddos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      },
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"#s-lock\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "#s-lock",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/kyomania/video-fast-site/motion/compositions/setup.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      }
+    ],
+    "filesScanned": 7
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"a-music\" is 40.05s but its slot (data-duration) is 40.60s — the slot is shortened to the media length when rendered. Set data-duration to ~40.05s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "43.6",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      }
+    ]
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 1,
+    "findings": [
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 26.644,
+        "selector": "#dd-2",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": 1044.65,
+          "top": -136.51,
+          "right": 1070.65,
+          "bottom": -110.51,
+          "width": 26,
+          "height": 26
+        },
+        "containerSelector": "#d-svg",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "top": 136.51
+        },
+        "dataAttributes": {
+          "data-svg-origin": "1047 -150"
+        },
+        "sourceFile": "compositions/ddos.html",
+        "bbox": {
+          "x": 1044.65,
+          "y": -136.51,
+          "width": 26,
+          "height": 26
+        },
+        "firstSeen": 26.644,
+        "lastSeen": 26.644,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          26.644
+        ]
+      }
+    ],
+    "duration": 43.6,
+    "samples": [
+      2.422,
+      7.267,
+      12.111,
+      16.956,
+      21.8,
+      26.644,
+      31.489,
+      36.333,
+      41.178
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 1,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      2.422,
+      12.111,
+      21.8,
+      31.489,
+      41.178
+    ],
+    "checked": 17,
+    "passed": 17
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 8,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 8 text elements stay under it for 0.5 s or more, the smallest \"Europa\" at 13 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Europa",
+        "selector": "#cn-1 > span:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/cache.html",
+        "bbox": {
+          "x": 1037.19,
+          "y": 270.74,
+          "width": 45.62,
+          "height": 16.47
+        },
+        "time": 18.864,
+        "times": [
+          17.865,
+          18.24,
+          18.24,
+          18.24,
+          18.864,
+          18.864,
+          18.989,
+          19.114
+        ],
+        "fontPx": 13.42,
+        "floorPx": 28,
+        "seconds": 2.749,
+        "elements": [
+          {
+            "selector": "#cn-1 > span:nth-of-type(1)",
+            "text": "Europa",
+            "fontPx": 13.42,
+            "time": 18.864,
+            "seconds": 2.749
+          },
+          {
+            "selector": "#c-srv > small:nth-of-type(1)",
+            "text": "bleibt, wie es ist",
+            "fontPx": 20,
+            "time": 18.24,
+            "seconds": 3.373
+          },
+          {
+            "selector": "#cn-2 > span:nth-of-type(1)",
+            "text": "Asien",
+            "fontPx": 21.09,
+            "time": 18.989,
+            "seconds": 2.624
+          },
+          {
+            "selector": "#cn-0 > span:nth-of-type(1)",
+            "text": "Nordamerika",
+            "fontPx": 22,
+            "time": 18.864,
+            "seconds": 2.749
+          },
+          {
+            "selector": "#cn-3 > span:nth-of-type(1)",
+            "text": "Südamerika",
+            "fontPx": 22,
+            "time": 19.114,
+            "seconds": 2.499
+          },
+          {
+            "selector": "#c-eb",
+            "text": "Edge-Caching & CDN",
+            "fontPx": 26,
+            "time": 17.865,
+            "seconds": 3.748
+          },
+          {
+            "selector": "#c-srv",
+            "text": "🖥️",
+            "fontPx": 26,
+            "time": 18.24,
+            "seconds": 3.373
+          },
+          {
+            "selector": "#c-srv > span:nth-of-type(1)",
+            "text": "Dein Hosting",
+            "fontPx": 26,
+            "time": 18.24,
+            "seconds": 3.373
+          }
+        ]
+      },
+      {
+        "code": "line_unread",
+        "severity": "warning",
+        "message": "\"Europa\" (1 word) is on screen 0.06 s (±0.01 s), under its 0.40 s floor: hold it about 0.5 s + 0.3 s a word (0.80 s here) before it leaves or changes; see references/motion.md.",
+        "text": "Europa",
+        "selector": "#cn-1 > span:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/cache.html",
+        "bbox": {
+          "x": 1017.71,
+          "y": 288.44,
+          "width": 84.57999999999993,
+          "height": 30.53000000000003
+        },
+        "time": 18.973,
+        "words": 1,
+        "seconds": 0.063,
+        "floorSeconds": 0.4,
+        "measured": [
+          {
+            "time": 18.614,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 18.739,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 18.864,
+            "opacity": 0.61,
+            "heightPx": 16
+          },
+          {
+            "time": 18.989,
+            "opacity": 1,
+            "heightPx": 31
+          },
+          {
+            "time": 19.114,
+            "opacity": 1,
+            "heightPx": 27
+          },
+          {
+            "time": 19.239,
+            "opacity": 1,
+            "heightPx": 27
+          },
+          {
+            "time": 19.364,
+            "opacity": 1,
+            "heightPx": 27
+          }
+        ]
+      },
+      {
+        "code": "line_unread",
+        "severity": "warning",
+        "message": "\"Gecacht am Edge – nah am Besucher\" (6 words) is on screen 1.16 s (±0.01 s), under its 1.72 s floor: hold it about 0.5 s + 0.3 s a word (2.30 s here) before it leaves or changes; see references/motion.md.",
+        "text": "Gecacht am Edge – nah am Besucher",
+        "selector": "#c-tag",
+        "dataAttributes": {},
+        "sourceFile": "compositions/cache.html",
+        "bbox": {
+          "x": 1208,
+          "y": 877.17,
+          "width": 528.97,
+          "height": 38
+        },
+        "time": 20.371,
+        "words": 6,
+        "seconds": 1.164,
+        "floorSeconds": 1.725,
+        "measured": [
+          {
+            "time": 20.113,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 20.238,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 20.363,
+            "opacity": 0.44,
+            "heightPx": 38
+          },
+          {
+            "time": 20.488,
+            "opacity": 0.95,
+            "heightPx": 38
+          },
+          {
+            "time": 20.613,
+            "opacity": 1,
+            "heightPx": 38
+          },
+          {
+            "time": 20.738,
+            "opacity": 1,
+            "heightPx": 38
+          },
+          {
+            "time": 20.863,
+            "opacity": 1,
+            "heightPx": 38
+          },
+          {
+            "time": 21.113,
+            "opacity": 1,
+            "heightPx": 38
+          },
+          {
+            "time": 21.238,
+            "opacity": 1,
+            "heightPx": 38
+          },
+          {
+            "time": 21.363,
+            "opacity": 1,
+            "heightPx": 38
+          },
+          {
+            "time": 21.488,
+            "opacity": 0.85,
+            "heightPx": 38
+          },
+          {
+            "time": 21.613,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 21.738,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 21.862,
+            "opacity": null,
+            "heightPx": null
+          }
+        ]
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 3 text elements stay under it for 0.5 s or more, the smallest \"Beispiel von fast.site: 1152×628-Foto...\" at 22 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Beispiel von fast.site: 1152×628-Foto als JPG und WebP. Ersparnis hängt von Bild und Qualität ab.",
+        "selector": "#i-note",
+        "dataAttributes": {},
+        "sourceFile": "compositions/images.html",
+        "bbox": {
+          "x": 140,
+          "y": 950,
+          "width": 942.38,
+          "height": 27
+        },
+        "time": 22.737,
+        "times": [
+          21.738,
+          22.487,
+          22.737
+        ],
+        "fontPx": 22,
+        "floorPx": 28,
+        "seconds": 3.123,
+        "elements": [
+          {
+            "selector": "#i-note",
+            "text": "Beispiel von fast.site: 1152×628-Foto als JPG und WebP. Ersparnis hängt von Bild und Qualität ab.",
+            "fontPx": 22,
+            "time": 22.737,
+            "seconds": 3.123
+          },
+          {
+            "selector": "#i-eb",
+            "text": "Bildoptimierung",
+            "fontPx": 26,
+            "time": 21.738,
+            "seconds": 4.122
+          },
+          {
+            "selector": "#i-fmt",
+            "text": "Original JPG",
+            "fontPx": 26,
+            "time": 22.487,
+            "seconds": 3.373
+          }
+        ]
+      },
+      {
+        "code": "line_unread",
+        "severity": "warning",
+        "message": "\"Dateigröße 198,2 KB −35 % · WebP\" (7 words) is on screen 1.83 s (±0.01 s), under its 1.95 s floor: hold it about 0.5 s + 0.3 s a word (2.60 s here) before it leaves or changes; see references/motion.md.",
+        "text": "Dateigröße 198,2 KB −35 % · WebP",
+        "selector": "#i-panel",
+        "dataAttributes": {},
+        "sourceFile": "compositions/images.html",
+        "bbox": {
+          "x": 1265.6,
+          "y": 673.12,
+          "width": 289.8299999999999,
+          "height": 57.75999999999999
+        },
+        "time": 24.002,
+        "words": 7,
+        "seconds": 1.835,
+        "floorSeconds": 1.95,
+        "measured": [
+          {
+            "time": 23.736,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 23.861,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 23.986,
+            "opacity": 0.2,
+            "heightPx": 38
+          },
+          {
+            "time": 24.111,
+            "opacity": 1,
+            "heightPx": 58
+          },
+          {
+            "time": 24.236,
+            "opacity": 1,
+            "heightPx": 58
+          },
+          {
+            "time": 24.361,
+            "opacity": 1,
+            "heightPx": 56
+          },
+          {
+            "time": 24.486,
+            "opacity": 1,
+            "heightPx": 56
+          },
+          {
+            "time": 25.36,
+            "opacity": 1,
+            "heightPx": 56
+          },
+          {
+            "time": 25.485,
+            "opacity": 1,
+            "heightPx": 56
+          },
+          {
+            "time": 25.61,
+            "opacity": 1,
+            "heightPx": 56
+          },
+          {
+            "time": 25.735,
+            "opacity": 0.93,
+            "heightPx": 56
+          },
+          {
+            "time": 25.86,
+            "opacity": 0.49,
+            "heightPx": 56
+          },
+          {
+            "time": 25.985,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 26.11,
+            "opacity": null,
+            "heightPx": null
+          }
+        ]
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and \"DDoS-Schutz\" renders at 26 px for 2.62 s: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "DDoS-Schutz",
+        "selector": "#d-eb",
+        "dataAttributes": {},
+        "sourceFile": "compositions/ddos.html",
+        "bbox": {
+          "x": 848.56,
+          "y": 110,
+          "width": 222.88,
+          "height": 32
+        },
+        "time": 25.985,
+        "times": [
+          25.985
+        ],
+        "fontPx": 25.61,
+        "floorPx": 28,
+        "seconds": 2.624,
+        "elements": [
+          {
+            "selector": "#d-eb",
+            "text": "DDoS-Schutz",
+            "fontPx": 25.61,
+            "time": 25.985,
+            "seconds": 2.624
+          }
+        ]
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and \"Einrichtung\" renders at 25 px for 3.87 s: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Einrichtung",
+        "selector": "#s-eb",
+        "dataAttributes": {},
+        "sourceFile": "compositions/setup.html",
+        "bbox": {
+          "x": 852.33,
+          "y": 200,
+          "width": 215.33,
+          "height": 32
+        },
+        "time": 28.734,
+        "times": [
+          28.734
+        ],
+        "fontPx": 24.93,
+        "floorPx": 28,
+        "seconds": 3.872,
+        "elements": [
+          {
+            "selector": "#s-eb",
+            "text": "Einrichtung",
+            "fontPx": 24.93,
+            "time": 28.734,
+            "seconds": 3.872
+          }
+        ]
+      },
+      {
+        "code": "line_unread",
+        "severity": "warning",
+        "message": "\"7 Tage kostenlos testen · keine Kreditkarte\" (6 words) is on screen 1.63 s (±0.01 s), under its 1.72 s floor: hold it about 0.5 s + 0.3 s a word (2.30 s here) before it leaves or changes; see references/motion.md.",
+        "text": "7 Tage kostenlos testen · keine Kreditkarte",
+        "selector": "#s-cta",
+        "dataAttributes": {},
+        "sourceFile": "compositions/setup.html",
+        "bbox": {
+          "x": 546.88,
+          "y": 860,
+          "width": 826.2500000000001,
+          "height": 50
+        },
+        "time": 30.974,
+        "words": 6,
+        "seconds": 1.632,
+        "floorSeconds": 1.725,
+        "measured": [
+          {
+            "time": 30.607,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 30.732,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 30.857,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 30.982,
+            "opacity": 0.63,
+            "heightPx": 50
+          },
+          {
+            "time": 31.107,
+            "opacity": 0.97,
+            "heightPx": 50
+          },
+          {
+            "time": 31.232,
+            "opacity": 1,
+            "heightPx": 50
+          },
+          {
+            "time": 31.357,
+            "opacity": 1,
+            "heightPx": 50
+          },
+          {
+            "time": 32.107,
+            "opacity": 1,
+            "heightPx": 50
+          },
+          {
+            "time": 32.232,
+            "opacity": 1,
+            "heightPx": 50
+          },
+          {
+            "time": 32.356,
+            "opacity": 1,
+            "heightPx": 50
+          },
+          {
+            "time": 32.481,
+            "opacity": 0.95,
+            "heightPx": 48
+          },
+          {
+            "time": 32.606,
+            "opacity": 0.46,
+            "heightPx": 28
+          },
+          {
+            "time": 32.731,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 32.856,
+            "opacity": null,
+            "heightPx": null
+          }
+        ]
+      }
+    ],
+    "enabled": true,
+    "step": 0.125,
+    "samples": 349
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "audio_clip_silent",
+        "severity": "warning",
+        "message": "assets/audio/sfx_whoosh.mp3 is silent for the whole part this clip plays (0-2.06 s of the file).",
+        "selector": "#a-whoosh",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 33.2,
+        "fixHint": "Check the file has sound there, or move data-media-start to where it does."
+      }
+    ]
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}
