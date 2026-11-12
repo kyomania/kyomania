@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Display"; font-weight: 400; src: url(assets/fonts/InterDisplay-Regular.otf); }
+      @font-face { font-family: "Display"; font-weight: 500; src: url(assets/fonts/InterDisplay-Medium.otf); }
+      @font-face { font-family: "Display"; font-weight: 600; src: url(assets/fonts/InterDisplay-SemiBold.otf); }
+      @font-face { font-family: "Display"; font-weight: 700; src: url(assets/fonts/InterDisplay-Bold.otf); }
+      @font-face { font-family: "Text"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
+      @font-face { font-family: "Text"; font-weight: 600; src: url(assets/fonts/Inter-SemiBold.otf); }
+      @font-face { font-family: "Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2); }
+      :root { --ink: #1d1d1f; --grey: #86868b; --grey2: #6e6e73; --blue: #3e71b6; --green: #0c9958; --red: #df482b; --yellow: #fbb419;
+        --display: "Display", sans-serif; --text: "Text", sans-serif; --mono: "Mono", monospace; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; font-family: var(--text); color: #fff; -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .ov { z-index: 5; pointer-events: none; }
+      .abs { position: absolute; }
+      .h { font-family: var(--display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.02; }
+      .ln { display: block; overflow: hidden; padding-bottom: 0.08em; }
+      .ln > span { display: inline-block; }
+      .ch { display: inline-block; }
+      .tab { font-variant-numeric: tabular-nums; }
+
+      /* intro overlay */
+      #o1 .wrap { left: 0; width: 1920px; top: 820px; text-align: center; }
+      #o1 .k { font: 500 34px var(--text); color: #a1a1a6; letter-spacing: 0.01em; }
+      #o1 .n { font: 600 110px/1 var(--display); letter-spacing: -0.035em; margin-top: 8px; }
+
+      /* macro still */
+      #s2 { background: #000; }
+      #k2 { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      #s2 .wrap { left: 140px; top: 760px; }
+      #s2 .h { font-size: 72px; }
+      #speed { font: 700 220px/0.9 var(--display) !important; letter-spacing: -0.05em; margin-top: 6px; }
+
+      /* black kinetic type */
+      #s3 { background: #000; }
+      #s3 .wrap { left: 0; width: 1920px; top: 0; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      #t3a { font-size: 130px; }
+      #t3b { font: 700 330px/0.88 var(--display); letter-spacing: -0.05em; }
+      #t3c { font-size: 110px; color: #86868b; margin-top: 20px; }
+
+      /* flight overlay */
+      #o4 .wrap { left: 140px; top: 760px; }
+      #o4 .h { font-size: 104px; }
+      #o4 .s { font: 500 34px var(--text); color: rgba(255,255,255,0.72); margin-top: 14px; }
+      #o4 .shade { position: absolute; left: 0; bottom: 0; width: 1920px; height: 520px; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.55)); }
+
+      /* glass overlay */
+      #o5 { color: var(--ink); }
+      #o5 .wrap { left: 140px; top: 200px; }
+      #o5 .h { font-size: 104px; }
+      #o5 .g { color: var(--grey); }
+      #chip { position: absolute; left: 140px; top: 820px; padding: 18px 28px; border-radius: 999px; background: rgba(255,255,255,0.72); backdrop-filter: blur(16px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); font: 600 30px var(--text); display: flex; gap: 18px; align-items: center; color: var(--ink); }
+      #chip .fmt { color: #fff; background: var(--ink); border-radius: 9px; padding: 4px 12px; font: 600 24px var(--mono); }
+      #chip .kb { color: var(--grey2); font-weight: 500; }
+
+      /* lighter slam */
+      #s6 { background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #pct { font: 700 360px/0.86 var(--display); letter-spacing: -0.055em; }
+      #pct small { font-size: 0.42em; vertical-align: 0.9em; margin-left: 8px; }
+      #s6 .s { font: 600 64px var(--display); color: #86868b; letter-spacing: -0.02em; margin-top: 30px; }
+
+      /* shield */
+      #s7 { background: #eeeeef; }
+      #k5 { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 50%; }
+      #s7 .wrap { left: 1345px; top: 400px; color: var(--ink); }
+      #s7 .h { font-size: 104px; }
+      #s7 .g { color: var(--grey); }
+
+      /* color slams */
+      .cs { display: flex; align-items: center; justify-content: center; }
+      .cs .big { font: 700 340px/0.9 var(--display); letter-spacing: -0.055em; color: #fff; }
+
+      /* finale overlay */
+      #o9 { color: var(--ink); }
+      #o9 .t { position: absolute; left: 0; width: 1920px; top: 860px; text-align: center; font: 600 52px var(--display); letter-spacing: -0.02em; }
+      #o9 .t .g { color: var(--grey); }
+      #o9 .c { position: absolute; left: 0; width: 1920px; top: 945px; text-align: center; font: 500 36px var(--text); color: var(--grey2); }
+      #o9 .c b { color: var(--ink); font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+
+      <!-- 1 intro clip 0 – 3.4 -->
+      <video id="v1" class="clip" src="assets/clips/c1.mp4" muted playsinline data-start="0" data-duration="3.4" data-media-start="0" data-track-index="1"></video>
+      <div id="o1" class="clip ov" data-start="0" data-duration="3.4" data-track-index="2">
+        <div class="abs wrap"><div class="k" id="o1k">Introducing</div><div class="n"><span class="ln" id="o1n"><span>fast.site</span></span></div></div>
+      </div>
+
+      <!-- 2 macro still 3.4 – 6.4 -->
+      <div id="s2" class="clip" data-start="3.4" data-duration="3.0" data-track-index="3">
+        <img id="k2" src="assets/kf/k2.jpg" />
+        <div class="abs wrap">
+          <div class="h"><span class="ln" id="t2a"><span>Engineered for one thing.</span></span></div>
+          <div class="h" id="speed"><span class="ln"><span>Speed.</span></span></div>
+        </div>
+      </div>
+
+      <!-- 3 kinetic type 6.4 – 9.8 -->
+      <div id="s3" class="clip" data-start="6.4" data-duration="3.4" data-track-index="4">
+        <div class="abs wrap" id="w3">
+          <div class="h" id="t3a">Make your website</div>
+          <div id="t3b">faster.</div>
+          <div class="h" id="t3c"><span class="ln"><span>Keep your hosting.</span></span></div>
+        </div>
+      </div>
+
+      <!-- 4 flight 9.8 – 14.4 -->
+      <video id="v2" class="clip" src="assets/clips/c2.mp4" muted playsinline data-start="9.8" data-duration="4.6" data-media-start="0.2" data-track-index="5"></video>
+      <div id="o4" class="clip ov" data-start="9.8" data-duration="4.6" data-track-index="6">
+        <div class="shade"></div>
+        <div class="abs wrap"><div class="h"><span class="ln" id="t4"><span>Edge caching.</span></span></div><div class="s" id="t4s">Every page, closer to every visitor.</div></div>
+      </div>
+
+      <!-- 5 glass slab 14.4 – 19.06 -->
+      <video id="v3" class="clip" src="assets/clips/c3.mp4" muted playsinline data-start="14.4" data-duration="4.66" data-media-start="0" data-track-index="7"></video>
+      <div id="o5" class="clip ov" data-start="14.4" data-duration="4.66" data-track-index="8">
+        <div class="abs wrap"><div class="h"><span class="ln" id="t5a"><span>Faster images.</span></span></div><div class="h g"><span class="ln" id="t5b"><span>Automatically.</span></span></div></div>
+        <div id="chip"><span class="fmt" id="fmt">JPG</span><span id="fname">hero.jpg</span><span class="kb tab" id="fkb">303.4 KB</span></div>
+      </div>
+
+      <!-- 6 lighter slam 19.06 – 20.3 -->
+      <div id="s6" class="clip" data-start="19.06" data-duration="1.24" data-track-index="9">
+        <div id="pct" class="tab"><span id="pctv">−0</span><small>%</small></div>
+        <div class="s" id="s6s">Lighter. Same picture.</div>
+      </div>
+
+      <!-- 7 shield 20.3 – 23.4 -->
+      <div id="s7" class="clip" data-start="20.3" data-duration="3.1" data-track-index="10">
+        <img id="k5" src="assets/kf/k5.jpg" />
+        <div class="abs wrap"><div class="h"><span class="ln" id="t7a"><span>Protection.</span></span></div><div class="h g"><span class="ln" id="t7b"><span>Built in.</span></span></div></div>
+      </div>
+
+      <!-- 8 color slams 23.4 – 25.8 -->
+      <div id="c1" class="clip cs" style="background:var(--blue)" data-start="23.4" data-duration="0.6" data-track-index="11"><div class="big">Faster.</div></div>
+      <div id="c2" class="clip cs" style="background:var(--green)" data-start="24.0" data-duration="0.6" data-track-index="12"><div class="big">Lighter.</div></div>
+      <div id="c3" class="clip cs" style="background:var(--red)" data-start="24.6" data-duration="0.6" data-track-index="13"><div class="big">Safer.</div></div>
+      <div id="c4" class="clip cs" style="background:var(--yellow)" data-start="25.2" data-duration="0.6" data-track-index="14"><div class="big" style="color:var(--ink)">Simpler.</div></div>
+
+      <!-- 9 finale 25.8 – 30 -->
+      <video id="v4" class="clip" src="assets/clips/c4.mp4" muted playsinline data-start="25.8" data-duration="4.2" data-media-start="0" data-track-index="15"></video>
+      <div id="o9" class="clip ov" data-start="25.8" data-duration="4.2" data-track-index="16">
+        <div class="t"><span class="ln" id="t9"><span>Make your website faster. <span class="g">Keep your hosting.</span></span></span></div>
+        <div class="c" id="c9"><b>fast.site</b> · Try it free for 7 days</div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", E = "power3.out";
+      const lineIn = (sel, t, d = 0.8) => tl.fromTo(sel + " > span", { yPercent: 110 }, { yPercent: 0, duration: d, ease: EX }, t);
+      const fadeUp = (sel, t, d = 0.6, y = 20) => tl.fromTo(sel, { y, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: E }, t);
+      const counter = (el, from, to, t, d, fmt) => { const o = { v: from }; tl.fromTo(o, { v: from }, { v: to, duration: d, ease: "power2.out", onUpdate: () => (el.textContent = fmt(o.v)) }, t); el.textContent = fmt(from); };
+      const split = (el) => { const t = el.textContent; el.textContent = ""; return [...t].map((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c === " " ? " " : c; el.appendChild(s); return s; }); };
+
+      // 1 intro
+      fadeUp("#o1k", 0.9, 0.8, 14);
+      lineIn("#o1n", 1.35, 1.0);
+      tl.to("#o1 .wrap", { opacity: 0, duration: 0.3 }, 3.05);
+
+      // 2 macro still: slow rack focus + drift
+      tl.fromTo("#k2", { scale: 1.18, x: 60, filter: "blur(10px)" }, { scale: 1.02, x: -40, filter: "blur(0px)", duration: 3.0, ease: "power2.out" }, 3.4);
+      lineIn("#t2a", 3.55, 0.8);
+      tl.fromTo("#speed > .ln > span", { yPercent: 110, scaleX: 1.35, transformOrigin: "0% 50%" }, { yPercent: 0, scaleX: 1, duration: 0.9, ease: EX }, 5.25);
+
+      // 3 kinetic type
+      const a3 = split($("#t3a"));
+      tl.fromTo(a3, { yPercent: 100, rotationX: -90, opacity: 0, transformPerspective: 600 }, { yPercent: 0, rotationX: 0, opacity: 1, duration: 0.6, ease: EX, stagger: 0.02 }, 6.45);
+      const b3 = split($("#t3b"));
+      tl.fromTo(b3, { x: (i) => 600 + i * 60, opacity: 0, skewX: -20 }, { x: 0, opacity: 1, skewX: 0, duration: 0.55, ease: EX, stagger: 0.025 }, 7.25);
+      lineIn("#t3c", 8.25, 0.7);
+      tl.fromTo("#w3", { scale: 1 }, { scale: 1.06, duration: 3.4, ease: "none" }, 6.4);
+      tl.to("#w3", { scale: 1.6, opacity: 0, duration: 0.25, ease: "power2.in" }, 9.55);
+
+      // 4 flight overlay
+      lineIn("#t4", 10.05, 0.8);
+      fadeUp("#t4s", 10.4, 0.6, 14);
+      tl.to("#o4 .wrap", { opacity: 0, duration: 0.3 }, 14.05);
+
+      // 5 glass overlay
+      lineIn("#t5a", 14.6, 0.8);
+      lineIn("#t5b", 14.85, 0.8);
+      fadeUp("#chip", 15.1, 0.6, 24);
+      tl.set("#fmt", { textContent: "JPG" }, 0); tl.set("#fname", { textContent: "hero.jpg" }, 0);
+      tl.set("#fmt", { textContent: "WebP" }, 16.6); tl.set("#fname", { textContent: "hero.webp" }, 16.6);
+      tl.fromTo("#chip", { scale: 1.08 }, { scale: 1, duration: 0.4, ease: EX, immediateRender: false }, 16.6);
+      counter($("#fkb"), 303.4, 198.2, 16.6, 0.9, (v) => v.toFixed(1) + " KB");
+      tl.to("#o5 .wrap, #chip", { opacity: 0, duration: 0.25 }, 18.8);
+
+      // 6 lighter slam
+      tl.fromTo("#pct", { scale: 1.25 }, { scale: 1, duration: 0.5, ease: EX }, 19.06);
+      counter($("#pctv"), 0, 35, 19.06, 0.45, (v) => "−" + Math.round(v));
+      fadeUp("#s6s", 19.45, 0.4, 14);
+
+      // 7 shield
+      tl.fromTo("#k5", { scale: 1.3, x: -170, rotation: -4 }, { scale: 1.22, x: -215, rotation: 0, duration: 3.1, ease: "power2.out" }, 20.3);
+      lineIn("#t7a", 20.55, 0.8);
+      lineIn("#t7b", 20.8, 0.8);
+
+      // 8 color slams: each slides in from the right as a mask
+      ["#c1", "#c2", "#c3", "#c4"].forEach((c, i) => {
+        const t = 23.4 + i * 0.6;
+        tl.fromTo(c, { clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0%)", duration: 0.22, ease: "power3.out" }, t);
+        tl.fromTo(c + " .big", { scale: 1.2, x: 120 }, { scale: 1, x: 0, duration: 0.5, ease: EX }, t);
+      });
+
+      // 9 finale
+      lineIn("#t9", 26.6, 0.9);
+      fadeUp("#c9", 27.0, 0.7, 12);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
