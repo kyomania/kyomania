@@ -1,0 +1,114 @@
+{
+  "files": [
+    {
+      "file": "FunnelDisplay-Medium.woff2",
+      "family": "Funnel Display",
+      "rawFamily": "Funnel Display Medium",
+      "subfamily": "Regular",
+      "postscript": "FunnelDisplay-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "bricolage-grotesque-latin-ext-v9.woff2",
+      "family": "Bricolage Grotesque 96pt",
+      "rawFamily": "Bricolage Grotesque 96pt ExtraBold",
+      "subfamily": "Regular",
+      "postscript": "BricolageGrotesque96ptExtraBold-Regular",
+      "weight": 800,
+      "style": "normal",
+      "variationAxes": [
+        "wght"
+      ],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "bricolage-grotesque-latin-v9.woff2",
+      "family": "Bricolage Grotesque 96pt",
+      "rawFamily": "Bricolage Grotesque 96pt ExtraBold",
+      "subfamily": "Regular",
+      "postscript": "BricolageGrotesque96ptExtraBold-Regular",
+      "weight": 800,
+      "style": "normal",
+      "variationAxes": [
+        "wght"
+      ],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "google-sans-flex-latin-ext-v22.woff2",
+      "family": "Google Sans Flex 18pt",
+      "rawFamily": "Google Sans Flex 18pt",
+      "subfamily": "Regular",
+      "postscript": "GoogleSansFlex18pt-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [
+        "wght"
+      ],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "google-sans-flex-latin-v22.woff2",
+      "family": "Google Sans Flex 18pt",
+      "rawFamily": "Google Sans Flex 18pt",
+      "subfamily": "Regular",
+      "postscript": "GoogleSansFlex18pt-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [
+        "wght"
+      ],
+      "identified": true,
+      "isIcon": false
+    }
+  ],
+  "families": [
+    {
+      "family": "Bricolage Grotesque 96pt",
+      "weights": [
+        800
+      ],
+      "variable": true,
+      "fileCount": 2,
+      "files": [
+        "bricolage-grotesque-latin-ext-v9.woff2",
+        "bricolage-grotesque-latin-v9.woff2"
+      ]
+    },
+    {
+      "family": "Funnel Display",
+      "weights": [
+        500
+      ],
+      "variable": false,
+      "fileCount": 1,
+      "files": [
+        "FunnelDisplay-Medium.woff2"
+      ]
+    },
+    {
+      "family": "Google Sans Flex 18pt",
+      "weights": [
+        400
+      ],
+      "variable": true,
+      "fileCount": 2,
+      "files": [
+        "google-sans-flex-latin-ext-v22.woff2",
+        "google-sans-flex-latin-v22.woff2"
+      ]
+    }
+  ],
+  "unidentified": [],
+  "meta": {
+    "generatedAt": "2026-11-12T13:24:14.215Z",
+    "tool": "fontkit"
+  }
+}

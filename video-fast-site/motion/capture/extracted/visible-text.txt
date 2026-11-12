@@ -1,0 +1,190 @@
+[span] Starte deinen kostenlosen 7-Tage-Test
+[span] Keine Kreditkarte erforderlich
+[a] Funktionen
+[a] Plattformen
+[button] Ressourcen
+[span] Ratgeber
+[span] Praxisnahe Ratgeber zu Ladezeit, Caching und Sicherheit für WordPress, WooCommerce und Shopware.
+[span] Was ist ein CDN und braucht deine Website eins?
+[span] WordPress schneller machen: Ursachen finden und beheben
+[span] Core Web Vitals verbessern: LCP, INP und CLS erklärt
+[span] Dokumentation
+[span] Einrichtung, Konfiguration und alle Funktionen Schritt für Schritt erklärt.
+[span] Wissensdatenbank
+[span] Antworten auf häufige Fragen zu Einrichtung, DNS, SSL und Caching.
+[span] Kurze Antworten zu Tarifen, Abrechnung und zur Funktionsweise von fast.site.
+[span] Entwickler
+[span] Cache-Verhalten, Response-Header und die Kennzahlen, auf die es ankommt.
+[span] Français
+[span] Italiano
+[span] Nederlands
+[a] Anmelden
+[a] Kostenlos testen
+[a] Wirst du angegriffen?
+[span] Français
+[span] Italiano
+[span] Nederlands
+[p] fast.site
+[h1] Mach deine Website schneller.
+[span] Behalte dein Hosting.
+[p] fast.site verbindet Edge-Caching, Bildoptimierung und Website-Schutz für deine bestehende Website. Verbinde deine Domain und miss den Unterschied auf deinen eigenen Seiten.
+[a] Kostenlos testen
+[a] Deine Technologie finden
+[p] 7 Tage kostenlos · Keine Kreditkarte erforderlich
+[span] app.fast.site
+[span] Demo
+[span] Übersicht
+[span] Bilder
+[span] FAST.site
+[p] Website-Übersicht
+[strong] example.com
+[span] Aktiv
+[button] Übersicht
+[button] Bilder
+[p] Gesamte Anfragen
+[strong] 1,2 Mio.
+[p] Übertragene Daten
+[strong] 48 GB
+[p] Sofortige Laderate
+[strong] 92%
+[strong] Gesamte Anfragen
+[span] Letzte 28 Tage
+[strong] example.com
+[span] deine Webseiten
+[span] SSL
+[figcaption] Interaktive Dashboard-Vorschau · Beispieldaten, keine Live-Ergebnisse.
+[p] WENIGER AUFWAND. MEHR FÜR DEINE WEBSITE.
+[h2] Eine schlankere, schnellere, besser geschützte Website.
+[p] Verbinde Content-Auslieferung, Bildoptimierung und Schutz – ohne deine Website neu zu bauen.
+[h3] Edge-Caching & CDN
+[p] Liefere wiederverwendbare Seiten und Dateien aus, ohne jede Antwort am Ursprungsserver neu zu erzeugen. Cachebarkeit und Konfiguration sind entscheidend: Personalisierte Seiten brauchen passende Bypass-Regeln.
+[a] So funktioniert Edge-Caching
+[h3] Bildoptimierung
+[p] Teste die Bildauslieferung auf den für deine Besucher wichtigen Seiten. Bildgröße ist nur ein Teil der Ladezeit; Layout, Skripte und Anwendung beeinflussen das Erlebnis weiterhin.
+[a] Mehr zur Bildoptimierung
+[h3] DDoS-Schutz
+[p] Prüfe neben der Beschleunigung auch den Schutz des gewählten Plans. Teste Formulare, Anmeldungen und Checkout, damit berechtigte Besucher deine Website weiter nutzen können.
+[a] Zur Sicherheitsdokumentation
+[p] Bildkompression
+[h2] Schnellere Bilder. Ganz automatisch.
+[p] Deine Bilder werden automatisch in WebP umgewandelt. Kein Code, keine manuelle Optimierung, keine Plugins.
+[a] Mehr zur Bildoptimierung
+[span] Original-JPG
+[span] Dateigröße
+[strong] 303,4 KB
+[span] Schnelles WebP
+[span] Dateigröße
+[strong] 198,2 KB
+[small] −35 %
+[p] Tatsächliche Dateigrößen dieses Fotos mit 1152 × 628 Pixeln, ausgeliefert als JPG und WebP. Die Ersparnis hängt vom Bild und den Qualitätseinstellungen ab. 1 KB = 1.000 Byte.
+[p] PERFORMANCE STATT VERSPRECHEN
+[h2] Deine Website als Ausgangspunkt. Messbare Unterschiede.
+[p] Edge-Caching kann Inhalte schneller ausliefern. Die Core Web Vitals hängen auch von Seitencode, Layout und Endgeräten ab; bessere Suchrankings sind nicht garantiert.
+[a] So bewertest du die Ergebnisse
+[h3] Wie läuft deine Website heute?
+[p] Gib deine Domain für eine Performance-Analyse ein. So hast du einen Ausgangspunkt, bevor du deine Website verbindest.
+[label] 1. Domain eingeben
+[button] Meine Website analysieren
+[p] Der Scan ist eine Einschätzung, keine Garantie. Teste echte Ergebnisse mit deinem eigenen Traffic.
+[p] So funktioniert's
+[h2] Dieselbe Website. Einfacher beschleunigt.
+[p] Plane Zeit für DNS-Propagation und SSL ein. Der Test beginnt nach der technischen Aktivierung—nicht schon bei der Plan-Auswahl.
+[h3] Website verbinden
+[p] Wähle einen Tarif und richte DNS und SSL ein. Die Einrichtung dauert üblicherweise wenige Stunden, abhängig von DNS-Verbreitung und Origin. Deine 7 Tage starten erst, wenn die Domain technisch aktiv ist.
+[h3] Ergebnisse messen
+[p] Verfolge Anfragen, Datenübertragung und vergleichbare Traffic-Verläufe im Dashboard. Sobald ausreichend Messwerte vorliegen, zeigen wir eine verbrauchsbasierte Tarifempfehlung.
+[h3] Beschleunigung behalten
+[p] Wähle vor Ablauf einen Bezahlplan und hinterlege eine Kreditkarte. Die Abrechnung beginnt am Ende des Trials, nicht bei der Tarifauswahl. Ohne Upgrade endet das FAST-Caching.
+[a] Kostenlos testen
+[a] Anleitung zur Einrichtung lesen
+[p] FÜR DEINEN STACK GEMACHT
+[h2] Deine Technologie. Jetzt auf der schnellen Seite.
+[p] Behalte deine vertrauten Tools. FAST.site liegt vor deinem bestehenden Hosting – mit plattformspezifischen Anleitungen und Unterstützung für individuelle Webanwendungen.
+[h3] Content-Plattformen
+[span] WordPress
+[span] Drupal
+[span] Joomla
+[span] TYPO3
+[h3] E-Commerce
+[span] WooCommerce
+[span] Magento
+[span] Shopware
+[span] PrestaShop
+[span] Shopify
+[h3] Frameworks & eigene Apps
+[span] Laravel
+[span] React
+[span] Vue
+[span] Nuxt
+[span] Next.js
+[span] HTML / CSS / JS
+[p] Du nutzt etwas anderes? Öffentliche HTTP-Inhalte lassen sich über die Edge ausliefern. Private Seiten, Sitzungen und Checkout brauchen passende Cache-Regeln. Für Shopify und andere gehostete Plattformen prüfen wir zuerst die Einrichtung.
+[a] Individuelle Integration ansehen
+[p] Bewertungen
+[h2] Echte Websites, echte Ergebnisse.
+[p] Das sagen Website-Betreiber, nachdem sie zu fast.site gewechselt sind.
+[blockquote] fast.site hat unsere Website 3x schneller gemacht, ohne dass wir eine einzige Zeile Code anfassen mussten. Nach dem Wechsel der Nameserver waren unsere Google-Speed-Scores innerhalb weniger Stunden im grünen Bereich.
+[span] cubee.expert
+[blockquote] Wir sind wegen des automatischen Angriffsschutzes zu fast.site gewechselt. Die Einrichtung hat 2 Minuten gedauert, und unsere Website blieb selbst bei Traffic-Spitzen 100% online, die früher unser Hosting lahmgelegt haben.
+[span] t.zone
+[blockquote] fast.site kümmert sich automatisch um Caching und Bildoptimierung unserer Website. Unser Team muss sich um keine Speed-Plugins oder Servereinstellungen mehr kümmern.
+[span] wiresoft.com
+[blockquote] Der Wechsel zu fast.site war die einfachste Performance-Lösung, die wir je umgesetzt haben. Dank Edge-Caching und automatischer Bildkonvertierung laden unsere inhaltsstarken Seiten endlich so, wie sie sollten.
+[span] adobelino.com
+[p] Weiterlesen
+[h2] Ratgeber
+[a] Alle Ratgeber
+[span] Plattformen
+[h3] Bestes WordPress-CDN: sechs Anbieter im Vergleich
+[p] Cloudflare, Bunny.net, KeyCDN, QUIC.cloud, Jetpack und fast.site im Vergleich: Was jeder cacht, wie er angebunden wird und wie du den passenden auswählst.
+[span] Ratgeber lesen
+[span] Plattformen
+[h3] CDN für WooCommerce richtig einrichten
+[p] So läuft dein WooCommerce-Shop hinter einem CDN: Cache-Regeln für Shopseiten, Ausnahmen für Warenkorb und Checkout, Cache leeren nach Änderungen und Tests.
+[span] Ratgeber lesen
+[span] Plattformen
+[h3] Shopware 6 mit CDN: Was in den Cache darf und was nicht
+[p] So setzt du ein CDN vor deine Shopware-6-Storefront: welche Antworten am Edge gecacht werden dürfen, wie du den Cache leerst und wie du alles prüfst.
+[span] Ratgeber lesen
+[h2] Gib deiner Website 7 Tage. Lass die Ergebnisse entscheiden.
+[p] Starte mit deiner eigenen Domain, deinem echten Traffic und Klarheit darüber, was danach passiert.
+[a] Kostenlos testen
+[a] Noch Fragen? Sprich mit dem Support
+[p] fast.site verbindet Edge-Caching, Bildoptimierung und Website-Schutz für deine bestehende Website. Verbinde deine Domain und miss den Unterschied auf deinen eigenen Seiten.
+[a] 7 Tage kostenlos testen
+[a] Funktionen
+[a] Plattformen
+[a] Entwickler
+[a] Dokumentation
+[h3] Plattformen
+[a] WordPress
+[a] WooCommerce
+[a] Shopware
+[h3] Unternehmen
+[a] Über fast.site
+[a] Partnerprogramm
+[a] Wissensdatenbank
+[a] Ratgeber
+[a] Wirst du angegriffen?
+[a] Français
+[a] Italiano
+[a] Nederlands
+[span] © 2026 Fast SaaS Limited
+[a] Datenschutz
+[a] Nutzungsbedingungen
+[button] Datenschutzeinstellungen
+[p] Alle Preise verstehen sich netto zzgl. gesetzlicher MwSt.
+[p] Datenschutzeinstellungen
+[p] Wir nutzen Cookies für Analyse und Marketing. Du entscheidest, welche wir setzen dürfen.
+[p] Deine Wahl kannst du jederzeit unten auf der Seite unter Datenschutzeinstellungen ändern.
+[a] Datenschutzrichtlinie
+[p] Essenziell
+[span] Immer aktiv
+[p] Erforderlich für die Funktion der Website.
+[p] Analyse
+[p] Hilft uns zu verstehen, wie Besucher unsere Website nutzen.
+[p] Marketing
+[p] Hilft uns, unsere Werbung zu messen und zu verbessern, zum Beispiel über Meta.
+[button] Alle ablehnen
+[button] Auswahl speichern
+[button] Alle akzeptieren

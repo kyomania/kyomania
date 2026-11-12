@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="shopware-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#189eff"/>
+      <stop offset="100%" style="stop-color:#0050ff"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#shopware-gradient)" d="M32 4L4 20v24l28 16 28-16V20L32 4zm0 8l20 11.5v23L32 58 12 46.5v-23L32 12z"/>
+  <path fill="url(#shopware-gradient)" d="M32 20l-12 7v14l12 7 12-7V27l-12-7zm0 6l6 3.5v7L32 40l-6-3.5v-7L32 26z"/>
+</svg>

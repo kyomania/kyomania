@@ -1,0 +1,52 @@
+{
+  "schema": "hyperframes.capture.icons.v1",
+  "headline": {
+    "file": "assets/favicon.svg",
+    "source": "assets/icon-icon-unsized.svg",
+    "rank": 0,
+    "shape": "bare-mark",
+    "reason": "bare mark preferred over 1 badge(s)"
+  },
+  "icons": [
+    {
+      "file": "assets/icon-icon-unsized.svg",
+      "url": "https://fast.site/favicon/favicon.svg",
+      "rel": "icon",
+      "sizes": null,
+      "type": "image/svg+xml",
+      "rank": 0,
+      "shape": "bare-mark",
+      "shapeReason": "first painted element is <path> with margins"
+    },
+    {
+      "file": "assets/icon-apple-touch-icon-180x180.png",
+      "url": "https://fast.site/favicon/apple-touch-icon.png",
+      "rel": "apple-touch-icon",
+      "sizes": "180x180",
+      "type": null,
+      "rank": 1,
+      "shape": "badge",
+      "shapeReason": "4 of 4 edge midpoints are opaque, so the drawing carries a backdrop"
+    },
+    {
+      "file": "assets/icon-icon-96x96.png",
+      "url": "https://fast.site/favicon/favicon-96x96.png",
+      "rel": "icon",
+      "sizes": "96x96",
+      "type": "image/png",
+      "rank": 2,
+      "shape": "bare-mark",
+      "shapeReason": "0 of 4 edge midpoints are opaque, so the drawing has transparent margins"
+    },
+    {
+      "file": "assets/icon-icon-48x48.ico",
+      "url": "https://fast.site/favicon/favicon.ico",
+      "rel": "icon",
+      "sizes": "48x48",
+      "type": "image/x-icon",
+      "rank": 3,
+      "shape": "unknown",
+      "shapeReason": "image format could not be decoded for inspection"
+    }
+  ]
+}

@@ -1,0 +1,405 @@
+{
+  "summary": {
+    "webAnimations": 36,
+    "cssDeclarations": 152,
+    "scrollTargets": 120,
+    "cdpAnimations": 212,
+    "canvases": 0
+  },
+  "namedAnimations": [
+    "trial-speed-flight-cd96b56d"
+  ],
+  "scrollTriggeredElements": 120,
+  "representativeAnimations": [
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 1027.1033935546875,
+        "y": 3.953125,
+        "width": 1920.0001220703125,
+        "height": 2,
+        "top": 3.953125,
+        "right": 2947.103515625,
+        "bottom": 5.953125,
+        "left": 1027.1033935546875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 16000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 1092.095458984375,
+        "y": 14.078125,
+        "width": 1920,
+        "height": 2,
+        "top": 14.078125,
+        "right": 3012.095458984375,
+        "bottom": 16.078125,
+        "left": 1092.095458984375
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 17500,
+        "delay": -1730,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 1146.82568359375,
+        "y": 24.1875,
+        "width": 1920,
+        "height": 2,
+        "top": 24.1875,
+        "right": 3066.82568359375,
+        "bottom": 26.1875,
+        "left": 1146.82568359375
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 19000,
+        "delay": -3460,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 1193.5465087890625,
+        "y": 34.3125,
+        "width": 1919.9998779296875,
+        "height": 2,
+        "top": 34.3125,
+        "right": 3113.54638671875,
+        "bottom": 36.3125,
+        "left": 1193.5465087890625
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 20500,
+        "delay": -5189.999999999999,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 1233.8963623046875,
+        "y": 8.359375,
+        "width": 1920.0001220703125,
+        "height": 2,
+        "top": 8.359375,
+        "right": 3153.896484375,
+        "bottom": 10.359375,
+        "left": 1233.8963623046875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 22000,
+        "delay": -6920,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 2120.783447265625,
+        "y": 18.46875,
+        "width": 1920,
+        "height": 2,
+        "top": 18.46875,
+        "right": 4040.783447265625,
+        "bottom": 20.46875,
+        "left": 2120.783447265625
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 16000,
+        "delay": -8650,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": -84.69994354248047,
+        "y": 28.59375,
+        "width": 1920,
+        "height": 2,
+        "top": 28.59375,
+        "right": 1835.3000564575195,
+        "bottom": 30.59375,
+        "left": -84.69994354248047
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 17500,
+        "delay": -10379.999999999998,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 62.93511199951172,
+        "y": 38.71875,
+        "width": 1920,
+        "height": 2,
+        "top": 38.71875,
+        "right": 1982.9351119995117,
+        "bottom": 40.71875,
+        "left": 62.93511199951172
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 19000,
+        "delay": -12110,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 188.96502685546875,
+        "y": 12.75,
+        "width": 1920,
+        "height": 2,
+        "top": 12.75,
+        "right": 2108.9650268554688,
+        "bottom": 14.75,
+        "left": 188.96502685546875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 20500,
+        "delay": -13840,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "trial-speed-flight-cd96b56d",
+      "targetSelector": "span.trial-speed-lane",
+      "targetRect": {
+        "x": 297.8090515136719,
+        "y": 22.875,
+        "width": 1920,
+        "height": 2,
+        "top": 22.875,
+        "right": 2217.809051513672,
+        "bottom": 24.875,
+        "left": 297.8090515136719
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(112%)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translate(-12%)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 22000,
+        "delay": -15570,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    }
+  ]
+}

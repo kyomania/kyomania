@@ -1,1 +1,5 @@
 video-fast-site/frames/*.png
+video-fast-site/**/*.mp4
+video-fast-site/**/*.wav
+video-fast-site/**/*.mp3
+video-fast-site/motion/node_modules/

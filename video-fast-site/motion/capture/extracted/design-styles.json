@@ -1,0 +1,319 @@
+{
+  "typography": [
+    {
+      "role": "display",
+      "fontFamily": "Google Sans Flex",
+      "fontSize": "64px",
+      "fontWeight": "600",
+      "lineHeight": "69.12px",
+      "letterSpacing": "-3.52px",
+      "color": "#1A1925",
+      "sampleText": "Mach deine Website schneller. Behalte dein Hosting."
+    },
+    {
+      "role": "heading",
+      "fontFamily": "Google Sans Flex",
+      "fontSize": "45.6px",
+      "fontWeight": "600",
+      "lineHeight": "52.44px",
+      "letterSpacing": "-2.052px",
+      "color": "#1A1925",
+      "sampleText": "Eine schlankere, schnellere, besser geschützte Website."
+    },
+    {
+      "role": "heading-3",
+      "fontFamily": "Google Sans Flex",
+      "fontSize": "20px",
+      "fontWeight": "600",
+      "lineHeight": "27px",
+      "letterSpacing": "-0.4px",
+      "color": "#1A1925",
+      "sampleText": "Edge-Caching & CDN"
+    },
+    {
+      "role": "body",
+      "fontFamily": "Google Sans Flex",
+      "fontSize": "17.6px",
+      "fontWeight": "400",
+      "lineHeight": "29.92px",
+      "letterSpacing": "normal",
+      "color": "#555563",
+      "sampleText": "fast.site verbindet Edge-Caching, Bildoptimierung und Websit"
+    },
+    {
+      "role": "link",
+      "fontFamily": "Google Sans Flex",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "lineHeight": "20px",
+      "letterSpacing": "-0.21px",
+      "color": "#343C4D",
+      "sampleText": "Funktionen"
+    },
+    {
+      "role": "label",
+      "fontFamily": "Google Sans Flex",
+      "fontSize": "13px",
+      "fontWeight": "500",
+      "lineHeight": "19.5px",
+      "letterSpacing": "normal",
+      "color": "#1A1925",
+      "sampleText": "1. Domain eingeben"
+    },
+    {
+      "role": "body-small",
+      "fontFamily": "Google Sans Flex",
+      "fontSize": "11px",
+      "fontWeight": "600",
+      "lineHeight": "16.5px",
+      "letterSpacing": "normal",
+      "color": "#237243",
+      "sampleText": "−35 %"
+    }
+  ],
+  "spacing": {
+    "observed": [
+      2,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      18
+    ],
+    "baseUnit": 4
+  },
+  "radius": [
+    "7px",
+    "10px",
+    "12px",
+    "18px"
+  ],
+  "shadows": [
+    {
+      "value": "rgba(49, 88, 235, 0.125) 0px 4px 12px 0px",
+      "count": 4
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.16) 0px 1px 0px 0px inset, rgba(26, 25, 37, 0.12) 0px 2px 4px 0px",
+      "count": 2
+    },
+    {
+      "value": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px",
+      "count": 1
+    },
+    {
+      "value": "rgba(41, 69, 121, 0.07) 0px 24px 65px 0px, rgba(41, 69, 121, 0.024) 0px 3px 12px 0px",
+      "count": 1
+    },
+    {
+      "value": "rgba(26, 25, 37, 0.1) 0px -8px 30px 0px",
+      "count": 1
+    }
+  ],
+  "buttons": [
+    {
+      "label": "USD",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#343C4D",
+      "padding": "0px 12px",
+      "borderRadius": "10px",
+      "border": "1px solid rgb(212, 215, 223)",
+      "boxShadow": "none",
+      "fontSize": "13px",
+      "fontWeight": "500",
+      "height": "44px"
+    },
+    {
+      "label": "Kostenlos testen",
+      "background": "#3158EB",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#FFFFFF",
+      "padding": "15px 22px",
+      "borderRadius": "12px",
+      "border": "0px solid rgb(226, 232, 240)",
+      "boxShadow": "rgba(49, 88, 235, 0.125) 0px 4px 12px 0px",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "height": "54px"
+    },
+    {
+      "label": "Übersicht",
+      "background": "#EDF2FF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#3158EB",
+      "padding": "11px 7px",
+      "borderRadius": "7px",
+      "border": "0px solid rgb(226, 232, 240)",
+      "boxShadow": "none",
+      "fontSize": "10px",
+      "fontWeight": "600",
+      "height": "37px"
+    },
+    {
+      "label": "Bilder",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#73788B",
+      "padding": "11px 7px",
+      "borderRadius": "7px",
+      "border": "0px solid rgb(226, 232, 240)",
+      "boxShadow": "none",
+      "fontSize": "10px",
+      "fontWeight": "400",
+      "height": "37px"
+    },
+    {
+      "label": "Gib deiner Website 7 Tage. Lass die Erge",
+      "background": "transparent",
+      "backgroundImage": "linear-gradient(110deg, rgb(233, 240, 255), rgb(234, 245, 239) 40%, rgb(255, 246, 216) 72%, rgb(255, 235, 231))",
+      "backdropFilter": "",
+      "color": "#1A1925",
+      "padding": "70px 0px",
+      "borderRadius": "0px",
+      "border": "0px solid rgb(226, 232, 240)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "470.625px"
+    },
+    {
+      "label": "Gib deiner Website 7 Tage. Lass die Erge",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1A1925",
+      "padding": "0px 24px",
+      "borderRadius": "0px",
+      "border": "0px solid rgb(226, 232, 240)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "330.625px"
+    }
+  ],
+  "cards": [
+    {
+      "label": "card",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1A1925",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px solid rgb(226, 232, 240)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "6403.05px"
+    },
+    {
+      "label": "card",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1A1925",
+      "padding": "28px",
+      "borderRadius": "18px",
+      "border": "1px solid rgb(230, 232, 239)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "331.5px"
+    },
+    {
+      "label": "card",
+      "background": "#FAFBFE",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1A1925",
+      "padding": "0px",
+      "borderRadius": "18px",
+      "border": "1px solid rgb(230, 232, 239)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "421.141px"
+    },
+    {
+      "label": "card",
+      "background": "#F1F8F3",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1A1925",
+      "padding": "0px",
+      "borderRadius": "18px",
+      "border": "1px solid rgb(220, 235, 225)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "421.141px"
+    }
+  ],
+  "nav": {
+    "label": "navigation",
+    "background": "#F7F7F8",
+    "backgroundImage": "",
+    "backdropFilter": "",
+    "color": "#020817",
+    "padding": "0px",
+    "borderRadius": "0px",
+    "border": "0px solid rgb(226, 232, 240)",
+    "boxShadow": "none",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "height": "124px"
+  },
+  "chips": [
+    {
+      "label": "Aktiv",
+      "background": "#F0F8F2",
+      "color": "#24814B",
+      "padding": "4px 7px",
+      "borderRadius": "20px",
+      "border": "1px solid rgb(225, 239, 229)",
+      "boxShadow": "none",
+      "fontSize": "9px",
+      "fontWeight": "400",
+      "height": "23.5px"
+    }
+  ],
+  "statCells": [],
+  "tabs": [],
+  "backgrounds": [
+    {
+      "value": "radial-gradient(at 93% 6%, rgb(230, 237, 252), rgba(0, 0, 0, 0) 54%), radial-gradient(at 80% 94%, rgb(255, 243, 213), rgba(0, 0, 0, 0) 38%), none",
+      "area": 1549440
+    },
+    {
+      "value": "linear-gradient(110deg, rgb(233, 240, 255), rgb(234, 245, 239) 40%, rgb(255, 246, 216) 72%, rgb(255, 235, 231))",
+      "area": 903600
+    },
+    {
+      "value": "linear-gradient(140deg, rgba(223, 234, 255, 0.69), rgba(238, 244, 236, 0.8) 52%, rgba(255, 240, 211, 0.69))",
+      "area": 382932
+    },
+    {
+      "value": "linear-gradient(135deg, rgb(239, 243, 253), rgb(243, 248, 242) 65%, rgb(255, 250, 232))",
+      "area": 223687
+    },
+    {
+      "value": "repeating-linear-gradient(0deg, rgb(238, 241, 247) 0px, rgb(238, 241, 247) 1px, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 28px)",
+      "area": 48480
+    }
+  ],
+  "glass": []
+}
