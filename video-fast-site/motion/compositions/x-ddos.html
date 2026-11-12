@@ -1,0 +1,97 @@
+<template>
+  <style>
+    
+@font-face { font-family: 'Google Sans Flex'; src: url('assets/fonts/google-sans-flex-latin-v22.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Bricolage Grotesque'; src: url('assets/fonts/bricolage-grotesque-latin-v9.woff2') format('woff2'); font-weight: 200 800; }
+
+    #root { position: absolute; inset: 0; background: #ffffff; overflow: hidden; font-family: 'Google Sans Flex', sans-serif; color: #101827; }
+    .abs { position: absolute; }
+    .eyebrow { font-family: 'Google Sans Flex'; font-weight: 600; font-size: 30px; letter-spacing: 0.14em; color: #3158EB; text-transform: uppercase; }
+    .h { font-family: 'Bricolage Grotesque'; font-weight: 600; letter-spacing: -0.03em; line-height: 1.02; }
+    
+    #root { background: #0B1020; color: #fff; }
+    #xd-red { left: 0; top: 0; width: 1920px; height: 1080px; background: radial-gradient(circle at 50% 55%, rgba(223,72,43,.0) 20%, rgba(223,72,43,.35) 100%); }
+    #xd-svg { left: 0; top: 0; width: 1920px; height: 1080px; }
+    #xd-svg circle { fill: #df482b; opacity: 0; }
+    .xring { left: 735px; top: 375px; width: 450px; height: 450px; border-radius: 50%; border: 6px solid #7FA6FF; opacity: 0; }
+    #xd-shield { left: 810px; top: 450px; width: 300px; height: 300px; }
+    #xd-h { left: 0; right: 0; top: 90px; text-align: center; font-size: 110px; }
+    #xd-h em { font-style: normal; color: #df482b; }
+    #xd-ok { left: 0; right: 0; top: 880px; text-align: center; }
+    #xd-ok span { display: inline-flex; align-items: center; gap: 16px; padding: 18px 36px; border-radius: 999px; background: #0c9958; color: #fff; font-size: 38px; font-weight: 800; }
+
+  </style>
+  <div id="root" data-composition-id="xddos" data-width="1920" data-height="1080">
+    <div id="xd-red" class="abs"></div>
+    <svg id="xd-svg" class="abs" viewBox="0 0 1920 1080"><circle id="xd-0" r="13.0"/><circle id="xd-1" r="13.0"/><circle id="xd-2" r="16.2"/><circle id="xd-3" r="14.9"/><circle id="xd-4" r="13.9"/><circle id="xd-5" r="12.8"/><circle id="xd-6" r="13.5"/><circle id="xd-7" r="10.2"/><circle id="xd-8" r="12.3"/><circle id="xd-9" r="11.2"/><circle id="xd-10" r="12.9"/><circle id="xd-11" r="16.5"/><circle id="xd-12" r="9.3"/><circle id="xd-13" r="9.8"/><circle id="xd-14" r="9.4"/><circle id="xd-15" r="14.5"/><circle id="xd-16" r="12.2"/><circle id="xd-17" r="10.5"/><circle id="xd-18" r="11.8"/><circle id="xd-19" r="9.2"/><circle id="xd-20" r="13.8"/><circle id="xd-21" r="13.2"/><circle id="xd-22" r="14.9"/><circle id="xd-23" r="10.2"/><circle id="xd-24" r="13.8"/><circle id="xd-25" r="13.7"/><circle id="xd-26" r="13.3"/><circle id="xd-27" r="13.8"/><circle id="xd-28" r="14.8"/><circle id="xd-29" r="9.6"/><circle id="xd-30" r="13.9"/><circle id="xd-31" r="9.1"/><circle id="xd-32" r="11.3"/><circle id="xd-33" r="12.1"/><circle id="xd-34" r="15.9"/><circle id="xd-35" r="13.8"/><circle id="xd-36" r="16.2"/><circle id="xd-37" r="13.2"/><circle id="xd-38" r="13.7"/><circle id="xd-39" r="11.7"/><circle id="xd-40" r="10.8"/><circle id="xd-41" r="9.6"/></svg>
+    <div id="xd-r0" class="abs xring"></div><div id="xd-r1" class="abs xring"></div><div id="xd-r2" class="abs xring"></div><div id="xd-r3" class="abs xring"></div><div id="xd-r4" class="abs xring"></div><div id="xd-r5" class="abs xring"></div><div id="xd-r6" class="abs xring"></div><div id="xd-r7" class="abs xring"></div><div id="xd-r8" class="abs xring"></div><div id="xd-r9" class="abs xring"></div><div id="xd-r10" class="abs xring"></div>
+    <svg id="xd-shield" class="abs" viewBox="0 0 100 100"><defs><linearGradient id="xdg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5B8CFF"/><stop offset="1" stop-color="#3e71b6"/></linearGradient></defs><path d="M50 6 L88 20 V48 C88 72 70 88 50 95 C30 88 12 72 12 48 V20 Z" fill="url(#xdg)"/><path d="M33 50 L45 62 L68 38" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div id="xd-h" class="abs h"><em>Angriffe?</em> Prallen ab.</div>
+    <div id="xd-ok" class="abs"><span>● Website bleibt online</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.fromTo("#xd-red", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.1);
+    tl.fromTo("#xd-shield", { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.8)" }, 0.0);
+    tl.fromTo("#xd-h", { opacity: 0, scale: 1.3, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 0.1);
+        tl.fromTo("#xd-0", { attr: { cx: 1237, cy: -424 }, opacity: 1 }, { attr: { cx: 1007, cy: 370 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.57);tl.to("#xd-0", { attr: { cx: 1333, cy: 238 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.89);
+    tl.fromTo("#xd-1", { attr: { cx: 2285, cy: 652 }, opacity: 1 }, { attr: { cx: 1195, cy: 612 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.00);tl.to("#xd-1", { attr: { cx: 1373, cy: 916 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.32);
+    tl.fromTo("#xd-2", { attr: { cx: 1285, cy: 1629 }, opacity: 1 }, { attr: { cx: 1014, cy: 829 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.35);tl.to("#xd-2", { attr: { cx: 773, cy: 1085 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.67);
+    tl.fromTo("#xd-3", { attr: { cx: 743, cy: -549 }, opacity: 1 }, { attr: { cx: 927, cy: 367 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.82);tl.to("#xd-3", { attr: { cx: 1190, cy: 134 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.14);
+    tl.fromTo("#xd-4", { attr: { cx: 1595, cy: -262 }, opacity: 1 }, { attr: { cx: 1074, cy: 394 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.70);tl.to("#xd-4", { attr: { cx: 1425, cy: 366 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.02);
+    tl.fromTo("#xd-5", { attr: { cx: 2291, cy: 531 }, opacity: 1 }, { attr: { cx: 1194, cy: 584 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.79);tl.to("#xd-5", { attr: { cx: 1409, cy: 863 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.11);
+    tl.fromTo("#xd-6", { attr: { cx: -345, cy: 414 }, opacity: 1 }, { attr: { cx: 729, cy: 556 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.52);tl.to("#xd-6", { attr: { cx: 593, cy: 231 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.84);
+    tl.fromTo("#xd-7", { attr: { cx: 191, cy: -153 }, opacity: 1 }, { attr: { cx: 817, cy: 413 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.38);tl.to("#xd-7", { attr: { cx: 932, cy: 81 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.70);
+    tl.fromTo("#xd-8", { attr: { cx: 2326, cy: 511 }, opacity: 1 }, { attr: { cx: 1194, cy: 580 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.75);tl.to("#xd-8", { attr: { cx: 1413, cy: 855 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.07);
+    tl.fromTo("#xd-9", { attr: { cx: -132, cy: 66 }, opacity: 1 }, { attr: { cx: 763, cy: 472 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.36);tl.to("#xd-9", { attr: { cx: 761, cy: 120 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.68);
+    tl.fromTo("#xd-10", { attr: { cx: -332, cy: 592 }, opacity: 1 }, { attr: { cx: 725, cy: 598 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.44);tl.to("#xd-10", { attr: { cx: 533, cy: 303 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.76);
+    tl.fromTo("#xd-11", { attr: { cx: 37, cy: 1472 }, opacity: 1 }, { attr: { cx: 814, cy: 784 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.32);tl.to("#xd-11", { attr: { cx: 463, cy: 754 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.64);
+    tl.fromTo("#xd-12", { attr: { cx: 1499, cy: -259 }, opacity: 1 }, { attr: { cx: 1060, cy: 387 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.50);tl.to("#xd-12", { attr: { cx: 1408, cy: 337 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.82);
+    tl.fromTo("#xd-13", { attr: { cx: -72, cy: -134 }, opacity: 1 }, { attr: { cx: 790, cy: 438 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.49);tl.to("#xd-13", { attr: { cx: 851, cy: 92 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.81);
+    tl.fromTo("#xd-14", { attr: { cx: 1356, cy: -322 }, opacity: 1 }, { attr: { cx: 1032, cy: 376 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.99);tl.to("#xd-14", { attr: { cx: 1371, cy: 282 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.31);
+    tl.fromTo("#xd-15", { attr: { cx: 1980, cy: -153 }, opacity: 1 }, { attr: { cx: 1128, cy: 435 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.38);tl.to("#xd-15", { attr: { cx: 1472, cy: 508 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.70);
+    tl.fromTo("#xd-16", { attr: { cx: -349, cy: 778 }, opacity: 1 }, { attr: { cx: 729, cy: 642 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.49);tl.to("#xd-16", { attr: { cx: 485, cy: 387 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.81);
+    tl.fromTo("#xd-17", { attr: { cx: 1312, cy: -318 }, opacity: 1 }, { attr: { cx: 1025, cy: 374 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.73);tl.to("#xd-17", { attr: { cx: 1361, cy: 269 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.05);
+    tl.fromTo("#xd-18", { attr: { cx: 1120, cy: -372 }, opacity: 1 }, { attr: { cx: 989, cy: 367 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.07);tl.to("#xd-18", { attr: { cx: 1304, cy: 210 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.39);
+    tl.fromTo("#xd-19", { attr: { cx: -403, cy: 131 }, opacity: 1 }, { attr: { cx: 746, cy: 502 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.41);tl.to("#xd-19", { attr: { cx: 692, cy: 154 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.73);
+    tl.fromTo("#xd-20", { attr: { cx: 1412, cy: 1598 }, opacity: 1 }, { attr: { cx: 1036, cy: 823 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.28);tl.to("#xd-20", { attr: { cx: 820, cy: 1101 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.60);
+    tl.fromTo("#xd-21", { attr: { cx: -86, cy: -219 }, opacity: 1 }, { attr: { cx: 797, cy: 430 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.01);tl.to("#xd-21", { attr: { cx: 875, cy: 87 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.33);
+    tl.fromTo("#xd-22", { attr: { cx: 2247, cy: 638 }, opacity: 1 }, { attr: { cx: 1195, cy: 609 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.20);tl.to("#xd-22", { attr: { cx: 1377, cy: 910 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.52);
+    tl.fromTo("#xd-23", { attr: { cx: 2172, cy: 864 }, opacity: 1 }, { attr: { cx: 1186, cy: 665 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.97);tl.to("#xd-23", { attr: { cx: 1290, cy: 1002 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.29);
+    tl.fromTo("#xd-24", { attr: { cx: 1189, cy: 1677 }, opacity: 1 }, { attr: { cx: 997, cy: 832 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.01);tl.to("#xd-24", { attr: { cx: 738, cy: 1070 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.33);
+    tl.fromTo("#xd-25", { attr: { cx: 2194, cy: 370 }, opacity: 1 }, { attr: { cx: 1188, cy: 543 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.39);tl.to("#xd-25", { attr: { cx: 1447, cy: 781 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.71);
+    tl.fromTo("#xd-26", { attr: { cx: 1310, cy: 1704 }, opacity: 1 }, { attr: { cx: 1014, cy: 829 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.65);tl.to("#xd-26", { attr: { cx: 773, cy: 1085 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.97);
+    tl.fromTo("#xd-27", { attr: { cx: -389, cy: 123 }, opacity: 1 }, { attr: { cx: 747, cy: 500 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.41);tl.to("#xd-27", { attr: { cx: 697, cy: 151 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.73);
+    tl.fromTo("#xd-28", { attr: { cx: 611, cy: 1683 }, opacity: 1 }, { attr: { cx: 905, cy: 828 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.71);tl.to("#xd-28", { attr: { cx: 574, cy: 948 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.03);
+    tl.fromTo("#xd-29", { attr: { cx: 86, cy: -270 }, opacity: 1 }, { attr: { cx: 819, cy: 412 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.27);tl.to("#xd-29", { attr: { cx: 936, cy: 81 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.59);
+    tl.fromTo("#xd-30", { attr: { cx: -292, cy: 784 }, opacity: 1 }, { attr: { cx: 729, cy: 645 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.19);tl.to("#xd-30", { attr: { cx: 482, cy: 395 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.51);
+    tl.fromTo("#xd-31", { attr: { cx: 1966, cy: -97 }, opacity: 1 }, { attr: { cx: 1133, cy: 440 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.01);tl.to("#xd-31", { attr: { cx: 1474, cy: 524 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.33);
+    tl.fromTo("#xd-32", { attr: { cx: 2252, cy: 382 }, opacity: 1 }, { attr: { cx: 1189, cy: 548 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.26);tl.to("#xd-32", { attr: { cx: 1443, cy: 792 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.58);
+    tl.fromTo("#xd-33", { attr: { cx: 739, cy: -398 }, opacity: 1 }, { attr: { cx: 922, cy: 368 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.12);tl.to("#xd-33", { attr: { cx: 1179, cy: 129 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.44);
+    tl.fromTo("#xd-34", { attr: { cx: 526, cy: -505 }, opacity: 1 }, { attr: { cx: 894, cy: 375 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.69);tl.to("#xd-34", { attr: { cx: 1120, cy: 105 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.01);
+    tl.fromTo("#xd-35", { attr: { cx: 936, cy: 1756 }, opacity: 1 }, { attr: { cx: 956, cy: 835 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.56);tl.to("#xd-35", { attr: { cx: 660, cy: 1025 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.88);
+    tl.fromTo("#xd-36", { attr: { cx: -318, cy: 1046 }, opacity: 1 }, { attr: { cx: 747, cy: 699 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.26);tl.to("#xd-36", { attr: { cx: 447, cy: 515 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.58);
+    tl.fromTo("#xd-37", { attr: { cx: 2003, cy: -87 }, opacity: 1 }, { attr: { cx: 1137, cy: 445 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.27);tl.to("#xd-37", { attr: { cx: 1476, cy: 537 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.59);
+    tl.fromTo("#xd-38", { attr: { cx: -368, cy: 388 }, opacity: 1 }, { attr: { cx: 730, cy: 551 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.57);tl.to("#xd-38", { attr: { cx: 601, cy: 224 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.89);
+    tl.fromTo("#xd-39", { attr: { cx: 581, cy: 1548 }, opacity: 1 }, { attr: { cx: 892, cy: 825 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 1.35);tl.to("#xd-39", { attr: { cx: 555, cy: 927 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.67);
+    tl.fromTo("#xd-40", { attr: { cx: -423, cy: 721 }, opacity: 1 }, { attr: { cx: 727, cy: 627 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.26);tl.to("#xd-40", { attr: { cx: 500, cy: 358 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.58);
+    tl.fromTo("#xd-41", { attr: { cx: 2376, cy: 255 }, opacity: 1 }, { attr: { cx: 1183, cy: 527 }, duration: 0.32, ease: "power2.in", immediateRender: false }, 0.99);tl.to("#xd-41", { attr: { cx: 1459, cy: 747 }, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.31);
+    tl.fromTo("#xd-r0", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 0.58);
+    tl.fromTo("#xd-r1", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 0.58);
+    tl.fromTo("#xd-r2", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 0.58);
+    tl.fromTo("#xd-r3", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 0.60);
+    tl.fromTo("#xd-r4", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 0.81);
+    tl.fromTo("#xd-r5", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 0.82);
+    tl.fromTo("#xd-r6", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 0.89);
+    tl.fromTo("#xd-r7", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 1.02);
+    tl.fromTo("#xd-r8", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 1.03);
+    tl.fromTo("#xd-r9", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 1.07);
+    tl.fromTo("#xd-r10", { scale: 1, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, 1.33);
+    tl.to("#xd-red", { opacity: 0, duration: 0.4 }, 1.3);
+    tl.fromTo("#xd-ok", { opacity: 0, y: 40, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(2)" }, 1.35);
+    tl.to("#xd-h, #xd-ok, #xd-shield, .xring", { opacity: 0, filter: "blur(10px)", duration: 0.2, ease: "power3.in" }, 2.45);
+
+    window.__timelines["xddos"] = tl;
+  </script>
+</template>

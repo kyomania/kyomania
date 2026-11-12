@@ -12,32 +12,38 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="43.6" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="40.1" data-width="1920" data-height="1080">
 
-      <!-- Diner: KI-Szenen (Seedance, lippensynchron auf ElevenLabs-v4-Stimmen) -->
-      <video id="v-mann" class="clip full" src="assets/video/mann.mp4" data-start="0" data-duration="4.6" data-media-start="0.25" data-track-index="1" data-has-audio="true" data-volume="1" playsinline style="z-index:1"></video>
-      <video id="v-oma" class="clip full" src="assets/video/oma.mp4" data-start="4.6" data-duration="3.0" data-media-start="0.25" data-track-index="1" data-has-audio="true" data-volume="1" playsinline style="z-index:2"></video>
-      <video id="v-vortex" class="clip full" src="assets/video/vortex.mp4" data-start="7.6" data-duration="5.4" data-media-start="0" data-track-index="1" data-has-audio="true" data-volume="1" playsinline style="z-index:3"></video>
+      <!-- Diner: KI-Szenen (Seedance). Bild stumm, Ton = ElevenLabs v4 (Julian / Mabel) -->
+      <video id="v-mann" class="clip full" src="assets/video/mann.mp4" data-start="0" data-duration="4.6" data-media-start="0.25" data-track-index="1" muted playsinline style="z-index:1"></video>
+      <video id="v-oma" class="clip full" src="assets/video/oma.mp4" data-start="4.6" data-duration="3.0" data-media-start="0.25" data-track-index="1" muted playsinline style="z-index:2"></video>
+      <video id="v-vortex" class="clip full" src="assets/video/vortex.mp4" data-start="7.6" data-duration="5.4" data-media-start="0" data-track-index="1" muted playsinline style="z-index:3"></video>
 
-      <!-- Motion Design im Handy: startet und endet auf exakt dem Handy-Screen-Frame -->
-      <div id="hero" data-composition-id="hero" data-composition-src="compositions/hero.html" data-start="13.0" data-duration="4.7" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
-      <div id="cache" data-composition-id="cache" data-composition-src="compositions/cache.html" data-start="17.7" data-duration="3.9" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
-      <div id="images" data-composition-id="images" data-composition-src="compositions/images.html" data-start="21.6" data-duration="4.3" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
-      <div id="ddos" data-composition-id="ddos" data-composition-src="compositions/ddos.html" data-start="25.9" data-duration="2.7" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
-      <div id="setup" data-composition-id="setup" data-composition-src="compositions/setup.html" data-start="28.6" data-duration="4.7" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <!-- Motion Design: startet auf exakt dem Handy-Screen-Frame -->
+      <div id="xspeed" data-composition-id="xspeed" data-composition-src="compositions/x-speed.html" data-start="13.0" data-duration="4.6" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="xglobe" data-composition-id="xglobe" data-composition-src="compositions/x-globe.html" data-start="17.6" data-duration="3.9" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="ximages" data-composition-id="ximages" data-composition-src="compositions/x-images.html" data-start="21.5" data-duration="4.3" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="xddos" data-composition-id="xddos" data-composition-src="compositions/x-ddos.html" data-start="25.8" data-duration="2.7" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="xcta" data-composition-id="xcta" data-composition-src="compositions/x-cta.html" data-start="28.5" data-duration="4.8" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
 
-      <!-- Rueckweg: der Strudel rueckwaerts, dann der Mann mit Kaffee -->
-      <video id="v-pullout" class="clip full" src="assets/video/pullout.mp4" data-start="33.3" data-duration="3.0" data-track-index="1" data-has-audio="true" data-volume="0.9" playsinline style="z-index:5"></video>
-      <video id="v-ende" class="clip full" src="assets/video/ende.mp4" data-start="36.3" data-duration="3.3" data-media-start="0.6" data-track-index="1" data-has-audio="true" data-volume="1" playsinline style="z-index:6"></video>
+      <!-- Logo, dann harter Schnitt auf den Mann -->
+      <div id="endcard" data-composition-id="endcard" data-composition-src="compositions/endcard.html" data-start="33.3" data-duration="4.0" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:5"></div>
+      <video id="v-ende" class="clip full" src="assets/video/ende.mp4" data-start="37.3" data-duration="2.8" data-media-start="1.85" data-track-index="1" muted playsinline style="z-index:6"></video>
 
-      <!-- Endcard mit animiertem Logo -->
-      <div id="endcard" data-composition-id="endcard" data-composition-src="compositions/endcard.html" data-start="39.6" data-duration="4.0" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:7"></div>
+      <!-- Stimmen -->
+      <audio id="a-l1" src="assets/audio/l1.mp3" data-start="0.18" data-duration="4.13" data-track-index="21" data-volume="1"></audio>
+      <audio id="a-oma" src="assets/audio/oma.mp3" data-start="4.85" data-duration="2.04" data-track-index="22" data-volume="1"></audio>
+      <audio id="a-l2" src="assets/audio/l2.mp3" data-start="7.93" data-duration="2.59" data-track-index="23" data-volume="1"></audio>
+      <audio id="a-vo" src="assets/audio/vo.mp3" data-start="13.05" data-duration="19.88" data-track-index="24" data-volume="1"></audio>
+      <audio id="a-l3" src="assets/audio/l3b.mp3" data-start="37.85" data-duration="2.19" data-track-index="25" data-volume="1"></audio>
 
-      <!-- Ton -->
-      <audio id="a-vo" src="assets/audio/vo.mp3" data-start="13.05" data-track-index="10" data-volume="1"></audio>
-      <audio id="a-music" src="assets/audio/music.mp3" data-start="3.0" data-duration="40.0" data-track-index="11" data-volume="0.28" data-fade-out="1.2"></audio>
+      <!-- Musik und Effekte -->
+      <audio id="a-music" src="assets/audio/music.mp3" data-start="3.0" data-duration="37.0" data-track-index="11" data-volume="0.28" data-fade-out="1.0"></audio>
       <audio id="a-roll" src="assets/audio/sfx_rollator.mp3" data-start="4.7" data-duration="2.9" data-track-index="12" data-volume="0.7" data-fade-out="0.3"></audio>
-      <audio id="a-logo" src="assets/audio/sfx_logo.mp3" data-start="40.4" data-track-index="14" data-volume="0.8"></audio>
+      <audio id="a-whoosh" src="assets/audio/whoosh2.mp3" data-start="10.9" data-duration="2.06" data-track-index="13" data-volume="0.8"></audio>
+      <audio id="a-hit1" src="assets/audio/impact.mp3" data-start="14.38" data-duration="1.07" data-track-index="26" data-volume="0.55"></audio>
+      <audio id="a-hit2" src="assets/audio/impact.mp3" data-start="24.25" data-duration="1.07" data-track-index="27" data-volume="0.55"></audio>
+      <audio id="a-hit3" src="assets/audio/impact.mp3" data-start="34.15" data-duration="1.07" data-track-index="28" data-volume="0.5"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {};
