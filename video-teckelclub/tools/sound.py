@@ -61,12 +61,18 @@ put(verb(mus,.28), 0, .85)
 for m,g in [(48,.4),(60,.3),(64,.28),(67,.28),(72,.25),(76,.2)]: put(verb(celesta(hz(m),3.,g),.4), 14.0)
 
 # SFX
-for c in (3.6,6.2,8.4,10.4,11.9): put(rip(.75,.22), c-.42, 1., rng.uniform(-.3,.3))
-for t in [0.35,1.25,2.4,4.05,6.65,8.9,10.75]+[12.25+.22*i for i in range(7)]+[13.5,13.7]: put(slap(.22), t+.05, 1., rng.uniform(-.25,.25))
-for i in range(6): put(tap(.18), .25+i*.17, 1., -.3)
-put(squeak(.12), 1.27)
-put(verb(celesta(hz(88),1.6,.3),.5), 2.75, 1., .2); put(verb(celesta(hz(91),1.6,.22),.5), 2.82, 1., .2)
-for i in range(9): put(tap(.12), 9.1+i*.14, 1., .2)
+for c in (3.6,6.2,8.4,10.4,11.9): put(rip(.62,.24), c-.33, 1., rng.uniform(-.3,.3))
+for t in [0.2,1.22,2.15,4.0,6.6,8.7,10.65]: put(slap(.24), t+.05, 1., rng.uniform(-.25,.25))
+for i in range(6): put(tap(.22), .15+i*.17+.08, 1., .3)          # Dackel-Hüpfer
+put(squeak(.14), 1.22); put(tap(.3), 1.62)
+for i,t in enumerate([2.5,2.67,2.84,3.0]): put(tap(.15), t, 1., (-1)**i*.3)
+put(verb(celesta(hz(88),1.6,.32),.5), 2.85, 1., .2); put(verb(celesta(hz(91),1.6,.24),.5), 2.92, 1., .2)
+for i in range(7): put(verb(celesta(hz([72,74,76,79,81,84,86][i]),.8,.16),.4), 6.75+i*.13, 1., -.6+.2*i)   # Fenster gehen an
+for i in range(6): put(tap(.25), 9.0+i*.25, 1., (-1)**i*.25); put(pop_ := tap(.12), 9.125+i*.25)    # Parade-Hüpfer
+for t0,n,g in [(0.3,20,.05),(2.25,14,.05),(4.1,28,.04),(6.7,12,.05),(8.8,19,.04),(9.2,20,.04),(10.75,40,.03),(12.25,20,.04),(12.6,15,.05),(14.05,34,.03)]:
+    for i in range(n): put(tap(g), t0+i*(0.03 if n<25 else 0.022)+.1, 1., rng.uniform(-.4,.4))   # Buchstaben
+put(slap(.6), 13.35); put(verb(np.sin(2*np.pi*70*np.arange(int(SR*.4))/SR)*np.exp(-np.arange(int(SR*.4))/SR*12)*.6,.3), 13.35)  # Datums-Stempel
+put(slap(.35), 13.77)
 put(verb(bells(.3,1.5),.5), 12.2, 1.)
 
 mix=np.stack([L,Rr],1); t=np.arange(N)/SR

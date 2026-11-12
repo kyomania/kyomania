@@ -12,37 +12,44 @@
       @font-face { font-family: "Hand"; font-weight: 700; src: url(assets/fonts/caveat-latin-700-normal.woff2) format("woff2"); }
       @font-face { font-family: "Inter"; font-weight: 500; src: url(assets/fonts/inter-latin-500-normal.woff2) format("woff2"); }
 
-      :root { --cream: #f3ebd9; --paper: #fbf6ea; --red: #c8312f; --green: #24452f; --navy: #1d2747; --gold: #c99a3e; --ink: #2b2420; }
+      :root { --cream: #e9dfcf; --paper: #fbf6ea; --red: #c8312f; --green: #24452f; --navy: #1d2747; --gold: #d3a548; --ink: #2b2420; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); color: var(--ink); }
       .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
       .abs { position: absolute; }
       .scene { position: absolute; inset: 0; overflow: hidden; }
+      .card { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 50% 60%; }
       .full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
-      .mul { mix-blend-mode: multiply; }
-      .creambg { background: #e9dfcf; }
+      .creambg { background: var(--cream); }
       .feather { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%); mask-composite: intersect; }
 
       /* Papier-Etiketten (Kanten werden per JS ausgerissen) */
       .lbl { position: absolute; }
-      .lbl .boil { position: relative; }
+      .boil { position: relative; }
       .tag { position: relative; padding: 26px 46px 30px; background: var(--paper); box-shadow: 0 10px 18px rgba(60,40,20,.25); }
       .tag.red { background: var(--red); color: #fff7ea; }
       .tag.green { background: var(--green); color: #fff7ea; }
-      .tape { position: absolute; width: 150px; height: 44px; background: rgba(240,226,190,.78); top: -20px; left: 50%; margin-left: -75px; transform: rotate(-4deg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+      .tape { position: absolute; width: 150px; height: 44px; background: rgba(240,226,190,.8); top: -20px; left: 50%; margin-left: -75px; transform: rotate(-4deg); box-shadow: 0 1px 2px rgba(0,0,0,.08); z-index: 2; }
       .serif { font-family: "Fraunces"; font-weight: 900; letter-spacing: -.01em; line-height: 1; white-space: nowrap; }
       .hand { font-family: "Hand"; font-weight: 700; line-height: 1; white-space: nowrap; }
+      .split .ch { display: inline-block; white-space: pre; }
 
       /* Riss-Übergang */
       #rip { position: absolute; left: -40px; top: 0; width: 1160px; height: 2700px; z-index: 70; filter: drop-shadow(0 -14px 18px rgba(50,30,10,.28)) drop-shadow(0 14px 18px rgba(50,30,10,.28)); }
       #ripIn { position: absolute; inset: 0; background: var(--paper); }
+      #ripStripe { position: absolute; left: 0; width: 1160px; top: 1250px; height: 120px; background: var(--red); }
+
+      /* Papier-Konfetti */
+      #conf { z-index: 60; pointer-events: none; }
+      .pc { position: absolute; left: 0; top: 0; filter: drop-shadow(0 4px 3px rgba(0,0,0,.25)); }
+      .star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
 
       /* Look */
       #tex { z-index: 90; opacity: .22; mix-blend-mode: multiply; pointer-events: none;
         background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .47  0 0 0 0 .36  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
       #vig { z-index: 91; pointer-events: none; background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(70,40,15,.35) 100%); }
-      .glow { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,196,90,.85) 0%, rgba(255,170,60,.35) 40%, rgba(255,150,40,0) 70%); mix-blend-mode: screen; }
+      .glow { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,196,90,.9) 0%, rgba(255,170,60,.38) 40%, rgba(255,150,40,0) 70%); mix-blend-mode: screen; }
       .flake { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 2px 2px rgba(0,0,0,.15); }
     </style>
   </head>
@@ -52,85 +59,87 @@
 
       <div class="clip" id="stage" data-start="0" data-duration="15">
 
-        <!-- 1a · Der Dackel kommt -->
+        <!-- 1a · Der Dackel kommt (Baum links, Dackel von rechts) -->
         <div class="scene creambg" id="s1">
-          
-          <div class="abs" id="dogWrap" style="left:-150px;top:880px;width:900px"><div class="boil"><img class="feather" src="assets/img/dackel.jpg" style="width:900px;display:block" /></div></div>
-          <img class="abs feather" id="baum" src="assets/img/baum.jpg" style="left:610px;top:900px;width:500px" />
-          <div class="lbl" id="bub" style="left:560px;top:690px"><div class="boil"><div class="tag" style="padding:22px 40px 26px;border-radius:0"><div class="hand" style="font-size:96px;color:var(--red)">Wuff!</div></div></div></div>
-          <div class="lbl" id="club" style="left:0;width:1080px;top:250px;display:flex;justify-content:center"><div class="boil"><div class="tag red"><div class="tape"></div><div class="serif" style="font-family:Fraunces;font-weight:600;font-style:italic;font-size:64px">Teckelclub Helmstedt</div></div></div></div>
-          <div class="lbl" id="club2" style="left:0;width:1080px;top:430px;display:flex;justify-content:center"><div class="boil"><div class="hand" style="font-size:66px;color:var(--green)">hat Post für dich …</div></div></div>
+          <div class="abs" id="baumWrap" style="left:-40px;top:930px;width:520px"><div class="boil"><img class="feather" src="assets/img/baum.jpg" style="width:520px;display:block" /></div></div>
+          <div class="abs" id="dogWrap" style="left:250px;top:900px;width:900px;transform-origin:40% 90%"><div class="boil"><img class="feather" src="assets/img/dackel.jpg" style="width:900px;display:block" /></div></div>
+          <div class="lbl" id="bub" style="left:240px;top:700px"><div class="boil"><div class="tag" style="padding:22px 40px 26px"><div class="hand" style="font-size:104px;color:var(--red)">Wuff!</div></div></div></div>
+          <div class="lbl" id="club" style="left:0;width:1080px;top:300px;display:flex;justify-content:center"><div class="boil"><div class="tag red"><div class="tape"></div><div class="serif split" style="font-family:Fraunces;font-weight:600;font-style:italic;font-size:70px">Teckelclub Helmstedt</div></div></div></div>
         </div>
 
         <!-- 1b · Der Brief -->
         <div class="scene creambg" id="s1b">
-          <div class="abs" id="briefWrap" style="left:-60px;top:560px;width:1200px"><div class="boil"><img class="feather" src="assets/img/dackel-brief.jpg" style="width:1200px;display:block" /></div></div>
+          <div class="abs" id="briefWrap" style="left:-60px;top:560px;width:1200px;transform-origin:60% 70%"><div class="boil"><img class="feather" src="assets/img/dackel-brief.jpg" style="width:1200px;display:block" /></div></div>
           <div class="glow" id="seal" style="left:640px;top:1130px;width:260px;height:260px"></div>
-          <div class="lbl" id="post" style="left:0;width:1080px;top:270px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="transform:rotate(-3deg)"><div class="tape"></div><div class="hand" style="font-size:104px;color:var(--red)">Post für dich!</div></div></div></div>
+          <div class="lbl" id="post" style="left:0;width:1080px;top:290px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="transform:rotate(-3deg)"><div class="tape"></div><div class="hand split" style="font-size:110px;color:var(--red)">Post für dich!</div></div></div></div>
         </div>
 
         <!-- 2 · Die Stadt -->
-        <div class="scene" id="s2">
-          <img class="full" id="stadt" src="assets/img/stadt.jpg" />
-          <div class="abs snow" id="snow2" style="inset:0"></div>
+        <div class="scene" id="s2" style="background:var(--navy)">
+          <div class="card" id="c2"><img class="full" id="stadt" src="assets/img/stadt.jpg" /></div>
+          <div class="abs snow" style="inset:0"></div>
           <div class="lbl" id="inv" style="left:0;width:1080px;top:150px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="text-align:center;padding:30px 56px 40px;transform:rotate(-2deg)"><div class="tape"></div>
-            <div class="hand" style="font-size:84px;color:var(--red)">Einladung</div>
-            <div class="serif" style="font-size:86px;color:var(--green);margin-top:10px">zur Weihnachtsfeier</div></div></div></div>
+            <div class="hand split" style="font-size:88px;color:var(--red)">Einladung</div>
+            <div class="serif split" style="font-size:86px;color:var(--green);margin-top:10px">zur Weihnachtsfeier</div></div></div></div>
         </div>
 
         <!-- 3 · Das Schützenhaus -->
-        <div class="scene" id="s3" style="background:#e9e4dc">
-          <img class="full" id="haus" src="assets/img/haus.jpg" />
-          <div class="glow wg" style="left:169px;top:822px;width:180px;height:180px"></div>
-          <div class="glow wg" style="left:448px;top:822px;width:180px;height:180px"></div>
-          <div class="glow wg" style="left:726px;top:822px;width:180px;height:180px"></div>
-          <div class="glow wg" style="left:169px;top:1254px;width:180px;height:180px"></div>
-          <div class="glow wg" style="left:726px;top:1254px;width:180px;height:180px"></div>
-          <div class="abs snow" id="snow3" style="inset:0"></div>
-          <div class="lbl" id="sh" style="left:0;width:1080px;top:1620px;display:flex;justify-content:center"><div class="boil"><div class="tag green" style="transform:rotate(2deg)"><div class="tape"></div>
+        <div class="scene" id="s3" style="background:var(--navy)">
+          <div class="card" id="c3"><img class="full" id="haus" src="assets/img/haus.jpg" />
+            <div class="glow wg" style="left:169px;top:822px;width:180px;height:180px"></div>
+            <div class="glow wg" style="left:448px;top:822px;width:180px;height:180px"></div>
+            <div class="glow wg" style="left:726px;top:822px;width:180px;height:180px"></div>
+            <div class="glow wg" style="left:169px;top:1254px;width:180px;height:180px"></div>
+            <div class="glow wg" style="left:726px;top:1254px;width:180px;height:180px"></div>
+            <div class="glow wg" style="left:330px;top:1250px;width:120px;height:120px"></div>
+            <div class="glow wg" style="left:630px;top:1250px;width:120px;height:120px"></div>
+          </div>
+          <div class="abs snow" style="inset:0"></div>
+          <div class="lbl" id="sh" style="left:0;width:1080px;top:1610px;display:flex;justify-content:center"><div class="boil"><div class="tag green" style="transform:rotate(2deg)"><div class="tape"></div>
             <div class="hand" style="font-size:58px;color:#f1d48a">im</div>
-            <div class="serif" style="font-size:80px;margin-top:4px">Schützenhaus</div></div></div></div>
+            <div class="serif split" style="font-size:84px;margin-top:4px">Schützenhaus</div></div></div></div>
         </div>
 
         <!-- 4 · Die Dackel-Parade -->
         <div class="scene" id="s4" style="background:var(--navy)">
-          <div class="abs snow" id="snow4" style="inset:0"></div>
-          <div class="lbl" id="paradeCard" style="left:50px;top:460px"><div class="boil"><div style="background:var(--paper);padding:22px 22px 26px;transform:rotate(-2deg);box-shadow:0 18px 30px rgba(0,0,0,.4)"><div class="tape"></div><img src="assets/img/parade.jpg" style="width:936px;display:block" /></div></div></div>
-          <div class="lbl" id="zwei" style="left:0;width:1080px;top:200px;display:flex;justify-content:center"><div class="boil"><div class="tag red" style="transform:rotate(-2deg)"><div class="tape"></div><div class="serif" style="font-size:66px">Zwei- &amp; Vierbeiner</div></div></div></div>
-          <div class="lbl" id="will" style="left:0;width:1080px;top:1520px;display:flex;justify-content:center"><div class="boil"><div class="hand" style="font-size:100px;color:#fbf2dc">herzlich willkommen!</div></div></div>
+          <div class="abs snow" style="inset:0"></div>
+          <div class="lbl" id="paradeCard" style="left:50px;top:470px"><div style="background:var(--paper);padding:22px 22px 26px;transform:rotate(-2deg);box-shadow:0 18px 30px rgba(0,0,0,.4)"><div class="tape"></div><img id="paradeImg" src="assets/img/parade.jpg" style="width:936px;display:block" /></div></div>
+          <div class="lbl" id="zwei" style="left:0;width:1080px;top:200px;display:flex;justify-content:center"><div class="boil"><div class="tag red" style="transform:rotate(-2deg)"><div class="tape"></div><div class="serif split" style="font-size:70px">Zwei- &amp; Vierbeiner</div></div></div></div>
+          <div class="lbl" id="will" style="left:0;width:1080px;top:1530px;display:flex;justify-content:center"><div class="boil"><div class="hand split" style="font-size:104px;color:#fbf2dc">herzlich willkommen!</div></div></div>
         </div>
 
         <!-- 5 · Der Festsaal -->
         <div class="scene" id="s5" style="background:#efe2c8">
-          <img class="full" id="saal" src="assets/img/saal.jpg" />
-          <div class="glow cg" style="left:380px;top:860px;width:190px;height:190px"></div>
-          <div class="glow cg" style="left:540px;top:760px;width:150px;height:150px"></div>
-          <div class="glow cg" style="left:700px;top:690px;width:130px;height:130px"></div>
-          <div class="glow cg" style="left:30px;top:660px;width:140px;height:140px"></div>
+          <div class="card" id="c5"><img class="full" id="saal" src="assets/img/saal.jpg" />
+            <div class="glow cg" style="left:380px;top:860px;width:190px;height:190px"></div>
+            <div class="glow cg" style="left:540px;top:760px;width:150px;height:150px"></div>
+            <div class="glow cg" style="left:700px;top:690px;width:130px;height:130px"></div>
+            <div class="glow cg" style="left:30px;top:660px;width:140px;height:140px"></div>
+          </div>
           <div class="lbl" id="kerz" style="left:0;width:1080px;top:150px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="text-align:center;transform:rotate(-2deg)"><div class="tape"></div>
-            <div class="hand" style="font-size:76px;color:var(--red)">Kerzenschein, Glühwein</div>
-            <div class="hand" style="font-size:76px;color:var(--green);margin-top:6px">&amp; gute Gesellschaft</div></div></div></div>
+            <div class="hand split" style="font-size:78px;color:var(--red)">Kerzenschein, Glühwein</div>
+            <div class="hand split" style="font-size:78px;color:var(--green);margin-top:6px">&amp; gute Gesellschaft</div></div></div></div>
         </div>
 
         <!-- 6 · Endkarte -->
         <div class="scene" id="s6" style="background:var(--cream)">
-          <img class="full" id="endk" src="assets/img/endkarte.jpg" />
-          <div class="glow" id="fire" style="left:470px;top:1390px;width:220px;height:220px"></div>
-          <div class="abs" id="eText" style="left:160px;top:380px;width:756px;text-align:center">
-            <div class="ln hand" style="font-size:62px;color:var(--red)">Teckelclub Helmstedt</div>
-            <div class="ln serif" style="font-size:78px;color:var(--green);margin-top:18px">Weihnachtsfeier</div>
-            <div class="ln abs" style="left:0;width:756px;top:165px;height:3px"><svg width="756" height="20" viewBox="0 0 756 20"><path id="ul" pathLength="1" d="M150 10 C 300 2, 460 16, 606 8" stroke="#c99a3e" stroke-width="5" fill="none" stroke-linecap="round" /></svg></div>
-            <div class="ln serif" style="font-size:132px;color:var(--red);margin-top:58px;letter-spacing:-.03em">22.12.2026</div>
-            <div class="ln serif" style="font-size:84px;color:var(--ink);margin-top:18px;font-weight:600">18:00 Uhr</div>
-            <div class="ln" style="margin-top:34px;font-family:Inter;font-weight:500;font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:var(--green)">Schützenhaus Helmstedt</div>
-            <div class="ln hand" style="font-size:46px;color:var(--red);margin-top:34px">Wir freuen uns auf euch – mit Hund!</div>
+          <div class="card" id="c6"><img class="full" id="endk" src="assets/img/endkarte.jpg" />
+            <div class="glow" id="fire" style="left:470px;top:1390px;width:220px;height:220px"></div>
           </div>
-          <div class="abs mul st" style="left:118px;top:300px;width:150px;height:150px;background:url(assets/img/deko.jpg) -762px -60px / 1200px 1200px"></div>
-          <div class="abs mul st" style="left:820px;top:880px;width:120px;height:120px;background:url(assets/img/deko.jpg) -36px -650px / 960px 960px"></div>
-          <div class="abs snow" id="snow6" style="inset:0"></div>
+          <div class="abs" id="eText" style="left:160px;top:380px;width:756px;text-align:center">
+            <div class="ln hand split" style="font-size:62px;color:var(--red)">Teckelclub Helmstedt</div>
+            <div class="ln serif split" style="font-size:80px;color:var(--green);margin-top:16px">Weihnachtsfeier</div>
+            <div class="ul abs" style="left:0;width:756px;top:162px;height:20px"><svg width="756" height="20" viewBox="0 0 756 20"><path id="ul" pathLength="1" d="M150 10 C 300 2, 460 16, 606 8" stroke="#c99a3e" stroke-width="5" fill="none" stroke-linecap="round" /></svg></div>
+            <div class="ln serif" id="date" style="font-size:134px;color:var(--red);margin-top:56px;letter-spacing:-.03em">22.12.2026</div>
+            <div class="ln serif" id="time" style="font-size:86px;color:var(--ink);margin-top:16px;font-weight:600">18:00 Uhr</div>
+            <div class="ln" style="margin-top:32px;font-family:Inter;font-weight:500;font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:var(--green)">Schützenhaus Helmstedt</div>
+            <div class="ln hand split" style="font-size:46px;color:var(--red);margin-top:34px">Wir freuen uns auf euch – mit Hund!</div>
+          </div>
+          <div class="abs snow" style="inset:0"></div>
         </div>
 
-        <div id="rip"><div id="ripIn"></div></div>
+        <div class="clip" id="conf"></div>
+        <div id="rip"><div id="ripIn"><div id="ripStripe"></div></div></div>
       </div>
 
       <div class="clip" id="tex" data-start="0" data-duration="15"></div>
@@ -143,6 +152,10 @@
       let seed = 23; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
       const R = (a, b) => a + (b - a) * rnd();
       const FPS = 12; // Stop-Motion-Takt
+      const $$ = (s) => gsap.utils.toArray(s);
+
+      // ---------- Text in Buchstaben zerlegen ----------
+      $$(".split").forEach((el) => { const t = el.textContent; el.textContent = ""; [...t].forEach((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; el.appendChild(s); }); });
 
       // ---------- ausgerissene Kanten (deterministisch) ----------
       function tornPoly(w, h, amp = 7, step = 18) {
@@ -153,86 +166,111 @@
         for (let y = h; y >= 0; y -= step) p.push([R(0, amp), y]);
         return "polygon(" + p.map(([x, y]) => `${(x / w * 100).toFixed(2)}% ${(y / h * 100).toFixed(2)}%`).join(",") + ")";
       }
-      document.querySelectorAll(".tag").forEach((el) => { el.style.clipPath = tornPoly(el.offsetWidth, el.offsetHeight, 9, 16); });
-      // Riss-Blatt: gezackte Ober- und Unterkante
+      $$(".tag").forEach((el) => { el.style.clipPath = tornPoly(el.offsetWidth, el.offsetHeight, 9, 16); });
       { const w = 1160, h = 2700, p = []; for (let x = 0; x <= w; x += 22) p.push([x, R(0, 60) + (x % 88 === 0 ? R(10, 40) : 0)]); p.push([w, h]);
         for (let x = w; x >= 0; x -= 22) p.push([x, h - R(0, 60)]);
         document.getElementById("ripIn").style.clipPath = "polygon(" + p.map(([x, y]) => `${x}px ${y.toFixed(1)}px`).join(",") + ")"; }
 
-      // ---------- Schneeflocken ----------
-      document.querySelectorAll(".snow").forEach((box) => {
-        for (let i = 0; i < 46; i++) { const f = document.createElement("div"); f.className = "flake"; const s = R(8, 22);
-          f.style.width = f.style.height = s + "px"; f.style.left = R(0, 1080) + "px"; f.style.top = R(-200, 1700) + "px"; f.style.opacity = R(0.7, 1); box.appendChild(f); }
-      });
+      // ---------- Schnee + Papier-Konfetti ----------
+      $$(".snow").forEach((box) => { for (let i = 0; i < 50; i++) { const f = document.createElement("div"); f.className = "flake"; const s = R(8, 22);
+        f.style.width = f.style.height = s + "px"; f.style.left = R(0, 1080) + "px"; f.style.top = R(-300, 1700) + "px"; f.style.opacity = R(0.7, 1); box.appendChild(f); } });
+      const conf = document.getElementById("conf"), confColors = ["#d3a548", "#d3a548", "#c8312f", "#2f6b45", "#e8c26a"];
+      const flakeSVG = `<svg viewBox="0 0 40 40"><g stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M20 3v34M5 11.5l30 17M5 28.5l30-17"/><path d="M20 9l-4-4M20 9l4-4M20 31l-4 4M20 31l4 4" stroke-width="3"/></g></svg>`;
+      const pieces = [];
+      for (let i = 0; i < 30; i++) { const d = document.createElement("div"); d.className = "pc"; const s = R(30, 70);
+        if (i % 3 === 2) { d.innerHTML = flakeSVG; d.style.width = d.style.height = s + "px"; }
+        else { d.classList.add("star"); d.style.width = d.style.height = s + "px"; d.style.background = confColors[i % confColors.length]; }
+        conf.appendChild(d); pieces.push({ d, x: R(-40, 1080), y: R(-1400, 1700), v: R(90, 170), w: R(30, 90), f: R(0.4, 1.0), r: R(-200, 200), p: R(0, 6) }); }
 
       // ---------- Helfer ----------
       const stepEase = (name, dur) => { const f = gsap.parseEase(name); const n = Math.max(1, Math.round(dur * FPS)); return (p) => Math.round(f(p) * n) / n; };
       const sm = (sel, vars, t, ease = "power2.out") => tl.to(sel, { ...vars, ease: stepEase(ease, vars.duration) }, t);
       const smFrom = (sel, from, to, t, ease = "back.out(1.6)") => tl.fromTo(sel, from, { ...to, ease: stepEase(ease, to.duration), immediateRender: false }, t);
-      const slap = (sel, t, rot = 0) => smFrom(sel, { autoAlpha: 0, scale: 1.35, rotation: rot - 6 }, { autoAlpha: 1, scale: 1, rotation: rot, duration: 0.42 }, t);
+      const slap = (sel, t, rot = 0) => smFrom(sel, { autoAlpha: 0, scale: 1.4, rotation: rot - 8 }, { autoAlpha: 1, scale: 1, rotation: rot, duration: 0.42 }, t);
+      // Buchstaben ploppen einzeln
+      const letters = (sel, t, gap = 0.035) => $$(sel + " .ch").forEach((c, i) => smFrom(c, { autoAlpha: 0, scale: 0.2, y: -40, rotation: R(-35, 35) }, { autoAlpha: 1, scale: 1, y: 0, rotation: R(-4, 4), duration: 0.3 }, t + i * gap, "back.out(2.5)"));
+      const shake = (sel, t, n = 6, a = 10) => { for (let i = 0; i < n; i++) tl.set(sel, { x: i === n - 1 ? 0 : R(-a, a), y: i === n - 1 ? 0 : R(-a, a) }, t + i / FPS); };
+      // Szene landet als gekippte Papierkarte, dann Kamerafahrt
+      const land = (sel, t, push, dur, rot) => { smFrom(sel, { scale: 1.32, rotation: rot, y: 60 }, { scale: 1.06, rotation: 0, y: 0, duration: 0.55 }, t, "back.out(1.3)"); sm(sel, { scale: 1.06 + push, rotation: -rot * 0.15, duration: dur - 0.55 }, t + 0.55, "none"); };
       const scenes = ["#s1", "#s1b", "#s2", "#s3", "#s4", "#s5", "#s6"];
-      const show = (id, t) => { scenes.forEach((s) => tl.set(s, { autoAlpha: s === id ? 1 : 0 }, t)); };
-      // Riss-Übergang: Blatt fährt durchs Bild, Szenenwechsel, wenn es alles verdeckt
-      const rip = (t, next) => { const d = 0.75, k = 9, cover = 5 / FPS;
-        tl.fromTo("#rip", { y: 1940, rotation: R(-2, 2) }, { y: -2720, duration: d, ease: (p) => Math.round(p * k) / k, immediateRender: false }, t - cover);
+      const show = (id, t) => scenes.forEach((s) => tl.set(s, { autoAlpha: s === id ? 1 : 0 }, t));
+      const rip = (t, next) => { const d = 0.62, k = Math.round(d * FPS), cover = 4 / FPS;
+        tl.fromTo("#rip", { y: 1940, rotation: R(-3, 3) }, { y: -2720, duration: d, ease: (p) => Math.round(p * k) / k, immediateRender: false }, t - cover);
         show(next, t); };
-      // „Boil“: alle Papierteile zittern leicht im Stop-Motion-Takt
-      const boils = gsap.utils.toArray(".boil");
-      for (let i = 0; i < 15 * FPS; i++) boils.forEach((b) => tl.set(b, { rotation: R(-0.7, 0.7), x: R(-1.6, 1.6), y: R(-1.6, 1.6) }, i / FPS));
-      // Schnee fällt (in Schritten)
-      gsap.utils.toArray(".snow").forEach((s) => sm(s.children, { y: "+=360", x: "+=40", duration: 15 }, 0, "none"));
-      // Fensterlicht und Kerzen flackern
-      for (let i = 0; i < 15 * FPS; i++) { tl.set(".wg", { opacity: R(0.55, 0.9) }, i / FPS); tl.set(".cg", { opacity: R(0.35, 0.8), scale: R(0.92, 1.08) }, i / FPS); tl.set("#fire", { opacity: R(0.45, 0.85), scale: R(0.9, 1.1) }, i / FPS); }
+
+      // ---------- Dauerbewegung im Stop-Motion-Takt ----------
+      const boils = $$(".boil").map((b) => ({ b, ph: R(0, 6), amp: R(1.2, 2.6) }));
+      for (let i = 0; i < 15 * FPS; i++) {
+        const t = i / FPS;
+        boils.forEach(({ b, ph, amp }) => tl.set(b, { rotation: amp * Math.sin(t * 4.2 + ph) + R(-0.5, 0.5), x: R(-1.6, 1.6), y: R(-1.6, 1.6) }, t));
+        pieces.forEach((q) => tl.set(q.d, { x: q.x + q.w * Math.sin(t * q.f * 2 + q.p), y: q.y + q.v * t, rotation: q.r * t }, t));
+        tl.set(".wgi", {}, t);
+        tl.set(".cg", { opacity: R(0.35, 0.85), scale: R(0.9, 1.1) }, t);
+        tl.set("#fire", { opacity: R(0.45, 0.9), scale: R(0.88, 1.12) }, t);
+        tl.set("#endk", { scale: 1 + 0.012 * Math.sin(t * 3) }, t);
+      }
+      $$(".snow").forEach((s) => sm(s.children, { y: "+=520", x: "+=60", duration: 15 }, 0, "none"));
 
       // ---------- Ausgangszustand ----------
       show("#s1", 0);
-      tl.set(["#club", "#club2", "#bub", "#post", "#inv", "#sh", "#zwei", "#will", "#kerz", ".ln", ".st"], { autoAlpha: 0 }, 0);
+      tl.set(["#club", "#bub", "#post", "#inv", "#sh", "#zwei", "#will", "#kerz", ".ln", ".ch", ".wg"], { autoAlpha: 0 }, 0);
       tl.set("#rip", { y: 2000 }, 0);
       tl.set("#ul", { strokeDasharray: 1, strokeDashoffset: 1 }, 0);
 
-      // 1a · 0 – 1,9 s: Dackel trippelt herein, „Wuff!“
-      smFrom("#baum", { autoAlpha: 0, y: 120, scale: 0.9 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.5 }, 0.05);
-      smFrom("#dogWrap", { x: -950 }, { x: 0, duration: 1.0 }, 0.25, "power2.out");
-      for (let i = 0; i < 6; i++) tl.to("#dogWrap", { y: -26, duration: 0.083, yoyo: true, repeat: 1, ease: "steps(1)" }, 0.25 + i * 0.17);
-      slap("#club", 0.35, -2);
-      smFrom("#club2", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.35 }, 0.75, "power2.out");
-      slap("#bub", 1.25, 4);
+      // 1a · 0 – 1,9 s: Baum ploppt, Dackel hüpft von rechts herein, „Wuff!“
+      smFrom("#baumWrap", { autoAlpha: 0, y: 260, rotation: -14, scale: 0.7 }, { autoAlpha: 1, y: 0, rotation: 0, scale: 1, duration: 0.5 }, 0.0, "back.out(2)");
+      smFrom("#dogWrap", { x: 950 }, { x: 0, duration: 1.0 }, 0.15, "power2.out");
+      for (let i = 0; i < 6; i++) tl.to("#dogWrap", { y: -46, rotation: i % 2 ? 3 : -3, duration: 0.083, yoyo: true, repeat: 1, ease: "steps(1)" }, 0.15 + i * 0.17);
+      slap("#club", 0.2, -2); letters("#club", 0.3, 0.03);
+      tl.to("#dogWrap", { y: -110, rotation: -7, duration: 0.17, ease: "steps(2)" }, 1.2);
+      tl.to("#dogWrap", { y: 0, rotation: 0, duration: 0.25, ease: "steps(3)" }, 1.37);
+      slap("#bub", 1.22, -6); shake("#bub .tag", 1.4, 5, 8);
+      sm("#dogWrap", { x: -60, duration: 0.3 }, 1.62, "power2.in");
 
       // 1b · 1,9 – 3,6 s: Brief mit Pfoten-Siegel
       show("#s1b", 1.9);
-      smFrom("#briefWrap", { y: 520 }, { y: 0, duration: 0.6 }, 1.9, "power3.out");
-      slap("#post", 2.4, 0);
-      smFrom("#seal", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.25, duration: 0.5 }, 2.75, "power2.out");
-      sm("#seal", { opacity: 0.4, scale: 1, duration: 0.5 }, 3.25, "power2.in");
+      smFrom("#briefWrap", { y: 620, rotation: 8 }, { y: 0, rotation: 0, duration: 0.55 }, 1.9, "back.out(1.4)");
+      [[2.5, 4], [2.67, -4], [2.84, 3], [3.0, -2], [3.17, 0]].forEach(([t, r]) => tl.set("#briefWrap", { rotation: r }, t));
+      slap("#post", 2.15, 0); letters("#post", 2.25, 0.04);
+      smFrom("#seal", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1.45, duration: 0.4 }, 2.85, "back.out(3)");
+      sm("#seal", { opacity: 0.35, scale: 1, duration: 0.4 }, 3.25, "power2.in");
 
       // 2 · 3,6 – 6,2 s: Einladung über der Stadt
       rip(3.6, "#s2");
-      sm("#stadt", { scale: 1.08, duration: 2.6, transformOrigin: "50% 70%" }, 3.6, "none");
-      slap("#inv", 4.05, 0);
+      land("#c2", 3.6, 0.1, 2.6, -5);
+      slap("#inv", 4.0, 0); letters("#inv", 4.1, 0.03);
 
-      // 3 · 6,2 – 8,4 s: das Schützenhaus
+      // 3 · 6,2 – 8,4 s: Schützenhaus, Fenster gehen nacheinander an
       rip(6.2, "#s3");
-      sm("#haus", { scale: 1.07, duration: 2.2, transformOrigin: "50% 60%" }, 6.2, "none");
-      slap("#sh", 6.65, 2);
+      land("#c3", 6.2, 0.1, 2.2, 5);
+      $$(".wg").forEach((w, i) => { smFrom(w, { autoAlpha: 0, scale: 0.3 }, { autoAlpha: 0.95, scale: 1.15, duration: 0.25 }, 6.75 + i * 0.13, "back.out(3)");
+        for (let k = 0; k < 20; k++) tl.set(w, { opacity: R(0.6, 0.95) }, 7.1 + i * 0.13 + k / FPS); });
+      slap("#sh", 6.6, 2); letters("#sh", 6.7, 0.04);
 
-      // 4 · 8,4 – 10,4 s: die Dackel-Parade
+      // 4 · 8,4 – 10,4 s: Dackel-Parade hüpft im Takt
       rip(8.4, "#s4");
-      smFrom("#paradeCard", { y: 900, rotation: 6 }, { y: 0, rotation: 0, duration: 0.6 }, 8.45, "back.out(1.4)");
-      for (let i = 0; i < 9; i++) tl.to("#paradeCard img", { y: i % 2 ? 0 : -12, duration: 0.01 }, 9.1 + i * 0.14);
-      slap("#zwei", 8.9, -2);
-      smFrom("#will", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.4 }, 9.3, "power2.out");
+      smFrom("#paradeCard", { y: 1100, rotation: 14 }, { y: 0, rotation: 0, duration: 0.55 }, 8.4, "back.out(1.5)");
+      for (let i = 0; i < 6; i++) { tl.to("#paradeCard", { y: -42, rotation: i % 2 ? 2.5 : -2.5, duration: 0.125, ease: "steps(2)" }, 9.0 + i * 0.25); tl.to("#paradeCard", { y: 0, duration: 0.125, ease: "steps(2)" }, 9.125 + i * 0.25); }
+      slap("#zwei", 8.7, -2); letters("#zwei", 8.8, 0.03);
+      tl.set("#will", { autoAlpha: 1 }, 9.2); letters("#will", 9.2, 0.035);
 
-      // 5 · 10,4 – 11,9 s: der Festsaal
+      // 5 · 10,4 – 11,9 s: Festsaal
       rip(10.4, "#s5");
-      sm("#saal", { scale: 1.08, duration: 1.5, transformOrigin: "50% 55%" }, 10.4, "none");
-      slap("#kerz", 10.75, -2);
+      land("#c5", 10.4, 0.12, 1.5, -4);
+      slap("#kerz", 10.65, -2); letters("#kerz", 10.75, 0.022);
 
-      // 6 · 11,9 – 15 s: die Einladungskarte
+      // 6 · 11,9 – 15 s: Einladungskarte, Datum als Stempel
       rip(11.9, "#s6");
-      gsap.utils.toArray(".ln").forEach((el, i) => slap(el, 12.25 + i * 0.22, 0));
-      tl.to("#ul", { strokeDashoffset: 0, duration: 0.4, ease: stepEase("power1.inOut", 0.4) }, 12.55);
-      gsap.utils.toArray(".st").forEach((el, i) => slap(el, 13.5 + i * 0.2, i ? 10 : -10));
-      sm("#endk", { scale: 1.03, duration: 3.1, transformOrigin: "50% 80%" }, 11.9, "none");
+      land("#c6", 11.9, 0.0, 3.1, 4);
+      tl.set(["#eText .ln:nth-child(1)", "#eText .ln:nth-child(2)", "#eText .ln:nth-child(7)"], { autoAlpha: 1 }, 12.2);
+      letters("#eText .ln:nth-child(1)", 12.25, 0.03);
+      letters("#eText .ln:nth-child(2)", 12.6, 0.04);
+      tl.to("#ul", { strokeDashoffset: 0, duration: 0.4, ease: stepEase("power1.inOut", 0.4) }, 13.0);
+      smFrom("#date", { scale: 2.4, rotation: -10, autoAlpha: 0 }, { scale: 1, rotation: -2, autoAlpha: 1, duration: 0.25 }, 13.1, "power3.in");
+      shake("#c6", 13.35, 5, 12);
+      smFrom("#time", { scale: 2, rotation: 8, autoAlpha: 0 }, { scale: 1, rotation: 1, autoAlpha: 1, duration: 0.22 }, 13.55, "power3.in");
+      smFrom("#eText .ln:nth-child(6)", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.3 }, 13.85, "power2.out");
+      letters("#eText .ln:nth-child(7)", 14.05, 0.018);
       tl.set({}, {}, 15);
 
       window.__timelines["main"] = tl;
