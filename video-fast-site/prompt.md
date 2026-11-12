@@ -10,7 +10,7 @@ Du bist Regisseur und Motion Designer. Mach einen ca. 35 bis 40 Sekunden langen 
 3. Der Mann: „Dann brauchst du fast.site.“ Er hält sein Handy in die Kamera, und die Kamera fährt nahtlos in den Bildschirm hinein. Dafür ist der letzte KI-Frame identisch mit dem ersten Frame des Motion Designs.
 4. Motion Design mit Sprecherstimme: was fast.site macht, angelehnt an die Webseite („Mach deine Website schneller. Behalte dein Hosting.“).
 5. Die Kamera fährt aus dem Bildschirm zurück an den Tisch. Der Mann hat jetzt eine volle Tasse und lehnt sich zufrieden zurück: „Und? Zu viel versprochen?“ Die Bedienung winkt im Hintergrund.
-6. Endcard mit Logo, „Kostenlos testen · 7 Tage, keine Kreditkarte“ und fast.site.
+6. Endcard mit animiertem Logo: Die vier farbigen Pfeil-Elemente (Blau, Grün, Rot, Gelb aus `assets/brand/icon.svg`) fliegen schnell und federnd ins Bild und setzen sich zum Pfeil zusammen. Dann baut sich der Schriftzug aus `wordmark.svg` auf, mit einem kurzen „Whoosh“ und einem sauberen Akzent-Sound. Darunter „Kostenlos testen · 7 Tage, keine Kreditkarte“ und fast.site. Das Logo steht am Ende mindestens 1,5 s ruhig da.
 
 **Look:** KI-Szenen in warmem Diner-Licht, cineastisch, mit geringer Schärfentiefe. Referenzen liegen in `assets/refs/`: der Mann (`mann.webp`), das Diner (`diner.webp`) und die Bedienung (`bedienung.webp`). Die Bedienung kommt in genau dieses Diner, nicht in das aus ihrem Foto. Der Motion-Teil folgt dem Branding von fast.site: weißer Grund, Text in #101827, Akzentfarben aus dem Pfeil-Logo (Blau #3e71b6/#4285f4, Grün #0c9958, Gelb #fbb419, Rot #df482b), Schriften Bricolage Grotesque und Google Sans Flex. Logo und OG-Bild liegen in `assets/brand/`. Schnelle, knackige Bewegung, die selbst „schnell“ wirkt, als Kontrast zur Oma.
 
