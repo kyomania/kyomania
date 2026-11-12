@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "PS2P"; font-weight: 400; src: url(assets/fonts/press-start-2p-latin-400-normal.woff2) format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0c0a1c; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0c0a1c; font-family: "PS2P", monospace; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      #game { position: absolute; left: 0; top: 0; width: 480px; height: 270px; transform: scale(4); transform-origin: 0 0; overflow: hidden; }
+      #world { position: absolute; left: 0; top: 0; width: 480px; height: 270px; transform-origin: 0 0; }
+      .a { position: absolute; }
+      .px { image-rendering: pixelated; }
+      svg { shape-rendering: crispEdges; display: block; }
+      .t { font-family: "PS2P", monospace; white-space: pre; line-height: 1.25; }
+      .sh { text-shadow: 1px 1px 0 #101827; }
+      .sh2 { text-shadow: 2px 2px 0 #101827, -1px -1px 0 #101827, 1px -1px 0 #101827, -1px 1px 0 #101827; }
+      #scr { position: absolute; left: 172px; top: 36px; width: 136px; height: 102px; overflow: hidden; background: #000; }
+      #scrIn { position: absolute; inset: 0; transform-origin: 50% 50%; }
+      .lvl { position: absolute; inset: 0; overflow: hidden; }
+      #scan { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, rgba(0,0,0,0.22) 0 0.5px, rgba(0,0,0,0) 0.5px 1px); z-index: 20; }
+      #glare { position: absolute; inset: 0; pointer-events: none; z-index: 21; background: radial-gradient(120% 100% at 30% 20%, rgba(255,255,255,0.10), rgba(255,255,255,0) 50%), radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.45) 100%); }
+      #crtflash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 22; }
+      #dlg { position: absolute; left: 8px; top: 226px; width: 464px; height: 40px; background: #101827; border: 2px solid #f2efe6; box-shadow: 0 0 0 2px #101827; }
+      #dlgT { position: absolute; left: 8px; top: 9px; font-size: 7px; color: #f2efe6; line-height: 1.6; }
+      #tag { position: absolute; left: 16px; top: 220px; padding: 2px 4px; background: #fbb419; color: #101827; font-size: 5px; box-shadow: 0 0 0 1px #101827; }
+      #hud { position: absolute; left: 0; top: 0; width: 480px; height: 16px; background: rgba(12,10,28,0.85); border-bottom: 1px solid #f2efe6; }
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+      <div id="stage" class="clip" data-start="0" data-duration="30" data-track-index="0" data-layout-ignore>
+        <div id="game">
+          <div id="world">
+            <div id="room" class="a" style="inset:0"></div>
+            <div id="npcs" class="a" style="inset:0"></div>
+            <div id="pc" class="a" style="inset:0"></div>
+            <div id="scr"><div id="scrIn">
+              <div class="lvl" id="L1"></div>
+              <div class="lvl" id="L2"></div>
+              <div class="lvl" id="L3"></div>
+              <div class="lvl" id="L4"></div>
+              <div class="lvl" id="L5"></div>
+              <div class="lvl" id="L6"></div>
+              <div class="lvl" id="L7"></div>
+            </div><div id="scan"></div><div id="glare"></div><div id="crtflash"></div></div>
+            <div id="fx" class="a" style="inset:0"></div>
+          </div>
+          <div id="hud">
+            <div class="a t" style="left:6px;top:5px;font-size:6px;color:#fbb419">1UP</div>
+            <div class="a t" id="score" style="left:28px;top:5px;font-size:6px;color:#f2efe6">SCORE 000000</div>
+            <div class="a" id="hearts" style="left:182px;top:4px;width:60px;height:8px"></div>
+            <div class="a t" style="left:226px;top:5px;font-size:5px;color:#c9c3e8">BESUCHER</div>
+            <div class="a t" style="left:318px;top:5px;font-size:5px;color:#c9c3e8">CPU-TEMP</div>
+            <div class="a" style="left:364px;top:4px;width:84px;height:8px;border:1px solid #f2efe6;background:#101827"><div id="temp" class="a" style="left:1px;top:1px;width:80px;height:4px;background:#3e9bff;transform-origin:0 50%"></div></div>
+            <div class="a t" id="tempT" style="left:452px;top:5px;font-size:5px;color:#3e9bff">OK</div>
+          </div>
+          <div id="dlg"><div id="dlgT" class="t"></div><div id="dlgA" class="a t" style="right:6px;bottom:4px;font-size:5px;color:#fbb419">▼</div></div>
+          <div id="tag" class="t">FAST.SITE</div>
+          <div id="big" class="a" style="inset:0"></div>
+          <div id="flash"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      const V = 0.9;
+      let sd = 31337; const rnd = () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }; const R = (a, b) => a + (b - a) * rnd();
+      function box(p, x, y, w, h, c, extra) { const d = document.createElement("div"); d.className = "a"; Object.assign(d.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px", background: c }, extra || {}); p.appendChild(d); return d; }
+      function txt(p, x, y, s, size, color, extra) { const d = document.createElement("div"); d.className = "a t"; d.textContent = s; Object.assign(d.style, { left: x + "px", top: y + "px", fontSize: size + "px", color }, extra || {}); p.appendChild(d); return d; }
+      // pixel sprite from a char grid
+      function sprite(rows, pal, k = 1) {
+        const w = rows[0].length, h = rows.length; let r = "";
+        rows.forEach((row, y) => { let x = 0; while (x < w) { const c = row[x]; let n = 1; while (x + n < w && row[x + n] === c) n++; if (c !== "." && pal[c]) r += `<rect x="${x}" y="${y}" width="${n}" height="1" fill="${pal[c]}"/>`; x += n; } });
+        return `<svg width="${w * k}" height="${h * k}" viewBox="0 0 ${w} ${h}">${r}</svg>`;
+      }
+      function put(p, x, y, svg, extra) { const d = document.createElement("div"); d.className = "a"; d.style.left = x + "px"; d.style.top = y + "px"; d.innerHTML = svg; Object.assign(d.style, extra || {}); p.appendChild(d); return d; }
+
+      const INK = "#101827";
+      const S = {
+        npc: ["..hhhh..", ".hhhhhh.", ".hssssh.", ".s0ss0s.", ".ssssss.", "..ssss..", ".cccccc.", "cccccccc", "s.cccc.s", "..cccc..", "..l..l..", "..l..l.."],
+        heart: [".rr.rr.", "rrrrrrr", "rrrrrrr", ".rrrrr.", "..rrr..", "...r..."],
+        smoke: ["..gggg..", ".gGGGGg.", "gGGGGGGg", "gGGGGGGg", "gGGGGGGg", ".gGGGGg.", "..gggg.."],
+        flame: ["..y...", ".yy.y.", ".yoyy.", "yoooy.", "yorroy", "yorroy", ".orro.", "..oo.."],
+        chev: ["....g....", "...ggg...", "..gg.gg..", ".gg...gg.", "....r....", "...rry...", "..rr.yy..", ".rr...yy."],
+        floppy: ["kkkkkkkkkkkk", "kkmmmmmmkkkk", "kkmmkkmmkkkk", "kkmmmmmmkkkk", "kkkkkkkkkkkk", "kwwwwwwwwwwk", "kwwwwgwwwwwk", "kwwwgwgwwwwk", "kwwwwrywwwwk", "kwwwrwwywwwk", "kwwwwwwwwwwk", "kkkkkkkkkkkk"],
+        cube: [".yyyyyy.", "yyyyyyyy", "yy0yy0yy", "yyyyyyyy", "yyy00yyy", "yyyyyyyy", ".yyyyyy.", ".d....d."],
+        flag: ["pyyyy.", "pyyyyy", "pyyyy.", "p.....", "p.....", "p.....", "p.....", "pp...."],
+        house: ["...rr...", "..rrrr..", ".rrrrrr.", "rrrrrrrr", ".wwwwww.", ".wbwwdw.", ".wwwwdw.", ".wwwwdw."],
+        castle: ["g.g.g.g.g", "ggggggggg", ".ggggggg.", ".gg.g.gg.", ".ggggggg.", ".ggg.ggg.", ".ggg.ggg."],
+        boss: ["....rrrrrrrr....", "...rrrrrrrrrr...", "..rrkkrrrrkkrr..", "..rrkyrrrrykrr..", "..rrrrrrrrrrrr..", "..rrkkkkkkkkrr..", "..rrkwkwkwkwrr..", "...rrrrrrrrrr...", ".gg.rrrrrrrr.gg.", "gggg.rrrrrr.gggg", ".gg..rr..rr..gg.", ".....rr..rr.....", "....rrr..rrr...."],
+        shield: ["bbbbbbbbbbbb", "bwwwwwwwwwwb", "bwwwwgwwwwwb", "bwwwgwgwwwwb", "bwwgwwwgwwwb", "bwwwwrywwwwb", "bwwwrwwywwwb", "bwwrwwwwywwb", ".bwwwwwwwwb.", ".bwwwwwwwwb.", "..bwwwwwwb..", "...bwwwwb...", "....bbbb...."],
+        xx: ["r.....r", ".r...r.", "..r.r..", "...r...", "..r.r..", ".r...r.", "r.....r"],
+        monitor: ["kkkkkkkkkkkk", "kbbbbbbbbbbk", "kbbbbbbbbbbk", "kbbbbbbbbbbk", "kbbbbbbbbbbk", "kbbbbbbbbbbk", "kkkkkkkkkkkk", "....kkkk....", "..kkkkkkkk.."],
+        phone: [".kkkkkk.", "kbbbbbbk", "kbbbbbbk", "kbbbbbbk", "kbbbbbbk", "kbbbbbbk", "kbbbbbbk", "kbbbbbbk", "kkkwwkkk", ".kkkkkk."],
+        globe: ["...gggg...", ".ggbbggbg.", ".gbbbggbbg", "gbbggbbbbg", "gbbgggbbgg", "gbbbggbbgg", "gbbbbbbggg", ".gbbbbggg.", ".ggbbgggg.", "...gggg..."],
+        check: [".......g", "......gg", "g....gg.", "gg..gg..", ".gggg...", "..gg...."],
+      };
+      const P = { h: "#5a3a22", s: "#f1c27d", 0: INK, l: "#2a2a3a", r: "#ef4040", g: "#9a96a8", G: "#c9c5d4", y: "#ffd23f", o: "#ff8a1a", k: INK, m: "#b9b9c4", w: "#f2efe6", b: "#3e9bff", p: "#c9c3e8", d: "#a87c1a" };
+      const pal = (o) => Object.assign({}, P, o || {});
+
+      // ================= ROOM =================
+      const room = $("#room");
+      box(room, 0, 0, 480, 270, "#3b3f7a");
+      for (let x = 0; x < 480; x += 12) box(room, x, 0, 4, 200, "#383c74");
+      box(room, 0, 196, 480, 74, "#2a2448");
+      for (let x = 0; x < 480; x += 24) box(room, x, 196, 1, 74, "#241f40");
+      // window with night sky
+      box(room, 56, 26, 64, 54, INK); box(room, 59, 29, 58, 48, "#151a45");
+      [[66, 36], [90, 34], [104, 48], [72, 58], [110, 62], [84, 52]].forEach(([x, y]) => box(room, x, y, 1, 1, "#f2efe6"));
+      box(room, 96, 38, 8, 8, "#fff3c4"); box(room, 99, 38, 5, 5, "#151a45");
+      box(room, 87, 29, 2, 48, INK); box(room, 59, 52, 58, 2, INK);
+      // door
+      box(room, 6, 112, 40, 86, INK); box(room, 8, 114, 36, 84, "#7a4a24"); box(room, 12, 120, 28, 30, "#6a3f1e"); box(room, 12, 156, 28, 36, "#6a3f1e"); box(room, 36, 154, 3, 3, "#ffd23f");
+      // poster + clock
+      box(room, 436, 26, 36, 46, INK); box(room, 438, 28, 32, 42, "#ef4040"); txt(room, 441, 34, "LVL", 6, "#ffd23f"); txt(room, 441, 46, "UP!", 6, "#f2efe6"); put(room, 446, 57, sprite(S.cube, pal(), 2).replace('width="16" height="16"', 'width="12" height="12"'));
+      box(room, 396, 26, 26, 26, INK, { borderRadius: "50%" }); box(room, 398, 28, 22, 22, "#f2efe6", { borderRadius: "50%" });
+      const hand = box(room, 408, 30, 2, 9, INK, { transformOrigin: "50% 100%" }); const hand2 = box(room, 408, 33, 2, 6, "#ef4040", { transformOrigin: "50% 100%" });
+      // desk
+      box(room, 128, 168, 344, 8, INK); box(room, 130, 168, 340, 6, "#b5743a"); box(room, 136, 176, 328, 94, "#6e4421"); box(room, 136, 176, 328, 2, INK);
+      box(room, 150, 186, 70, 30, "#5d391b"); box(room, 180, 199, 10, 3, "#ffd23f"); box(room, 380, 186, 70, 30, "#5d391b"); box(room, 410, 199, 10, 3, "#ffd23f");
+      // plant
+      box(room, 404, 152, 14, 16, "#b5743a"); box(room, 402, 150, 18, 4, "#8a5a2b");
+      [[404, 138], [410, 132], [414, 140], [398, 142]].forEach(([x, y]) => box(room, x, y, 6, 12, "#3d9b4a"));
+
+      // ================= RETRO PC =================
+      const pc = $("#pc");
+      const CASE = "#d8cfb0", SH = "#b5aa86", HI = "#efe8d0";
+      box(pc, 158, 24, 164, 136, INK); box(pc, 160, 26, 160, 132, CASE); box(pc, 160, 26, 160, 3, HI); box(pc, 160, 150, 160, 8, SH);
+      box(pc, 168, 32, 144, 110, "#8f8770"); box(pc, 170, 34, 140, 106, INK);
+      box(pc, 296, 148, 4, 4, "#3d9b4a"); box(pc, 172, 147, 50, 4, SH); txt(pc, 230, 146, "FASTCOM 486", 4, "#7a7258");
+      box(pc, 222, 158, 36, 8, INK); box(pc, 224, 158, 32, 7, SH); box(pc, 202, 164, 76, 6, INK); box(pc, 204, 164, 72, 4, CASE);
+      // tower
+      box(pc, 334, 68, 54, 102, INK); box(pc, 336, 70, 50, 98, CASE); box(pc, 336, 70, 50, 3, HI); box(pc, 336, 160, 50, 8, SH);
+      for (let i = 0; i < 4; i++) box(pc, 342, 78 + i * 4, 38, 2, SH);
+      box(pc, 342, 96, 38, 10, SH); box(pc, 345, 100, 32, 2, INK); txt(pc, 345, 109, "3½\"", 4, "#7a7258");
+      box(pc, 342, 122, 38, 10, SH); box(pc, 346, 126, 30, 2, "#7a7258");
+      const led1 = box(pc, 344, 148, 4, 3, "#3d9b4a"); const led2 = box(pc, 352, 148, 4, 3, "#7a2020");
+      box(pc, 364, 146, 16, 8, SH); box(pc, 368, 148, 8, 4, "#7a7258");
+      // keyboard + mouse
+      box(pc, 176, 172, 132, 14, INK); box(pc, 178, 172, 128, 12, CASE);
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 15; c++) box(pc, 181 + c * 8.3, 174 + r * 3.4, 7, 2.6, r === 2 && c > 4 && c < 10 ? HI : SH);
+      box(pc, 316, 174, 10, 12, INK, { borderRadius: "4px" }); box(pc, 317, 175, 8, 10, CASE, { borderRadius: "3px" });
+
+      // ================= SCREEN L1: the shop (slow, then instant) =================
+      const L1 = $("#L1");
+      box(L1, 0, 0, 136, 102, "#f2efe6");
+      box(L1, 0, 0, 136, 8, "#2b4bd6"); txt(L1, 3, 2, "DEIN-SHOP.DE", 4, "#f2efe6"); box(L1, 126, 2, 4, 4, "#ef4040"); box(L1, 120, 2, 4, 4, "#c9c3e8");
+      box(L1, 0, 8, 136, 7, "#e3ddd0"); txt(L1, 3, 10, "ATELIER", 3.5, INK, { letterSpacing: "1px" }); txt(L1, 70, 10.5, "NEU DAMEN SALE", 2.6, "#5c5246");
+      const heroB = put(L1, 0, 15, `<img class="px" src="assets/img/hero_blk.png" style="width:136px;height:42px;object-fit:cover;display:block">`);
+      const heroP = put(L1, 0, 15, `<img class="px" src="assets/img/hero_px.png" style="width:136px;height:42px;object-fit:cover;display:block">`);
+      txt(L1, 5, 24, "DIE NEUE", 4, INK); txt(L1, 5, 30, "KOLLEKTION", 4, INK);
+      const prods = [];
+      [1, 2, 3, 4].forEach((n, i) => {
+        const x = 3 + i * 33;
+        box(L1, x, 60, 31, 24, "#e9e4dc");
+        prods.push([put(L1, x, 60, `<img class="px" src="assets/img/p${n}_blk.png" style="width:31px;height:24px;object-fit:cover;display:block">`), put(L1, x, 60, `<img class="px" src="assets/img/p${n}_px.png" style="width:31px;height:24px;object-fit:cover;display:block">`)]);
+        txt(L1, x, 86, ["289€", "129€", "219€", "99€"][i], 3, INK);
+      });
+      const mask1 = box(L1, 0, 15, 136, 87, "#f2efe6", { transformOrigin: "50% 100%" });
+      box(L1, 0, 92, 136, 10, "#c9c3e8");
+      const stat = txt(L1, 3, 95, "LADE ... 00%", 3.5, INK);
+      const bar = box(L1, 76, 95, 56, 4, "#2b4bd6", { transformOrigin: "0 50%" });
+      const hour = put(L1, 62, 40, sprite(["kkkkkkk", ".kyyyk.", "..kyk..", "...k...", "..kyk..", ".kyyyk.", "kkkkkkk"], pal(), 2));
+
+      // ================= SCREEN L2: hosting stays =================
+      const L2 = $("#L2");
+      box(L2, 0, 0, 136, 102, "#6fb6ff"); box(L2, 0, 80, 136, 22, "#3d8b3d"); box(L2, 0, 80, 136, 3, "#5fbf4a");
+      [[10, 14], [70, 10], [108, 22]].forEach(([x, y]) => { box(L2, x, y, 18, 5, "#f2efe6"); box(L2, x + 4, y - 3, 10, 4, "#f2efe6"); });
+      txt(L2, 4, 4, "LVL 2", 5, "#ffd23f", { textShadow: "1px 1px 0 #101827" }); txt(L2, 4, 12, "KEIN UMZUG", 5, "#f2efe6", { textShadow: "1px 1px 0 #101827" });
+      const srv = put(L2, 98, 44, sprite(["kkkkkkkkkkk", "kmmmmmmmmmk", "kmkkkkkkkmk", "kmgmmmmmmmk", "kmkkkkkkkmk", "kmgmmmmmmmk", "kmkkkkkkkmk", "kmymmmmmmmk", "kmkkkkkkkmk", "kmgmmmmmmmk", "kmmmmmmmmmk", "kkkkkkkkkkk"], pal({ g: "#3df07a" }), 3));
+      txt(L2, 92, 37, "HOSTING", 3.5, "#f2efe6", { textShadow: "1px 1px 0 #101827" });
+      const truck = put(L2, 0, 60, sprite(["rrrrrrrrrrrrrr..........", "rwwwwwwwwwwwwr..........", "rwrrrwrwrrrwwrkkkkk.....", "rwrwrwrwrwrwwrkbbbkk....", "rwrrrwrwrrrwwrkbbbbkk...", "rwwwwwwwwwwwwrkkkkkkkk..", "rrrrrrrrrrrrrrkkkkkkkkk.", "rrrrrrrrrrrrrrkkkkkkkkk.", ".kk.......kk.....kk.....", "kmmk.....kmmk...kmmk....", ".kk.......kk.....kk....."], pal(), 1.6));
+      const truckL = txt(L2, 10, 50, "UMZUG?", 3.5, "#ef4040", { textShadow: "1px 1px 0 #101827" });
+      const xmark = put(L2, 14, 52, sprite(S.xx, pal(), 4));
+      const gate = put(L2, 70, 46, sprite(["kkkkkkkkkkkk", "kyyyyyyyyyyk", "kykkkkkkkkyk", "kyk......kyk", "kyk......kyk", "kyk......kyk", "kyk......kyk", "kyk......kyk", "kyk......kyk", "kyk......kyk", "kyk......kyk", "kkk......kkk"], pal(), 3));
+      put(L2, 79, 38, sprite(S.chev, pal({ g: "#3df07a", r: "#ef4040", y: "#ffd23f" }), 2));
+      const bleibt = txt(L2, 82, 28, "✓ BLEIBT", 4, "#3df07a", { textShadow: "1px 1px 0 #101827" });
+
+      // ================= SCREEN L3: edge map =================
+      const L3 = $("#L3");
+      box(L3, 0, 0, 136, 102, "#2b6fd6");
+      for (let i = 0; i < 26; i++) box(L3, R(0, 132), R(0, 100), 3, 1, "#5a92e8");
+      [[4, 52, 46, 44], [20, 40, 30, 16], [56, 20, 40, 30], [64, 48, 26, 22], [98, 8, 34, 40], [100, 56, 30, 34]].forEach(([x, y, w, h]) => { box(L3, x, y, w, h, "#3d9b4a"); box(L3, x + 2, y + h - 3, w - 4, 3, "#2f7a3a"); });
+      txt(L3, 4, 4, "LVL 3", 5, "#ffd23f", { textShadow: "1px 1px 0 #101827" }); txt(L3, 4, 12, "EDGE-CACHING", 5, "#f2efe6", { textShadow: "1px 1px 0 #101827" });
+      const longPath = [];
+      for (let i = 0; i < 18; i++) { const u = i / 17; const x = 16 + (114 - 16) * u, y = 80 - 64 * u + Math.sin(u * 6) * 6; longPath.push(box(L3, x, y, 2, 2, "#f2efe6")); }
+      put(L3, 10, 78, sprite(S.house, pal(), 2)); txt(L3, 8, 95, "DU", 3, "#f2efe6");
+      put(L3, 112, 12, sprite(S.castle, pal({ g: "#c9c3e8" }), 2)); txt(L3, 102, 28, "HOSTING", 3, "#f2efe6");
+      const flags = [[34, 60], [64, 30], [76, 56], [104, 62], [40, 44], [112, 40]].map(([x, y]) => put(L3, x, y, sprite(S.flag, pal(), 2)));
+      const hero3 = put(L3, 22, 80, sprite(S.cube, pal(), 1.5));
+      const warp = txt(L3, 44, 76, "WARP!", 4, "#ffd23f", { textShadow: "1px 1px 0 #101827" });
+      const near = box(L3, 26, 66, 10, 14, "rgba(255,210,63,0.0)", { borderLeft: "2px dotted #ffd23f" });
+
+      // ================= SCREEN L4: compressor =================
+      const L4 = $("#L4");
+      box(L4, 0, 0, 136, 102, "#22223a");
+      for (let i = 0; i < 14; i++) box(L4, i * 10, 0, 1, 102, "#262645");
+      txt(L4, 4, 4, "BONUS", 5, "#ffd23f", { textShadow: "1px 1px 0 #101827" }); txt(L4, 4, 12, "BILDER → WEBP", 5, "#f2efe6", { textShadow: "1px 1px 0 #101827" });
+      box(L4, 0, 80, 136, 6, "#555577"); for (let i = 0; i < 28; i++) box(L4, i * 5, 82, 2, 2, "#8a8aa8");
+      const mach = document.createElement("div"); mach.className = "a"; mach.style.left = "50px"; mach.style.top = "34px"; L4.appendChild(mach);
+      box(mach, 0, 0, 36, 46, INK); box(mach, 2, 2, 32, 42, "#8a8aa8"); box(mach, 2, 2, 32, 4, "#b9b9c4"); box(mach, 6, 10, 24, 10, INK); txt(mach, 8, 13, "WEBP", 4, "#3df07a");
+      const piston = box(mach, 12, 24, 12, 6, "#ffd23f"); box(mach, 6, 34, 24, 10, "#555577");
+      const lamp = box(mach, 28, 4, 4, 4, "#3df07a");
+      const picIn = put(L4, 4, 50, `<div style="width:34px;height:28px;border:2px solid #f2efe6;background:#000"><img class="px" src="assets/img/hero_px.png" style="width:30px;height:24px;object-fit:cover;display:block"></div>`);
+      const lblIn = txt(L4, 2, 42, "JPG 303,4KB", 3, "#f2efe6");
+      const picOut = put(L4, 96, 56, `<div style="width:24px;height:22px;border:2px solid #3df07a;background:#000"><img class="px" src="assets/img/hero_px.png" style="width:20px;height:18px;object-fit:cover;display:block"></div>`);
+      const lblOut = txt(L4, 88, 46, "WEBP 198,2KB", 3, "#3df07a");
+      const dmg = txt(L4, 92, 26, "-35%", 7, "#ffd23f", { textShadow: "1px 1px 0 #101827" });
+
+      // ================= SCREEN L5: boss =================
+      const L5 = $("#L5");
+      box(L5, 0, 0, 136, 102, "#1a1030");
+      for (let i = 0; i < 30; i++) box(L5, R(0, 136), R(18, 100), 1, 1, "#6a5aa8");
+      txt(L5, 4, 4, "BOSS: DDOS-BOT", 4.5, "#ef4040", { textShadow: "1px 1px 0 #101827" });
+      box(L5, 4, 12, 128, 5, INK); const hp = box(L5, 5, 13, 126, 3, "#ef4040", { transformOrigin: "0 50%" });
+      const boss = put(L5, 4, 40, sprite(S.boss, pal({ k: "#2a0a0a", g: "#9a96a8" }), 2.2));
+      const shield = put(L5, 84, 36, sprite(S.shield, pal({ b: "#3e9bff", g: "#3df07a", r: "#ef4040", y: "#ffd23f" }), 2.4));
+      const site5 = put(L5, 116, 52, sprite(S.monitor, pal({ b: "#3df07a" }), 1.4));
+      txt(L5, 105, 68, "DEIN SHOP", 2.8, "#f2efe6");
+      const pellets = [];
+      for (let i = 0; i < 14; i++) pellets.push(box(L5, 0, 0, 3, 3, "#ff5a3a", { boxShadow: "0 0 2px #ff5a3a" }));
+      const blk = txt(L5, 70, 26, "BLOCK!", 4, "#3e9bff", { textShadow: "1px 1px 0 #101827" });
+      const boom = put(L5, 4, 34, sprite(["..y..y..y..", ".yoy.yoy.y.", "yoooyooooy.", ".yorrroory.", "yoorrrrrooy", ".yorrrrroy.", "yooorrrooy.", ".yoooooy.y.", "..y.y.y..y."], pal(), 3));
+
+      // ================= SCREEN L6: platform select =================
+      const L6 = $("#L6");
+      box(L6, 0, 0, 136, 102, INK);
+      for (let y = 0; y < 102; y += 6) box(L6, 0, y, 136, 1, "#18233a");
+      txt(L6, 10, 6, "WÄHLE PLATTFORM", 5, "#ffd23f");
+      const opts = [["DESKTOP", S.monitor, 10], ["HANDY", S.phone, 51], ["ÜBERALL", S.globe, 92]].map(([lab, sp, x]) => {
+        const b = box(L6, x, 22, 36, 46, "#18233a", { boxShadow: "0 0 0 1px #c9c3e8" });
+        put(L6, x + (lab === "HANDY" ? 10 : 6), 30, sprite(sp, pal({ b: "#3e9bff", g: "#3d9b4a", w: "#f2efe6" }), lab === "HANDY" ? 2 : 2));
+        txt(L6, x + 2, 58, lab, 3.2, "#f2efe6");
+        const ck = put(L6, x + 26, 18, sprite(S.check, pal({ g: "#3df07a" }), 1.6));
+        return [b, ck];
+      });
+      const cur = txt(L6, 0, 0, "▶", 6, "#ffd23f");
+      const allT = txt(L6, 14, 78, "ALLE PLATTFORMEN!", 4.5, "#3df07a");
+
+      // ================= SCREEN L7: logo / start =================
+      const L7 = $("#L7");
+      box(L7, 0, 0, 136, 102, INK);
+      put(L7, 18, 10, `<svg width="100" height="34" viewBox="0 0 428.82 146.98" style="shape-rendering:auto">{{ICON}}<g fill="#f2efe6">{{WORD}}</g></svg>`);
+      txt(L7, 14, 52, "7 TAGE KOSTENLOS", 5, "#ffd23f");
+      const startB = box(L7, 22, 66, 92, 14, "#ffd23f", { boxShadow: "0 0 0 1px #f2efe6" });
+      const startT = txt(L7, 30, 70.5, "▶ JETZT TESTEN", 4.5, INK);
+      txt(L7, 14, 88, "KEINE KREDITKARTE NÖTIG", 3, "#c9c3e8");
+      const ok7 = txt(L7, 44, 40, "START!", 6, "#3df07a");
+
+      // ================= NPC visitors =================
+      const npcs = $("#npcs");
+      const shirts = ["#ef4040", "#3e9bff", "#3d9b4a", "#ffd23f", "#c06ae8"], hairs = ["#5a3a22", "#1a1a1a", "#d9a441", "#7a2a10", "#3a2a1a"];
+      const people = shirts.map((c, i) => {
+        const x = 54 + i * 15;
+        const p = put(npcs, x, 172, sprite(S.npc, pal({ c, h: hairs[i] }), 2));
+        const bub = put(npcs, x + 2, 156, `<div style="background:#f2efe6;border:1px solid #101827;padding:1px 2px;font-size:4px;color:#101827;font-family:PS2P">…</div>`);
+        return [p, bub, x];
+      });
+
+      // ================= HUD =================
+      const hearts = [];
+      for (let i = 0; i < 5; i++) hearts.push(put($("#hearts"), i * 8, 1, sprite(S.heart, pal(), 1)));
+      const sc = { v: 0 };
+      const setScore = () => ($("#score").textContent = "SCORE " + String(Math.round(sc.v)).padStart(6, "0"));
+      function score(t, to, d = 0.6) { tl.to(sc, { v: to, duration: d, ease: "none", onUpdate: setScore }, t); }
+      tl.set(sc, { v: 0 }, 0);
+
+      // ================= dialogue (typewriter) =================
+      function say(t, s, cps = 38) {
+        const o = { n: 0 };
+        tl.fromTo(o, { n: 0 }, { n: s.length, duration: s.length / cps, ease: "none", immediateRender: false, onUpdate: () => ($("#dlgT").textContent = s.slice(0, Math.round(o.n))) }, t);
+      }
+      tl.set("#dlgT", { textContent: "" }, 0);
+      tl.fromTo("#dlgA", { opacity: 1 }, { opacity: 0, duration: 0.25, repeat: 59, yoyo: true, ease: "steps(1)" }, 0);
+      say(V, "Deine Website lädt …");
+      say(V + 2.04, "Deine Website lädt … und lädt …", 80);
+      say(V + 3.32, "Deine Website lädt … und lädt … und lädt.", 80);
+      say(V + 4.63, "Jede Sekunde kostet dich Besucher!");
+      say(V + 7.07, "Mit fast.site wird sie SCHNELL –");
+      say(V + 8.95, "ohne Umzug. Du behältst dein Hosting.");
+      say(V + 12.01, "Edge-Caching liefert deine Seiten\nblitzschnell aus.");
+      say(V + 15.14, "Bilder werden automatisch zu\nschlankem WebP.");
+      say(V + 18.09, "Und DDoS-Schutz hält Angriffe draußen.");
+      say(V + 20.55, "Auf dem Desktop. Auf dem Handy.");
+      say(V + 22.6, "Auf dem Desktop. Auf dem Handy. Überall.", 90);
+      say(V + 23.67, "fast.site – jetzt 7 Tage kostenlos testen!");
+
+      // ================= helpers =================
+      const world = $("#world");
+      function cam(t, x, y, s, d = 0.7, ease = "power3.inOut") { tl.to(world, { x, y, scale: s, duration: d, ease }, t); }
+      function shake(t, dur, amp) { const n = Math.round(dur / 0.05); for (let i = 0; i < n; i++) tl.set("#game", { x: Math.round(R(-amp, amp)), y: Math.round(R(-amp, amp)) }, t + i * 0.05); tl.set("#game", { x: 0, y: 0 }, t + dur); }
+      function flash(t, o = 0.9, d = 0.25) { tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: d, ease: "steps(4)", immediateRender: false }, t); }
+      function bigText(t, s, size, color, dur = 0.9, y = 100) {
+        const d = txt($("#big"), 0, y, s, size, color, { width: "480px", textAlign: "center", textShadow: "3px 3px 0 #101827, -1px -1px 0 #101827, 2px -1px 0 #101827, -1px 2px 0 #101827" });
+        tl.set(d, { opacity: 0 }, 0);
+        tl.fromTo(d, { opacity: 1, scale: 2.5 }, { scale: 1, duration: 0.25, ease: "back.out(2)", immediateRender: false }, t);
+        tl.to(d, { opacity: 0, y: -12, duration: 0.25, ease: "steps(3)" }, t + dur);
+      }
+      const levels = ["#L1", "#L2", "#L3", "#L4", "#L5", "#L6", "#L7"];
+      function showLevel(id) { return levels.map((l) => [l, { opacity: l === id ? 1 : 0 }]); }
+      levels.forEach((l) => tl.set(l, { opacity: l === "#L1" ? 1 : 0 }, 0));
+      // CRT channel switch: squash to a line, swap, open again
+      function crt(t, id) {
+        tl.to("#scrIn", { scaleY: 0.02, duration: 0.09, ease: "power2.in" }, t);
+        tl.to("#crtflash", { opacity: 0.9, duration: 0.05 }, t + 0.06);
+        levels.forEach((l) => tl.set(l, { opacity: l === id ? 1 : 0 }, t + 0.1));
+        tl.to("#scrIn", { scaleY: 1, duration: 0.14, ease: "power2.out" }, t + 0.12);
+        tl.to("#crtflash", { opacity: 0, duration: 0.15, ease: "steps(3)" }, t + 0.12);
+      }
+      // smoke puff system
+      const fx = $("#fx");
+      function puff(t, x, y, k = 1, life = 1.6) {
+        const s = put(fx, x, y, sprite(S.smoke, pal({ g: "#8c8898", G: "#c9c5d4" }), 2));
+        tl.set(s, { opacity: 0 }, 0);
+        tl.fromTo(s, { opacity: 0.95, scale: 0.4 * k, x: 0, y: 0 }, { opacity: 0, scale: 2.2 * k, x: R(-14, 14), y: R(-60, -36), duration: life, ease: "power1.out", immediateRender: false }, t);
+      }
+      function spark(t, x, y) {
+        for (let i = 0; i < 6; i++) { const s = box(fx, x, y, 1.5, 1.5, i % 2 ? "#ffd23f" : "#ff8a1a"); tl.set(s, { opacity: 0 }, 0); const a = R(-Math.PI, 0); tl.fromTo(s, { opacity: 1, x: 0, y: 0 }, { opacity: 0, x: Math.cos(a) * R(8, 20), y: Math.sin(a) * R(8, 20) + 6, duration: 0.45, ease: "power2.out", immediateRender: false }, t); }
+      }
+
+      // ================= 0 – 8: the slow page =================
+      tl.set(world, { x: 0, y: 0, scale: 1 }, 0);
+      tl.fromTo(world, { x: -24, y: -14, scale: 1.1 }, { x: -12, y: -7, scale: 1.05, duration: 7.6, ease: "sine.inOut" }, 0);
+      tl.fromTo(hand, { rotation: 0 }, { rotation: 360 * 14, duration: 8, ease: "none" }, 0);
+      tl.fromTo(hand2, { rotation: 0 }, { rotation: 360 * 2, duration: 8, ease: "none" }, 0);
+      tl.fromTo(led2, { backgroundColor: "#7a2020" }, { backgroundColor: "#ff3a3a", duration: 0.3, repeat: 25, yoyo: true, ease: "steps(1)" }, 0);
+      tl.fromTo(hour, { rotation: 0 }, { rotation: 180 * 8, duration: 7.9, ease: "steps(16)" }, 0);
+      tl.set(heroP, { opacity: 0 }, 0); prods.forEach(([b, p]) => tl.set(p, { opacity: 0 }, 0));
+      // interlaced reveal: the page appears line by line, painfully slow
+      tl.fromTo(mask1, { scaleY: 1 }, { scaleY: 0.58, duration: 7.4, ease: "steps(18)" }, 0.5);
+      const ld = { v: 0 };
+      tl.fromTo(ld, { v: 0 }, { v: 23, duration: 7.4, ease: "steps(23)", onUpdate: () => (stat.textContent = "LADE ... " + String(Math.round(ld.v)).padStart(2, "0") + "%") }, 0.5);
+      tl.fromTo(bar, { scaleX: 0 }, { scaleX: 0.23, duration: 7.4, ease: "steps(12)" }, 0.5);
+      tl.fromTo("#temp", { scaleX: 0.18 }, { scaleX: 0.24, duration: 7.5, ease: "none" }, 0);
+      tl.set("#tempT", { textContent: "OK", color: "#3e9bff" }, 0);
+      // visitors wait, then leave one by one
+      people.forEach(([p, b, x], i) => {
+        tl.set(b, { opacity: 0 }, 0);
+        tl.fromTo(b, { opacity: 1, y: 3 }, { y: 0, duration: 0.3, ease: "steps(3)", immediateRender: false }, 1.8 + i * 0.25);
+        tl.fromTo(p, { y: 0 }, { y: -2, duration: 0.25, yoyo: true, repeat: 5, ease: "steps(1)" }, 2.0 + i * 0.3);
+        const t0 = V + 4.9 + i * 0.42;
+        tl.set(b, { innerHTML: '<div style="background:#f2efe6;border:1px solid #101827;padding:1px 2px;font-size:4px;color:#ef4040;font-family:PS2P">!!</div>' }, t0 - 0.3);
+        tl.set(p, { scaleX: -1, transformOrigin: "50% 50%" }, t0);
+        tl.to([p, b], { x: 26 - x, duration: 0.7, ease: "steps(7)" }, t0);
+        tl.set([p, b], { opacity: 0 }, t0 + 0.7);
+        tl.to(hearts[4 - i], { opacity: 0, scale: 0, duration: 0.2, ease: "steps(3)" }, t0 + 0.1);
+      });
+      // the fast.site floppy flies in
+      const fl = put(fx, 0, 0, sprite(S.floppy, pal({ g: "#3df07a", r: "#ef4040", y: "#ffd23f" }), 2));
+      tl.set(fl, { opacity: 0 }, 0);
+      tl.fromTo(fl, { opacity: 1, x: 470, y: 30, rotation: 0 }, { x: 349, y: 82, rotation: 720, duration: 0.6, ease: "power2.in", immediateRender: false }, 7.32);
+      tl.to(fl, { scaleY: 0.1, y: 98, duration: 0.08, ease: "none" }, 7.92);
+      tl.set(fl, { opacity: 0 }, 8.0);
+      bigText(7.35, "POWER-UP!", 14, "#ffd23f", 0.55, 80);
+
+      // ================= 7.98 DROP: instant + the PC overheats =================
+      const D = 7.98;
+      flash(D, 1, 0.3);
+      tl.set(mask1, { scaleY: 0 }, D); tl.set(hour, { opacity: 0 }, D);
+      tl.set(heroP, { opacity: 1 }, D); prods.forEach(([b, p]) => tl.set(p, { opacity: 1 }, D));
+      tl.set(stat, { textContent: "✓ SOFORT GELADEN", color: "#1f8a3a" }, D); tl.set(bar, { scaleX: 1, backgroundColor: "#3d9b4a" }, D);
+      tl.to("#temp", { scaleX: 1, backgroundColor: "#ef4040", duration: 0.3, ease: "steps(6)" }, D);
+      tl.set("#tempT", { textContent: "HOT!", color: "#ef4040" }, D + 0.2);
+      tl.fromTo("#tempT", { opacity: 1 }, { opacity: 0.2, duration: 0.15, yoyo: true, repeat: 30, ease: "steps(1)", immediateRender: false }, D + 0.3);
+      tl.fromTo("#temp", { opacity: 1 }, { opacity: 0.5, duration: 0.15, yoyo: true, repeat: 30, ease: "steps(1)", immediateRender: false }, D + 0.3);
+      bigText(D + 0.25, "SCHNELL!!", 30, "#f2efe6", 1.4, 96);
+      score(D + 0.1, 10000, 0.6);
+      shake(D, 1.4, 3); shake(9.4, 0.7, 1);
+      tl.fromTo(led1, { backgroundColor: "#3d9b4a" }, { backgroundColor: "#3df07a", duration: 0.08, repeat: 120, yoyo: true, ease: "steps(1)" }, D);
+      tl.fromTo(world, { x: -12, y: -7, scale: 1.05 }, { x: -6, y: -3, scale: 1.02, duration: 0.4, ease: "back.out(2)", immediateRender: false }, D);
+      // smoke + sparks + flames
+      const vents = [[344, 66], [356, 64], [368, 66], [378, 68]], mon = [[164, 40], [314, 44], [166, 96], [312, 100], [214, 22], [262, 22]];
+      for (let i = 0; i < 60; i++) { const t = D + 0.05 + i * 0.07; const [x, y] = vents[i % 4]; puff(t, x + R(-3, 3), y, R(0.8, 1.3), R(1.3, 1.9)); }
+      for (let i = 0; i < 40; i++) { const t = D + 0.2 + i * 0.1; const [x, y] = mon[i % 6]; puff(t, x + R(-3, 3), y + R(-4, 4), R(0.6, 1.0), R(1.2, 1.7)); }
+      for (let i = 0; i < 10; i++) spark(D + i * 0.18, 340 + R(0, 44), 70);
+      const flames = [[346, 58], [362, 56], [376, 58]].map(([x, y]) => put(fx, x, y, sprite(S.flame, pal(), 2)));
+      flames.forEach((f, i) => { tl.set(f, { opacity: 0 }, 0); tl.set(f, { opacity: 1 }, D + 0.25 + i * 0.08); tl.fromTo(f, { scaleY: 1, transformOrigin: "50% 100%" }, { scaleY: 0.7, duration: 0.08, repeat: 22, yoyo: true, ease: "steps(1)", immediateRender: false }, D + 0.3); tl.set(f, { opacity: 0 }, 10.0); });
+
+      // ================= into the CRT: feature levels =================
+      const ZX = 240 - 240 * 2, ZY = 121 - 87 * 2;
+      cam(9.85, ZX, ZY, 2, 0.5, "power3.inOut");
+      // gentle smoke keeps leaking around the bezel while zoomed in
+      for (let i = 0; i < 70; i++) { const t = 10.3 + i * 0.2; const side = i % 2 ? [164, 60 + (i % 5) * 18] : [314, 60 + (i % 5) * 18]; puff(t, side[0] + R(-2, 2), side[1], R(0.5, 0.8), 1.4); }
+      // L2
+      crt(10.0, "#L2");
+      tl.set([truck, truckL], { x: -60 }, 0); tl.set(xmark, { opacity: 0 }, 0); tl.set(gate, { opacity: 0 }, 0); tl.set(bleibt, { opacity: 0 }, 0);
+      tl.to([truck, truckL], { x: 0, duration: 0.5, ease: "steps(10)" }, 10.2);
+      tl.fromTo(xmark, { opacity: 1, scale: 2 }, { scale: 1, duration: 0.2, ease: "steps(4)", immediateRender: false }, V + 9.8);
+      tl.to([truck, truckL, xmark], { x: -80, duration: 0.5, ease: "steps(10)" }, V + 10.15);
+      tl.fromTo(gate, { opacity: 1, y: 30 }, { y: 0, duration: 0.4, ease: "steps(8)", immediateRender: false }, 11.0);
+      tl.fromTo(bleibt, { opacity: 1, scale: 2 }, { scale: 1, duration: 0.25, ease: "steps(5)", immediateRender: false }, V + 11.0);
+      score(V + 11.0, 15000, 0.4);
+      // L3
+      crt(12.75, "#L3");
+      flags.forEach((f, i) => { tl.set(f, { opacity: 0 }, 0); tl.fromTo(f, { opacity: 1, y: 8 }, { y: 0, duration: 0.25, ease: "steps(4)", immediateRender: false }, 13.2 + i * 0.12); });
+      tl.set(warp, { opacity: 0 }, 0);
+      tl.to(longPath, { backgroundColor: "#555577", duration: 0.1, stagger: 0.02 }, V + 13.3);
+      tl.to(hero3, { opacity: 0, scale: 0.2, duration: 0.15, ease: "steps(3)" }, V + 13.2);
+      tl.set(hero3, { x: 14, y: -18 }, V + 13.35);
+      tl.to(hero3, { opacity: 1, scale: 1, duration: 0.2, ease: "steps(4)" }, V + 13.4);
+      tl.fromTo(warp, { opacity: 1, scale: 1.8 }, { scale: 1, duration: 0.2, ease: "steps(4)", immediateRender: false }, V + 13.4);
+      spark(V + 13.4, 172 + 40, 36 + 64);
+      score(V + 13.5, 20000, 0.4);
+      // L4
+      crt(15.85, "#L4");
+      tl.set([picOut, lblOut, dmg], { opacity: 0 }, 0);
+      tl.fromTo([picIn, lblIn], { x: -40 }, { x: 0, duration: 0.5, ease: "steps(10)" }, 16.05);
+      const SQ = V + 15.9;
+      tl.to([picIn, lblIn], { x: 46, duration: 0.3, ease: "steps(6)" }, SQ - 0.3);
+      tl.set([picIn, lblIn], { opacity: 0 }, SQ);
+      tl.fromTo(piston, { y: 0 }, { y: 6, duration: 0.08, repeat: 7, yoyo: true, ease: "steps(1)", immediateRender: false }, SQ);
+      tl.fromTo(mach, { x: 0 }, { x: 1, duration: 0.05, repeat: 9, yoyo: true, ease: "steps(1)", immediateRender: false }, SQ);
+      tl.fromTo(lamp, { backgroundColor: "#3df07a" }, { backgroundColor: "#ef4040", duration: 0.08, repeat: 7, yoyo: true, ease: "steps(1)", immediateRender: false }, SQ);
+      tl.fromTo(picOut, { opacity: 1, x: -16 }, { x: 0, duration: 0.3, ease: "steps(6)", immediateRender: false }, SQ + 0.6);
+      tl.set(lblOut, { opacity: 1 }, SQ + 0.8);
+      tl.fromTo(dmg, { opacity: 1, y: 8 }, { y: -6, duration: 0.8, ease: "steps(8)", immediateRender: false }, V + 16.6);
+      score(V + 16.7, 25000, 0.4);
+      // L5
+      crt(18.85, "#L5");
+      tl.set(boom, { opacity: 0 }, 0); tl.set(blk, { opacity: 0 }, 0);
+      tl.fromTo(boss, { y: 0 }, { y: -4, duration: 0.3, repeat: 7, yoyo: true, ease: "steps(2)" }, 19.0);
+      pellets.forEach((p, i) => {
+        const t0 = 19.3 + i * 0.12, y0 = 52 + R(-8, 8), y1 = 46 + R(-10, 14);
+        tl.set(p, { opacity: 0 }, 0);
+        tl.fromTo(p, { opacity: 1, x: 36, y: y0 }, { x: 82, y: y1, duration: 0.25, ease: "steps(6)", immediateRender: false }, t0);
+        tl.set(p, { opacity: 0 }, t0 + 0.25);
+        tl.fromTo(shield, { x: 1 }, { x: 0, duration: 0.08, ease: "steps(1)", immediateRender: false }, t0 + 0.25);
+      });
+      tl.fromTo(blk, { opacity: 1 }, { opacity: 0, duration: 0.2, repeat: 7, yoyo: true, ease: "steps(1)", immediateRender: false }, 19.6);
+      tl.fromTo(hp, { scaleX: 1 }, { scaleX: 0, duration: 1.7, ease: "steps(17)" }, 19.3);
+      tl.set(boss, { opacity: 0 }, 21.05); tl.fromTo(boom, { opacity: 1, scale: 0.4 }, { scale: 1.2, duration: 0.25, ease: "steps(5)", immediateRender: false }, 21.05); tl.set(boom, { opacity: 0 }, 21.35);
+      score(21.05, 35000, 0.3);
+      // L6
+      crt(21.35, "#L6");
+      opts.forEach(([b, ck]) => tl.set(ck, { opacity: 0 }, 0)); tl.set(allT, { opacity: 0 }, 0);
+      tl.set(cur, { x: 4, y: 40 }, 0);
+      [[V + 20.55, 0], [V + 21.65, 1], [V + 22.62, 2]].forEach(([t, i]) => {
+        tl.to(cur, { x: [2, 43, 84][i], y: 40, duration: 0.15, ease: "steps(3)" }, t - 0.1);
+        tl.to(opts[i][0], { backgroundColor: "#2b4bd6", boxShadow: "0 0 0 2px #ffd23f", duration: 0.05, ease: "steps(1)" }, t);
+        tl.set(opts[i][1], { opacity: 1 }, t + 0.15);
+      });
+      opts.forEach(([b, ck], i) => { tl.set(ck, { opacity: 1 }, V + 22.75); tl.to(b, { boxShadow: "0 0 0 2px #3df07a", duration: 0.05 }, V + 22.75 + i * 0.05); });
+      tl.fromTo(allT, { opacity: 1 }, { opacity: 0.2, duration: 0.15, repeat: 5, yoyo: true, ease: "steps(1)", immediateRender: false }, V + 22.8);
+      score(V + 22.8, 50000, 0.4);
+
+      // ================= logo + CTA, back to the room =================
+      const LOGO = V + 23.67;
+      crt(LOGO - 0.12, "#L7");
+      tl.set(ok7, { opacity: 0 }, 0);
+      cam(24.75, -6, -3, 1.02, 0.7, "power3.inOut");
+      tl.fromTo(startB, { opacity: 1 }, { opacity: 0.4, duration: 0.3, repeat: 7, yoyo: true, ease: "steps(1)", immediateRender: false }, V + 25.6);
+      // visitors come back happy
+      people.forEach(([p, b, x], i) => {
+        const t0 = 25.4 + i * 0.3;
+        tl.set(b, { innerHTML: '<div style="background:#f2efe6;border:1px solid #101827;padding:1px 2px;font-size:4px;color:#ef4040;font-family:PS2P">♥</div>' }, t0);
+        tl.set(p, { scaleX: 1 }, t0);
+        tl.set([p, b], { opacity: 1, x: 26 - x }, t0);
+        tl.to([p, b], { x: 0, duration: 0.7, ease: "steps(7)" }, t0);
+        tl.fromTo(p, { y: 0 }, { y: -4, duration: 0.12, repeat: 7, yoyo: true, ease: "steps(1)", immediateRender: false }, t0 + 0.8);
+        tl.to(hearts[i], { opacity: 1, scale: 1, duration: 0.2, ease: "steps(3)" }, t0 + 0.7);
+      });
+      // the PC keeps happily smoking
+      for (let i = 0; i < 40; i++) { const t = 24.9 + i * 0.12; const [x, y] = vents[i % 4]; puff(t, x + R(-3, 3), y, R(0.8, 1.2), 1.6); }
+      for (let i = 0; i < 18; i++) { const t = 25.0 + i * 0.25; const [x, y] = mon[i % 6]; puff(t, x, y, 0.8, 1.5); }
+      // press start
+      const CLICK = 28.35;
+      tl.to(startB, { opacity: 1, backgroundColor: "#3df07a", duration: 0.05 }, CLICK);
+      tl.set(startT, { textContent: "▶ LOS GEHT'S!" }, CLICK);
+      
+      flash(CLICK, 0.6, 0.25); shake(CLICK, 0.4, 2);
+      bigText(CLICK + 0.05, "LEVEL CLEAR!", 22, "#ffd23f", 1.0, 92);
+      score(CLICK, 99999, 0.8);
+      for (let i = 0; i < 8; i++) spark(CLICK + i * 0.06, 200 + R(0, 80), 60 + R(0, 40));
+      tl.to("#game", { opacity: 0, duration: 0.5, ease: "steps(5)" }, 29.45);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
