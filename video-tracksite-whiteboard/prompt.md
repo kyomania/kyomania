@@ -55,3 +55,11 @@ danach in `assets/img/` ablegen (polaroid-1.png, polaroid-2.png, flatlay.png).
 - Fonts liegen schon in `video-tracksite/film/assets/fonts/`, GSAP in `.../vendor/gsap.min.js`.
 - Schnell rendern: `video-tracksite/tools/capture.cjs` (Playwright, Bild für Bild), dann ffmpeg.
 - Beim Seeken per Playwright nie das Timeline-Objekt zurückgeben (`seek(t); return 1;`).
+
+## Stand
+
+Fertig: `track-whiteboard-20s.mp4`. Projekt: `board/index.html` (alle Texte, Formen, Striche und
+Keyframes editierbar, Kamera über `shot(...)`, Cursor über `move(...)`). Ton: `tools/sound.py`.
+Rendern (ohne GPU-Emulation, sonst Kachel-Fehler beim Zoom):
+`for r in "0 200" "200 400" "400 600"; do set -- $r; node tools/capture.cjs board frames $1 $2 & done; wait`
+dann `ffmpeg -framerate 30 -i frames/f%04d.jpg -i board/assets/audio/mix.wav -c:v libx264 -crf 16 -pix_fmt yuv420p -c:a aac -shortest track-whiteboard-20s.mp4`
