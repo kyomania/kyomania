@@ -16,6 +16,9 @@ Du bist Regisseur und Motion Designer. Mach einen ca. 35 bis 40 Sekunden langen 
 
 **Ton:** Die Stimmen der Charaktere kommen nativ aus den Videoclips, der Mann klingt in allen Szenen gleich. Dazu eine deutsche Sprecherstimme für den Motion-Teil, instrumentale Diner-Musik, die im Motion-Teil modern und treibend wird, und Soundeffekte (Rollator-Quietschen, Tasse, Whoosh beim Übergang).
 
+**Bilder:** Die Startbilder liefert der Nutzer selbst. Für dieses Projekt werden niemals Bilder mit GPT Image generiert.
+**Übergänge:** Nur mit Top-Modellen (Seedance 2.5). Kling wird nicht für Übergänge verwendet.
+
 **Fakten:** Nur Aussagen verwenden, die auf fast.site stehen. Keine erfundenen Ladezeiten und keine Ranking-Versprechen.
 
 **Tempo:** Der Diner-Teil ist knapp und schnell geschnitten. Die Frage des Mannes ca. 3 s, die Oma ca. 3 s, „Dann brauchst du fast.site“ mit der Fahrt ins Handy ca. 4 s. Nach etwa 10 Sekunden läuft also schon das Motion Design. Das Ende mit dem Mann dauert ca. 3 s.
