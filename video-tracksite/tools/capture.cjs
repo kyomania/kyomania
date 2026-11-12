@@ -11,6 +11,7 @@ const srv = http.createServer((q, r) => { const f = path.join(dir, decodeURIComp
   await new Promise((r) => setTimeout(r, 5000));
   for (let f = +a; f < +b; f++) {
     await p.evaluate((t) => { window.__timelines.main.seek(t); return 1; }, f / fps);
+    await p.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r(1))))); // rafWait
     await p.screenshot({ path: path.join(out, `f${String(f).padStart(4, '0')}.jpg`), type: 'jpeg', quality: 95, timeout: 60000 });
     if (f % 50 === 0) console.log('frame', f);
   }
