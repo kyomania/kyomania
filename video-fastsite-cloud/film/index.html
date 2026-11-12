@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Display"; font-weight: 600; src: url(assets/fonts/InterDisplay-SemiBold.otf); }
+      @font-face { font-family: "Display"; font-weight: 700; src: url(assets/fonts/InterDisplay-Bold.otf); }
+      @font-face { font-family: "Text"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
+      @font-face { font-family: "Text"; font-weight: 600; src: url(assets/fonts/Inter-SemiBold.otf); }
+      :root { --display: "Display", sans-serif; --text: "Text", sans-serif; --green: #0c9958; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; color: #fff; font-family: var(--text); -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .ov { pointer-events: none; }
+
+      /* glass pills */
+      .pill { position: absolute; display: flex; align-items: center; gap: 16px; padding: 18px 28px 18px 22px; border-radius: 999px;
+        background: rgba(255,255,255,0.78); backdrop-filter: blur(16px); color: #1d1d1f; font: 600 28px var(--display); letter-spacing: -0.01em;
+        box-shadow: 0 18px 50px rgba(30,20,10,0.22); white-space: nowrap; }
+      .spin { width: 30px; height: 30px; border-radius: 50%; border: 3.5px solid rgba(29,29,31,0.15); border-top-color: rgba(29,29,31,0.7); }
+      .ck { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; flex: none; }
+      .pill small { font: 500 22px var(--text); color: #6e6e73; margin-left: 6px; }
+
+      /* word trail */
+      .word { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 18px; padding: 16px 30px 16px 22px; border-radius: 999px;
+        background: rgba(20,14,10,0.42); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.22);
+        font: 700 56px/1 var(--display); letter-spacing: 0.02em; white-space: nowrap; color: #fff; }
+      .word .dt { width: 20px; height: 20px; border-radius: 50%; background: var(--c); flex: none; }
+      .word i { font-style: normal; color: var(--c); }
+
+      /* captions */
+      #cap { position: absolute; left: 120px; bottom: 110px; font: 600 80px/1.05 var(--display); letter-spacing: -0.03em; text-shadow: 0 4px 30px rgba(0,0,0,0.35); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="31.1" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="31.1" data-volume="1"></audio>
+
+      <video id="vA" class="clip" src="assets/clips/a.mp4" muted playsinline data-start="0" data-duration="4.2" data-media-start="0" data-track-index="1"></video>
+      <video id="vB" class="clip" src="assets/clips/b.mp4" muted playsinline data-start="4.2" data-duration="4.0" data-media-start="0.3" data-track-index="2"></video>
+      <div id="oB" class="clip ov" data-start="4.2" data-duration="4.0" data-track-index="3">
+        <div class="pill" id="load" style="left:1180px;top:170px"><div class="spin" id="spin"></div>yourshop.com<small id="lt">loading… 1.0 s</small></div>
+      </div>
+      <video id="vC" class="clip" src="assets/clips/c.mp4" muted playsinline data-start="8.2" data-duration="2.8" data-media-start="0" data-track-index="4"></video>
+      <video id="vD" class="clip" src="assets/clips/d.mp4" muted playsinline data-start="11.0" data-duration="2.6" data-media-start="0" data-track-index="5"></video>
+      <video id="vE" class="clip" src="assets/clips/e.mp4" muted playsinline data-start="13.6" data-duration="7.4" data-media-start="0" data-track-index="6"></video>
+      <div id="oE" class="clip ov" data-start="13.6" data-duration="7.4" data-track-index="7"></div>
+      <video id="vF" class="clip" src="assets/clips/f.mp4" muted playsinline data-start="21.0" data-duration="4.3" data-media-start="0" data-track-index="8"></video>
+      <div id="oF" class="clip ov" data-start="21.0" data-duration="4.3" data-track-index="9">
+        <div class="pill" id="o1" style="left:1150px;top:300px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€129</small></div>
+        <div class="pill" id="o2" style="left:1240px;top:420px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€89</small></div>
+        <div class="pill" id="o3" style="left:1180px;top:540px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€39</small></div>
+      </div>
+      <video id="sting" class="clip" src="assets/clips/sting.mp4" muted playsinline data-start="25.3" data-duration="5.8" data-media-start="0.7" data-track-index="10"></video>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", E = "power3.out";
+
+      // B: loading pill, counter keeps climbing
+      tl.fromTo("#load", { opacity: 0, y: 20, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: EX }, 4.5);
+      tl.fromTo("#spin", { rotation: 0 }, { rotation: 1500, duration: 3.7, ease: "none" }, 4.5);
+      const lt = { v: 1.0 }; document.querySelector("#lt").textContent = "loading… 1.0 s";
+      tl.fromTo(lt, { v: 1.0 }, { v: 8.6, duration: 3.4, ease: "power1.in", onUpdate: () => (document.querySelector("#lt").textContent = "loading… " + lt.v.toFixed(1) + " s") }, 4.7);
+      tl.to("#load", { y: 160, rotation: 8, opacity: 0, duration: 0.5, ease: "power2.in" }, 7.75);
+
+      // E: words stream out of the rocket's tail along the exhaust
+      const W = [["EDGE", "#4f8fe6", 13.95], ["CACHE", "#2fb35e", 16.1], ["WEBP <i>−35%</i>", "#f5b72a", 17.95], ["SHIELD", "#e2463a", 19.35]];
+      const oE = document.querySelector("#oE");
+      W.forEach(([txt, c, t], i) => {
+        const d = document.createElement("div"); d.className = "word"; d.style.setProperty("--c", c); d.innerHTML = `<span class="dt"></span>${txt}`;
+        oE.appendChild(d);
+        const small = c === "#ffffff";
+        const P = (k) => ({ x: 1440 + 230 * k, y: 760 + 120 * k });
+        tl.set(d, { xPercent: -50, yPercent: -50 }, 0);
+        tl.fromTo(d, { x: P(0).x, y: P(0).y, scale: 0.35, opacity: 0, filter: "blur(6px)" },
+          { x: P(0.35).x, y: P(0.35).y, scale: small ? 0.75 : 1.1, opacity: small ? 0.7 : 1, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, t);
+        tl.to(d, { x: P(0.95).x, y: P(0.95).y, scale: small ? 0.6 : 0.85, opacity: 0, filter: "blur(3px)", duration: 1.15, ease: "power1.in" }, t + 0.6);
+      });
+
+      // F: orders pop in
+      ["#o1", "#o2", "#o3"].forEach((s, i) => tl.fromTo(s, { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 22.0 + i * 0.55));
+      tl.to("#oF", { y: -20, duration: 2.6, ease: "sine.inOut" }, 23.2);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
