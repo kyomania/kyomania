@@ -17,7 +17,7 @@ sc.cycles.max_bounces = 4
 sc.render.resolution_x, sc.render.resolution_y = 1920, 1080; sc.render.resolution_percentage = SCALE
 sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Punchy"
 w = bpy.data.worlds.new("W"); sc.world = w; w.use_nodes = True
-bg = w.node_tree.nodes["Background"]; bg.inputs[0].default_value = (0.004, 0.007, 0.02, 1); bg.inputs[1].default_value = 1.0
+bg = w.node_tree.nodes["Background"]; bg.inputs[0].default_value = (0.01, 0.012, 0.035, 1); bg.inputs[1].default_value = 1.0
 
 
 def mat(name, base=(0.02, 0.025, 0.04), rough=0.35, metal=0.6, emit=None, strength=0.0, alpha=1.0):
@@ -30,8 +30,17 @@ def mat(name, base=(0.02, 0.025, 0.04), rough=0.35, metal=0.6, emit=None, streng
     return m
 
 
+_cubes = {}
+def _cube(m):
+    if m.name not in _cubes:
+        me = bpy.data.meshes.new("cube_" + m.name)
+        v = [(-1, -1, -1), (1, -1, -1), (1, 1, -1), (-1, 1, -1), (-1, -1, 1), (1, -1, 1), (1, 1, 1), (-1, 1, 1)]
+        f = [(0, 3, 2, 1), (4, 5, 6, 7), (0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)]
+        me.from_pydata(v, [], f); me.materials.append(m); _cubes[m.name] = me
+    return _cubes[m.name]
 def box(x, y, z, sx, sy, sz, m):
-    bpy.ops.mesh.primitive_cube_add(location=(x, y, z)); o = bpy.context.object; o.scale = (sx / 2, sy / 2, sz / 2); o.data.materials.append(m); return o
+    o = bpy.data.objects.new("b", _cube(m)); bpy.context.collection.objects.link(o)
+    o.location = (x, y, z); o.scale = (sx / 2, sy / 2, sz / 2); return o
 
 
 TOWER = mat("tower", (0.03, 0.035, 0.05), 0.25, 0.8)
@@ -60,18 +69,22 @@ for gx in range(-9, 10):
         sx, sy = random.uniform(1.8, 2.8), random.uniform(1.8, 2.8)
         box(x, y, h / 2, sx, sy, h, TOWER)
         # rack lights: thin glowing strips on the front face
-        n = int(h / 0.45)
-        wm = WIN_B if random.random() < 0.25 else WIN_A
+        n = int(h / 0.28)
+        wm = WIN_B if random.random() < 0.2 else WIN_A
         for k in range(n):
-            if random.random() < 0.65:
-                box(x, y - sy / 2 - 0.01, 0.3 + k * 0.45, sx * random.uniform(0.4, 0.85), 0.02, 0.06, wm)
+            if random.random() < 0.55:
+                ww = sx * random.uniform(0.15, 0.4)
+                box(x + random.uniform(-sx / 2 + ww / 2, sx / 2 - ww / 2), y - sy / 2 - 0.01, 0.25 + k * 0.28, ww, 0.02, 0.035, wm)
+            if random.random() < 0.35:
+                box(x - sx / 2 - 0.01, y + random.uniform(-sy / 3, sy / 3), 0.25 + k * 0.28, 0.02, sy * 0.2, 0.035, wm)
         towers.append((x, y, h))
 
 # the hero tower: "DEIN SHOP"
-SX, SY, SH = 0.0, 6.0, 7.0
+SX, SY, SH = 0.0, 6.0, 12.0
 box(SX, SY, SH / 2, 2.8, 2.8, SH, TOWER)
-for k in range(int(SH / 0.4)):
-    box(SX, SY - 1.41, 0.3 + k * 0.4, 2.2, 0.02, 0.08, WIN_S)
+for k in range(int(SH / 0.3)):
+    box(SX, SY - 1.41, 0.3 + k * 0.3, 2.3, 0.02, 0.06, WIN_S)
+    box(SX - 1.41, SY, 0.3 + k * 0.3, 0.02, 2.3, 0.06, WIN_S)
 box(SX, SY, SH + 0.05, 2.9, 2.9, 0.1, WIN_S)
 
 
@@ -114,8 +127,8 @@ if SHOT == "shield":
     dome = bpy.context.object
     dm = bpy.data.materials.new("dome"); dm.use_nodes = True; nt = dm.node_tree; nt.nodes.clear()
     out = nt.nodes.new("ShaderNodeOutputMaterial"); mix = nt.nodes.new("ShaderNodeMixShader"); tr = nt.nodes.new("ShaderNodeBsdfTransparent")
-    em = nt.nodes.new("ShaderNodeEmission"); em.inputs[0].default_value = (0.25, 0.6, 1.0, 1); em.inputs[1].default_value = 3.0
-    lw = nt.nodes.new("ShaderNodeLayerWeight"); lw.inputs[0].default_value = 0.35
+    em = nt.nodes.new("ShaderNodeEmission"); em.inputs[0].default_value = (0.25, 0.6, 1.0, 1); em.inputs[1].default_value = 1.4
+    lw = nt.nodes.new("ShaderNodeLayerWeight"); lw.inputs[0].default_value = 0.15
     wf = nt.nodes.new("ShaderNodeWireframe"); wf.inputs[0].default_value = 0.06
     mx = nt.nodes.new("ShaderNodeMath"); mx.operation = "MAXIMUM"
     nt.links.new(lw.outputs["Facing"], mx.inputs[0]); nt.links.new(wf.outputs[0], mx.inputs[1])
@@ -130,23 +143,31 @@ if SHOT == "shield":
 
 # camera
 cam = bpy.data.cameras.new("cam"); co = bpy.data.objects.new("cam", cam); sc.collection.objects.link(co); sc.camera = co
-cam.lens = 28 if SHOT == "shield" else 35
+cam.lens = 26 if SHOT == "shield" else 30
 if SHOT == "shield":
-    co.location = (-34, -32, 26)
+    co.location = (-40, -38, 30)
 else:
-    co.location = (-16, -18, 9)
-tgt = Vector((0, 8, 3)) if SHOT != "shield" else Vector((0, 14, 2))
+    co.location = (-20, -24, 16)
+tgt = Vector((0, 9, 4)) if SHOT != "shield" else Vector((0, 14, 2))
 co.rotation_euler = (tgt - co.location).to_track_quat("-Z", "Y").to_euler()
 cam.dof.use_dof = SHOT != "shield"; cam.dof.focus_distance = (Vector((SX, SY, 3)) - co.location).length; cam.dof.aperture_fstop = 2.8
 
 # moon-ish key light + bloom
 bpy.ops.object.light_add(type="SUN", location=(0, 0, 20)); sun = bpy.context.object; sun.data.energy = 0.25; sun.data.color = (0.5, 0.6, 1.0); sun.rotation_euler = (0.9, 0.2, 0.6)
 
-sc.use_nodes = True
-nt = sc.node_tree; nt.nodes.clear()
-rl = nt.nodes.new("CompositorNodeRLayers"); gl = nt.nodes.new("CompositorNodeGlare"); comp = nt.nodes.new("CompositorNodeComposite")
-gl.glare_type = "FOG_GLOW"; gl.quality = "HIGH"; gl.threshold = 0.6; gl.size = 8
-nt.links.new(rl.outputs["Image"], gl.inputs["Image"]); nt.links.new(gl.outputs["Image"], comp.inputs["Image"])
+try:
+    nt = bpy.data.node_groups.new("Comp", "CompositorNodeTree"); sc.compositing_node_group = nt
+    rl = nt.nodes.new("CompositorNodeRLayers"); gl = nt.nodes.new("CompositorNodeGlare")
+    nt.interface.new_socket("Image", in_out="OUTPUT", socket_type="NodeSocketColor"); go = nt.nodes.new("NodeGroupOutput")
+    for k, v in (("Type", "Bloom"), ("Quality", "High")):
+        try: gl.inputs[k].default_value = v
+        except Exception as e: print("glare", k, e)
+    for k, v in (("Threshold", 0.7), ("Strength", 0.9), ("Size", 0.6)):
+        try: gl.inputs[k].default_value = v
+        except Exception as e: print("glare", k, e)
+    nt.links.new(rl.outputs["Image"], gl.inputs["Image"]); nt.links.new(gl.outputs["Image"], go.inputs[0])
+except Exception as e:
+    print("compositor skipped", e)
 
 sc.render.filepath = OUT
 bpy.ops.render.render(write_still=True)
