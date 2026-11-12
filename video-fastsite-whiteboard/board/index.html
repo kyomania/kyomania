@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bricolage"; font-weight: 700; src: url(assets/fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Bricolage"; font-weight: 800; src: url(assets/fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 400; src: url(assets/fonts/inter-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 500; src: url(assets/fonts/inter-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url(assets/fonts/inter-latin-600-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Hand"; font-weight: 500; src: url(assets/fonts/caveat-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Hand"; font-weight: 700; src: url(assets/fonts/caveat-latin-700-normal.woff2) format("woff2"); }
+
+      :root {
+        --brand: #047844;     /* fast.site Grün */
+        --bg: #f3f2ef;
+        --ink: #1d1d1f;
+        --ink2: #55555a;
+        --yellow: #fde35a; --green: #c9eb7d; --pink: #f8c1da; --purple: #cdbff7;
+        --blue: #b9dcfb; --orange: #fdd59a; --red: #e3436b; --violet: #6b4fe0;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: "Inter", sans-serif; color: var(--ink); }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+      .abs { position: absolute; }
+
+      /* Board (Kamera = Transform auf #cam) */
+      #cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+      #dots { position: absolute; left: -2000px; top: -2000px; width: 6000px; height: 5000px;
+        background-image: radial-gradient(circle, rgba(0,0,0,.13) 1.2px, transparent 1.4px); background-size: 26px 26px; }
+
+      /* Sticky Notes */
+      .sticky { position: absolute; padding: 26px 26px 22px; box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 12px 22px rgba(60,50,20,.12); }
+      .sticky .k { font-size: 14px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: rgba(0,0,0,.72); }
+      .sticky .h { font-size: 30px; font-weight: 500; line-height: 1.08; margin-top: 14px; letter-spacing: -.01em; }
+      .sticky .b { font-size: 17px; line-height: 1.3; margin-top: 16px; }
+      .sticky .n { font-size: 14px; margin-top: 6px; color: rgba(0,0,0,.7); }
+
+      /* Polaroids */
+      .pola { position: absolute; background: #fff; padding: 14px 14px 0; box-shadow: 0 2px 3px rgba(0,0,0,.06), 0 18px 30px rgba(0,0,0,.12); }
+      .pola img { display: block; width: 100%; object-fit: cover; }
+      .pola .c1 { font-size: 24px; font-weight: 500; margin-top: 12px; }
+      .pola .c2 { font-size: 13px; color: var(--ink2); margin-top: 4px; }
+      .tape { position: absolute; width: 96px; height: 26px; background: rgba(253,227,90,.75); left: 50%; top: -12px; margin-left: -48px; transform: rotate(-3deg); }
+
+      /* Kanban */
+      .colh { position: absolute; font-size: 21px; font-weight: 500; width: 210px; height: 40px; border-bottom: 2px solid #3b3b3f; }
+      .colh span { position: absolute; right: 0; top: 4px; font-size: 15px; color: var(--ink2); font-variant-numeric: tabular-nums; }
+      .card { position: absolute; width: 210px; height: 80px; background: #fff; border: 1px solid #e3e1dc; border-left: 4px solid var(--yellow); padding: 14px 14px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+      .card .t { font-size: 16px; font-weight: 500; }
+      .card .w { font-size: 12px; color: var(--ink2); margin-top: 14px; }
+      .card .ok { position: absolute; right: 12px; top: 12px; width: 22px; height: 22px; }
+
+      /* Fluss-Karten */
+      .fc { position: absolute; padding: 18px 20px; border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 10px 18px rgba(0,0,0,.08); }
+      .fc .h { font-size: 21px; font-weight: 500; letter-spacing: -.01em; }
+      .fc .s { font-size: 13px; margin-top: 6px; color: rgba(0,0,0,.65); }
+
+      /* Handschrift (Reveal per clip-path) */
+      .hand { position: absolute; font-family: "Hand"; font-weight: 500; white-space: nowrap; line-height: 1; }
+      svg.ink { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; pointer-events: none; }
+      svg.ink path, svg.ink ellipse { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+      /* Cursor */
+      .cur { position: absolute; left: 0; top: 0; z-index: 50; }
+      .cur svg { display: block; width: 30px; height: 30px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.18)); }
+      .cur .pill { position: absolute; left: 22px; top: 22px; color: #fff; font-size: 17px; font-weight: 500; padding: 6px 14px; border-radius: 20px; white-space: nowrap; }
+
+      /* UI-Chrome (fest, nicht im Board) */
+      .panel { position: absolute; background: #fff; border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 4px 14px rgba(0,0,0,.05); }
+      .av { width: 40px; height: 40px; border-radius: 8px; overflow: hidden; display: inline-block; vertical-align: middle; }
+      .av img { width: 100%; height: 100%; display: block; }
+      .badge { position: absolute; width: 34px; height: 30px; border-radius: 8px; background: var(--red); color: #fff; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="38.5" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="38.5" data-volume="1"></audio>
+
+      <div class="clip" id="stage" data-start="0" data-duration="38.5">
+        <div id="cam">
+          <div id="dots"></div>
+
+          <!-- ============ Titel ============ -->
+          <div class="abs" id="kick" style="left:670px;top:160px;font-size:16px;font-weight:500;letter-spacing:.06em;color:#4a4a4f">FAST.SITE &nbsp;·&nbsp; SPEED-SPRINT</div>
+          <div class="abs" style="left:662px;top:188px;font-family:Bricolage;font-weight:700;font-size:62px;line-height:1.03;letter-spacing:-.03em">
+            <div style="overflow:hidden"><div id="t1">Website schneller.</div></div>
+            <div style="overflow:hidden"><div id="t2">Hosting behalten.</div></div>
+          </div>
+          <div class="hand" id="hTitle" style="left:700px;top:334px;font-size:40px;color:var(--red)">7 Tage kostenlos testen</div>
+
+          <!-- ============ links oben ============ -->
+          <div class="pola" id="p1" style="left:112px;top:180px;width:290px;transform:rotate(-4deg)">
+            <div class="tape"></div>
+            <img src="assets/img/shop.jpg" style="height:250px;object-position:50% 30%" />
+            <div class="c1">Lena + ihr Shop</div>
+            <div class="c2" style="padding-bottom:16px">WooCommerce · Inhaberin</div>
+          </div>
+          <div class="sticky" id="sY" style="left:410px;top:142px;width:224px;height:226px;background:var(--yellow);transform:rotate(4deg)">
+            <div class="k">Montag / 09:00</div>
+            <div class="h">Domain<br />verbinden</div>
+            <div class="b">DNS + SSL.<br />Hosting bleibt.</div>
+            <div class="n">Lena</div>
+          </div>
+          <div class="badge" id="bdg" style="left:603px;top:130px">3</div>
+          <div class="hand" id="hLove" style="left:160px;top:526px;font-size:58px;color:var(--red)">genau so!</div>
+
+          <!-- ============ Kanban ============ -->
+          <div class="abs" id="kKick" style="left:617px;top:412px;font-size:14px;font-weight:500;letter-spacing:.04em;color:#4a4a4f">SPEED-SPRINT &nbsp;·&nbsp; DIESE WOCHE</div>
+          <div class="abs" id="kBg" style="left:604px;top:438px;width:733px;height:330px;background:rgba(255,255,255,.55)"></div>
+          <div class="colh" id="ch1" style="left:634px;top:452px">Zu tun<span id="n1">2</span></div>
+          <div class="colh" id="ch2" style="left:865px;top:452px">In Arbeit<span id="n2">2</span></div>
+          <div class="colh" id="ch3" style="left:1096px;top:452px">Erledigt<span id="n3">2</span></div>
+          <div class="card kc" style="left:634px;top:504px"><div class="t">Checkout-Regeln prüfen</div><div class="w">Jonas</div></div>
+          <div class="card kc" style="left:634px;top:594px"><div class="t">Formulare testen</div><div class="w">Jonas</div></div>
+          <div class="card kc" style="left:865px;top:504px;border-left-color:var(--pink)"><div class="t">DNS &amp; SSL einrichten</div><div class="w">Lena + Jonas</div></div>
+          <div class="card kc" id="mv" style="left:865px;top:594px;border-left-color:var(--pink);z-index:20"><div class="t">Bilder in WebP</div><div class="w">fast.site · automatisch</div>
+            <svg class="ok" id="okc" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="#3dbb6c" /><path d="M6 11.5l3.2 3.2L16 8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+          <div class="card kc" style="left:1096px;top:504px;border-left-color:#9bd35a"><div class="t">Domain verbinden</div><div class="w">Lena</div></div>
+          <div class="card kc" style="left:1096px;top:594px;border-left-color:#9bd35a"><div class="t">Edge-Caching aktiv</div><div class="w">Jonas</div></div>
+
+          <!-- ============ rechts oben ============ -->
+          <div class="sticky" id="sG" style="left:1272px;top:132px;width:206px;height:198px;background:var(--green);transform:rotate(-3deg)">
+            <div class="k">Dienstag / 12:30</div>
+            <div class="h" style="font-size:28px">DDoS-<br />Schutz</div>
+            <div class="b" style="font-size:15px;margin-top:12px">Formulare, Login<br />&amp; Checkout testen.</div>
+          </div>
+          <div class="panel" id="cmt" style="left:1155px;top:322px;width:292px;height:80px;border:1.5px solid #c9c1f2;border-radius:8px;transform:rotate(-2deg)">
+            <div style="position:absolute;left:16px;top:14px;font-size:17px;font-weight:500">WebP: 303,4 KB → 198,2 KB</div>
+            <div style="position:absolute;left:16px;top:48px;font-size:12px;color:var(--ink2)">Jonas &nbsp;·&nbsp; 2 Antworten</div>
+          </div>
+          <div class="pola" id="p2" style="left:1505px;top:172px;width:282px;transform:rotate(4deg)">
+            <div class="tape" style="background:rgba(253,213,154,.8)"></div>
+            <img src="assets/img/marketer.jpg" style="height:250px;object-position:50% 25%" />
+            <div class="c1">Jonas</div>
+            <div class="c2" style="padding-bottom:16px">Performance Marketing</div>
+          </div>
+          <div class="sticky" id="sP" style="left:1490px;top:565px;width:238px;height:208px;background:var(--purple);transform:rotate(2deg)">
+            <div class="k">Vor Freitag</div>
+            <div class="h" style="font-size:26px">Bilder auto-<br />matisch in WebP.</div>
+            <div class="b" style="font-size:15px;margin-top:12px">Kein Code. −35 %<br />im Beispiel.</div>
+          </div>
+          <div class="hand" id="hDup" style="left:1494px;top:786px;font-size:50px;color:var(--violet)">keine Plugins!</div>
+
+          <!-- ============ links unten ============ -->
+          <div class="sticky" id="sK" style="left:150px;top:630px;width:272px;height:214px;background:var(--pink);transform:rotate(-3deg)">
+            <div class="k">Samstag / 11:00</div>
+            <div class="h">7-Tage-Test<br />läuft.</div>
+            <div class="b" style="font-size:15px">Keine Kreditkarte<br />erforderlich.</div>
+            <div class="n">Lena + Jonas</div>
+          </div>
+          <div class="abs" id="tagGo" style="left:378px;top:606px;background:var(--yellow);padding:8px 16px;border-radius:16px;font-size:17px;font-weight:600;letter-spacing:.04em;transform:rotate(9deg);box-shadow:0 4px 10px rgba(0,0,0,.08)">GO-LIVE!</div>
+          <div class="pola" id="p3" style="left:458px;top:848px;width:170px;padding:10px 10px 0;transform:rotate(5deg)">
+            <img src="assets/img/order.jpg" style="height:140px;object-position:50% 60%" />
+            <div class="c1" style="font-size:16px;margin-top:8px">Bestellung #1042</div>
+            <div class="c2" style="padding-bottom:10px;font-size:11px">Checkout getestet ✓</div>
+          </div>
+          <div class="panel" id="stat" style="left:186px;top:905px;width:238px;height:70px;border-radius:2px;transform:rotate(-1.5deg)">
+            <div style="position:absolute;left:16px;top:13px;font-size:18px;font-weight:500">WordPress · Shopware</div>
+            <div style="position:absolute;left:16px;top:44px;font-size:12px;color:var(--ink2)">WooCommerce · Next.js · TYPO3 …</div>
+          </div>
+
+          <!-- ============ Fluss ============ -->
+          <div class="fc" id="f1" style="left:618px;top:836px;width:180px;height:106px;background:var(--green);transform:rotate(-2deg)"><div class="h" style="font-size:25px;line-height:1.1">Deine<br />Besucher</div></div>
+          <div class="fc" id="f2" style="left:985px;top:766px;width:198px;height:86px;background:var(--blue);transform:rotate(-1deg)">
+            <div class="h" style="display:flex;align-items:center;gap:10px"><img src="assets/img/fastsite-icon.svg" width="26" height="26" style="display:block" />fast.site</div>
+            <div class="s">Edge-Caching &amp; CDN</div></div>
+          <div class="fc" id="f3" style="left:1004px;top:882px;width:198px;height:86px;background:var(--orange);transform:rotate(1.5deg)"><div class="h">WebP + Schutz</div><div class="s">automatisch, vor dem Server</div></div>
+          <div class="fc" id="f4" style="left:1442px;top:866px;width:200px;height:86px;background:#ddd3fb;transform:rotate(-1deg)"><div class="h" style="font-size:20px">Dein Hosting</div><div class="s">bleibt, wie es ist</div></div>
+
+          <!-- Endsticker -->
+          <div class="abs" id="stk" style="left:1222px;top:978px;background:#fff;border-radius:14px;padding:14px 22px 14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 3px rgba(0,0,0,.06),0 14px 26px rgba(4,120,68,.25);transform:rotate(-3deg)">
+            <div><img src="assets/img/fastsite-logo.svg" style="height:40px;display:block" /><div style="font-size:14px;color:var(--ink2);margin-top:4px">7 Tage kostenlos testen</div></div>
+          </div>
+
+          <!-- ============ Zeichnungen (alle Striche editierbar) ============ -->
+          <svg class="ink" viewBox="0 0 1920 1080">
+            <path id="iUnder" pathLength="1" d="M684 324 C 800 318, 930 316, 1086 320" stroke="#e3436b" stroke-width="5" />
+            <path id="iLoveArrow" pathLength="1" d="M330 548 C 352 530, 362 512, 378 504 M378 504 l-18 2 M378 504 l-4 17" stroke="#e3436b" stroke-width="4" />
+            <!-- Doodle: Einkaufstüte mit Häkchen -->
+            <path id="iBag" pathLength="1" d="M478 400 L470 455 L540 455 L532 400 Z M490 400 C 490 382, 520 382, 520 400 M488 430 l12 11 l22 -22" stroke="#1d1d1f" stroke-width="3.2" />
+            <path id="iBox" pathLength="1" d="M604 438 H1338 V768 H604 Z" stroke="#7b84e6" stroke-width="2" />
+            <path id="iCircle" pathLength="1" d="M300 618 C 170 600, 118 690, 128 760 C 140 850, 260 880, 360 862 C 452 846, 466 760, 440 690 C 420 636, 380 612, 300 618 C 280 619, 268 622, 262 626" stroke="#e3436b" stroke-width="4" />
+            <path id="iDup" pathLength="1" d="M1500 842 C 1600 836, 1700 838, 1795 842" stroke="#6b4fe0" stroke-width="3.5" />
+            <path id="a1" pathLength="1" d="M800 868 C 860 860, 870 806, 980 806" stroke="#1d1d1f" stroke-width="2.4" />
+            <path id="a1h" pathLength="1" d="M968 798 L982 806 L968 814" stroke="#1d1d1f" stroke-width="2.4" />
+            <path id="a2" pathLength="1" d="M1185 812 C 1240 830, 1245 905, 1206 922" stroke="#1d1d1f" stroke-width="2.4" />
+            <path id="a2h" pathLength="1" d="M1216 912 L1204 923 L1220 928" stroke="#1d1d1f" stroke-width="2.4" />
+            <path id="a3" pathLength="1" d="M1204 946 C 1300 960, 1340 905, 1436 908" stroke="#1d1d1f" stroke-width="2.4" />
+            <path id="a3h" pathLength="1" d="M1424 900 L1438 908 L1424 916" stroke="#1d1d1f" stroke-width="2.4" />
+          </svg>
+
+          <!-- ============ Cursor ============ -->
+          <div class="cur" id="cLena"><svg viewBox="0 0 30 30"><path d="M4 3 L26 13 L15 16 L11 27 Z" fill="#e3436b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round" /></svg><div class="pill" style="background:#e3436b">Lena</div></div>
+          <div class="cur" id="cJonas"><svg viewBox="0 0 30 30"><path d="M4 3 L26 13 L15 16 L11 27 Z" fill="#2fa55a" stroke="#fff" stroke-width="1.6" stroke-linejoin="round" /></svg><div class="pill" style="background:#2fa55a">Jonas</div></div>
+          <div class="cur" id="cMaya"><svg viewBox="0 0 30 30"><path d="M4 3 L26 13 L15 16 L11 27 Z" fill="#c09310" stroke="#fff" stroke-width="1.6" stroke-linejoin="round" /></svg><div class="pill" style="background:#c09310">Maya</div></div>
+          <div class="cur" id="cAI"><svg viewBox="0 0 30 30"><path d="M4 3 L26 13 L15 16 L11 27 Z" fill="#0c9958" stroke="#fff" stroke-width="1.6" stroke-linejoin="round" /></svg><div class="pill" style="background:#0c9958">fast.site</div></div>
+        </div>
+
+        <!-- ============ Fest stehende App-Oberfläche ============ -->
+        <div class="panel" id="uiTop" style="left:12px;top:14px;width:676px;height:64px">
+          <img src="assets/img/fastsite-icon.svg" width="28" height="28" style="position:absolute;left:26px;top:18px" />
+          <div style="position:absolute;left:68px;top:19px;font-size:20px">fast.site &nbsp;/&nbsp; Speed-Sprint</div>
+          <svg style="position:absolute;right:30px;top:24px" width="16" height="16" viewBox="0 0 16 16"><path d="M3 6l5 5 5-5" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </div>
+        <div class="panel" id="uiR" style="left:1462px;top:14px;width:448px;height:64px">
+          <div style="position:absolute;left:14px;top:12px"><span class="av"><img src="assets/img/av-lena.jpg" /></span> <span class="av" style="margin-left:4px"><img src="assets/img/av-jonas.jpg" /></span> <span style="font-size:16px;color:#666;margin-left:10px;vertical-align:middle">+3</span></div>
+          <div style="position:absolute;left:158px;top:12px;width:136px;height:40px;border-radius:7px;background:#047844;color:#fff;font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center">Board teilen</div>
+          <svg style="position:absolute;left:326px;top:19px" width="26" height="26" viewBox="0 0 26 26"><path d="M4 4h18v13H11l-5 5v-5H4z" fill="none" stroke="#222" stroke-width="1.8" stroke-linejoin="round" /></svg>
+          <div style="position:absolute;left:378px;top:14px;font-size:22px;letter-spacing:2px">···</div>
+        </div>
+        <div class="panel" id="uiL" style="left:8px;top:350px;width:58px;height:360px">
+          <div style="position:absolute;left:9px;top:12px;width:40px;height:40px;border-radius:8px;background:#ebe7fb"></div>
+          <svg style="position:absolute;left:18px;top:21px" width="22" height="22" viewBox="0 0 22 22"><path d="M4 2 L18 10 L11 12 L8 19 Z" fill="none" stroke="#6b4fe0" stroke-width="1.8" stroke-linejoin="round" /></svg>
+          <div style="position:absolute;left:20px;top:70px;font-size:24px">T</div>
+          <div style="position:absolute;left:18px;top:118px;width:22px;height:22px;background:var(--yellow);border-radius:2px"></div>
+          <svg style="position:absolute;left:17px;top:164px" width="24" height="24" viewBox="0 0 24 24"><path d="M3 21L21 3" stroke="#222" stroke-width="2" /></svg>
+          <svg style="position:absolute;left:17px;top:208px" width="24" height="24" viewBox="0 0 24 24"><path d="M21 3v18H3" fill="none" stroke="#222" stroke-width="2" /></svg>
+          <div style="position:absolute;left:17px;top:252px;width:24px;height:24px;border:2px solid #222"></div>
+          <div style="position:absolute;left:17px;top:298px;font-size:20px;letter-spacing:1px">···</div>
+        </div>
+        <div class="abs" id="uiFoot" style="left:24px;top:1026px;font-size:15px;color:#666">fast.site Board &nbsp;/&nbsp; Alle Änderungen gespeichert</div>
+        <div class="panel" id="uiZoom" style="left:1710px;top:1006px;width:192px;height:58px">
+          <div style="position:absolute;left:26px;top:15px;font-size:20px">−</div>
+          <div style="position:absolute;left:0;width:192px;text-align:center;top:16px;font-size:20px;font-variant-numeric:tabular-nums"><span id="zoom">125</span>%</div>
+          <div style="position:absolute;right:26px;top:14px;font-size:22px">+</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      // ---- Zeit-Warp: Board-Ablauf (20 s) auf die Sprecherstimme (38,5 s) legen ----
+      const KN = [[0,0],[2.75,3.9],[2.95,4.2],[3.35,7.0],[3.95,9.0],[4.25,9.6],[5.25,10.9],[5.4,11.3],[6.7,13.0],[7.5,15.0],[8.6,16.2],[9.0,17.3],[9.85,18.6],[10.4,19.2],[10.85,20.6],[11.6,22.2],[13.95,24.6],[14.4,26.0],[15.6,27.8],[15.95,28.6],[16.6,31.7],[18.15,33.0],[20.0,38.5]];
+      const warp = (t) => { for (let i = 1; i < KN.length; i++) { const [a0, b0] = KN[i - 1], [a1, b1] = KN[i]; if (t <= a1) return b0 + (b1 - b0) * (t - a0) / (a1 - a0); } return KN[KN.length - 1][1]; };
+      const stretch = (target, v) => v && typeof v.duration === "number" && (v.ease === "none" || (typeof target === "string" && target.startsWith("#c")));
+      const _to = tl.to.bind(tl), _fromTo = tl.fromTo.bind(tl), _set = tl.set.bind(tl);
+      tl.to = (t, v, pos) => { if (typeof pos === "number") { if (stretch(t, v)) v.duration = warp(pos + v.duration) - warp(pos); pos = warp(pos); } return _to(t, v, pos); };
+      tl.fromTo = (t, f, v, pos) => { if (typeof pos === "number") { if (stretch(t, v)) v.duration = warp(pos + v.duration) - warp(pos); pos = warp(pos); } return _fromTo(t, f, v, pos); };
+      tl.set = (t, v, pos) => _set(t, v, typeof pos === "number" ? warp(pos) : pos);
+      const W = 1920, H = 1080;
+
+      // ---------- Kamera: Blickführung übers Board ----------
+      // shot(t, fx, fy, s, d): Bildmitte auf Board-Punkt (fx, fy) bei Zoom s
+      const cam = { fx: 870, fy: 275, s: 1.7 };
+      const zoomEl = document.getElementById("zoom"), camEl = document.getElementById("cam");
+      const applyCam = () => {
+        camEl.style.transform = `translate(${(W / 2 - cam.fx * cam.s).toFixed(2)}px, ${(H / 2 - cam.fy * cam.s).toFixed(2)}px) scale(${cam.s.toFixed(4)})`;
+        zoomEl.textContent = Math.round(cam.s * 75);
+      };
+      const camProxy = {}; ["fx", "fy", "s"].forEach((k) => Object.defineProperty(camProxy, k, { get: () => cam[k], set: (v) => { cam[k] = v; applyCam(); } }));
+      const shot = (t, fx, fy, s, d = 0.85) => tl.to(camProxy, { fx, fy, s, duration: d, ease: "power3.inOut" }, t);
+      tl.fromTo(camProxy, { fx: 860, fy: 268, s: 1.78 }, { fx: 880, fy: 282, s: 1.68, duration: 2.7, ease: "none", immediateRender: true }, 0);
+      shot(2.75, 400, 370, 1.55);
+      tl.to(camProxy, { fx: 412, fy: 384, s: 1.52, duration: 1.8, ease: "none" }, 3.6);
+      shot(5.4, 972, 602, 1.48);
+      tl.to(camProxy, { fx: 982, fy: 606, s: 1.45, duration: 2.75, ease: "none" }, 6.25);
+      shot(9.0, 1452, 462, 1.45);
+      tl.to(camProxy, { fx: 1462, fy: 470, s: 1.42, duration: 1.75, ease: "none" }, 9.85);
+      shot(11.6, 1010, 858, 1.45);
+      tl.to(camProxy, { fx: 1020, fy: 862, s: 1.42, duration: 1.95, ease: "none" }, 12.45);
+      shot(14.4, 330, 790, 1.5);
+      tl.to(camProxy, { fx: 340, fy: 796, s: 1.47, duration: 1.4, ease: "none" }, 15.25);
+      shot(16.65, 960, 540, 1.0, 1.25);
+      tl.to(camProxy, { fx: 962, fy: 546, s: 0.985, duration: 2.1, ease: "none" }, 17.9);
+
+      // ---------- Helfer ----------
+      const pop = (sel, t, from = 0.6, d = 0.55) => tl.fromTo(sel, { scale: from, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: d, ease: "back.out(2.2)", immediateRender: false }, t);
+      const drop = (sel, t) => tl.fromTo(sel, { scale: 1.18, autoAlpha: 0, y: -30 }, { scale: 1, autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+      const ink = (sel, t, d = 0.6) => tl.fromTo(sel, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d, ease: "power1.inOut", immediateRender: false }, t);
+      const write = (sel, t, d = 0.9) => tl.fromTo(sel, { clipPath: "inset(-20% 100% -30% 0)" }, { clipPath: "inset(-20% 0% -30% 0)", duration: d, ease: "power1.inOut", immediateRender: false }, t);
+      const rise = (sel, t, d = 0.7) => tl.fromTo(sel, { yPercent: 105 }, { yPercent: 0, duration: d, ease: "expo.out", immediateRender: false }, t);
+      // Cursor-Fahrt über Wegpunkte [t, x, y]
+      const move = (sel, pts, ease = "power2.inOut") => { for (let i = 1; i < pts.length; i++) { const [t0, , ] = pts[i - 1], [t1, x, y] = pts[i]; tl.to(sel, { x, y, duration: t1 - t0, ease }, t0); } };
+      const press = (sel, t) => tl.to(sel + " svg", { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1, transformOrigin: "20% 20%" }, t);
+
+      // ---------- Ausgangszustand ----------
+      const hidden = ["#kick", "#sY", "#bdg", "#p1", "#p2", "#p3", "#sG", "#cmt", "#sP", "#sK", "#tagGo", "#stat", "#f1", "#f2", "#f3", "#f4", "#stk", "#kKick", "#kBg", ".colh", ".kc", "#okc"];
+      tl.set(hidden, { autoAlpha: 0 }, 0);
+      tl.set(["#t1", "#t2"], { yPercent: 105 }, 0);
+      tl.set(["#hTitle", "#hLove", "#hDup"], { clipPath: "inset(-20% 100% -30% 0)" }, 0);
+      tl.set("svg.ink path", { strokeDasharray: 1, strokeDashoffset: 1 }, 0);
+      tl.set("#cLena", { x: 1180, y: 120 }, 0); tl.set("#cJonas", { x: 260, y: 760 }, 0); tl.set("#cMaya", { x: 640, y: 1000 }, 0); tl.set("#cAI", { x: 1360, y: 260 }, 0);
+      tl.fromTo(["#uiTop", "#uiR", "#uiL", "#uiZoom", "#uiFoot"], { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.05, ease: "power2.out", immediateRender: false }, 0.05);
+
+      // 1 · Titel (0 – 2,8 s)
+      tl.to("#kick", { autoAlpha: 1, duration: 0.4 }, 0.35);
+      rise("#t1", 0.55); rise("#t2", 0.78);
+      move("#cLena", [[0.2, 1180, 120], [1.2, 676, 318], [1.95, 1086, 312], [2.8, 1210, 372]]);
+      ink("#iUnder", 1.25, 0.7); press("#cLena", 1.22);
+      write("#hTitle", 1.95, 0.95);
+
+      // 2 · Lena, ihr Shop, Snippet-Sticky (2,8 – 5,4 s)
+      drop("#p1", 2.95);
+      pop("#sY", 3.35); pop("#bdg", 3.8, 0.2, 0.4);
+      move("#cJonas", [[3.0, 260, 760], [3.9, 560, 300], [4.6, 520, 470], [5.4, 760, 640]]);
+      ink("#iBag", 3.95, 0.7);
+      move("#cLena", [[2.8, 1210, 372], [4.2, 330, 560], [5.2, 390, 500], [6.4, 1000, 430]]);
+      write("#hLove", 4.25, 0.75); ink("#iLoveArrow", 4.85, 0.4);
+
+      // 3 · Kanban, Karte wandert nach „Erledigt“ (5,4 – 9 s)
+      tl.to(["#kKick", "#kBg"], { autoAlpha: 1, duration: 0.5 }, 5.6); ink("#iBox", 5.6, 0.7);
+      tl.fromTo(".colh", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.1, ease: "power2.out", immediateRender: false }, 5.95);
+      tl.fromTo(".kc", { autoAlpha: 0, y: 14, scale: 0.96 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.07, ease: "back.out(1.8)", immediateRender: false }, 6.2);
+      move("#cJonas", [[5.4, 760, 640], [7.2, 1030, 646], [7.5, 1036, 650]]);
+      press("#cJonas", 7.45);
+      tl.to("#mv", { scale: 1.05, rotation: 2.5, boxShadow: "0 18px 30px rgba(0,0,0,.18)", duration: 0.2 }, 7.5);
+      tl.to("#mv", { x: 231, y: 90, duration: 0.85, ease: "power2.inOut" }, 7.65);
+      move("#cJonas", [[7.65, 1036, 650], [8.5, 1267, 740]]);
+      tl.to("#mv", { scale: 1, rotation: 0, boxShadow: "0 1px 2px rgba(0,0,0,.04)", borderLeftColor: "#9bd35a", duration: 0.25, ease: "back.out(2)" }, 8.5);
+      tl.set("#n2", { textContent: "1" }, 8.55); tl.set("#n3", { textContent: "3" }, 8.55);
+      pop("#okc", 8.6, 0.2, 0.4);
+      move("#cAI", [[6.4, 1360, 260], [7.6, 905, 500], [8.6, 1190, 515], [9.6, 1385, 525]]);
+      move("#cLena", [[6.4, 1000, 430], [8.0, 700, 640], [9.4, 1215, 250]]);
+
+      // 4 · Consent, Jonas, Deduplizierung (9 – 11,6 s)
+      pop("#sG", 9.3); pop("#cmt", 9.65, 0.8, 0.45);
+      drop("#p2", 9.85);
+      move("#cJonas", [[8.5, 1267, 740], [10.3, 1520, 440], [11.2, 1560, 455]]);
+      pop("#sP", 10.4);
+      write("#hDup", 10.85, 0.8); ink("#iDup", 11.5, 0.4);
+
+      // 5 · Der Weg eines Events (11,6 – 14,4 s)
+      pop("#f1", 12.05);
+      ink("#a1", 12.35, 0.5); ink("#a1h", 12.82, 0.15); pop("#f2", 12.75);
+      ink("#a2", 13.05, 0.4); ink("#a2h", 13.42, 0.15); pop("#f3", 13.3);
+      ink("#a3", 13.6, 0.5); ink("#a3h", 14.06, 0.15); pop("#f4", 13.95);
+      move("#cMaya", [[11.4, 640, 1000], [12.3, 800, 880], [12.85, 975, 815], [13.4, 1215, 880], [14.1, 1430, 915], [14.6, 1560, 940]]);
+      move("#cAI", [[11.6, 1385, 525], [13.2, 1100, 820], [14.4, 1150, 790]]);
+
+      // 6 · Go-Live (14,4 – 16,6 s)
+      pop("#sK", 14.7);
+      move("#cLena", [[11.6, 1215, 250], [14.6, 470, 640], [15.1, 300, 620], [15.8, 460, 700]]);
+      ink("#iCircle", 15.0, 0.75);
+      pop("#tagGo", 15.45, 0.4, 0.45);
+      drop("#p3", 15.6); pop("#stat", 15.85, 0.8, 0.45);
+
+      // 7 · Rauszoomen, Track-Sticker (16,6 – 20 s)
+      move("#cJonas", [[14.4, 1560, 455], [17.6, 1585, 470], [19.6, 1560, 430]], "sine.inOut");
+      move("#cMaya", [[14.6, 1560, 940], [17.5, 1200, 760], [19.5, 1180, 740]], "sine.inOut");
+      move("#cAI", [[14.4, 1150, 790], [17.2, 980, 520], [19.6, 1000, 540]], "sine.inOut");
+      move("#cLena", [[15.8, 460, 700], [17.9, 1250, 1035], [18.35, 1300, 1045], [19.8, 1470, 1040]]);
+      tl.fromTo("#stk", { scale: 1.6, autoAlpha: 0, rotation: -12 }, { scale: 1, autoAlpha: 1, rotation: -3, duration: 0.45, ease: "back.out(2.4)", immediateRender: false }, 18.15);
+      press("#cLena", 18.12);
+      tl.set({}, {}, 20);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
