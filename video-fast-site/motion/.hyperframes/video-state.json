@@ -1,7 +1,7 @@
 {
   "version": 1,
   "historyId": "aab365e7-0c76-41ab-a6b6-ca10465f8944",
-  "currentRevision": "401edeb6-b287-4014-925c-77b019ef6cc2",
+  "currentRevision": "51e07139-72ae-43a6-86d3-e0aa37b427d8",
   "pendingChanges": false,
   "files": {
     "AGENTS.md": {
@@ -361,8 +361,8 @@
       "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/35/35a6d4ea79ebe911f0d81705f7aace5d8ff0316b745b0311d56af50c9c237cb7"
     },
     "index.html": {
-      "hash": "2687d78ef849d7fc28e0ef3fa4087048947b4c564382ffba6870cb3977087869",
-      "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/26/2687d78ef849d7fc28e0ef3fa4087048947b4c564382ffba6870cb3977087869"
+      "hash": "1e8136ca06ee98dce0cd3a51d5ea304b42e1df5dbc47e91e8c527a3fc6a62762",
+      "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/1e/1e8136ca06ee98dce0cd3a51d5ea304b42e1df5dbc47e91e8c527a3fc6a62762"
     },
     "meta.json": {
       "hash": "f9e179330123089f6b399d7b0a9ce91a66d459bc493bd8fd08c9896d27ef9e48",
@@ -463,6 +463,22 @@
     "assets/audio/sync_omab.wav": {
       "hash": "3c73ad82be8e530babe35abb3d1c5fa30245b84bd4c04556b9c6118b0ebf83b6",
       "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/3c/3c73ad82be8e530babe35abb3d1c5fa30245b84bd4c04556b9c6118b0ebf83b6"
+    },
+    "assets/audio/cut_ende.wav": {
+      "hash": "9ed1aa0e032d23ed106093f2b29b28090f01bdb315ac2d0f9bac9cf2baf7ac54",
+      "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/9e/9ed1aa0e032d23ed106093f2b29b28090f01bdb315ac2d0f9bac9cf2baf7ac54"
+    },
+    "assets/audio/cut_mann.wav": {
+      "hash": "f29b558ea9f71c0ef61bbacc6eb1f5e56acc0eacfaadef999920c62d9e8c5b0a",
+      "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/f2/f29b558ea9f71c0ef61bbacc6eb1f5e56acc0eacfaadef999920c62d9e8c5b0a"
+    },
+    "assets/audio/cut_oma.wav": {
+      "hash": "8ee06523e4f6d8d3414dc296afbf59d74805c8bc9e7238626471b24312014c51",
+      "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/8e/8ee06523e4f6d8d3414dc296afbf59d74805c8bc9e7238626471b24312014c51"
+    },
+    "assets/audio/cut_vortex.wav": {
+      "hash": "74a2528a94838238f89dad9386d3b4abff8fd51c452ce7742cab731bc5848ac9",
+      "content": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/74/74a2528a94838238f89dad9386d3b4abff8fd51c452ce7742cab731bc5848ac9"
     }
   },
   "revisions": {
@@ -763,12 +779,58 @@
           "after": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/26/2687d78ef849d7fc28e0ef3fa4087048947b4c564382ffba6870cb3977087869"
         }
       }
+    },
+    "1fbd1b29-7c0d-48d5-a4e7-27d9e630cc3a": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794494979224,
+      "endedAt": 1794494979237,
+      "files": {
+        "assets/audio/cut_ende.wav": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/9e/9ed1aa0e032d23ed106093f2b29b28090f01bdb315ac2d0f9bac9cf2baf7ac54"
+        },
+        "assets/audio/cut_mann.wav": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/f2/f29b558ea9f71c0ef61bbacc6eb1f5e56acc0eacfaadef999920c62d9e8c5b0a"
+        },
+        "assets/audio/cut_oma.wav": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/8e/8ee06523e4f6d8d3414dc296afbf59d74805c8bc9e7238626471b24312014c51"
+        },
+        "assets/audio/cut_vortex.wav": {
+          "before": null,
+          "after": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/74/74a2528a94838238f89dad9386d3b4abff8fd51c452ce7742cab731bc5848ac9"
+        },
+        "index.html": {
+          "before": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/26/2687d78ef849d7fc28e0ef3fa4087048947b4c564382ffba6870cb3977087869",
+          "after": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/38/383fa0c5ba3a6ad1c247230b16695e2ee086e948ec6634f2c61c4cb19320cc04"
+        }
+      }
+    },
+    "51e07139-72ae-43a6-86d3-e0aa37b427d8": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794495008645,
+      "endedAt": 1794495008650,
+      "files": {
+        "index.html": {
+          "before": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/38/383fa0c5ba3a6ad1c247230b16695e2ee086e948ec6634f2c61c4cb19320cc04",
+          "after": "/root/.cache/hyperframes/history/aab365e7-0c76-41ab-a6b6-ca10465f8944/blobs/1e/1e8136ca06ee98dce0cd3a51d5ea304b42e1df5dbc47e91e8c527a3fc6a62762"
+        }
+      }
     }
   },
   "checks": {
     "latest": {
-      "revision": "401edeb6-b287-4014-925c-77b019ef6cc2",
-      "id": "7e10fef1-78e5-4f8b-89c8-cd7e52dd9d29"
+      "revision": "51e07139-72ae-43a6-86d3-e0aa37b427d8",
+      "id": "f6a7693f-f5ee-4638-8999-d3913032e612"
     },
     "revisions": {
       "e128bb17-c758-41e6-bca1-1ab9c7baff6f": [
@@ -907,7 +969,6 @@
         {
           "id": "ace2f754-8fe4-4d81-979a-4e815c9798be",
           "scope": "project",
-          "report": "/home/user/kyomania/video-fast-site/motion/.hyperframes/artifacts/checks/ace2f754-8fe4-4d81-979a-4e815c9798be.json",
           "metadata": {
             "ok": true,
             "browserSkipped": false,
@@ -932,7 +993,9 @@
           "revision": "4f9629c6-f434-4685-90bb-db7c6e7c6e7c",
           "inputFingerprint": "216f183ad79446f4fa081b755502effd4afb2ab59b1396383eb867fd7674d1a9",
           "inputScope": "local-project-files",
-          "attribution": "recorded-revision"
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "c1227050-c57e-463d-a76a-0acc613008e8"
         }
       ],
       "401edeb6-b287-4014-925c-77b019ef6cc2": [
@@ -963,6 +1026,71 @@
           "contentHash": "6455323f31b6004a7c7cf439dee92458bc665e0fa63730b7ea484e9688770163",
           "revision": "401edeb6-b287-4014-925c-77b019ef6cc2",
           "inputFingerprint": "adb8bca62d36151c7d06fc1266b208d38a533bfc7b9d03425ad529246735fe9e",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision"
+        }
+      ],
+      "1fbd1b29-7c0d-48d5-a4e7-27d9e630cc3a": [
+        {
+          "id": "a97a96f1-bc30-49ac-9a3a-af0f4ae9bf82",
+          "scope": "project",
+          "metadata": {
+            "ok": true,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 45000,
+              "cache": true,
+              "contrast": true,
+              "craft": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto",
+              "includeUnmounted": false
+            }
+          },
+          "createdAt": 1794494998526,
+          "contentHash": "a76e63b1933c9a61d2fb79e953b891d3b717e24b402b289110218790b7291af1",
+          "revision": "1fbd1b29-7c0d-48d5-a4e7-27d9e630cc3a",
+          "inputFingerprint": "6ba10f2307a25fb0fa35ee6e0773fbb46cbf3fbb9dc2199957f1228a57e015e7",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "c1227050-c57e-463d-a76a-0acc613008e8"
+        }
+      ],
+      "51e07139-72ae-43a6-86d3-e0aa37b427d8": [
+        {
+          "id": "f6a7693f-f5ee-4638-8999-d3913032e612",
+          "scope": "project",
+          "report": "/home/user/kyomania/video-fast-site/motion/.hyperframes/artifacts/checks/f6a7693f-f5ee-4638-8999-d3913032e612.json",
+          "metadata": {
+            "ok": true,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 45000,
+              "cache": true,
+              "contrast": true,
+              "craft": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto",
+              "includeUnmounted": false
+            }
+          },
+          "createdAt": 1794495027297,
+          "contentHash": "a24ffb033d6136e81ab7b3d6ae2b7c1369658c6103572b01d46eb6c1c6f19ff7",
+          "revision": "51e07139-72ae-43a6-86d3-e0aa37b427d8",
+          "inputFingerprint": "7ef8f39cc49fb126a30b0e13fb953524ba22ff5afbc2aa27ead54449712361e9",
           "inputScope": "local-project-files",
           "attribution": "recorded-revision"
         }
@@ -2426,15 +2554,15 @@
   },
   "renders": {
     "latest": {
-      "id": "b6149c64-2865-4bce-914b-e084b916ca8e",
-      "completedAt": 1794494669047,
-      "output": "/home/user/kyomania/video-fast-site/fast-site-diner-v3.mp4",
+      "id": "c1227050-c57e-463d-a76a-0acc613008e8",
+      "completedAt": 1794495168131,
+      "output": "/home/user/kyomania/video-fast-site/fast-site-diner-v4.mp4",
       "status": "completed",
-      "revision": "401edeb6-b287-4014-925c-77b019ef6cc2"
+      "revision": "51e07139-72ae-43a6-86d3-e0aa37b427d8"
     },
     "retainedRevisions": [
-      "401edeb6-b287-4014-925c-77b019ef6cc2",
-      "4f9629c6-f434-4685-90bb-db7c6e7c6e7c"
+      "51e07139-72ae-43a6-86d3-e0aa37b427d8",
+      "401edeb6-b287-4014-925c-77b019ef6cc2"
     ]
   },
   "pendingArtifactCleanup": []

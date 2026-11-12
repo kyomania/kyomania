@@ -43,7 +43,7 @@
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st0",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -75,18 +75,18 @@
           "width": 524,
           "height": 6
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st1",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -118,18 +118,18 @@
           "width": 566,
           "height": 14
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st2",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -161,18 +161,18 @@
           "width": 827,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st3",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -204,18 +204,18 @@
           "width": 801,
           "height": 10
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st4",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -247,18 +247,18 @@
           "width": 1346,
           "height": 7
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st5",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -290,18 +290,18 @@
           "width": 984,
           "height": 15
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st6",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -333,18 +333,18 @@
           "width": 1011,
           "height": 14
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st7",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -376,18 +376,18 @@
           "width": 1009,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st8",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -419,18 +419,18 @@
           "width": 1017,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st9",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -462,18 +462,18 @@
           "width": 1011,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st10",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -505,18 +505,18 @@
           "width": 839,
           "height": 4
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st11",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -548,18 +548,18 @@
           "width": 1324,
           "height": 12
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st12",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -591,18 +591,18 @@
           "width": 1230,
           "height": 12
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st13",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -634,18 +634,18 @@
           "width": 677,
           "height": 9
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st14",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -677,18 +677,18 @@
           "width": 1173,
           "height": 15
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st15",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -720,18 +720,18 @@
           "width": 1098,
           "height": 8
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st16",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -763,18 +763,18 @@
           "width": 1361,
           "height": 9
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st17",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -806,18 +806,18 @@
           "width": 910,
           "height": 7
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st18",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -849,18 +849,18 @@
           "width": 1333,
           "height": 17
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st19",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -892,18 +892,18 @@
           "width": 951,
           "height": 13
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st20",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -935,18 +935,18 @@
           "width": 972,
           "height": 16
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st21",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -978,18 +978,18 @@
           "width": 948,
           "height": 15
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st22",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -1021,18 +1021,18 @@
           "width": 591,
           "height": 4
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st23",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -1064,18 +1064,18 @@
           "width": 575,
           "height": 12
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st24",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -1107,18 +1107,18 @@
           "width": 869,
           "height": 17
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "container_overflow",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st25",
         "message": "Element extends outside a clipping layout container.",
         "rect": {
@@ -1150,18 +1150,18 @@
           "width": 1289,
           "height": 7
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st0",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1191,18 +1191,18 @@
           "width": 524,
           "height": 6
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st1",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1232,18 +1232,18 @@
           "width": 566,
           "height": 14
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st2",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1273,18 +1273,18 @@
           "width": 827,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st3",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1314,18 +1314,18 @@
           "width": 801,
           "height": 10
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st4",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1355,18 +1355,18 @@
           "width": 1346,
           "height": 7
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st5",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1396,18 +1396,18 @@
           "width": 984,
           "height": 15
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st6",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1437,18 +1437,18 @@
           "width": 1011,
           "height": 14
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st7",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1478,18 +1478,18 @@
           "width": 1009,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st8",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1519,18 +1519,18 @@
           "width": 1017,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st9",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1560,18 +1560,18 @@
           "width": 1011,
           "height": 11
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st10",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1601,18 +1601,18 @@
           "width": 839,
           "height": 4
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st11",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1642,18 +1642,18 @@
           "width": 1324,
           "height": 12
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st12",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1683,18 +1683,18 @@
           "width": 1230,
           "height": 12
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st13",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1724,18 +1724,18 @@
           "width": 677,
           "height": 9
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st14",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1765,18 +1765,18 @@
           "width": 1173,
           "height": 15
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st15",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1806,18 +1806,18 @@
           "width": 1098,
           "height": 8
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st16",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1847,18 +1847,18 @@
           "width": 1361,
           "height": 9
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st17",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1888,18 +1888,18 @@
           "width": 910,
           "height": 7
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st18",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1929,18 +1929,18 @@
           "width": 1333,
           "height": 17
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st19",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -1970,18 +1970,18 @@
           "width": 951,
           "height": 13
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st20",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -2011,18 +2011,18 @@
           "width": 972,
           "height": 16
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st21",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -2052,18 +2052,18 @@
           "width": 948,
           "height": 15
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st23",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -2093,18 +2093,18 @@
           "width": 575,
           "height": 12
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st24",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -2134,18 +2134,18 @@
           "width": 869,
           "height": 17
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       },
       {
         "code": "escaped_container",
         "severity": "info",
-        "time": 15.594,
+        "time": 15.688,
         "selector": "#xs-st25",
         "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
         "rect": {
@@ -2175,26 +2175,26 @@
           "width": 1289,
           "height": 7
         },
-        "firstSeen": 15.594,
-        "lastSeen": 15.594,
+        "firstSeen": 15.688,
+        "lastSeen": 15.688,
         "occurrences": 1,
         "heldMs": 0,
         "times": [
-          15.594
+          15.688
         ]
       }
     ],
-    "duration": 40.1,
+    "duration": 40.34,
     "samples": [
-      2.228,
-      6.683,
-      11.139,
-      15.594,
-      20.05,
-      24.506,
-      28.961,
-      33.417,
-      37.872
+      2.241,
+      6.723,
+      11.206,
+      15.688,
+      20.17,
+      24.652,
+      29.134,
+      33.617,
+      38.099
     ],
     "transitionSamples": [],
     "transitionSamplesDropped": 0,
@@ -2219,11 +2219,11 @@
     "findings": [],
     "enabled": true,
     "samples": [
-      2.228,
-      11.139,
-      20.05,
-      28.961,
-      37.872
+      2.241,
+      11.206,
+      20.17,
+      29.134,
+      38.099
     ],
     "checked": 9,
     "passed": 9
@@ -2243,78 +2243,78 @@
         "dataAttributes": {},
         "sourceFile": "compositions/x-cta.html",
         "bbox": {
-          "x": 609.06,
-          "y": 658.74,
-          "width": 701.8600000000001,
-          "height": 58.51999999999998
+          "x": 609.63,
+          "y": 658.79,
+          "width": 700.7199999999999,
+          "height": 58.41999999999996
         },
-        "time": 30.004,
+        "time": 30.24,
         "words": 3,
-        "seconds": 0.93,
+        "seconds": 0.929,
         "floorSeconds": 1.05,
         "measured": [
           {
-            "time": 29.731,
+            "time": 29.974,
             "opacity": null,
             "heightPx": null
           },
           {
-            "time": 29.856,
+            "time": 30.099,
             "opacity": null,
             "heightPx": null
           },
           {
-            "time": 29.981,
-            "opacity": 0.27,
-            "heightPx": 44
+            "time": 30.224,
+            "opacity": 0.17,
+            "heightPx": 42
           },
           {
-            "time": 30.106,
+            "time": 30.349,
             "opacity": 1,
-            "heightPx": 59
+            "heightPx": 58
           },
           {
-            "time": 30.231,
-            "opacity": 1,
-            "heightPx": 57
-          },
-          {
-            "time": 30.356,
+            "time": 30.474,
             "opacity": 1,
             "heightPx": 56
           },
           {
-            "time": 30.481,
+            "time": 30.598,
             "opacity": 1,
             "heightPx": 56
           },
           {
-            "time": 30.606,
+            "time": 30.723,
             "opacity": 1,
             "heightPx": 56
           },
           {
-            "time": 30.731,
+            "time": 30.848,
             "opacity": 1,
             "heightPx": 56
           },
           {
-            "time": 30.856,
+            "time": 30.973,
             "opacity": 1,
             "heightPx": 56
           },
           {
-            "time": 30.981,
+            "time": 31.098,
+            "opacity": 1,
+            "heightPx": 56
+          },
+          {
+            "time": 31.223,
             "opacity": null,
             "heightPx": null
           },
           {
-            "time": 31.106,
+            "time": 31.348,
             "opacity": null,
             "heightPx": null
           },
           {
-            "time": 31.231,
+            "time": 31.473,
             "opacity": null,
             "heightPx": null
           }
@@ -2323,7 +2323,7 @@
     ],
     "enabled": true,
     "step": 0.125,
-    "samples": 321
+    "samples": 323
   },
   "audio": {
     "ok": true,
