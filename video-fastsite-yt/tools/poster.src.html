@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; font-weight: 400; src: url(assets/fonts/inter-tight-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 900; src: url(assets/fonts/inter-tight-latin-900-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 800; src: url(assets/fonts/jetbrains-mono-latin-800-normal.woff2) format("woff2"); }
+      :root { --k: #0b0b0b; --w: #f2f2ee; --y: #fbb419; --r: #ff4a2e; --g: #8c8c88; --sans: "Inter Tight", sans-serif; --mono: "JB Mono", monospace; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--k); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--k); font-family: var(--sans); color: var(--w); }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .abs { position: absolute; }
+      .T { font-family: var(--sans); font-weight: 900; text-transform: uppercase; letter-spacing: -0.045em; line-height: 0.86; white-space: nowrap; }
+      .O { color: transparent; -webkit-text-stroke: 3px var(--w); }
+      .M { font-family: var(--mono); font-weight: 500; font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+      .mk { position: absolute; overflow: hidden; padding-top: 70px; margin-top: -70px; padding-bottom: 14px; padding-right: 20px; }
+      .mk > div { will-change: transform; }
+      .grid { position: absolute; inset: 0; background-image: linear-gradient(90deg, rgba(242,242,238,0.06) 1px, transparent 1px); background-size: 160px 100%; }
+      .dk { background: var(--k); color: var(--w); }
+      #hud { z-index: 60; }
+      #hud .M { font-size: 18px; color: var(--w); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+
+      <!-- S1 problem -->
+      <div id="s1" class="clip dk" data-start="0" data-duration="8.05" data-track-index="1">
+        <div class="grid"></div>
+        <div class="mk" style="left:110px;top:110px"><div class="T" id="t1a" style="font-size:118px">Deine Website</div></div>
+        <div class="mk" style="left:104px;top:230px"><div class="T" id="t1b" style="font-size:270px">lädt.</div></div>
+        <div class="mk" style="left:104px;top:590px"><div class="T O" id="t1c" style="font-size:180px">und lädt.</div></div>
+        <div class="mk" style="left:104px;top:770px"><div class="T O" id="t1d" style="font-size:180px;opacity:0.45;-webkit-text-stroke-width:2px">und lädt.</div></div>
+        <div class="mk" style="left:110px;top:110px"><div class="T" id="t1e" style="font-size:104px">Jede Sekunde kostet</div></div>
+        <div class="mk" style="left:110px;top:212px"><div class="T" id="t1f" style="font-size:104px">dich <span style="color:var(--r)">Besucher.</span></div></div>
+        <div class="abs" id="cnt" style="right:110px;top:96px;text-align:right">
+          <div class="M" style="color:var(--g)">Ladezeit / s</div>
+          <div id="tv" style="font-family:var(--mono);font-weight:800;font-size:200px;line-height:1;letter-spacing:-0.04em">0,0</div>
+        </div>
+        <div class="abs" id="line1" style="left:0;top:536px;width:1920px;height:8px;background:var(--w);transform-origin:0 50%"></div>
+        <div class="abs M" id="pct1" style="left:110px;top:556px;color:var(--g)">000 %</div>
+        <div id="dots1" class="abs" style="left:110px;top:620px;width:1700px;height:340px"></div>
+      </div>
+
+      <!-- S2 drop -->
+      <div id="s2" class="clip" data-start="7.98" data-duration="2.17" data-track-index="2" style="background:transparent;color:var(--k)">
+        <div class="abs" id="ybg" style="left:0;top:0;width:1920px;height:1080px;background:var(--y);transform-origin:50% 50%"></div>
+        <div class="abs M" id="l2" style="left:110px;top:120px;color:var(--k)">02 — Die Lösung</div>
+        <div class="mk" style="left:110px;top:200px"><div class="T" id="t2a" style="font-size:96px;color:var(--k)">Mit fast.site wird sie</div></div>
+        <div class="abs T" id="t2b" style="left:96px;top:330px;font-size:380px;color:var(--k)">schnell.</div>
+        <div class="abs" style="left:0;top:820px;width:1920px;height:120px;background:var(--k);overflow:hidden"><div id="mq" class="T" style="position:absolute;left:0;top:18px;font-size:96px;color:var(--y)">Sofort geladen — sofort geladen — sofort geladen — sofort geladen — sofort geladen —</div></div>
+      </div>
+
+      <!-- S3 keep hosting -->
+      <div id="s3" class="clip dk" data-start="10.1" data-duration="2.8" data-track-index="3">
+        <div class="grid"></div>
+        <div class="abs M" style="left:110px;top:120px;color:var(--g)">03 — So funktioniert's</div>
+        <div class="mk" style="left:104px;top:190px"><div class="T" id="t3a" style="font-size:210px">Ohne</div></div>
+        <div class="mk" style="left:104px;top:390px"><div class="T O" id="t3b" style="font-size:210px">Umzug.</div></div>
+        <div class="abs" id="bar3" style="left:90px;top:470px;width:900px;height:34px;background:var(--y);transform-origin:0 50%"></div>
+        <div class="mk" style="left:104px;top:190px"><div class="T" id="t3c" style="font-size:170px">Dein Hosting</div></div>
+        <div class="mk" style="left:104px;top:360px"><div class="T" id="t3d" style="font-size:170px;color:var(--y)">bleibt.</div></div>
+        <svg class="abs" id="arr3" style="left:0;top:0" width="1920" height="1080"><g stroke="#f2f2ee" stroke-width="4" fill="none"><path d="M120 830 H1150"/><path d="M120 880 H1150"/><path d="M120 930 H1150"/></g></svg>
+        <div class="abs" id="ring3" style="left:1500px;top:700px;width:520px;height:520px;margin:-260px;border:10px solid var(--y)"></div>
+        <div class="abs M" id="ringL" style="left:1250px;top:410px;color:var(--y)">fast.site</div>
+        <div class="abs" id="sq3" style="left:1500px;top:700px;width:300px;height:300px;margin:-150px;background:var(--w);display:flex;align-items:center;justify-content:center"><div class="M" style="color:var(--k);font-weight:800">Hosting</div></div>
+        <div class="abs M" id="pin3" style="left:1660px;top:520px;background:var(--y);color:var(--k);padding:6px 12px;font-weight:800">✓ bleibt</div>
+      </div>
+
+      <!-- S4 edge -->
+      <div id="s4" class="clip dk" data-start="12.8" data-duration="3.2" data-track-index="4">
+        <div class="grid"></div>
+        <div class="abs M" style="left:110px;top:120px;color:var(--g)">04 — Edge-Caching &amp; CDN</div>
+        <div class="mk" style="left:104px;top:180px"><div class="T" id="t4a" style="font-size:190px">Edge-Caching.</div></div>
+        <div class="mk" style="left:110px;top:360px"><div class="M" id="t4b" style="font-size:34px">liefert deine Seiten aus der Nähe — blitzschnell</div></div>
+        <svg class="abs" id="map4" style="left:0;top:440px" width="1920" height="600" viewBox="0 0 1920 600"><g id="fld"></g><g id="rip"></g><path id="far4" d="M 230 470 C 700 620, 1300 600, 1720 120" fill="none" stroke="#8c8c88" stroke-width="3" stroke-dasharray="8 10"/><path id="near4" d="M 230 470 L 470 330" stroke="#fbb419" stroke-width="8" stroke-linecap="square"/><g id="nodes"></g>
+          <g transform="translate(1720,120)"><rect x="-26" y="-26" width="52" height="52" fill="#f2f2ee"/><text x="40" y="8" font-family="JB Mono" font-size="20" fill="#8c8c88" letter-spacing="3">URSPRUNG</text></g>
+          <g transform="translate(230,470)"><circle r="22" fill="#f2f2ee"/><text x="-10" y="62" font-family="JB Mono" font-size="20" fill="#8c8c88" letter-spacing="3">BESUCHER</text></g>
+        </svg>
+      </div>
+
+      <!-- S5 webp -->
+      <div id="s5" class="clip" data-start="15.9" data-duration="3.1" data-track-index="5" style="background:var(--w);color:var(--k)">
+        <div class="abs M" style="left:110px;top:120px;color:#555">05 — Bildoptimierung</div>
+        <div class="mk" style="left:104px;top:170px"><div class="T" id="t5a" style="font-size:150px;color:var(--k)">Automatisch WebP.</div></div>
+        <div class="abs M" id="fn5" style="left:110px;top:360px;color:var(--k);font-weight:800">bild.jpg</div>
+        <div class="abs" id="img5" style="left:110px;top:400px;width:1100px;height:540px;transform-origin:0 50%"></div>
+        <div class="abs" id="sz5" style="left:1260px;top:400px;font-family:var(--mono);font-weight:800;font-size:110px;letter-spacing:-0.04em;color:var(--k)">303,4<span style="font-size:44px"> KB</span></div>
+        <div class="abs T" id="pc5" style="left:1250px;top:580px;font-size:180px;color:var(--k);background:var(--y);padding:10px 26px 0">−35 %</div>
+        <div class="abs M" id="nt5" style="left:1262px;top:900px;font-size:15px;color:#555;line-height:1.5;white-space:normal;width:560px">Beispielfoto von fast.site (1152 × 628 px), JPG 303,4 KB → WebP 198,2 KB. Ersparnis variiert je Bild.</div>
+      </div>
+
+      <!-- S6 ddos -->
+      <div id="s6" class="clip dk" data-start="18.9" data-duration="2.6" data-track-index="6">
+        <div class="grid"></div>
+        <div class="abs M" style="left:110px;top:120px;color:var(--g)">06 — DDoS-Schutz</div>
+        <div class="mk" style="left:104px;top:180px"><div class="T" id="t6a" style="font-size:180px">Angriffe</div></div>
+        <div class="mk" style="left:104px;top:350px"><div class="T" id="t6b" style="font-size:180px">bleiben</div></div>
+        <div class="mk" style="left:104px;top:520px"><div class="T" id="t6c" style="font-size:180px;color:var(--y)">draußen.</div></div>
+        <svg class="abs" style="left:0;top:0" width="1920" height="1080"><circle id="ring6" cx="1420" cy="560" r="250" fill="none" stroke="#fbb419" stroke-width="12"/><circle id="core6" cx="1420" cy="560" r="80" fill="#f2f2ee"/></svg>
+        <div class="abs M" id="core6l" style="left:1350px;top:665px;font-size:16px;color:var(--g)">deine Website</div>
+        <div id="pt6" class="abs" style="inset:0"></div>
+      </div>
+
+      <!-- S7 devices -->
+      <div id="s7" class="clip dk" data-start="21.4" data-duration="3.1" data-track-index="7">
+        <div class="grid"></div>
+        <div id="many7" class="abs" style="inset:0"></div>
+        <div class="abs" id="frm" style="left:960px;top:430px;width:900px;height:560px;border:8px solid var(--w)"><div class="M" id="frmL" style="position:absolute;left:16px;top:12px;font-size:18px">Desktop · 16:10</div></div>
+        <div class="abs T" id="t7a" style="left:0;width:1920px;text-align:center;top:800px;font-size:190px">Desktop.</div>
+        <div class="abs T" id="t7b" style="left:0;width:1920px;text-align:center;top:800px;font-size:190px">Handy.</div>
+        <div class="abs T" id="t7c" style="left:0;width:1920px;text-align:center;top:380px;font-size:330px;color:var(--y)">Überall.</div>
+      </div>
+
+      <!-- S8 logo + cta -->
+      <div id="s8" class="clip dk" data-start="24.45" data-duration="5.55" data-track-index="8">
+        <div class="grid"></div>
+        <div class="abs" id="sweep" style="left:0;top:180px;width:10px;height:380px;background:var(--y)"></div>
+        <svg id="logo" class="abs" style="left:510px;top:200px" width="900" height="308" viewBox="0 0 428.82 146.98"><g>{{ICON}}</g><g fill="#f2f2ee">{{WORD}}</g></svg>
+        <div class="mk" style="left:0;width:1920px;top:600px;text-align:center"><div class="T" id="t8a" style="font-size:110px">Jetzt <span style="color:var(--y)">7 Tage kostenlos</span> testen.</div></div>
+        <div class="abs" id="btn8" style="left:960px;top:780px;transform:translateX(-50%);border:5px solid var(--y);padding:24px 54px;display:flex;align-items:center;gap:24px;white-space:nowrap"><div class="T" id="btnT" style="font-size:52px;color:var(--y);letter-spacing:-0.02em">Kostenlos testen →</div></div>
+        <div class="abs" id="btnF" style="left:960px;top:780px;transform:translateX(-50%);background:var(--y);padding:29px 59px;white-space:nowrap"><div class="T" style="font-size:52px;color:var(--k);letter-spacing:-0.02em">Kostenlos testen →</div></div>
+        <div class="abs M" id="nc8" style="left:0;width:1920px;text-align:center;top:940px;color:var(--g)">Keine Kreditkarte erforderlich · fast.site/de</div>
+        <svg id="cur8" class="abs" viewBox="0 0 46 46" style="left:0;top:0;width:54px;height:54px"><path d="M6 4 L6 38 L15 29 L21 43 L28 40 L22 26 L35 26 Z" fill="#f2f2ee" stroke="#0b0b0b" stroke-width="3" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- HUD -->
+      <div id="hud" class="clip" data-start="0" data-duration="30" data-track-index="9" data-layout-ignore>
+        <div class="abs M" id="h1" style="left:110px;top:44px">fast.site / spot 30″</div>
+        <div class="abs M" id="h2" style="right:110px;top:44px">00:00:00</div>
+        <div class="abs M" id="h3" style="left:110px;bottom:40px">01 / 08</div>
+        <div class="abs M" id="h4" style="right:110px;bottom:40px">fast.site/de</div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "expo.out" } });
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      const V = 0.9;
+      let sd = 99; const rnd = () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }; const R = (a, b) => a + (b - a) * rnd();
+      function mk(p, css, html) { const d = document.createElement("div"); d.className = "abs"; Object.assign(d.style, css || {}); if (html) d.innerHTML = html; p.appendChild(d); return d; }
+      // line rises out of its mask / leaves upward
+      function up(sel, t, d = 0.7) { tl.fromTo(sel, { yPercent: 110 }, { yPercent: 0, duration: d, ease: "expo.out" }, t); }
+      function out(sel, t, d = 0.35) { tl.to(sel, { yPercent: -110, duration: d, ease: "expo.in" }, t); tl.to(sel, { opacity: 0, duration: d * 0.6, ease: "power1.in" }, t); }
+      function hideUntil(sel, t) { tl.set(sel, { yPercent: 110 }, 0); up(sel, t); }
+      // shutter: the scene opens from a horizontal slit
+      function shutter(sel, t) { tl.fromTo(sel, { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "expo.out" }, t); }
+
+      // ---------- HUD ----------
+      const tc = { f: 0 };
+      tl.fromTo(tc, { f: 0 }, { f: 900, duration: 30, ease: "none", onUpdate: () => { const f = Math.floor(tc.f), s = Math.floor(f / 30), fr = f % 30; $("#h2").textContent = "00:" + String(s).padStart(2, "0") + ":" + String(fr).padStart(2, "0"); } }, 0);
+      [[0, "01"], [7.98, "02"], [10.1, "03"], [12.8, "04"], [15.9, "05"], [18.9, "06"], [21.4, "07"], [24.45, "08"]].forEach(([t, n]) => tl.set("#h3", { textContent: n + " / 08" }, t));
+      tl.set("#hud .M", { color: "#f2f2ee" }, 0);
+      tl.set("#hud .M", { color: "#0b0b0b" }, 8.1); tl.set("#hud .M", { color: "#f2f2ee" }, 10.1);
+      tl.set("#hud .M", { color: "#0b0b0b" }, 15.95); tl.set("#hud .M", { color: "#f2f2ee" }, 18.9);
+      tl.from("#hud .M", { opacity: 0, duration: 0.6, stagger: 0.08, ease: "power2.out" }, 0.2);
+
+      // ================= S1 =================
+      tl.fromTo("#line1", { scaleX: 0 }, { scaleX: 0.31, duration: 7.5, ease: "power1.out" }, 0.25);
+      const pc = { v: 0 };
+      tl.fromTo(pc, { v: 0 }, { v: 31, duration: 7.5, ease: "power1.out", onUpdate: () => ($("#pct1").textContent = String(Math.round(pc.v)).padStart(3, "0") + " %") }, 0.25);
+      tl.from("#pct1", { opacity: 0, duration: 0.4 }, 0.3);
+      hideUntil("#t1a", V); hideUntil("#t1b", V + 0.55);
+      hideUntil("#t1c", V + 2.04); hideUntil("#t1d", V + 3.32);
+      tl.from("#cnt", { opacity: 0, x: 40, duration: 0.8 }, 0.5);
+      const tv = { v: 0 };
+      tl.fromTo(tv, { v: 0 }, { v: 8.4, duration: 7.4, ease: "none", onUpdate: () => ($("#tv").textContent = tv.v.toFixed(1).replace(".", ",")) }, 0.5);
+      tl.to("#tv", { color: "#ff4a2e", duration: 0.6 }, 5.0);
+      // "Jede Sekunde kostet dich Besucher."
+      out(["#t1a", "#t1b"], V + 4.3); out(["#t1c", "#t1d"], V + 4.36);
+      hideUntil("#t1e", V + 4.63); hideUntil("#t1f", V + 4.78);
+      const D1 = $("#dots1"), COLS = 24, ROWS = 6, dots = [];
+      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) { const d = mk(D1, { left: c * 71 + "px", top: r * 58 + "px", width: "22px", height: "22px", borderRadius: "50%", background: "#f2f2ee" }); dots.push(d); }
+      tl.from(dots, { scale: 0, duration: 0.5, stagger: { amount: 0.6, grid: [ROWS, COLS], from: "start" }, ease: "back.out(3)" }, V + 4.75);
+      const order = dots.map((d, i) => [rnd(), d]).sort((a, b) => a[0] - b[0]).map((x) => x[1]).slice(0, 110);
+      order.forEach((d, i) => tl.to(d, { scale: 0.35, backgroundColor: "#3a3a38", duration: 0.25, ease: "power2.out" }, V + 5.4 + i * 0.016));
+      for (let i = 0; i < 10; i++) tl.set("#line1", { y: i % 2 ? -3 : 3 }, 7.45 + i * 0.05);
+      tl.to("#line1", { scaleX: 1, y: 0, backgroundColor: "#fbb419", duration: 0.1, ease: "power4.in" }, 7.86);
+
+      // ================= S2: the line tears open to yellow =================
+      const D = 7.98;
+      tl.fromTo("#ybg", { scaleY: 8 / 1080 }, { scaleY: 1, duration: 0.42, ease: "expo.inOut" }, D);
+      tl.from("#l2", { opacity: 0, duration: 0.3 }, D + 0.3);
+      hideUntil("#t2a", D + 0.32);
+      tl.from("#t2b", { x: 1700, scaleX: 3.2, skewX: -35, transformOrigin: "0% 50%", duration: 0.7, ease: "expo.out" }, D + 0.38);
+      tl.fromTo("#mq", { x: 0 }, { x: -900, duration: 2.0, ease: "none" }, D + 0.2);
+      tl.from("#mq", { opacity: 0, duration: 0.2 }, D + 0.4);
+      tl.to("#s2", { clipPath: "inset(0% 0% 100% 0%)", duration: 0.35, ease: "expo.in" }, 9.8);
+
+      // ================= S3 =================
+      shutter("#s3", 10.1);
+      hideUntil("#t3a", V + 9.25); hideUntil("#t3b", V + 9.4);
+      tl.fromTo("#bar3", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, V + 9.8);
+      out(["#t3a", "#t3b"], V + 10.12); tl.to("#bar3", { scaleX: 0, transformOrigin: "100% 50%", duration: 0.3, ease: "expo.in" }, V + 10.12);
+      hideUntil("#t3c", V + 10.36); hideUntil("#t3d", V + 10.5);
+      tl.from("#sq3", { scale: 0, duration: 0.6, ease: "expo.out" }, 10.3);
+      tl.from("#ring3", { scale: 0.58, opacity: 0, duration: 0.7, ease: "expo.out" }, 10.9);
+      tl.from("#ringL", { opacity: 0, x: -20, duration: 0.4 }, 11.2);
+      $$("#arr3 path").forEach((p, i) => { p.style.strokeDasharray = "40 1100"; tl.fromTo(p, { strokeDashoffset: 0, opacity: 0 }, { strokeDashoffset: -1060, opacity: 1, duration: 0.9, ease: "power2.in", immediateRender: false }, 10.9 + i * 0.18); tl.set(p, { opacity: 0 }, 0); tl.set(p, { opacity: 0 }, 11.8 + i * 0.18); });
+      tl.fromTo("#pin3", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(3)" }, V + 11.0);
+      tl.to("#s3", { clipPath: "inset(50% 0% 50% 0%)", duration: 0.3, ease: "expo.in" }, 12.55);
+
+      // ================= S4 =================
+      shutter("#s4", 12.8);
+      hideUntil("#t4a", V + 12.01); hideUntil("#t4b", V + 12.3);
+      const NS = "http://www.w3.org/2000/svg", fld = $("#fld");
+      for (let y = 30; y < 590; y += 34) for (let x = 120; x < 1820; x += 34) { const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 2.6); c.setAttribute("fill", "#3a3a38"); fld.appendChild(c); }
+      tl.from("#fld circle", { opacity: 0, duration: 0.3, stagger: { amount: 0.8, from: "start" } }, 12.85);
+      const NP = [[470, 330], [760, 180], [1020, 420], [1290, 230], [1520, 470], [620, 520], [1160, 90]];
+      NP.forEach(([x, y], i) => {
+        const g = document.createElementNS(NS, "g"); g.setAttribute("transform", `translate(${x},${y})`);
+        g.innerHTML = `<rect x="-11" y="-11" width="22" height="22" fill="#fbb419"/>`; $("#nodes").appendChild(g);
+        tl.from(g, { scale: 0, transformOrigin: "50% 50%", duration: 0.4, ease: "back.out(3)" }, 13.3 + i * 0.1);
+        for (let k = 0; k < 2; k++) { const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 12); c.setAttribute("fill", "none"); c.setAttribute("stroke", "#fbb419"); c.setAttribute("stroke-width", "2"); $("#rip").appendChild(c);
+          tl.fromTo(c, { attr: { r: 12 }, opacity: 0.9 }, { attr: { r: 120 }, opacity: 0, duration: 1.1, ease: "power2.out", repeat: 1 }, 13.4 + i * 0.1 + k * 0.55); }
+      });
+      const far = $("#far4"); tl.from(far, { opacity: 0, duration: 0.5 }, 13.2);
+      const near = $("#near4"); near.style.strokeDasharray = 300;
+      tl.fromTo(near, { strokeDashoffset: 300 }, { strokeDashoffset: 0, duration: 0.4, ease: "expo.out" }, V + 13.3);
+      tl.to(far, { opacity: 0.25, duration: 0.4 }, V + 13.3);
+      tl.to("#s4", { clipPath: "inset(50% 0% 50% 0%)", duration: 0.3, ease: "expo.in" }, 15.65);
+
+      // ================= S5 =================
+      shutter("#s5", 15.9);
+      hideUntil("#t5a", V + 15.14);
+      const IMG = $("#img5"), TC = 22, TR = 11, tw = 1100 / TC, th = 540 / TR;
+      for (let r = 0; r < TR; r++) for (let c = 0; c < TC; c++) {
+        const nx = c / TC, ny = r / TR;
+        const fig = Math.exp(-((nx - 0.42) ** 2) / 0.006 - ((ny - 0.55) ** 2) / 0.12);
+        const l = 0.78 - 0.25 * ny * 0.4 + 0.08 * Math.sin(c * 1.7 + r) - 0.55 * fig;
+        const rC = Math.round(255 * Math.min(1, l * 1.05)), gC = Math.round(255 * Math.min(1, l * 0.88)), bC = Math.round(255 * Math.min(1, l * 0.7));
+        mk(IMG, { left: c * tw + "px", top: r * th + "px", width: tw + 0.5 + "px", height: th + 0.5 + "px", background: `rgb(${rC},${gC},${bC})` });
+      }
+      tl.from("#img5 > div", { scale: 0, duration: 0.5, stagger: { amount: 0.6, grid: [TR, TC], from: "center" }, ease: "power3.out" }, 16.0);
+      tl.from(["#fn5", "#sz5"], { opacity: 0, duration: 0.4 }, 16.3);
+      const SQ = V + 15.9;
+      tl.to("#img5", { scaleX: 0.653, duration: 0.8, ease: "expo.inOut" }, SQ);
+      tl.to("#img5 > div", { scaleX: 0.84, duration: 0.4, yoyo: true, repeat: 1, ease: "power2.inOut" }, SQ);
+      tl.set("#fn5", { textContent: "bild.webp" }, SQ + 0.4);
+      tl.to("#sz5", { x: -381, duration: 0.8, ease: "expo.inOut" }, SQ);
+      const sz = { v: 303.4 };
+      tl.fromTo(sz, { v: 303.4 }, { v: 198.2, duration: 0.8, ease: "expo.inOut", onUpdate: () => ($("#sz5").innerHTML = sz.v.toFixed(1).replace(".", ",") + '<span style="font-size:44px"> KB</span>') }, SQ);
+      tl.fromTo("#pc5", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "expo.out" }, V + 16.6);
+      tl.set("#pc5", { clipPath: "inset(0% 100% 0% 0%)" }, 0);
+      tl.from("#nt5", { opacity: 0, duration: 0.5 }, V + 16.9);
+      tl.to("#s5", { clipPath: "inset(50% 0% 50% 0%)", duration: 0.3, ease: "expo.in" }, 18.65);
+
+      // ================= S6 =================
+      shutter("#s6", 18.9);
+      hideUntil("#t6a", V + 18.09); hideUntil("#t6b", V + 18.3); hideUntil("#t6c", V + 18.5);
+      const ring = $("#ring6"); const RL = 2 * Math.PI * 250; ring.style.strokeDasharray = RL;
+      tl.fromTo(ring, { strokeDashoffset: RL }, { strokeDashoffset: 0, duration: 0.8, ease: "expo.inOut" }, 19.0);
+      tl.from("#core6", { attr: { r: 0 }, duration: 0.6, ease: "back.out(2)" }, 19.0);
+      tl.from("#core6l", { opacity: 0, duration: 0.4 }, 19.3);
+      const CX = 1420, CY = 560, PT = $("#pt6");
+      for (let i = 0; i < 34; i++) {
+        const a = R(0, Math.PI * 2), t0 = 19.35 + i * 0.05;
+        const p = mk(PT, { left: "0px", top: "0px", width: "14px", height: "14px", margin: "-7px", background: "#ff4a2e" });
+        tl.set(p, { opacity: 0 }, 0);
+        tl.fromTo(p, { opacity: 1, x: CX + Math.cos(a) * 1100, y: CY + Math.sin(a) * 900, rotation: 45 }, { x: CX + Math.cos(a) * 262, y: CY + Math.sin(a) * 262, duration: 0.45, ease: "power2.in", immediateRender: false }, t0);
+        tl.to(p, { scale: 3, opacity: 0, duration: 0.25, ease: "power2.out" }, t0 + 0.45);
+        tl.fromTo(ring, { attr: { "stroke-width": 20 } }, { attr: { "stroke-width": 12 }, duration: 0.2, immediateRender: false }, t0 + 0.45);
+      }
+      for (let i = 0; i < 8; i++) {
+        const a = R(0, Math.PI * 2), t0 = 19.5 + i * 0.22;
+        const p = mk(PT, { left: "0px", top: "0px", width: "16px", height: "16px", margin: "-8px", borderRadius: "50%", background: "#f2f2ee" });
+        tl.set(p, { opacity: 0 }, 0);
+        tl.fromTo(p, { opacity: 1, x: CX + Math.cos(a) * 1100, y: CY + Math.sin(a) * 900 }, { x: CX, y: CY, duration: 0.7, ease: "power1.inOut", immediateRender: false }, t0);
+        tl.set(p, { opacity: 0 }, t0 + 0.7);
+      }
+      tl.to("#s6", { clipPath: "inset(50% 0% 50% 0%)", duration: 0.3, ease: "expo.in" }, 21.15);
+
+      // ================= S7 =================
+      shutter("#s7", 21.4);
+      tl.set(["#t7a", "#t7b", "#t7c"], { opacity: 0 }, 0); gsap.set("#frm", { xPercent: -50, yPercent: -50 });
+      tl.from("#frm", { scaleX: 0, duration: 0.6, ease: "expo.out" }, V + 20.5);
+      tl.set("#t7a", { opacity: 1 }, V + 20.55); tl.fromTo("#t7a", { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, immediateRender: false }, V + 20.55);
+      tl.to("#t7a", { opacity: 0, duration: 0.15 }, V + 21.6);
+      tl.to("#frm", { width: 330, height: 680, borderRadius: 46, duration: 0.55, ease: "expo.inOut" }, V + 21.55);
+      tl.set("#frmL", { textContent: "Handy · 9:19" }, V + 21.8);
+      tl.fromTo("#t7b", { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, immediateRender: false }, V + 21.7);
+      tl.to("#t7b", { opacity: 0, duration: 0.15 }, V + 22.6);
+      tl.to("#frm", { opacity: 0, scale: 0.5, duration: 0.3, ease: "expo.in" }, V + 22.55);
+      const shapes = [[160, 120, 1], [520, 60, 0], [760, 110, 2], [1100, 70, 1], [1500, 100, 0], [1720, 340, 2], [180, 520, 0], [470, 470, 2], [1380, 520, 1], [1640, 700, 0], [260, 820, 1], [700, 760, 0], [1060, 780, 2], [1400, 860, 0]];
+      const dims = [[300, 190, 0], [120, 240, 22], [220, 290, 14]];
+      shapes.forEach(([x, y, k], i) => {
+        const [w, h, br] = dims[k];
+        const s = mk($("#many7"), { left: x + "px", top: y + "px", width: w + "px", height: h + "px", border: "5px solid #f2f2ee", borderRadius: br + "px" });
+        tl.set(s, { opacity: 0 }, 0);
+        tl.fromTo(s, { opacity: 1, scale: 0 }, { scale: 1, duration: 0.5, ease: "expo.out", immediateRender: false }, V + 22.62 + i * 0.03);
+        tl.to(s, { backgroundColor: "#2a2a28", duration: 0.15 }, V + 22.9 + i * 0.05);
+      });
+      tl.fromTo("#t7c", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.5, ease: "expo.out", immediateRender: false }, V + 22.7);
+
+      tl.to("#s7", { clipPath: "inset(50% 0% 50% 0%)", duration: 0.25, ease: "expo.in" }, 24.2);
+
+      // ================= S8 =================
+      const LOGO = V + 23.67;
+      tl.fromTo("#sweep", { x: 400 }, { x: 1520, duration: 0.6, ease: "expo.inOut" }, LOGO - 0.15);
+      tl.set("#sweep", { opacity: 0 }, 0); tl.set("#sweep", { opacity: 1 }, LOGO - 0.15); tl.set("#sweep", { opacity: 0 }, LOGO + 0.47);
+      tl.fromTo("#logo", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "expo.inOut" }, LOGO - 0.15);
+      tl.to("#logo", { y: -40, scale: 0.86, duration: 0.8, ease: "expo.inOut" }, V + 24.6);
+      hideUntil("#t8a", V + 24.8);
+      tl.from("#btn8", { clipPath: "inset(0% 50% 0% 50%)", duration: 0.5, ease: "expo.out" }, V + 25.6);
+      tl.from("#nc8", { opacity: 0, duration: 0.5 }, V + 26.0);
+      tl.set("#btnF", { clipPath: "inset(0% 100% 0% 0%)" }, 0);
+      tl.set("#cur8", { opacity: 0 }, 0);
+      tl.fromTo("#cur8", { opacity: 1, x: 1500, y: 1080 }, { x: 1130, y: 830, duration: 0.9, ease: "power3.out", immediateRender: false }, 27.3);
+      const CLICK = 28.35;
+      tl.to("#cur8", { scale: 0.85, duration: 0.08 }, CLICK); tl.to("#cur8", { scale: 1, duration: 0.15 }, CLICK + 0.08);
+      tl.to("#btnF", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: "expo.out" }, CLICK);
+      tl.to("#s8", { opacity: 0, duration: 0.5, ease: "power1.in" }, 29.45);
+      tl.to("#hud", { opacity: 0, duration: 0.5 }, 29.45);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
