@@ -18,6 +18,10 @@ Ablauf-Idee: Dackel läuft durch den Schnee ins Bild und winkt → Briefumschlag
 öffnet sich → Text „Einladung zur Weihnachtsfeier“ → Schützenhaus bei Nacht, Fenster gehen an →
 Dackel-Parade auf dem Weg zum Haus → festlicher Saal → Endkarte mit Datum, Uhrzeit, Ort.
 
+Das echte Schützenhaus: `assets/schuetzenhaus-helmstedt-foto.jpg` (dunkles Holz-Obergeschoss, weißes Erdgeschoss,
+rotes Ziegeldach, Giebel mit goldenem Hirsch und „1938“, Rundbogentür mit Schild „Schützenhaus“).
+Schild „Schützenhaus“ und „1938“ als Papier-Schriftzug im Code auf das Haus setzen, nicht generieren.
+
 Texte (vom Verein bestätigen lassen, NICHT ins Bild generieren, sondern im Code setzen):
 - „Teckelclub Helmstedt“
 - „Einladung zur Weihnachtsfeier“
@@ -44,8 +48,8 @@ Paper cut-out collage illustration of a cheerful smooth-haired red standard dach
 2. Dackel mit Einladung (1:1, Freisteller)
 Paper cut-out collage illustration of the same red dachshund with green scarf and red Santa hat, sitting and holding a cream paper envelope in its mouth, the envelope closed with a red wax seal stamped with a paw print, tail raised happily, layered handcrafted paper with torn edges and paper texture, soft drop shadows, isolated on a plain flat warm off-white background, no text
 
-3. Schützenhaus bei Nacht (9:16)
-Paper cut-out diorama of a traditional German half-timbered rifle club house (Schützenhaus) on a snowy winter night, warm golden glowing windows, a fir garland with red bows over the wooden door, lanterns, snow-covered fir trees on both sides, deep navy night sky with paper stars and a crescent moon, multiple layered paper planes creating depth, torn paper edges, visible paper grain, soft shadows, cozy Christmas mood, no text
+3. Schützenhaus bei Nacht (9:16) – Foto `assets/schuetzenhaus-helmstedt-foto.jpg` als Referenzbild anhängen
+Paper cut-out diorama of the Schützenhaus Helmstedt on a snowy winter night: a two-storey building with a white plastered ground floor and an upper floor clad in dark brown vertical wooden boards, a steep red clay-tile hipped roof covered with snow, a small chimney with a wisp of smoke, a pointed dark wooden front gable in the middle with a golden leaping stag emblem, white six-pane windows with fir sprigs and red bows in the window boxes, warm golden light glowing from every window, a central arched dark wooden entrance door with two small wall lanterns, a fir garland with red bows above the door, snow-covered round topiary bushes in terracotta pots and a small wooden picket fence in front, deep navy night sky with paper stars and a crescent moon, multiple layered paper planes creating depth, torn paper edges, visible paper grain, soft shadows, cozy Christmas mood, no lettering
 
 4. Festsaal innen (9:16)
 Paper cut-out diorama of a cozy festive hall inside a German rifle club house, long wooden tables with white tablecloths, candles and fir sprigs, a tall decorated Christmas tree in the corner, round wooden shooting target discs and antlers on the wood-panelled wall, warm golden light, layered handcrafted paper with torn edges and paper texture, soft shadows, empty room without people, no text
@@ -56,8 +60,8 @@ Paper cut-out collage of a decorated Christmas fir tree made of layered green pa
 6. Deko-Set (1:1, Freisteller)
 Paper cut-out collage sticker sheet of Christmas decorations spread out with space between them: white paper snowflakes, gold paper stars, red baubles, holly leaves with red berries, a candy cane and a small paper paw print, handcrafted layered paper with torn edges and paper grain, each element casting a soft shadow, plain flat warm off-white background, no text
 
-7. Dackel-Parade (9:16)
-Paper cut-out collage illustration of a row of five happy dachshunds of different colors (red, black-and-tan, brown, wire-haired grey) wearing colorful knitted scarves and Santa hats, walking in a line through the snow toward a warmly lit half-timbered house in the distance, falling paper snowflakes, navy night sky, layered handcrafted paper with torn edges, visible paper texture, soft shadows, joyful mood, no text
+7. Dackel-Parade (9:16) – Bild 1 und das Schützenhaus-Foto als Referenz anhängen
+Paper cut-out collage illustration of a row of five happy dachshunds of different colors (red, black-and-tan, brown, wire-haired grey) wearing colorful knitted scarves and Santa hats, walking in a line through the snow toward the Schützenhaus in the distance: white ground floor, dark brown wooden upper floor, red snow-covered tile roof, pointed wooden gable with a golden stag emblem, warm glowing windows, falling paper snowflakes, navy night sky, layered handcrafted paper with torn edges, visible paper texture, soft shadows, joyful mood, no text
 
 8. Winterliche Kleinstadt (9:16)
 Paper cut-out collage skyline of a small historic German town in winter at dusk, half-timbered houses, a Renaissance-style building with gables and a church tower, snow on the roofs, warm lit windows, layered paper silhouettes in navy, cream and soft gold creating depth, torn paper edges and paper grain, falling paper snow, no text
