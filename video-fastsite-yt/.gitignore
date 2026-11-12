@@ -1,0 +1,6 @@
+npmtmp/
+**/.hyperframes/
+*.raw.wav
+.*.hf-transaction-*/
+work-*/
+dl/img/

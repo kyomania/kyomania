@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; font-weight: 400; src: url(assets/fonts/inter-tight-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url(assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 900; src: url(assets/fonts/inter-tight-latin-900-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 800; src: url(assets/fonts/jetbrains-mono-latin-800-normal.woff2) format("woff2"); }
+
+      :root {
+        --ink: #04060c;
+        --ink2: #0a0f1c;
+        --line: rgba(160, 190, 255, 0.14);
+        --yellow: #fbb419;
+        --green: #0c9958;
+        --lime: #34e08a;
+        --red: #df482b;
+        --blue: #3e71b6;
+        --sky: #6fb6ff;
+        --paper: #f3f6ff;
+        --mute: rgba(225, 233, 255, 0.62);
+        --sans: "Inter Tight", sans-serif;
+        --mono: "JB Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ink); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--ink); font-family: var(--sans); color: var(--paper); }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .abs { position: absolute; }
+      .ch { display: inline-block; will-change: transform; white-space: pre; }
+      .mono { font-family: var(--mono); font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+      .grad { background: linear-gradient(90deg, var(--yellow), #ff8a3d 35%, var(--lime) 70%, var(--sky)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .gradg { background: linear-gradient(90deg, var(--lime), var(--sky)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+      /* ---------- global ---------- */
+      #bg { z-index: 0; background: radial-gradient(90% 70% at 50% 40%, #0b1430 0%, var(--ink) 70%); }
+      .glow { position: absolute; border-radius: 50%; filter: blur(140px); }
+      #floor { position: absolute; left: -1200px; top: 560px; width: 4320px; height: 1400px; transform-origin: 50% 0; transform: perspective(900px) rotateX(72deg);
+        background-image: linear-gradient(var(--line) 2px, transparent 2px), linear-gradient(90deg, var(--line) 2px, transparent 2px); background-size: 120px 120px;
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 60%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 60%, transparent 100%); }
+      .dust { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #cfe0ff; }
+      #grain { z-index: 90; opacity: 0.07; mix-blend-mode: overlay; width: 3840px; height: 2160px; inset: auto; left: -960px; top: -540px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+      #vig { z-index: 89; pointer-events: none; background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,6,0.8) 100%); }
+      #flash { z-index: 95; background: #fff; opacity: 0; }
+      #warp { z-index: 60; pointer-events: none; }
+      .streak { position: absolute; height: 4px; width: 600px; border-radius: 4px; transform-origin: 0 50%; opacity: 0; }
+
+      /* ---------- devices ---------- */
+      .stage { position: absolute; inset: 0; perspective: 2600px; }
+      .rig { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-style: preserve-3d; }
+      .laptop { position: absolute; width: 1120px; transform-style: preserve-3d; }
+      .lid { width: 1120px; height: 704px; border-radius: 26px; padding: 20px; background: linear-gradient(160deg, #2a2f3b, #0d1017 40%, #07090e);
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.08) inset, 0 60px 120px rgba(0,0,0,0.6), 0 0 120px rgba(80,140,255,0.12); position: relative; }
+      .screen { position: relative; width: 1080px; height: 664px; border-radius: 10px; overflow: hidden; background: #f4f1ec; }
+      .base { width: 1280px; margin-left: -80px; height: 26px; border-radius: 0 0 26px 26px; background: linear-gradient(180deg, #8d93a3, #3a3f4c 50%, #1b1e26); position: relative; }
+      .base:after { content: ""; position: absolute; left: 540px; top: 0; width: 200px; height: 10px; border-radius: 0 0 12px 12px; background: #50566440; }
+      .phone { position: absolute; width: 340px; height: 700px; border-radius: 58px; padding: 13px; background: linear-gradient(150deg, #3a3f4a, #0b0d12 35%, #050608);
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.1) inset, 0 50px 110px rgba(0,0,0,0.65), 0 0 90px rgba(80,140,255,0.12); }
+      .pscreen { position: relative; width: 314px; height: 674px; border-radius: 46px; overflow: hidden; background: #f4f1ec; }
+      .island { position: absolute; left: 107px; top: 12px; width: 100px; height: 30px; border-radius: 20px; background: #000; z-index: 9; }
+      .glare { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 32%); z-index: 8; }
+
+      /* ---------- shop site (desktop) ---------- */
+      .site { position: absolute; inset: 0; font-family: var(--sans); color: #1c1a17; background: #f4f1ec; }
+      .bar { height: 40px; background: #e7e3dc; display: flex; align-items: center; padding: 0 16px; gap: 8px; position: relative; }
+      .bar i { width: 12px; height: 12px; border-radius: 50%; background: #c9c3b9; display: block; }
+      .url { margin-left: 120px; width: 560px; height: 26px; border-radius: 13px; background: #f7f5f1; font-size: 14px; color: #6d675e; display: flex; align-items: center; gap: 8px; padding-left: 14px; font-family: var(--mono); letter-spacing: 0.02em; }
+      .prog { position: absolute; left: 0; bottom: 0; height: 3px; width: 1080px; transform-origin: 0 50%; background: var(--red); }
+      .nav { height: 56px; display: flex; align-items: center; padding: 0 34px; gap: 30px; border-bottom: 1px solid #e3ded5; }
+      .brand { font-weight: 400; font-size: 22px; letter-spacing: 0.42em; color: #1c1a17; }
+      .nav span { font-size: 14px; color: #4d4740; }
+      .nav .sp { flex: 1; }
+      .hero { position: relative; height: 330px; overflow: hidden; }
+      .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .hero .ht { position: absolute; left: 44px; top: 70px; }
+      .hk { font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #5c5246; }
+      .hh { font-size: 52px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-top: 12px; color: #1c1a17; }
+      .hb { margin-top: 24px; display: inline-block; padding: 12px 24px; background: #1c1a17; color: #f4f1ec; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; }
+      .prods { display: flex; gap: 18px; padding: 22px 34px 0; }
+      .card { width: 239px; }
+      .card .im { width: 239px; height: 150px; overflow: hidden; background: #e9e4dc; }
+      .card .im img { width: 100%; height: 100%; object-fit: cover; }
+      .card .n { font-size: 14px; margin-top: 9px; color: #2b2721; }
+      .card .p { font-size: 14px; font-weight: 800; margin-top: 2px; }
+      .skel { position: absolute; left: 0; right: 0; top: 40px; bottom: 0; background: #f1eee9; }
+      .sk { position: absolute; border-radius: 8px; background: linear-gradient(90deg, #e2ddd5 0%, #ece8e1 20%, #e2ddd5 40%) ; background-size: 600px 100%; }
+      .spin { position: absolute; width: 64px; height: 64px; border-radius: 50%; border: 6px solid rgba(0,0,0,0.08); border-top-color: #8b8378; }
+
+      /* ---------- shop site (phone) ---------- */
+      .msite { position: absolute; inset: 0; background: #f4f1ec; color: #1c1a17; }
+      .mstat { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0; font-size: 14px; font-weight: 800; }
+      .mnav { height: 46px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e3ded5; }
+      .mnav .brand { font-size: 18px; }
+      .mhero { position: relative; height: 300px; overflow: hidden; }
+      .mhero img { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: 37% 30%; }
+      .mhero .ht { position: absolute; left: 20px; bottom: 22px; }
+      .mhero .hh { font-size: 30px; color: #fff; text-shadow: 0 2px 20px rgba(0,0,0,0.35); }
+      .mhero .hk { color: rgba(255,255,255,0.9); }
+      .mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; }
+      .mgrid .im { height: 120px; overflow: hidden; background: #e9e4dc; }
+      .mgrid img { width: 100%; height: 100%; object-fit: cover; }
+      .mgrid .n { font-size: 12px; margin-top: 6px; }
+      .mgrid .p { font-size: 12px; font-weight: 800; }
+
+      /* ---------- type ---------- */
+      .kick { font-family: var(--mono); font-size: 22px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mute); display: flex; align-items: center; gap: 14px; }
+      .kick b { width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 14px var(--yellow); display: block; }
+      .head { font-weight: 900; font-size: 104px; letter-spacing: -0.045em; line-height: 0.95; }
+      .glass { background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02)); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 26px;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.45); backdrop-filter: blur(14px); }
+
+      /* scene A */
+      #sA .timer { right: 90px; top: 80px; padding: 18px 28px; display: flex; align-items: center; gap: 18px; }
+      #sA .timer .l { font-family: var(--mono); font-size: 20px; letter-spacing: 0.18em; color: var(--mute); }
+      #sA .timer .v { font-family: var(--mono); font-weight: 800; font-size: 54px; color: var(--red); min-width: 190px; text-align: right; }
+      #sA .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--red); box-shadow: 0 0 16px var(--red); }
+      .cap { position: absolute; z-index: 20; left: 0; width: 1920px; text-align: center; font-weight: 900; letter-spacing: -0.045em; }
+      #lossCard { left: 1290px; top: 560px; width: 520px; height: 300px; padding: 26px 30px; }
+      #lossCard .t { font-family: var(--mono); font-size: 18px; letter-spacing: 0.18em; color: var(--mute); }
+      #lossCard .big { font-weight: 900; font-size: 48px; color: var(--red); margin-top: 6px; letter-spacing: -0.03em; }
+
+      /* scene C */
+      .node { position: absolute; top: 470px; width: 380px; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
+      .node .nl { font-weight: 800; font-size: 34px; letter-spacing: -0.02em; }
+      .node .ns { font-family: var(--mono); font-size: 17px; letter-spacing: 0.16em; color: var(--mute); text-transform: uppercase; }
+      .badge { position: absolute; top: -26px; right: -20px; padding: 10px 18px; border-radius: 999px; background: var(--green); color: #fff; font-weight: 800; font-size: 22px; box-shadow: 0 0 30px rgba(12,153,88,0.7); display: flex; gap: 8px; align-items: center; }
+      .strike { position: absolute; height: 10px; border-radius: 6px; background: var(--red); transform-origin: 0 50%; }
+
+      /* scene D */
+      #dash { left: 1000px; top: 300px; width: 820px; height: 600px; padding: 34px 38px; }
+      .dtop { display: flex; align-items: center; gap: 16px; }
+      .dtop .ttl { font-weight: 800; font-size: 28px; }
+      .pill { padding: 6px 14px; border-radius: 999px; font-size: 16px; font-weight: 800; }
+      .kpis { display: flex; gap: 18px; margin-top: 28px; }
+      .kpi { flex: 1; padding: 20px 22px; border-radius: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
+      .kpi .kl { font-size: 16px; color: var(--mute); }
+      .kpi .kv { font-weight: 900; font-size: 46px; letter-spacing: -0.03em; margin-top: 6px; }
+      .bars { position: absolute; left: 38px; right: 38px; bottom: 60px; height: 220px; display: flex; align-items: flex-end; gap: 8px; }
+      .bars i { flex: 1; display: block; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--sky), var(--blue)); transform-origin: 50% 100%; }
+      .demo { position: absolute; left: 38px; bottom: 22px; font-family: var(--mono); font-size: 14px; letter-spacing: 0.12em; color: rgba(225,233,255,0.4); }
+
+      /* scene E */
+      .file { position: absolute; left: 1010px; width: 800px; height: 150px; padding: 26px 32px; }
+      .file .fn { font-family: var(--mono); font-size: 22px; color: var(--mute); letter-spacing: 0.06em; }
+      .file .fs { position: absolute; right: 32px; top: 22px; font-weight: 900; font-size: 44px; letter-spacing: -0.02em; }
+      .file .fb { position: absolute; left: 32px; bottom: 30px; height: 18px; border-radius: 10px; transform-origin: 0 50%; }
+      .file .track { position: absolute; left: 32px; right: 32px; bottom: 30px; height: 18px; border-radius: 10px; background: rgba(255,255,255,0.07); }
+      #pct { left: 1010px; top: 760px; font-weight: 900; font-size: 190px; letter-spacing: -0.06em; line-height: 1; }
+      #scan { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--lime); box-shadow: 0 0 30px 8px rgba(52,224,138,0.8); z-index: 7; }
+      .tag { position: absolute; padding: 6px 12px; border-radius: 8px; font-family: var(--mono); font-weight: 800; font-size: 16px; z-index: 7; }
+
+      /* scene F */
+      #shield { left: 760px; top: 290px; width: 400px; height: 460px; }
+      .bolt { position: absolute; height: 8px; border-radius: 5px; transform-origin: 100% 50%; background: linear-gradient(90deg, rgba(223,72,43,0), #ff5a3a); box-shadow: 0 0 14px #ff3a1a; }
+      .spark { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #ffb199; box-shadow: 0 0 16px #ff5a3a; }
+      .ripple { position: absolute; left: 960px; top: 520px; width: 10px; height: 10px; margin: -5px; border-radius: 50%; border: 4px solid var(--sky); }
+      #online { left: 1340px; top: 420px; width: 420px; padding: 26px 30px; }
+
+      /* scene H */
+      #logo { left: 960px; top: 470px; width: 1240px; height: 425px; margin-left: -620px; margin-top: -212px; }
+      #ctaBtn { left: 960px; top: 800px; transform: translateX(-50%); padding: 30px 56px; border-radius: 999px; background: var(--yellow); color: #101827; font-weight: 900; font-size: 44px; letter-spacing: -0.02em; display: flex; gap: 20px; align-items: center; box-shadow: 0 0 80px rgba(251,180,25,0.45); white-space: nowrap; }
+      #cursor { left: 0; top: 0; width: 46px; height: 46px; z-index: 5; }
+      .rp { position: absolute; width: 20px; height: 20px; margin: -10px; border-radius: 50%; border: 4px solid #fff; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+
+      <div id="bg" class="clip" data-start="0" data-duration="30" data-track-index="0">
+        <div class="glow" id="g1" style="left:-200px;top:-300px;width:1000px;height:900px;background:#1d3f8a;opacity:.55"></div>
+        <div class="glow" id="g2" style="left:1200px;top:400px;width:900px;height:800px;background:#0c7a4a;opacity:.35"></div>
+        <div class="glow" id="g3" style="left:700px;top:700px;width:700px;height:600px;background:#b4700a;opacity:0"></div>
+        <div id="floor"></div>
+        <div id="dustL" class="abs" style="inset:0"></div>
+      </div>
+
+      <!-- ========== A: loading problem ========== -->
+      <div id="sA" class="clip" data-start="0" data-duration="8.0" data-track-index="1">
+        <div class="stage"><div class="rig" id="rigA"></div></div>
+        <div class="glass abs timer" id="timerA"><div class="dot"></div><div class="l">LADEZEIT</div><div class="v" id="tval">0,0 s</div></div>
+        <div class="cap" id="capA" style="top:850px;font-size:120px"></div>
+        <div class="glass abs" id="lossCard"><div class="t">BESUCHER</div><div class="big">springen ab</div><svg width="460" height="150" viewBox="0 0 460 150" style="margin-top:10px"><path id="lossPath" d="M0,20 C60,22 90,30 140,50 S240,80 290,100 S400,130 460,142" fill="none" stroke="#df482b" stroke-width="6" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <!-- ========== B: drop / instant ========== -->
+      <div id="sB" class="clip" data-start="7.95" data-duration="2.3" data-track-index="2">
+        <div class="stage"><div class="rig" id="rigB"></div></div>
+        <div class="glass abs timer" id="timerB" style="right:90px;top:80px;padding:18px 28px;display:flex;align-items:center;gap:18px"><div style="width:14px;height:14px;border-radius:50%;background:var(--lime);box-shadow:0 0 16px var(--lime)"></div><div class="mono" style="font-size:20px;color:var(--mute)">LADEZEIT</div><div style="font-family:var(--mono);font-weight:800;font-size:54px;color:var(--lime)">SOFORT DA</div></div>
+        <div class="abs" id="burstIcon" style="left:960px;top:540px;width:520px;height:520px;margin:-260px"><svg viewBox="0 0 147 147" width="520" height="520">{{ICON}}</svg></div>
+        <div class="abs" id="ring" style="left:960px;top:540px;width:40px;height:40px;margin:-20px;border-radius:50%;border:10px solid var(--yellow)"></div>
+        <div class="cap" id="capB" style="top:860px;font-size:110px"><span class="ch">Mit </span><span class="ch" style="color:#fff">fast.site</span><span class="ch"> </span><span class="ch grad">schnell.</span></div>
+      </div>
+
+      <!-- ========== C: keep hosting ========== -->
+      <div id="sC" class="clip" data-start="10.1" data-duration="2.8" data-track-index="3">
+        <div class="abs" style="left:150px;top:120px"><div class="kick" id="kC"><b></b>Ohne Umzug</div></div>
+        <div class="abs head" id="hC1" style="left:150px;top:180px">Kein Umzug.</div>
+        <div class="strike" id="strikeC" style="left:146px;top:228px;width:0"></div>
+        <div class="abs head" id="hC2" style="left:150px;top:180px">Behalte dein <span class="grad">Hosting.</span></div>
+        <svg class="abs" style="left:0;top:0" width="1920" height="1080"><path id="lnC1" d="M 520 620 L 770 620" stroke="rgba(255,255,255,0.25)" stroke-width="4" stroke-dasharray="14 14" fill="none"/><path id="lnC2" d="M 1150 620 L 1400 620" stroke="rgba(255,255,255,0.25)" stroke-width="4" stroke-dasharray="14 14" fill="none"/></svg>
+        <div id="pkC" class="abs" style="inset:0"></div>
+        <div class="node glass" id="nC1" style="left:140px">
+          <svg width="150" height="100" viewBox="0 0 150 100"><rect x="6" y="10" width="96" height="62" rx="8" fill="none" stroke="#cfe0ff" stroke-width="5"/><rect x="0" y="74" width="108" height="8" rx="4" fill="#cfe0ff"/><rect x="112" y="24" width="34" height="64" rx="8" fill="#0a0f1c" stroke="#cfe0ff" stroke-width="5"/></svg>
+          <div class="nl">Besucher</div><div class="ns">Desktop · Handy</div></div>
+        <div class="node glass" id="nC2" style="left:770px;border-color:rgba(251,180,25,0.6);box-shadow:0 0 80px rgba(251,180,25,0.25)">
+          <svg viewBox="0 0 147 147" width="110" height="110">{{ICON}}</svg>
+          <div class="nl">fast.site Edge</div><div class="ns">Cache · Bilder · Schutz</div></div>
+        <div class="node glass" id="nC3" style="left:1400px">
+          <svg width="110" height="110" viewBox="0 0 110 110"><g fill="none" stroke="#cfe0ff" stroke-width="5"><rect x="10" y="8" width="90" height="26" rx="6"/><rect x="10" y="42" width="90" height="26" rx="6"/><rect x="10" y="76" width="90" height="26" rx="6"/></g><g fill="#34e08a"><circle cx="26" cy="21" r="5"/><circle cx="26" cy="55" r="5"/><circle cx="26" cy="89" r="5"/></g></svg>
+          <div class="nl">Dein Hosting</div><div class="ns">bleibt, wo es ist</div>
+          <div class="badge" id="badgeC"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 12 L10 18 L20 6" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>bleibt</div></div>
+      </div>
+
+      <!-- ========== D: edge caching ========== -->
+      <div id="sD" class="clip" data-start="12.8" data-duration="3.2" data-track-index="4">
+        <div class="abs" style="left:110px;top:90px"><div class="kick" id="kD"><b></b>01 · Edge-Caching &amp; CDN</div></div>
+        <div class="abs head" id="hD" style="left:110px;top:150px;font-size:96px">Blitzschnell <span class="gradg">ausgeliefert.</span></div>
+        <svg id="globe" class="abs" style="left:140px;top:300px" width="760" height="760" viewBox="-380 -380 760 760">
+          <defs><radialGradient id="gg" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#1b3f8f" stop-opacity="0.55"/><stop offset="1" stop-color="#050a18" stop-opacity="0"/></radialGradient></defs>
+          <circle r="330" fill="url(#gg)"/><circle r="330" fill="none" stroke="rgba(111,182,255,0.35)" stroke-width="2"/>
+          <g id="gpts"></g><g id="garcs"></g><g id="gnodes"></g>
+        </svg>
+        <div class="glass abs" id="dash">
+          <div class="dtop"><svg viewBox="0 0 147 147" width="40" height="40">{{ICON}}</svg><div class="ttl">Website-Übersicht</div><div class="mono" style="font-size:16px;color:var(--mute);margin-left:6px">dein-shop.de</div><div style="flex:1"></div><div class="pill" style="background:rgba(12,153,88,0.25);color:var(--lime)">● Aktiv</div></div>
+          <div class="kpis">
+            <div class="kpi"><div class="kl">Gesamte Anfragen</div><div class="kv" id="k1">1,2 Mio.</div></div>
+            <div class="kpi"><div class="kl">Übertragene Daten</div><div class="kv" id="k2">48 GB</div></div>
+            <div class="kpi"><div class="kl">Sofortige Laderate</div><div class="kv gradg" id="k3">92 %</div></div>
+          </div>
+          <div class="bars" id="bars"></div>
+          <div class="demo">DEMO · BEISPIELDATEN</div>
+        </div>
+      </div>
+
+      <!-- ========== E: WebP ========== -->
+      <div id="sE" class="clip" data-start="15.9" data-duration="3.1" data-track-index="5">
+        <div class="abs" style="left:110px;top:90px"><div class="kick" id="kE"><b></b>02 · Bildoptimierung</div></div>
+        <div class="abs head" id="hE" style="left:110px;top:150px;font-size:96px">Automatisch <span class="grad">WebP.</span></div>
+        <div class="stage"><div class="rig" id="rigE"></div></div>
+        <div class="glass file" id="f1" style="top:330px"><div class="fn">bild.jpg</div><div class="fs" id="fs1">{{JPGKB}} KB</div><div class="track"></div><div class="fb" style="width:736px;background:#8b8f9c"></div></div>
+        <div class="glass file" id="f2" style="top:520px;border-color:rgba(52,224,138,0.5)"><div class="fn" style="color:var(--lime)">bild.webp</div><div class="fs gradg" id="fs2">{{WEBPKB}} KB</div><div class="track"></div><div class="fb" id="fb2" style="width:736px;background:linear-gradient(90deg,var(--lime),var(--sky))"></div></div>
+        <div class="abs gradg" id="pct">−{{PCT}} %</div>
+        <div class="abs mono" id="pnote" style="left:1016px;top:965px;font-size:15px;color:rgba(225,233,255,0.45)">Beispiel von fast.site · Foto 1152 × 628 px · Ersparnis variiert je Bild</div>
+      </div>
+
+      <!-- ========== F: DDoS ========== -->
+      <div id="sF" class="clip" data-start="18.9" data-duration="2.6" data-track-index="6">
+        <div class="abs" style="left:110px;top:90px"><div class="kick" id="kF"><b style="background:var(--red);box-shadow:0 0 14px var(--red)"></b>03 · DDoS-Schutz</div></div>
+        <div class="abs head" id="hF" style="left:110px;top:150px;font-size:96px">Angriffe bleiben <span class="grad">draußen.</span></div>
+        <div id="bolts" class="abs" style="inset:0"></div>
+        <svg id="shield" class="abs" viewBox="0 0 400 460">
+          <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fb6ff" stop-opacity="0.35"/><stop offset="1" stop-color="#3e71b6" stop-opacity="0.08"/></linearGradient></defs>
+          <path id="shp" d="M200 12 L380 80 L380 220 C380 330 300 410 200 448 C100 410 20 330 20 220 L20 80 Z" fill="url(#sg)" stroke="#6fb6ff" stroke-width="7" stroke-linejoin="round"/>
+          <g transform="translate(118,150) scale(1.12)">{{ICON}}</g>
+        </svg>
+        <div class="glass abs" id="online">
+          <div style="display:flex;align-items:center;gap:14px"><div style="width:16px;height:16px;border-radius:50%;background:var(--lime);box-shadow:0 0 16px var(--lime)"></div><div style="font-weight:800;font-size:30px">dein-shop.de</div></div>
+          <div class="mono" style="font-size:18px;color:var(--lime);margin-top:12px">ONLINE · GESCHÜTZT</div>
+          <div style="display:flex;gap:10px;margin-top:20px" id="okrow"></div>
+        </div>
+      </div>
+
+      <!-- ========== G: devices everywhere ========== -->
+      <div id="sG" class="clip" data-start="21.4" data-duration="3.15" data-track-index="7">
+        <div class="stage"><div class="rig" id="rigG"></div></div>
+        <div class="cap" id="capG1" style="top:880px;font-size:120px">Desktop.</div>
+        <div class="cap" id="capG2" style="top:880px;font-size:120px">Handy.</div>
+        <div class="cap grad" id="capG3" style="top:880px;font-size:150px">Überall.</div>
+      </div>
+
+      <!-- ========== H: logo + CTA ========== -->
+      <div id="sH" class="clip" data-start="24.45" data-duration="5.55" data-track-index="8">
+        <div class="abs" id="rays" style="left:960px;top:470px;width:2400px;height:2400px;margin:-1200px;border-radius:50%;background:repeating-conic-gradient(from 0deg, rgba(251,180,25,0.07) 0deg 6deg, rgba(0,0,0,0) 6deg 18deg);-webkit-mask-image:radial-gradient(circle, #000 0%, transparent 60%);mask-image:radial-gradient(circle, #000 0%, transparent 60%)"></div>
+        <svg id="logo" class="abs" viewBox="0 0 428.82 146.98">
+          <g id="lgIcon">{{ICONSPLIT}}</g>
+          <g id="lgWord" fill="#ffffff">{{WORD}}</g>
+        </svg>
+        <div class="abs" id="ctaH" style="left:0;width:1920px;top:560px;text-align:center;font-weight:900;font-size:84px;letter-spacing:-0.04em">Jetzt <span class="grad">7 Tage kostenlos</span> testen.</div>
+        <div class="abs" id="ctaBtn">Kostenlos testen <svg width="44" height="44" viewBox="0 0 44 44"><path class="arr" d="M8 22 H34 M24 12 L34 22 L24 32" stroke="#101827" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="abs mono" id="nocc" style="left:0;width:1920px;top:960px;text-align:center;font-size:22px;color:var(--mute)">Keine Kreditkarte erforderlich · fast.site/de</div>
+        <div id="rps" class="abs" style="inset:0"></div>
+        <svg id="cursor" class="abs" viewBox="0 0 46 46"><path d="M6 4 L6 38 L15 29 L21 43 L28 40 L22 26 L35 26 Z" fill="#fff" stroke="#101827" stroke-width="2.5" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div id="warp" data-layout-ignore class="clip" data-start="0" data-duration="30" data-track-index="9"></div>
+      <div id="vig" data-layout-ignore class="clip" data-start="0" data-duration="30" data-track-index="10"></div>
+      <div id="grain" data-layout-ignore class="clip" data-start="0" data-duration="30" data-track-index="11"></div>
+      <div id="flash" data-layout-ignore class="clip" data-start="0" data-duration="30" data-track-index="12"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      let seed = 4242;
+      const rnd = () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+      const R = (a, b) => a + (b - a) * rnd();
+      const NS = "http://www.w3.org/2000/svg";
+      const V = 0.9; // voice offset in the mix
+      function split(el) {
+        const txt = el.textContent; el.textContent = "";
+        return [...txt].map((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; el.appendChild(s); return s; });
+      }
+      function mk(parent, cls, css, html) { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css || {}); if (html) d.innerHTML = html; parent.appendChild(d); return d; }
+      function flash(t, o = 0.85, d = 0.3, color = "#fff") { tl.set("#flash", { backgroundColor: color }, t); tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: d, ease: "power2.out", immediateRender: false }, t); }
+      function shake(target, t, dur = 0.35, amp = 20) {
+        const n = Math.round(dur / 0.033);
+        for (let i = 0; i < n; i++) { const k = 1 - i / n; tl.set(target, { x: R(-amp, amp) * k, y: R(-amp, amp) * k }, t + i * 0.033); }
+        tl.set(target, { x: 0, y: 0 }, t + dur);
+      }
+      function inHead(sel, t) { tl.from(split($(sel)), { yPercent: 110, opacity: 0, duration: 0.5, stagger: 0.018, ease: "expo.out" }, t); }
+      function inKick(sel, t) { tl.from(sel, { x: -40, opacity: 0, duration: 0.45, ease: "expo.out" }, t); }
+      function wrapHead(sel) { // split but keep gradient spans: split text nodes per child
+        const el = $(sel); const out = [];
+        [...el.childNodes].forEach((n) => {
+          if (n.nodeType === 3) { const frag = document.createDocumentFragment(); [...n.textContent].forEach((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; frag.appendChild(s); out.push(s); }); el.replaceChild(frag, n); }
+          else { const txt = n.textContent; n.textContent = ""; [...txt].forEach((c) => { const s = document.createElement("span"); s.className = "ch " + n.className; s.textContent = c; el.insertBefore(s, n); out.push(s); }); el.removeChild(n); }
+        });
+        return out;
+      }
+      function headIn(sel, t, st = 0.02) { tl.from(wrapHead(sel), { yPercent: 100, opacity: 0, rotateX: -70, duration: 0.55, stagger: st, ease: "expo.out" }, t); }
+
+      // ---------- shop markup ----------
+      const P = [["Wollmantel Camel", "289 €", "p1"], ["Sneaker Weiß", "129 €", "p2"], ["Ledertasche Cognac", "219 €", "p3"], ["Strickpullover Creme", "99 €", "p4"]];
+      const lock = `<svg width="12" height="14" viewBox="0 0 12 14"><rect x="1" y="6" width="10" height="8" rx="2" fill="#6d675e"/><path d="M3 6 V4 a3 3 0 0 1 6 0 V6" stroke="#6d675e" stroke-width="2" fill="none"/></svg>`;
+      function deskSite(loading) {
+        return `<div class="site">
+          <div class="bar"><i></i><i></i><i></i><div class="url">${lock}dein-shop.de</div>${loading ? '<div class="prog"></div>' : ""}</div>
+          <div class="nav"><div class="brand">ATELIER</div><span>Neu</span><span>Damen</span><span>Herren</span><span>Accessoires</span><span style="color:#b0442a">Sale</span><div class="sp"></div><span>Suche</span><span>Konto</span><span>Warenkorb (0)</span></div>
+          <div class="hero"><img src="assets/img/hero.jpg"/><div class="ht"><div class="hk">Herbst / Winter 26</div><div class="hh">Die neue<br/>Kollektion</div><div class="hb">Jetzt entdecken</div></div></div>
+          <div class="prods">${P.map((p) => `<div class="card"><div class="im"><img src="assets/img/${p[2]}.jpg"/></div><div class="n">${p[0]}</div><div class="p">${p[1]}</div></div>`).join("")}</div>
+          ${loading ? `<div class="skel"><div class="sk" style="left:34px;top:14px;width:140px;height:28px"></div><div class="sk" style="left:220px;top:18px;width:420px;height:20px"></div>
+            <div class="sk" style="left:0;top:58px;width:1080px;height:330px;border-radius:0"></div>
+            ${[0, 1, 2, 3].map((i) => `<div class="sk" style="left:${34 + i * 257}px;top:410px;width:239px;height:150px"></div><div class="sk" style="left:${34 + i * 257}px;top:572px;width:160px;height:14px"></div>`).join("")}
+            <div class="spin" style="left:508px;top:190px"></div></div>` : ""}
+        </div>`;
+      }
+      function phoneSite(loading) {
+        return `<div class="msite"><div class="mstat"><span>9:41</span><span>●●● 5G</span></div>
+          <div class="mnav"><div class="brand">ATELIER</div></div>
+          <div class="mhero"><img src="assets/img/hero.jpg"/><div class="ht"><div class="hk">Herbst / Winter 26</div><div class="hh">Die neue<br/>Kollektion</div></div></div>
+          <div class="mgrid">${P.map((p) => `<div><div class="im"><img src="assets/img/${p[2]}.jpg"/></div><div class="n">${p[0]}</div><div class="p">${p[1]}</div></div>`).join("")}</div>
+          ${loading ? `<div class="skel" style="top:52px"><div class="sk" style="left:100px;top:12px;width:114px;height:22px"></div><div class="sk" style="left:0;top:46px;width:314px;height:300px;border-radius:0"></div>
+            ${[0, 1, 2, 3].map((i) => `<div class="sk" style="left:${14 + (i % 2) * 148}px;top:${360 + Math.floor(i / 2) * 170}px;width:138px;height:120px"></div>`).join("")}
+            <div class="spin" style="left:125px;top:165px"></div></div>` : ""}
+          </div>`;
+      }
+      function laptop(parent, x, y, s, loading, id) {
+        const d = mk(parent, "laptop", { left: x + "px", top: y + "px" });
+        d.id = id; d.innerHTML = `<div class="lid"><div class="screen" data-layout-ignore>${deskSite(loading)}<div class="glare"></div></div></div><div class="base"></div>`;
+        gsap.set(d, { scale: s, transformOrigin: "50% 50%" }); return d;
+      }
+      function phone(parent, x, y, s, loading, id) {
+        const d = mk(parent, "phone", { left: x + "px", top: y + "px" });
+        d.id = id; d.innerHTML = `<div class="pscreen" data-layout-ignore>${phoneSite(loading)}<div class="island"></div><div class="glare"></div></div>`;
+        gsap.set(d, { scale: s, transformOrigin: "50% 50%" }); return d;
+      }
+
+      // ---------- global ----------
+      tl.fromTo("#g1", { x: 0, y: 0 }, { x: 500, y: 200, duration: 30, ease: "sine.inOut" }, 0);
+      tl.fromTo("#g2", { x: 0, y: 0 }, { x: -600, y: -250, duration: 30, ease: "sine.inOut" }, 0);
+      tl.fromTo("#floor", { backgroundPosition: "0px 0px" }, { backgroundPosition: "0px 3600px", duration: 30, ease: "none" }, 0);
+      for (let i = 0; i < 60; i++) {
+        const d = mk($("#dustL"), "dust", { left: R(0, 1920) + "px", top: R(0, 1080) + "px", opacity: R(0.1, 0.5) });
+        const sz = R(2, 5); d.style.width = d.style.height = sz + "px";
+        tl.fromTo(d, { y: 0, x: 0 }, { y: R(-260, -80), x: R(-80, 80), duration: 30, ease: "none" }, 0);
+      }
+      for (let i = 0; i < 30 * 12; i++) tl.set("#grain", { x: Math.round(R(-900, 900)), y: Math.round(R(-500, 500)) }, i / 12);
+
+      // warp streaks
+      const warpEls = [];
+      for (let i = 0; i < 80; i++) { const s = mk($("#warp"), "streak"); s.dataset.a = R(0, Math.PI * 2); s.style.height = R(2, 6).toFixed(1) + "px"; warpEls.push(s); }
+      function warp(t, dur = 0.5, color = "#fff", cx = 960, cy = 540) {
+        warpEls.forEach((s) => {
+          const a = +s.dataset.a, r0 = R(60, 300), r1 = r0 + R(1200, 1900), d = rnd() * 0.12;
+          tl.set(s, { left: cx, top: cy, rotation: (a * 180) / Math.PI, background: `linear-gradient(90deg, rgba(255,255,255,0), ${color})` }, t);
+          tl.fromTo(s, { x: Math.cos(a) * r0, y: Math.sin(a) * r0, scaleX: 0.05, opacity: 0 }, { x: Math.cos(a) * r1, y: Math.sin(a) * r1, scaleX: R(0.6, 1.5), opacity: 1, duration: dur, ease: "power3.in", immediateRender: false }, t + d);
+          tl.to(s, { opacity: 0, duration: 0.08, ease: "none" }, t + d + dur);
+        });
+      }
+
+      // ============ A: 0 – 8.0 ============
+      const rigA = $("#rigA");
+      const lapA = laptop(rigA, 170, 170, 1, true, "lapA");
+      const phA = phone(rigA, 1290, 250, 0.95, true, "phA");
+      gsap.set(rigA, { rotateY: -10, rotateX: 4 });
+      tl.fromTo(rigA, { z: -500, rotateY: -22, y: 80 }, { z: -60, rotateY: -8, y: 0, duration: 7.9, ease: "power2.out" }, 0);
+      tl.from(lapA, { y: 140, duration: 1.0, ease: "expo.out" }, 0);
+      tl.from(phA, { opacity: 0, y: 220, x: 120, duration: 1.1, ease: "expo.out" }, 0.25);
+      // skeleton shimmer + spinners
+      tl.fromTo("#sA .sk", { backgroundPosition: "-600px 0" }, { backgroundPosition: "1400px 0", duration: 1.3, ease: "none", repeat: 5 }, 0);
+      tl.fromTo("#sA .spin", { rotation: 0 }, { rotation: 360 * 9, duration: 7.9, ease: "none" }, 0);
+      // progress bar crawls and stalls
+      tl.fromTo("#sA .prog", { scaleX: 0 }, { scaleX: 0.18, duration: 1.4, ease: "power2.out" }, 0.3);
+      tl.to("#sA .prog", { scaleX: 0.31, duration: 2.2, ease: "power1.inOut" }, 2.6);
+      tl.to("#sA .prog", { scaleX: 0.36, duration: 2.6, ease: "none" }, 5.0);
+      // timer
+      const tv = { v: 0 };
+      tl.fromTo(tv, { v: 0 }, { v: 8.7, duration: 7.6, ease: "none", onUpdate: () => ($("#tval").textContent = tv.v.toFixed(1).replace(".", ",") + " s") }, 0.3);
+      tl.from("#timerA", { y: -60, opacity: 0, duration: 0.6, ease: "expo.out" }, 0.4);
+      tl.fromTo("#sA .dot", { opacity: 1 }, { opacity: 0.2, duration: 0.25, yoyo: true, repeat: 15, ease: "none" }, 0.4);
+      // captions on the words: "Deine Website lädt." (0.9) "Und lädt." (2.94) "Und lädt." (4.22)
+      const capA = $("#capA");
+      const caps = [["Deine Website lädt.", V + 0.0, 54], ["Und lädt.", V + 2.04, 0], ["Und lädt …", V + 3.32, 0]];
+      caps.forEach(([txt, t], i) => {
+        tl.call(() => {}, null, t);
+        tl.set(capA, { textContent: txt, fontSize: i ? 150 : 120, color: i === 2 ? "#df482b" : "#f3f6ff" }, t - 0.02);
+        tl.fromTo(capA, { opacity: 0, y: 40, scale: 1.06, filter: "blur(12px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out", immediateRender: false }, t);
+        tl.to(capA, { opacity: 0, filter: "blur(10px)", duration: 0.25, ease: "power2.in" }, t + (i === 0 ? 1.3 : 0.95));
+      });
+      tl.set(capA, { textContent: "" }, 0);
+      // rig pushes harder on each "lädt"
+      [V + 2.04, V + 3.32].forEach((t, i) => { tl.to(rigA, { z: "+=60", duration: 0.12, ease: "power3.out" }, t); shake("#rigA", t, 0.25, 6 + i * 6); });
+      // "Jede Sekunde kostet dich Besucher." 5.53–7.56
+      const capA2 = mk($("#sA"), "cap", { top: "850px", fontSize: "88px" });
+      capA2.innerHTML = 'Jede Sekunde kostet dich <span style="color:#df482b">Besucher.</span>';
+      tl.from(wrapHead2(capA2), { yPercent: 80, opacity: 0, duration: 0.45, stagger: 0.015, ease: "expo.out" }, V + 4.63);
+      function wrapHead2(el) { const tmp = el.id; el.id = "tmpcap"; const r = wrapHead("#tmpcap"); el.id = tmp || ""; return r; }
+      tl.from("#lossCard", { x: 200, opacity: 0, duration: 0.55, ease: "expo.out" }, V + 4.75);
+      const lp = $("#lossPath"); const L = 560; lp.style.strokeDasharray = L;
+      tl.fromTo(lp, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, V + 5.0);
+      tl.to(rigA, { filter: "saturate(0.25) brightness(0.6)", duration: 1.6, ease: "power1.in" }, V + 4.8);
+      // tension glitch before drop
+      for (let i = 0; i < 6; i++) tl.set("#sA", { x: R(-14, 14), filter: `hue-rotate(${R(-30, 30)}deg)` }, 7.55 + i * 0.06);
+      tl.set("#sA", { x: 0, filter: "none" }, 7.92);
+      tl.to(capA2, { opacity: 0, duration: 0.2 }, 7.65);
+
+      // ============ B: 7.95 – 10.25 (drop at 8.0) ============
+      const rigB = $("#rigB");
+      const lapB = laptop(rigB, 170, 170, 1, false, "lapB");
+      const phB = phone(rigB, 1290, 250, 0.95, false, "phB");
+      gsap.set(rigB, { rotateY: -8, rotateX: 4, z: -60 });
+      const DROP = 7.98;
+      flash(DROP, 1, 0.45, "#ffffff");
+      warp(DROP - 0.02, 0.55, "#fbb419");
+      shake("#rigB", DROP, 0.35, 22);
+      tl.fromTo("#burstIcon", { scale: 2.6, opacity: 1, rotation: -25 }, { scale: 0.2, opacity: 0, rotation: 0, duration: 0.7, ease: "power3.in", immediateRender: false }, DROP);
+      tl.set("#burstIcon", { opacity: 0 }, 0);
+      tl.fromTo("#ring", { scale: 1, opacity: 1 }, { scale: 60, opacity: 0, duration: 0.9, ease: "expo.out" }, DROP);
+      // content snaps in (wipe per section)
+      tl.from("#sB .hero img, #sB .mhero img", { scale: 1.25, duration: 1.4, ease: "expo.out" }, DROP);
+      tl.from("#sB .card, #sB .mgrid > div", { y: 60, opacity: 0, duration: 0.5, stagger: 0.04, ease: "expo.out" }, DROP + 0.05);
+      tl.from("#sB .hero .ht > *, #sB .mhero .ht > *", { x: -50, opacity: 0, duration: 0.5, stagger: 0.05, ease: "expo.out" }, DROP + 0.1);
+      tl.fromTo(rigB, { z: -60, rotateY: -8 }, { z: 60, rotateY: 6, duration: 2.3, ease: "power2.out" }, DROP);
+      tl.from("#timerB", { scale: 1.4, opacity: 0, duration: 0.4, ease: "back.out(2)" }, DROP + 0.1);
+      tl.from("#capB .ch", { yPercent: 100, opacity: 0, scale: 0.6, duration: 0.45, stagger: 0.07, ease: "back.out(2)" }, DROP + 0.12);
+      tl.fromTo("#g3", { opacity: 0 }, { opacity: 0.45, duration: 0.3 }, DROP);
+      tl.to("#g3", { opacity: 0, duration: 1.5 }, DROP + 0.5);
+      // light sweep over screens
+      tl.to("#sB", { opacity: 0, duration: 0.2, ease: "power2.in" }, 10.05);
+
+      // ============ C: 10.1 – 12.9 ============
+      inKick("#kC", 10.12);
+      headIn("#hC1", V + 9.25);
+      tl.to("#strikeC", { width: 540, duration: 0.3, ease: "power3.out" }, V + 9.75);
+      tl.to(["#hC1", "#strikeC"], { opacity: 0, y: -40, duration: 0.25, ease: "power2.in" }, V + 10.2);
+      tl.set("#hC2", { opacity: 0 }, 0);
+      tl.set("#hC2", { opacity: 1 }, V + 10.36);
+      headIn("#hC2", V + 10.36, 0.016);
+      ["#nC1", "#nC2", "#nC3"].forEach((n, i) => tl.from(n, { y: 120, opacity: 0, rotateX: -30, duration: 0.6, ease: "expo.out" }, 10.2 + i * 0.12));
+      tl.fromTo("#nC2", { scale: 1 }, { scale: 1.06, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 10.7);
+      ["#lnC1", "#lnC2"].forEach((l) => tl.fromTo(l, { strokeDashoffset: 0 }, { strokeDashoffset: -280, duration: 2.6, ease: "none" }, 10.2));
+      for (let i = 0; i < 10; i++) {
+        const k = mk($("#pkC"), "abs", { width: "16px", height: "16px", borderRadius: "50%", background: i % 2 ? "#fbb419" : "#6fb6ff", boxShadow: "0 0 18px currentColor", left: "0px", top: "612px" });
+        const t0 = 10.45 + i * 0.22; const fwd = i % 2 === 0;
+        tl.fromTo(k, { x: fwd ? 520 : 1400, opacity: 0 }, { x: fwd ? 770 : 1150, opacity: 1, duration: 0.35, ease: "power1.in" }, t0);
+        tl.to(k, { opacity: 0, duration: 0.05 }, t0 + 0.35);
+        const k2 = mk($("#pkC"), "abs", { width: "16px", height: "16px", borderRadius: "50%", background: "#34e08a", boxShadow: "0 0 18px #34e08a", left: "0px", top: "612px" });
+        tl.fromTo(k2, { x: fwd ? 1150 : 770, opacity: 0 }, { x: fwd ? 1400 : 520, opacity: 1, duration: 0.35, ease: "power1.out" }, t0 + 0.12);
+        tl.to(k2, { opacity: 0, duration: 0.05 }, t0 + 0.47);
+      }
+      tl.from("#badgeC", { scale: 0, rotation: -20, duration: 0.45, ease: "back.out(2.5)" }, V + 11.0);
+      tl.fromTo("#nC3", { borderColor: "rgba(255,255,255,0.12)" }, { borderColor: "rgba(52,224,138,0.7)", boxShadow: "0 0 80px rgba(52,224,138,0.3)", duration: 0.3 }, V + 11.0);
+      tl.to("#sC", { opacity: 0, scale: 1.05, duration: 0.2, ease: "power2.in" }, 12.7);
+
+      // ============ D: 12.8 – 16.0 ============
+      inKick("#kD", 12.85);
+      headIn("#hD", V + 12.01);
+      // globe
+      const gp = $("#gpts"), PTS = [];
+      const N = 520, GR = 330;
+      for (let i = 0; i < N; i++) {
+        const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), th = i * 2.399963;
+        const c = document.createElementNS(NS, "circle"); c.setAttribute("r", "2.6"); c.setAttribute("fill", "#9cc4ff"); gp.appendChild(c);
+        PTS.push([Math.cos(th) * r, y, Math.sin(th) * r, c]);
+      }
+      const NODES = [], gn = $("#gnodes"), ga = $("#garcs");
+      const nodeLL = [[50, 8], [48, 2], [40, -74], [37, -122], [35, 139], [1, 103], [-23, -46], [-33, 151], [19, 72], [25, 55], [52, 13], [60, 24]];
+      nodeLL.forEach(([la, lo]) => {
+        const g = document.createElementNS(NS, "g");
+        g.innerHTML = `<circle r="18" fill="none" stroke="#fbb419" stroke-width="3" class="pr"/><circle r="7" fill="#fbb419"/>`;
+        gn.appendChild(g); const lat = la * Math.PI / 180, lon = lo * Math.PI / 180;
+        NODES.push([Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon), g]);
+      });
+      const arcs = [];
+      for (let i = 0; i < 9; i++) { const p = document.createElementNS(NS, "path"); p.setAttribute("fill", "none"); p.setAttribute("stroke", "#34e08a"); p.setAttribute("stroke-width", "3"); p.setAttribute("stroke-linecap", "round"); ga.appendChild(p); arcs.push([0, 1 + (i % 11), p]); }
+      function proj(v, rot) { const c = Math.cos(rot), s = Math.sin(rot), tx = 0.32; let x = v[0] * c - v[2] * s, z = v[0] * s + v[2] * c, y = v[1]; const y2 = y * Math.cos(tx) - z * Math.sin(tx), z2 = y * Math.sin(tx) + z * Math.cos(tx); return [x * GR, -y2 * GR, z2]; }
+      const gs = { r: 0 };
+      tl.fromTo(gs, { r: 0.4 }, { r: 2.2, duration: 3.3, ease: "none", onUpdate: () => {
+        PTS.forEach((p) => { const [x, y, z] = proj(p, gs.r); p[3].setAttribute("cx", x.toFixed(1)); p[3].setAttribute("cy", y.toFixed(1)); p[3].setAttribute("opacity", z > 0 ? (0.25 + 0.75 * z).toFixed(2) : "0.06"); });
+        const pos = NODES.map((n) => { const q = proj(n, gs.r); n[3].setAttribute("transform", `translate(${q[0].toFixed(1)},${q[1].toFixed(1)})`); n[3].setAttribute("opacity", q[2] > -0.1 ? "1" : "0"); return q; });
+        arcs.forEach(([a, b, p], i) => { const A = pos[(i * 3) % pos.length], B = pos[(i * 3 + 4) % pos.length]; if (A[2] < 0 || B[2] < 0) { p.setAttribute("opacity", "0"); return; } const mx = (A[0] + B[0]) / 2 * 1.35, my = (A[1] + B[1]) / 2 * 1.35; p.setAttribute("d", `M${A[0].toFixed(1)},${A[1].toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${B[0].toFixed(1)},${B[1].toFixed(1)}`); p.setAttribute("opacity", "0.9"); });
+      } }, 12.8);
+      tl.from("#globe", { scale: 0.6, opacity: 0, duration: 0.8, ease: "expo.out" }, 12.82);
+      arcs.forEach(([, , p], i) => { p.style.strokeDasharray = "900"; tl.fromTo(p, { strokeDashoffset: 900 }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.out" }, 13.3 + i * 0.12); });
+      tl.fromTo("#gnodes .pr", { scale: 0.4, opacity: 1, transformOrigin: "50% 50%" }, { scale: 2.2, opacity: 0, duration: 0.8, ease: "power1.out", repeat: 3, stagger: 0.05 }, 13.0);
+      // dashboard
+      tl.from("#dash", { x: 260, opacity: 0, rotateY: -25, duration: 0.7, ease: "expo.out" }, 13.0);
+      tl.from("#dash .kpi", { y: 50, opacity: 0, duration: 0.45, stagger: 0.1, ease: "expo.out" }, 13.3);
+      const bars = $("#bars"); for (let i = 0; i < 28; i++) mk(bars, "", {}).outerHTML; bars.innerHTML = Array.from({ length: 28 }, (_, i) => `<i style="height:${(35 + 55 * (0.5 + 0.5 * Math.sin(i * 0.7)) * (0.5 + i / 56) + R(0, 18)).toFixed(0)}%"></i>`).join("");
+      tl.from("#bars i", { scaleY: 0, duration: 0.5, stagger: 0.025, ease: "expo.out" }, 13.6);
+      const kc = { a: 0, b: 0, c: 0 };
+      tl.fromTo(kc, { a: 0, b: 0, c: 0 }, { a: 1.2, b: 48, c: 92, duration: 1.2, ease: "power3.out", onUpdate: () => { $("#k1").textContent = kc.a.toFixed(1).replace(".", ",") + " Mio."; $("#k2").textContent = Math.round(kc.b) + " GB"; $("#k3").textContent = Math.round(kc.c) + " %"; } }, 13.4);
+      tl.to("#sD", { opacity: 0, x: -80, duration: 0.2, ease: "power2.in" }, 15.8);
+
+      // ============ E: 15.9 – 19.0 ============
+      inKick("#kE", 15.95);
+      headIn("#hE", V + 15.14);
+      const rigE = $("#rigE");
+      const phE = phone(rigE, 360, 330, 0.98, false, "phE");
+      gsap.set(rigE, { rotateY: 14, rotateX: 4 });
+      tl.from(phE, { y: 500, rotation: 8, opacity: 0, duration: 0.8, ease: "expo.out" }, 15.95);
+      tl.fromTo(rigE, { rotateY: 18 }, { rotateY: 6, duration: 3.1, ease: "power1.out" }, 15.9);
+      // scan over the phone hero
+      const mh = phE.querySelector(".mhero");
+      const scan = document.createElement("div"); scan.id = "scan"; mh.appendChild(scan);
+      const t1 = document.createElement("div"); t1.className = "tag"; t1.textContent = "JPG"; Object.assign(t1.style, { left: "14px", top: "14px", background: "#8b8f9c", color: "#fff" }); mh.appendChild(t1);
+      const t2 = document.createElement("div"); t2.className = "tag"; t2.textContent = "WEBP ✓"; Object.assign(t2.style, { left: "14px", top: "14px", background: "#34e08a", color: "#04230f" }); mh.appendChild(t2);
+      tl.fromTo(scan, { y: -10, opacity: 1 }, { y: 300, duration: 0.9, ease: "power2.inOut" }, V + 15.9);
+      tl.to(scan, { opacity: 0, duration: 0.15 }, V + 16.8);
+      tl.fromTo(mh.querySelector("img"), { filter: "blur(6px) saturate(0.6)" }, { filter: "blur(0px) saturate(1)", duration: 0.9, ease: "power2.inOut" }, V + 15.9);
+      tl.set(t2, { opacity: 0 }, 0); tl.set(t1, { opacity: 0 }, 0);
+      tl.set(t1, { opacity: 1 }, 16.1); tl.set(t1, { opacity: 0 }, V + 16.75);
+      tl.fromTo(t2, { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, V + 16.75);
+      // files
+      tl.from("#f1", { x: 300, opacity: 0, duration: 0.55, ease: "expo.out" }, 16.15);
+      tl.from("#f2", { x: 300, opacity: 0, duration: 0.55, ease: "expo.out" }, 16.3);
+      tl.from("#f1 .fb", { scaleX: 0, duration: 0.6, ease: "expo.out" }, 16.4);
+      tl.fromTo("#fb2", { scaleX: 1 }, { scaleX: {{RATIO}}, duration: 0.9, ease: "expo.inOut" }, V + 15.9);
+      tl.from("#pct", { scale: 0.4, opacity: 0, duration: 0.5, ease: "back.out(2)" }, V + 16.6);
+      shake("#pct", V + 16.6, 0.25, 10);
+      tl.from("#pnote", { opacity: 0, duration: 0.4 }, V + 16.8);
+      tl.to("#sE", { opacity: 0, scale: 0.96, duration: 0.2, ease: "power2.in" }, 18.8);
+
+      // ============ F: 18.9 – 21.5 ============
+      inKick("#kF", 18.95);
+      headIn("#hF", V + 18.09);
+      tl.from("#shield", { scale: 0.3, opacity: 0, duration: 0.6, ease: "back.out(1.8)" }, 19.0);
+      tl.from("#online", { x: 220, opacity: 0, duration: 0.6, ease: "expo.out" }, 19.3);
+      $("#okrow").innerHTML = Array.from({ length: 10 }, () => `<i style="display:block;width:28px;height:44px;border-radius:6px;background:rgba(52,224,138,.75)"></i>`).join("");
+      tl.from("#okrow i", { scaleY: 0, transformOrigin: "50% 100%", duration: 0.3, stagger: 0.05, ease: "expo.out" }, 19.6);
+      const hitX = 960, hitY = 520;
+      for (let i = 0; i < 26; i++) {
+        const a = (i % 2 ? R(150, 215) : R(125, 160)) * Math.PI / 180; const len = R(260, 420);
+        const sx = hitX + Math.cos(a) * 950, sy = hitY + Math.sin(a) * 620;
+        const ex = hitX + Math.cos(a) * 205, ey = hitY + Math.sin(a) * 235;
+        const b = mk($("#bolts"), "bolt", { width: len + "px", left: "0px", top: "0px" });
+        const t0 = 19.3 + i * 0.07;
+        tl.set(b, { rotation: (a * 180) / Math.PI + 180, x: sx - len, y: sy, transformOrigin: "100% 50%" }, 0);
+        // move along direction: tip from (sx,sy) to (ex,ey)
+        tl.fromTo(b, { x: sx - len, y: sy, opacity: 1 }, { x: ex - len, y: ey, duration: 0.4, ease: "power1.in", immediateRender: false }, t0);
+        tl.set(b, { opacity: 0 }, t0 + 0.4); tl.set(b, { opacity: 0 }, 0);
+        for (let k = 0; k < 5; k++) {
+          const sp = mk($("#bolts"), "spark", { left: ex + "px", top: ey + "px" });
+          tl.set(sp, { opacity: 0 }, 0);
+          const da = a + Math.PI + R(-1.1, 1.1);
+          tl.fromTo(sp, { x: 0, y: 0, opacity: 1, scale: 1 }, { x: Math.cos(da) * R(40, 120), y: Math.sin(da) * R(40, 120), opacity: 0, scale: 0.2, duration: 0.4, ease: "power2.out", immediateRender: false }, t0 + 0.4);
+        }
+        const rp = mk($("#bolts"), "ripple", {}); tl.set(rp, { opacity: 0 }, 0);
+        tl.fromTo(rp, { scale: 1, opacity: 0.9 }, { scale: 48, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, t0 + 0.4);
+        tl.fromTo("#shp", { strokeWidth: 14 }, { strokeWidth: 7, duration: 0.25, immediateRender: false }, t0 + 0.4);
+      }
+      shake("#shield", 19.65, 0.2, 6); shake("#shield", 20.3, 0.2, 6);
+      tl.to("#sF", { opacity: 0, duration: 0.2 }, 21.35);
+
+      // ============ G: 21.4 – 24.55 ============
+      const rigG = $("#rigG");
+      const lapG = laptop(rigG, 400, 120, 1.18, false, "lapG");
+      const phG = phone(rigG, 1500, 220, 1.0, false, "phG");
+      // extra devices for "Überall"
+      const extras = [];
+      [[-560, 120, 0.55], [2050, 120, 0.55], [-420, 600, 0.5], [1980, 560, 0.5], [760, -560, 0.5]].forEach(([x, y, s], i) => {
+        const e = i % 2 ? phone(rigG, x + 300, y, s * 1.4, false, "phX" + i) : laptop(rigG, x, y, s, false, "lapX" + i); extras.push(e); tl.set(e, { opacity: 0 }, 0);
+      });
+      gsap.set(rigG, { rotateX: 3 });
+      tl.set(phG, { opacity: 0 }, 0);
+      tl.from(lapG, { z: -900, rotateY: -40, opacity: 0, duration: 0.6, ease: "expo.out" }, V + 20.55);
+      tl.fromTo(lapG.querySelector(".site"), { y: 0 }, { y: -40, duration: 1.0, ease: "power2.inOut" }, V + 20.9);
+      // "Desktop." 21.5  "Handy." 22.63  "Überall." 23.65
+      tl.set("#capG1", { opacity: 0 }, 0); tl.set("#capG2", { opacity: 0 }, 0); tl.set("#capG3", { opacity: 0 }, 0);
+      tl.fromTo("#capG1", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out", immediateRender: false }, V + 20.6);
+      tl.to("#capG1", { opacity: 0, y: -40, duration: 0.2 }, V + 21.5);
+      tl.to(lapG, { x: -300, scale: 0.95, duration: 0.5, ease: "expo.inOut" }, V + 21.6);
+      tl.fromTo(phG, { opacity: 0, x: 600, rotation: 15 }, { opacity: 1, x: -150, rotation: 0, duration: 0.55, ease: "expo.out", immediateRender: false }, V + 21.65);
+      tl.fromTo("#capG2", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out", immediateRender: false }, V + 21.75);
+      tl.to("#capG2", { opacity: 0, y: -40, duration: 0.2 }, V + 22.6);
+      // Überall: pull back
+      tl.to(rigG, { scale: 0.55, duration: 0.9, ease: "expo.inOut" }, V + 22.65);
+      extras.forEach((e, i) => tl.fromTo(e, { opacity: 0, scale: e.classList.contains("phone") ? 0.4 : 0.3 }, { opacity: 1, scale: e.classList.contains("phone") ? 0.77 : 0.55, duration: 0.5, ease: "back.out(1.6)", immediateRender: false }, V + 22.75 + i * 0.05));
+      tl.fromTo("#capG3", { opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out", immediateRender: false }, V + 22.75);
+      flash(V + 22.75, 0.35, 0.25);
+      tl.to("#sG", { opacity: 0, duration: 0.15 }, 24.42);
+
+      // ============ H: 24.45 – 30 ============
+      const LOGO = V + 23.67; // "fast.site."
+      warp(LOGO - 0.15, 0.45, "#fbb419", 960, 470);
+      flash(LOGO, 0.9, 0.4);
+      tl.fromTo("#rays", { rotation: 0, scale: 0.4, opacity: 0 }, { rotation: 50, scale: 1, opacity: 1, duration: 5.5, ease: "power1.out" }, LOGO);
+      $$("#lgIcon path").forEach((p, i) => tl.from(p, { x: R(-260, 260), y: R(-200, 200), rotation: R(-90, 90), opacity: 0, transformOrigin: "50% 50%", duration: 0.55, ease: "expo.out" }, LOGO - 0.12 + i * 0.03));
+      tl.from("#lgWord path", { y: 80, opacity: 0, duration: 0.45, stagger: 0.06, ease: "expo.out" }, LOGO + 0.1);
+      shake("#logo", LOGO, 0.3, 14);
+      tl.to("#logo", { y: -220, scale: 0.62, duration: 0.7, ease: "expo.inOut" }, V + 24.55);
+      // CTA "Jetzt sieben Tage kostenlos testen" 25.7
+      headIn("#ctaH", V + 24.8, 0.018);
+      tl.from("#ctaBtn", { scale: 0, opacity: 0, duration: 0.55, ease: "back.out(2.2)" }, V + 25.6);
+      tl.from("#nocc", { opacity: 0, y: 20, duration: 0.5 }, V + 26.0);
+      tl.fromTo("#ctaBtn .arr", { x: 0 }, { x: 10, duration: 0.25, yoyo: true, repeat: 7, ease: "sine.inOut" }, 27.0);
+      // cursor click
+      tl.set("#cursor", { opacity: 0 }, 0);
+      tl.fromTo("#cursor", { x: 1500, y: 1100, opacity: 1 }, { x: 1110, y: 850, duration: 0.9, ease: "power3.out", immediateRender: false }, 27.4);
+      const CLICK = 28.35;
+      tl.to("#cursor", { scale: 0.8, duration: 0.08 }, CLICK); tl.to("#cursor", { scale: 1, duration: 0.15 }, CLICK + 0.08);
+      tl.to("#ctaBtn", { scale: 0.94, duration: 0.08 }, CLICK); tl.to("#ctaBtn", { scale: 1.04, duration: 0.25, ease: "back.out(3)" }, CLICK + 0.08);
+      for (let i = 0; i < 3; i++) { const r = mk($("#rps"), "rp", { left: "1115px", top: "855px" }); tl.set(r, { opacity: 0 }, 0); tl.fromTo(r, { scale: 1, opacity: 0.9 }, { scale: 14 + i * 6, opacity: 0, duration: 0.7, ease: "power2.out", immediateRender: false }, CLICK + i * 0.09); }
+      tl.to("#ctaBtn", { boxShadow: "0 0 140px rgba(251,180,25,0.8)", duration: 0.3 }, CLICK);
+      tl.to("#sH", { opacity: 0, duration: 0.5, ease: "power1.in" }, 29.45);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
