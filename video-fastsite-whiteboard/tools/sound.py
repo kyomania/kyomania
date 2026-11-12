@@ -6,10 +6,10 @@ import sys, wave
 import numpy as np
 from scipy.signal import butter, sosfilt, fftconvolve
 
-SR = 48000; DUR = 38.5; N = int(SR * DUR)
+SR = 48000; DUR = 43.0; N = int(SR * DUR)
 rng = np.random.default_rng(5)
 L = np.zeros(N); R = np.zeros(N)
-KN = [[0,0],[2.75,3.9],[2.95,4.2],[3.35,7.0],[3.95,9.0],[4.25,9.6],[5.25,10.9],[5.4,11.3],[6.7,13.0],[7.5,15.0],[8.6,16.2],[9.0,17.3],[9.85,18.6],[10.4,19.2],[10.85,20.6],[11.6,22.2],[13.95,24.6],[14.4,26.0],[15.6,27.8],[15.95,28.6],[16.6,31.7],[18.15,33.0],[20.0,38.5]]
+KN = [[0,0.0],[2.75,4.3],[2.95,4.649],[3.35,7.903],[3.95,10.227],[4.25,10.924],[5.25,12.435],[5.4,12.9],[6.7,14.855],[7.5,17.155],[8.6,18.535],[9.0,19.8],[9.85,21.259],[10.4,21.933],[10.85,23.504],[11.6,25.3],[13.95,28.016],[14.4,29.6],[15.6,31.432],[15.95,32.246],[16.6,35.4],[18.15,36.853],[20.0,43.0]]
 def warp(t):
     for (a0,b0),(a1,b1) in zip(KN, KN[1:]):
         if t <= a1: return b0 + (b1-b0)*(t-a0)/(a1-a0)
@@ -77,7 +77,7 @@ bpm = 112; beat = 60 / bpm; bar = 4 * beat
 chords = [(60, 64, 67), (55, 59, 62), (57, 60, 64), (53, 57, 60)]
 mus = np.zeros(N)
 t = 0.15; i = 0
-while t < 37.0:
+while t < 41.5:
     c = chords[(i // 8) % 4]
     k = i % 8
     note = [c[0]+12, c[2]+12, c[1]+12, c[2]+12, c[0]+24, c[2]+12, c[1]+12, c[2]+12][k]
@@ -113,7 +113,7 @@ def load_mp3(path):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-f", "s16le", "-ac", "1", "-ar", str(SR), "-"], capture_output=True).stdout
     return np.frombuffer(raw, dtype="<i2").astype(np.float64) / 32768
 VO = np.zeros(N)
-for i, t in enumerate([0.5, 4.0, 11.5, 17.4, 22.3, 26.2, 31.8], 1):
+for i, t in enumerate([0.5, 4.4, 13.0, 19.9, 25.4, 29.7, 35.5], 1):
     v = load_mp3(f"dl/vo{i}.mp3"); j = int(t * SR); n = min(len(v), N - j); VO[j:j+n] += v[:n]
 env = np.convolve(np.abs(VO), np.ones(int(.25*SR))/int(.25*SR), mode="same")
 duck = 1 - 0.6 * np.clip(env / (env.max() * 0.25 + 1e-9), 0, 1)

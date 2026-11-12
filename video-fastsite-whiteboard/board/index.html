@@ -77,10 +77,10 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="38.5" data-width="1920" data-height="1080" data-fps="30">
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="38.5" data-volume="1"></audio>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="43" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="43" data-volume="1"></audio>
 
-      <div class="clip" id="stage" data-start="0" data-duration="38.5">
+      <div class="clip" id="stage" data-start="0" data-duration="43">
         <div id="cam">
           <div id="dots"></div>
 
@@ -235,7 +235,7 @@
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
       // ---- Zeit-Warp: Board-Ablauf (20 s) auf die Sprecherstimme (38,5 s) legen ----
-      const KN = [[0,0],[2.75,3.9],[2.95,4.2],[3.35,7.0],[3.95,9.0],[4.25,9.6],[5.25,10.9],[5.4,11.3],[6.7,13.0],[7.5,15.0],[8.6,16.2],[9.0,17.3],[9.85,18.6],[10.4,19.2],[10.85,20.6],[11.6,22.2],[13.95,24.6],[14.4,26.0],[15.6,27.8],[15.95,28.6],[16.6,31.7],[18.15,33.0],[20.0,38.5]];
+      const KN = [[0,0.0],[2.75,4.3],[2.95,4.649],[3.35,7.903],[3.95,10.227],[4.25,10.924],[5.25,12.435],[5.4,12.9],[6.7,14.855],[7.5,17.155],[8.6,18.535],[9.0,19.8],[9.85,21.259],[10.4,21.933],[10.85,23.504],[11.6,25.3],[13.95,28.016],[14.4,29.6],[15.6,31.432],[15.95,32.246],[16.6,35.4],[18.15,36.853],[20.0,43.0]];
       const warp = (t) => { for (let i = 1; i < KN.length; i++) { const [a0, b0] = KN[i - 1], [a1, b1] = KN[i]; if (t <= a1) return b0 + (b1 - b0) * (t - a0) / (a1 - a0); } return KN[KN.length - 1][1]; };
       const stretch = (target, v) => v && typeof v.duration === "number" && (v.ease === "none" || (typeof target === "string" && target.startsWith("#c")));
       const _to = tl.to.bind(tl), _fromTo = tl.fromTo.bind(tl), _set = tl.set.bind(tl);
