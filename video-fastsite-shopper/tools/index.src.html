@@ -51,22 +51,34 @@
       #bridge { background: #000; display: flex; align-items: center; justify-content: center; }
       #bridge .t { font: 600 92px var(--display); letter-spacing: -0.03em; }
 
-      /* ---------- flow graph ---------- */
-      #graph { background: radial-gradient(120% 90% at 50% 40%, #121214 0%, #050506 70%); }
-      #persp { position: absolute; inset: 0; perspective: 2200px; perspective-origin: 50% 50%; }
-      #plane { position: absolute; left: 0; top: 0; width: 5600px; height: 1500px; transform-origin: 0 0; }
-      #grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.10) 1.4px, transparent 1.6px); background-size: 56px 56px; }
-      #wires { position: absolute; left: 0; top: 0; width: 5600px; height: 1500px; overflow: visible; }
-      .node { position: absolute; width: 330px; height: 196px; margin: -98px 0 0 -165px; border-radius: 30px; padding: 26px 28px;
-        background: linear-gradient(160deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025)); border: 1.5px solid rgba(255,255,255,0.12); color: #8e8e93; }
-      .node .ic { width: 50px; height: 50px; border-radius: 14px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; }
-      .node .ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-      .node .l { font: 600 30px var(--display); letter-spacing: -0.015em; margin-top: 22px; color: #c7c7cc; }
-      .node .s { font: 500 20px var(--mono); margin-top: 6px; color: #6e6e73; }
-      .node .lit { position: absolute; inset: -1.5px; border-radius: 30px; border: 2px solid var(--c); opacity: 0; }
-      .node.faint { opacity: 0.45; }
-      #gtitle { position: absolute; left: 120px; top: 90px; font: 600 30px var(--text); color: #6e6e73; letter-spacing: 0.02em; }
-
+      /* ---------- flow graph (dense node network, tilt + depth of field) ---------- */
+      #graph { background: #0b0b0c; }
+      .dof { position: absolute; inset: 0; perspective: 1500px; perspective-origin: 50% 46%;
+        background: radial-gradient(120% 95% at 50% 46%, #19191b 0%, #0e0e10 55%, #070708 100%); }
+      .dof.far { filter: blur(9px); }
+      .dof.mid { filter: blur(3.6px); -webkit-mask-image: linear-gradient(to bottom, transparent 4%, #000 18%, #000 80%, transparent 94%); mask-image: linear-gradient(to bottom, transparent 4%, #000 18%, #000 80%, transparent 94%); }
+      .dof.sharp { -webkit-mask-image: linear-gradient(to bottom, transparent 24%, #000 36%, #000 62%, transparent 74%); mask-image: linear-gradient(to bottom, transparent 24%, #000 36%, #000 62%, transparent 74%); }
+      .rot { position: absolute; left: 960px; top: 520px; width: 0; height: 0; transform-style: preserve-3d; transform-origin: 0 0; }
+      .pan { position: absolute; left: 0; top: 0; width: 3400px; height: 2200px; transform-origin: 0 0; }
+      .pan svg { position: absolute; left: 0; top: 0; width: 3400px; height: 2200px; overflow: visible; }
+      .nd { position: absolute; width: 66px; height: 66px; margin: -33px 0 0 -33px; border-radius: 16px; background: linear-gradient(160deg, #2c2c30, #1c1c1f);
+        border: 1.5px solid rgba(255,255,255,0.10); box-shadow: 0 6px 18px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+      .nd svg { width: 30px; height: 30px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .nd .lb { position: absolute; top: 78px; left: 50%; width: 180px; margin-left: -90px; text-align: center; font: 500 12px/1.3 var(--mono); color: #6e6e73; }
+      .nd.key { width: 86px; height: 86px; margin: -43px 0 0 -43px; border-radius: 20px; border-color: rgba(255,255,255,0.16); }
+      .nd.key svg { width: 38px; height: 38px; }
+      .nd.key .lb { top: 100px; width: 240px; margin-left: -120px; font: 600 17px/1.3 var(--text); color: #aeaeb2; }
+      .nd.key .lb b { display: block; font: 500 13px var(--mono); color: #6e6e73; margin-top: 2px; }
+      .nd .glow { position: absolute; inset: -1.5px; border-radius: inherit; background: linear-gradient(160deg, #b9fff0, #59e3c2); opacity: 0;
+        box-shadow: 0 0 26px rgba(120,255,215,0.75), 0 0 70px rgba(80,230,190,0.45); }
+      .nd .glow.red { background: linear-gradient(160deg, #ff9a86, #df482b); box-shadow: 0 0 26px rgba(255,110,80,0.7), 0 0 70px rgba(223,72,43,0.4); }
+      .nd .ico2 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; }
+      .nd .ico2 svg { stroke: #0b3d33; }
+      #gcap { position: absolute; left: 120px; bottom: 110px; z-index: 5; }
+      #gcap .e { font: 600 22px var(--text); color: #8e8e93; letter-spacing: 0.06em; text-transform: uppercase; }
+      #gcap .t { position: relative; height: 96px; margin-top: 8px; }
+      #gcap .t div { position: absolute; left: 0; top: 0; white-space: nowrap; font: 600 84px/1.05 var(--display); letter-spacing: -0.03em; color: #fff; opacity: 0; }
+      #gshade { position: absolute; left: 0; bottom: 0; width: 1920px; height: 420px; background: linear-gradient(rgba(7,7,8,0), rgba(7,7,8,0.85)); z-index: 4; }
       /* ---------- end card ---------- */
       #end { background: #000; }
       #end .ic { position: absolute; left: 50%; top: 250px; width: 170px; height: 170px; margin-left: -85px; }
@@ -91,10 +103,12 @@
       <!-- ===== 2: bridge (4.6 – 5.8) ===== -->
       <div id="bridge" class="clip" data-start="4.6" data-duration="1.2" data-track-index="5"><div class="t"><span class="ln" id="brt"><span>Here's the fix.</span></span></div></div>
 
-      <!-- ===== 3: flow graph (5.8 – 15.06) ===== -->
-      <div id="graph" class="clip" data-start="5.8" data-duration="9.26" data-track-index="6">
-        <div id="persp"><div id="plane"><div id="grid"></div><svg id="wires" viewBox="0 0 5600 1500"></svg></div></div>
-        <div id="gtitle">HOW A REQUEST TRAVELS WITH FAST.SITE</div>
+      <!-- ===== 3: flow graph (5.8 – 15.06) — generated clip ===== -->
+      <video id="flowv" class="clip" src="assets/clips/flow.mp4" muted playsinline data-start="5.8" data-duration="9.26" data-media-start="0" data-track-index="6"></video>
+      <div id="graph" class="clip" data-start="5.8" data-duration="9.26" data-track-index="13" style="background:transparent">
+        <div id="gshade"></div>
+        <div id="gcap"><div class="e">fast.site · request flow</div>
+          <div class="t"><div id="gc1">Nearest edge.</div><div id="gc2">Straight from cache.</div><div id="gc3">Images, −35 %.</div><div id="gc4">Attacks blocked.</div></div></div>
       </div>
 
       <!-- ===== 4: instant (15.06 – 18.6) ===== -->
@@ -209,102 +223,13 @@
       // ---------------- bridge ----------------
       lineIn("#brt", 4.68, 0.7);
 
-      // ---------------- flow graph ----------------
-      const icons = {
-        user: '<circle cx="14" cy="9" r="4.5"/><path d="M5 24c1.4-5 5-7.5 9-7.5s7.6 2.5 9 7.5"/>',
-        edge: '<circle cx="14" cy="14" r="10"/><path d="M4 14h20M14 4c3 3 4.5 6.4 4.5 10S17 21 14 24c-3-3-4.5-6.4-4.5-10S11 7 14 4z"/>',
-        cache: '<path d="M16 3L6 16h8l-2 9 10-13h-8z"/>',
-        image: '<rect x="4" y="5" width="20" height="18" rx="3"/><circle cx="10" cy="11" r="2"/><path d="M5 21l6-6 4 4 3-3 5 5"/>',
-        shield: '<path d="M14 3l9 3.5V13c0 6-4 9.8-9 12-5-2.2-9-6-9-12V6.5z"/><path d="M10 14l3 3 5-6"/>',
-        page: '<rect x="6" y="3" width="16" height="22" rx="3"/><path d="M10 9h8M10 13h8M10 17h5"/>',
-        server: '<rect x="5" y="4" width="18" height="8" rx="2"/><rect x="5" y="16" width="18" height="8" rx="2"/><path d="M9 8h.01M9 20h.01"/>',
-        bolt: '<path d="M14 4v8M14 16v.01"/><circle cx="14" cy="14" r="10"/>'
-      };
-      // main path nodes: id, x, y, icon, label, sub, color, time
-      const N = [
-        ["n0", 700, 700, "user", "Visitor", "Munich · 1 click", "#ffffff", 6.3],
-        ["n1", 1450, 520, "edge", "Nearest edge", "Frankfurt · 9 ms", "#3e71b6", 7.55],
-        ["n2", 2200, 700, "cache", "Cache", "HIT", "#0c9958", 8.95],
-        ["n3", 2950, 520, "image", "Image", "hero.jpg · 303 KB", "#fbb419", 10.95],
-        ["n4", 3700, 700, "shield", "Shield", "threat blocked", "#df482b", 13.1],
-        ["n5", 4450, 520, "page", "Page delivered", "instant ✓", "#0c9958", 14.3]
-      ];
-      const F = [ // faint context nodes
-        ["f0", 2200, 1180, "server", "Your hosting", "origin · unchanged"],
-        ["f1", 1450, 140, "edge", "Edge", "London"],
-        ["f2", 2950, 1060, "edge", "Edge", "Paris"],
-        ["f3", 3700, 220, "bolt", "Bot traffic", "unknown source"]
-      ];
-      const plane = $("#plane"), wires = $("#wires");
-      const mkNode = (n, faint) => {
-        const d = document.createElement("div"); d.className = "node" + (faint ? " faint" : ""); d.id = n[0];
-        d.style.left = n[1] + "px"; d.style.top = n[2] + "px"; if (!faint) d.style.setProperty("--c", n[6]);
-        d.innerHTML = `<div class="ic"><svg viewBox="0 0 28 28">${icons[n[3]]}</svg></div><div class="l">${n[4]}</div><div class="s">${n[5]}</div>${faint ? "" : '<div class="lit"></div>'}`;
-        plane.appendChild(d); return d;
-      };
-      F.forEach((n) => mkNode(n, true));
-      const nodeEls = N.map((n) => mkNode(n, false));
-      const NS = "http://www.w3.org/2000/svg";
-      const wire = (x1, y1, x2, y2, cls) => {
-        const p = document.createElementNS(NS, "path"); const mx = (x1 + x2) / 2;
-        p.setAttribute("d", `M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}`);
-        p.setAttribute("fill", "none"); p.setAttribute("stroke-width", cls === "base" ? 2 : 4); p.setAttribute("stroke-linecap", "round");
-        p.setAttribute("stroke", cls === "base" ? "rgba(255,255,255,0.12)" : "url(#lg)");
-        wires.appendChild(p); return p;
-      };
-      wires.innerHTML = '<defs><linearGradient id="lg" gradientUnits="userSpaceOnUse" x1="700" y1="0" x2="4450" y2="0"><stop offset="0" stop-color="#3e71b6"/><stop offset="0.35" stop-color="#0c9958"/><stop offset="0.7" stop-color="#fbb419"/><stop offset="1" stop-color="#df482b"/></linearGradient></defs>';
-      // context wires
-      wire(2200, 1082, 2200, 798, "base").setAttribute("stroke-dasharray", "8 10");
-      wire(1450, 238, 1450, 422, "base"); wire(2950, 962, 2950, 618, "base"); wire(3700, 318, 3700, 602, "base");
-      const actives = [];
-      for (let i = 0; i < N.length - 1; i++) {
-        const a = N[i], b = N[i + 1];
-        wire(a[1] + 165, a[2], b[1] - 165, b[2], "base");
-        const p = wire(a[1] + 165, a[2], b[1] - 165, b[2], "act");
-        const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; actives.push([p, L]);
-      }
-      // packet dot
-      const dot = document.createElementNS(NS, "circle"); dot.setAttribute("r", 9); dot.setAttribute("fill", "#fff"); dot.setAttribute("cx", 865); dot.setAttribute("cy", 700); wires.appendChild(dot);
-      // blocked threat packet
-      const bad = document.createElementNS(NS, "circle"); bad.setAttribute("r", 9); bad.setAttribute("fill", "#df482b"); bad.setAttribute("cx", 3700); bad.setAttribute("cy", 318); bad.setAttribute("opacity", 0); wires.appendChild(bad);
-      const badX = document.createElementNS(NS, "path"); badX.setAttribute("d", "M3688 588l24 24M3712 588l-24 24"); badX.setAttribute("stroke", "#df482b"); badX.setAttribute("stroke-width", 5); badX.setAttribute("stroke-linecap", "round"); badX.setAttribute("opacity", 0); wires.appendChild(badX);
-
-      // light up nodes + draw wires in sync with the voice
-      N.forEach((n, i) => {
-        const el = nodeEls[i], t = n[7];
-        tl.fromTo(el.querySelector(".lit"), { opacity: 0 }, { opacity: 1, duration: 0.35, ease: E }, t);
-        tl.fromTo(el, { scale: 1 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, t);
-        tl.to(el.querySelector(".l"), { color: "#ffffff", duration: 0.3 }, t);
-        tl.to(el.querySelector(".ic"), { color: n[6], backgroundColor: "rgba(255,255,255,0.1)", duration: 0.3 }, t);
-        if (i > 0) {
-          const [p, L] = actives[i - 1], t0 = N[i - 1][7] + 0.15, dur = Math.max(0.5, t - t0 - 0.05);
-          tl.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, t0);
-          const pr = { k: 0 };
-          tl.fromTo(pr, { k: 0 }, { k: 1, duration: dur, ease: "power2.inOut", onUpdate: () => { const q = p.getPointAtLength(pr.k * L); dot.setAttribute("cx", q.x); dot.setAttribute("cy", q.y); } }, t0);
-        }
+      // ---------------- flow graph: generated clip + captions synced to the voice ----------------
+      [["#gc1", 6.4, 8.6], ["#gc2", 8.9, 10.8], ["#gc3", 11.0, 13.0], ["#gc4", 13.2, 15.0]].forEach(([s, a, b]) => {
+        tl.fromTo(s, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: EX }, a);
+        tl.to(s, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, b);
       });
-      tl.set(dot, { attr: { cx: 865, cy: 700 } }, 0);
-      // image node turns into WebP
-      tl.set("#n3 .s", { textContent: "hero.jpg · 303 KB" }, 0);
-      tl.set("#n3 .s", { textContent: "WebP · 198 KB  −35%" }, 11.75);
-      tl.set("#n3 .l", { textContent: "Image" }, 0);
-      tl.set("#n3 .l", { textContent: "Image → WebP" }, 11.75);
-      tl.fromTo("#n3", { scale: 1 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1, immediateRender: false }, 11.75);
-      // threat gets blocked at the shield
-      tl.fromTo(bad, { attr: { cx: 3700, cy: 318 }, opacity: 0 }, { attr: { cx: 3700, cy: 590 }, opacity: 1, duration: 0.6, ease: "power2.in" }, 13.25);
-      tl.to(bad, { opacity: 0, duration: 0.15 }, 13.85);
-      tl.fromTo(badX, { opacity: 0 }, { opacity: 1, duration: 0.12 }, 13.85);
-      tl.to(badX, { opacity: 0, duration: 0.4 }, 14.5);
-      // camera: tilted plane, panning with the packet
-      tl.set(plane, { rotationX: 20, z: -60 }, 0);
-      tl.set(plane, { x: 960 - 700 + 120, y: -170 }, 5.8);
-      [[5.8, 700], [7.55, 1450], [8.95, 2200], [10.95, 2950], [13.1, 3700], [14.3, 4450], [15.06, 4700]].reduce((prev, cur) => {
-        tl.fromTo(plane, { x: 960 - prev[1] + 120 }, { x: 960 - cur[1] + 120, duration: cur[0] - prev[0], ease: "power2.inOut", immediateRender: false }, prev[0]);
-        return cur;
-      });
-      tl.fromTo("#persp", { scale: 1.12 }, { scale: 0.96, duration: 9.26, ease: "none" }, 5.8);
-      tl.fromTo("#gtitle", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 6.0);
-      tl.fromTo("#graph", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 5.8);
+      tl.fromTo("#gcap .e", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 6.1);
+      tl.fromTo("#flowv", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 5.8);
 
       // ---------------- end card ----------------
       tl.fromTo("#endic", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: EX }, 22.2);

@@ -1,0 +1,28 @@
+      /* ---------- flow graph (dense node network, tilt + depth of field) ---------- */
+      #graph { background: #0b0b0c; }
+      .dof { position: absolute; inset: 0; perspective: 1500px; perspective-origin: 50% 46%;
+        background: radial-gradient(120% 95% at 50% 46%, #19191b 0%, #0e0e10 55%, #070708 100%); }
+      .dof.far { filter: blur(9px); }
+      .dof.mid { filter: blur(3.6px); -webkit-mask-image: linear-gradient(to bottom, transparent 4%, #000 18%, #000 80%, transparent 94%); mask-image: linear-gradient(to bottom, transparent 4%, #000 18%, #000 80%, transparent 94%); }
+      .dof.sharp { -webkit-mask-image: linear-gradient(to bottom, transparent 24%, #000 36%, #000 62%, transparent 74%); mask-image: linear-gradient(to bottom, transparent 24%, #000 36%, #000 62%, transparent 74%); }
+      .rot { position: absolute; left: 960px; top: 520px; width: 0; height: 0; transform-style: preserve-3d; transform-origin: 0 0; }
+      .pan { position: absolute; left: 0; top: 0; width: 3400px; height: 2200px; transform-origin: 0 0; }
+      .pan svg { position: absolute; left: 0; top: 0; width: 3400px; height: 2200px; overflow: visible; }
+      .nd { position: absolute; width: 66px; height: 66px; margin: -33px 0 0 -33px; border-radius: 16px; background: linear-gradient(160deg, #2c2c30, #1c1c1f);
+        border: 1.5px solid rgba(255,255,255,0.10); box-shadow: 0 6px 18px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+      .nd svg { width: 30px; height: 30px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .nd .lb { position: absolute; top: 78px; left: 50%; width: 180px; margin-left: -90px; text-align: center; font: 500 12px/1.3 var(--mono); color: #6e6e73; }
+      .nd.key { width: 86px; height: 86px; margin: -43px 0 0 -43px; border-radius: 20px; border-color: rgba(255,255,255,0.16); }
+      .nd.key svg { width: 38px; height: 38px; }
+      .nd.key .lb { top: 100px; width: 240px; margin-left: -120px; font: 600 17px/1.3 var(--text); color: #aeaeb2; }
+      .nd.key .lb b { display: block; font: 500 13px var(--mono); color: #6e6e73; margin-top: 2px; }
+      .nd .glow { position: absolute; inset: -1.5px; border-radius: inherit; background: linear-gradient(160deg, #b9fff0, #59e3c2); opacity: 0;
+        box-shadow: 0 0 26px rgba(120,255,215,0.75), 0 0 70px rgba(80,230,190,0.45); }
+      .nd .glow.red { background: linear-gradient(160deg, #ff9a86, #df482b); box-shadow: 0 0 26px rgba(255,110,80,0.7), 0 0 70px rgba(223,72,43,0.4); }
+      .nd .ico2 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; }
+      .nd .ico2 svg { stroke: #0b3d33; }
+      #gcap { position: absolute; left: 120px; bottom: 110px; z-index: 5; }
+      #gcap .e { font: 600 22px var(--text); color: #8e8e93; letter-spacing: 0.06em; text-transform: uppercase; }
+      #gcap .t { position: relative; height: 96px; margin-top: 8px; }
+      #gcap .t div { position: absolute; left: 0; top: 0; white-space: nowrap; font: 600 84px/1.05 var(--display); letter-spacing: -0.03em; color: #fff; opacity: 0; }
+      #gshade { position: absolute; left: 0; bottom: 0; width: 1920px; height: 420px; background: linear-gradient(rgba(7,7,8,0), rgba(7,7,8,0.85)); z-index: 4; }
