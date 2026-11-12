@@ -15,18 +15,9 @@
       @font-face { font-family: "Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2); }
 
       :root {
-        --paper: #fbfbfd;
-        --mist: #f5f5f7;
-        --ink: #1d1d1f;
-        --grey: #86868b;
-        --line: #d2d2d7;
-        --green: #0c9958;
-        --blue: #3e71b6;
-        --red: #df482b;
-        --yellow: #fbb419;
-        --display: "Display", sans-serif;
-        --text: "Text", sans-serif;
-        --mono: "Mono", monospace;
+        --paper: #fbfbfd; --mist: #f5f5f7; --ink: #1d1d1f; --grey: #86868b; --grey2: #6e6e73;
+        --green: #0c9958; --blue: #3e71b6; --red: #df482b; --yellow: #fbb419;
+        --display: "Display", sans-serif; --text: "Text", sans-serif; --mono: "Mono", monospace;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); }
@@ -37,18 +28,12 @@
       .g { color: var(--grey); }
       .ln { display: block; overflow: hidden; padding-bottom: 0.08em; }
       .ln > span { display: inline-block; }
+      .w { display: inline-block; }
       .tab { font-variant-numeric: tabular-nums; }
 
-      /* ---------- S1 ---------- */
-      #s1 { background: var(--paper); }
-      #s1 .wrap { left: 0; width: 1920px; top: 352px; text-align: center; }
-      #s1 .h { font-size: 128px; }
-
-      /* ---------- S2 browser ---------- */
-      #s2 { background: var(--paper); perspective: 2200px; }
-      #cam2 { position: absolute; inset: 0; transform-origin: 960px 430px; }
-      #browser { position: absolute; left: 300px; top: 80px; width: 1320px; height: 740px; border-radius: 22px; background: #fff; overflow: hidden;
-        box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 30px 80px rgba(0,0,0,0.10), 0 8px 24px rgba(0,0,0,0.06); transform-origin: 50% 100%; }
+      /* ---------- browser (shared) ---------- */
+      .bw { position: absolute; width: 1320px; height: 740px; border-radius: 22px; background: #fff; overflow: hidden;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 30px 80px rgba(0,0,0,0.10), 0 8px 24px rgba(0,0,0,0.06); }
       .chrome { position: absolute; left: 0; top: 0; width: 100%; height: 56px; background: #f6f6f8; border-bottom: 1px solid #e6e6ea; }
       .dot { position: absolute; top: 21px; width: 14px; height: 14px; border-radius: 50%; }
       .url { position: absolute; left: 50%; top: 12px; width: 460px; margin-left: -230px; height: 32px; border-radius: 9px; background: #ebebee;
@@ -61,7 +46,6 @@
       .hero-txt { position: absolute; left: 56px; top: 132px; width: 420px; }
       .hero-txt .k { font: 600 15px var(--text); color: var(--grey); letter-spacing: 0.08em; text-transform: uppercase; }
       .hero-txt .t { font: 600 64px/1.02 var(--display); letter-spacing: -0.03em; margin-top: 14px; }
-      .hero-txt .s { font: 400 21px/1.4 var(--text); color: #515154; margin-top: 18px; }
       .btn { display: inline-block; margin-top: 30px; padding: 14px 28px; border-radius: 999px; background: var(--ink); color: #fff; font: 500 17px var(--text); }
       .himg { position: absolute; left: 520px; top: 104px; width: 744px; height: 419px; border-radius: 16px; overflow: hidden; background: #ececf0; }
       .himg img, .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -69,102 +53,114 @@
       .card { width: 286px; height: 200px; border-radius: 14px; overflow: hidden; background: #ececf0; position: relative; }
       .sk { position: absolute; inset: 0; background: #ececf0; }
       .sk::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%); transform: translateX(var(--sh, -100%)); }
-      #togw { position: absolute; left: 0; top: 872px; width: 1920px; display: flex; justify-content: center; }
-      #toggle { position: relative; display: flex; align-items: center; gap: 18px; padding: 14px 18px 14px 22px; border-radius: 999px; background: #fff;
-        box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 10px 30px rgba(0,0,0,0.08); font: 600 24px var(--text); }
-      #toggle svg.ic { width: 34px; height: 34px; }
-      .sw { position: relative; width: 64px; height: 38px; border-radius: 999px; background: #e3e3e8; }
+
+      /* ---------- A / B type ---------- */
+      #sA, #sB { background: var(--paper); }
+      #sA .wrap, #sB .wrap { left: 0; width: 1920px; top: 0; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      #sA .h { font-size: 150px; }
+      #fast { font-size: 300px !important; font-weight: 700; letter-spacing: -0.045em; line-height: 0.9; }
+      #sB .h { font-size: 170px; }
+
+      /* ---------- C race ---------- */
+      #sC { background: var(--paper); }
+      #camC { position: absolute; inset: 0; }
+      .lane { position: absolute; top: 150px; width: 818px; }
+      .lane .lab { height: 64px; display: flex; align-items: center; gap: 14px; font: 600 30px var(--display); letter-spacing: -0.01em; }
+      .lane .lab svg { width: 36px; height: 36px; }
+      .lane .frame { position: relative; width: 818px; height: 459px; margin-top: 18px; }
+      .lane .frame .bw { left: 0; top: 0; }
+      .lane .stat { margin-top: 40px; display: flex; align-items: center; gap: 22px; }
+      .lane .trk { flex: 1; height: 12px; border-radius: 999px; background: #e8e8ed; position: relative; overflow: hidden; }
+      .lane .fill { position: absolute; inset: 0; border-radius: 999px; transform-origin: 0 50%; transform: scaleX(0); }
+      .lane .st { width: 170px; font: 600 26px var(--text); text-align: right; }
+      .sw { position: relative; width: 64px; height: 38px; border-radius: 999px; background: #e3e3e8; margin-left: 8px; }
       .sw .on { position: absolute; inset: 0; border-radius: 999px; background: var(--green); opacity: 0; }
       .sw .kn { position: absolute; left: 3px; top: 3px; width: 32px; height: 32px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-      #cap2 { position: absolute; left: 0; width: 1920px; top: 858px; text-align: center; }
-      #cap2 .h { font-size: 64px; }
-      #cap2 .s { font: 500 30px var(--text); color: var(--grey); margin-top: 10px; }
-      #hdr { position: absolute; left: 1388px; top: 470px; width: 420px; padding: 26px 30px; border-radius: 20px; background: rgba(29,29,31,0.94); color: #f5f5f7;
-        font: 500 19px/1.75 var(--mono); box-shadow: 0 30px 70px rgba(0,0,0,0.25); }
-      #hdr .k { color: #8e8e93; }
-      #hdr .hit { color: #34c759; }
 
-      /* ---------- S3 globe ---------- */
-      #s3 { background: #000; color: #f5f5f7; }
-      #s3 .wrap { left: 0; width: 1920px; top: 92px; text-align: center; }
-      #s3 .h { font-size: 96px; }
-      #s3 .s { font: 500 36px var(--text); color: #86868b; margin-top: 12px; }
-      #globe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      /* ---------- slams ---------- */
+      .slam { background: var(--ink); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .slam .big { font: 700 300px/0.9 var(--display); letter-spacing: -0.05em; }
+      .slam .sub { font: 500 40px var(--mono); color: #a1a1a6; margin-top: 40px; }
 
-      /* ---------- S4 images ---------- */
-      #s4 { background: var(--paper); }
-      #cam4 { position: absolute; inset: 0; transform-origin: 960px 540px; }
-      #s4 .left { left: 150px; top: 170px; width: 700px; }
-      #s4 .eb { font: 600 28px var(--text); color: var(--blue); margin-bottom: 18px; }
-      #s4 .h { font-size: 92px; }
-      #pct { font: 600 230px/1 var(--display); letter-spacing: -0.04em; margin-top: 70px; color: var(--ink); }
-      #pct small { font-size: 0.5em; vertical-align: 0.62em; margin-left: 6px; }
-      #pcap { font: 500 24px var(--text); color: var(--grey); margin-top: 10px; }
-      #photo { position: absolute; left: 860px; top: 150px; width: 912px; height: 513px; border-radius: 28px; overflow: hidden; background: #ececf0;
-        box-shadow: 0 30px 80px rgba(0,0,0,0.10); }
-      #photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-      #ph-b { clip-path: inset(0 100% 0 0); }
-      #ph-b2 { filter: saturate(1.04) contrast(1.02); }
-      #scan { position: absolute; left: 0; top: 0; height: 100%; width: 2px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.04); opacity: 0; }
-      #chip { position: absolute; left: 28px; top: 28px; padding: 10px 18px; border-radius: 999px; background: rgba(255,255,255,0.86); backdrop-filter: blur(12px);
-        font: 600 20px var(--text); display: flex; gap: 12px; align-items: center; }
-      #chip .fmt { color: #fff; background: var(--ink); border-radius: 8px; padding: 3px 10px; font: 600 16px var(--mono); }
-      .bars { position: absolute; left: 860px; top: 718px; width: 912px; }
-      .br { display: grid; grid-template-columns: 90px 1fr 150px; align-items: center; gap: 24px; height: 64px; }
-      .br .l { font: 600 22px var(--mono); color: var(--grey); }
-      .br .v { font: 600 26px var(--text); text-align: right; }
-      .trk { height: 14px; border-radius: 999px; background: #ececf0; position: relative; overflow: hidden; }
-      .fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 999px; transform-origin: 0 50%; }
-      #foot4 { position: absolute; left: 860px; top: 872px; font: 400 18px var(--text); color: var(--grey); }
+      /* ---------- E globe ---------- */
+      #sE { background: #000; color: #f5f5f7; }
+      #sE .wrap { left: 0; width: 1920px; top: 92px; text-align: center; }
+      #sE .h { font-size: 96px; }
+      #sE .s { font: 500 36px var(--text); color: #86868b; margin-top: 12px; }
+      #globe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 1076px 644px; }
 
-      /* ---------- S5 protection ---------- */
-      #s5 { background: var(--mist); }
-      #s5 .left { left: 150px; top: 300px; width: 620px; }
+      /* ---------- F fly ---------- */
+      #sF { background: var(--paper); }
+      #flyw { position: absolute; inset: 0; transform-origin: 1192px 540px; }
+      #fb { left: 300px; top: 170px; }
+
+      /* ---------- G macro ---------- */
+      #sG { background: #d9d4cc; }
+      #mac { position: absolute; inset: 0; transform-origin: 1192px 540px; }
+      #mac img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      #grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.28) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.28) 1px, transparent 1px);
+        background-size: 40px 40px; opacity: 0; }
+      #scan { position: absolute; left: 0; top: 0; width: 2px; height: 1080px; background: #fff; opacity: 0; }
+      #gtxt { position: absolute; left: 140px; top: 250px; }
+      #gtxt .eb { font: 600 30px var(--text); color: var(--ink); opacity: 0.7; }
+      #pct { font: 700 260px/1 var(--display); letter-spacing: -0.05em; color: var(--ink); margin-top: 10px; }
+      #pct small { font-size: 0.45em; vertical-align: 0.75em; margin-left: 6px; }
+      #chip { position: absolute; left: 140px; top: 760px; padding: 16px 26px; border-radius: 999px; background: rgba(255,255,255,0.7); backdrop-filter: blur(16px);
+        font: 600 28px var(--text); display: flex; gap: 16px; align-items: center; }
+      #chip .fmt { color: #fff; background: var(--ink); border-radius: 9px; padding: 4px 12px; font: 600 22px var(--mono); }
+      #chip .kb { color: var(--grey2); font-weight: 500; }
+
+      /* ---------- I protection ---------- */
+      #sI { background: var(--mist); perspective: 2400px; }
+      #sI .left { left: 150px; top: 300px; width: 620px; }
       #shield { width: 120px; height: 140px; margin-bottom: 40px; }
-      #s5 .h { font-size: 104px; }
-      #s5 .s { font: 500 30px/1.4 var(--text); color: var(--grey); margin-top: 26px; width: 560px; }
-      #log { position: absolute; left: 860px; top: 150px; width: 910px; height: 780px; border-radius: 28px; background: #fff; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.08); }
+      #sI .h { font-size: 112px; }
+      #log { position: absolute; left: 860px; top: 130px; width: 910px; height: 820px; border-radius: 28px; background: #fff; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.08); }
       #log .hd { position: absolute; left: 0; top: 0; width: 100%; height: 120px; padding: 32px 40px; border-bottom: 1px solid #f0f0f2; display: flex; justify-content: space-between; align-items: center; background: #fff; z-index: 2; }
       #log .hd .t { font: 600 26px var(--display); }
-      #log .hd .t span { display: block; font: 500 16px var(--text); color: var(--grey); margin-top: 4px; }
+      #log .hd .t span { display: block; font: 500 16px var(--text); color: var(--grey2); margin-top: 4px; }
       #log .hd .n { font: 600 54px var(--display); letter-spacing: -0.02em; color: var(--red); text-align: right; }
-      #log .hd .n span { display: block; font: 500 15px var(--text); color: var(--grey); letter-spacing: 0; }
+      #log .hd .n span { display: block; font: 500 15px var(--text); color: var(--grey2); letter-spacing: 0; }
       #rows { position: absolute; left: 0; top: 120px; width: 100%; }
       .row { display: grid; grid-template-columns: 90px 1fr 80px 150px; align-items: center; height: 66px; padding: 0 40px; border-bottom: 1px solid #f4f4f6; font: 500 19px var(--mono); color: #3a3a3c; }
-      .row .m { color: #6e6e73; }
-      .row .c { color: #6e6e73; }
+      .row.bad { background: #fff6f4; }
+      .row .m, .row .c { color: var(--grey2); }
       .pill { justify-self: end; font: 600 15px var(--text); padding: 6px 14px; border-radius: 999px; }
       .pill.ok { color: #0a7d48; background: #e3f5ec; }
       .pill.bl { color: #c33a1f; background: #fde9e4; }
-      #fade5 { position: absolute; left: 0; bottom: 0; width: 100%; height: 160px; background: linear-gradient(rgba(255,255,255,0), #fff); z-index: 2; }
+      #fadeI { position: absolute; left: 0; bottom: 0; width: 100%; height: 160px; background: linear-gradient(rgba(255,255,255,0), #fff); z-index: 2; }
 
-      /* ---------- S6 dashboard ---------- */
-      #s6 { background: var(--paper); }
-      #s6 .wrap { left: 0; width: 1920px; top: 96px; text-align: center; }
-      #s6 .h { font-size: 88px; }
+      /* ---------- K dashboard ---------- */
+      #sK { background: var(--paper); perspective: 2400px; }
+      #sK .wrap { left: 0; width: 1920px; top: 96px; text-align: center; }
+      #sK .h { font-size: 88px; }
       #dash { position: absolute; left: 260px; top: 360px; width: 1400px; height: 500px; border-radius: 32px; background: #fff; box-shadow: 0 30px 80px rgba(0,0,0,0.09); padding: 40px 48px; }
       #dash .top { display: flex; justify-content: space-between; align-items: center; }
       #dash .top .b { display: flex; align-items: center; gap: 14px; font: 600 24px var(--display); }
       #dash .top .b svg { width: 34px; height: 34px; }
-      #dash .top .il { font: 500 15px var(--text); color: var(--grey); padding: 7px 14px; border-radius: 999px; background: var(--mist); }
+      #dash .top .il { font: 500 15px var(--text); color: var(--grey2); padding: 7px 14px; border-radius: 999px; background: var(--mist); }
       .tiles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 26px; margin-top: 34px; }
       .tile { height: 320px; border-radius: 22px; background: var(--mist); padding: 32px 34px; position: relative; overflow: hidden; }
-      .tile .l { font: 500 20px var(--text); color: var(--grey); }
+      .tile .l { font: 500 20px var(--text); color: var(--grey2); }
       .tile .v { font: 600 74px/1.1 var(--display); letter-spacing: -0.03em; margin-top: 14px; }
       .tile .v small { font-size: 0.42em; color: var(--grey); margin-left: 6px; letter-spacing: 0; }
       .tile svg.spark { position: absolute; left: 0; bottom: 0; width: 100%; height: 130px; }
       #ring { position: absolute; right: 34px; bottom: 30px; width: 150px; height: 150px; }
-      #works { position: absolute; left: 0; width: 1920px; top: 920px; text-align: center; font: 500 26px var(--text); color: var(--grey); }
+      #works { position: absolute; left: 0; width: 1920px; top: 920px; text-align: center; font: 500 28px var(--text); color: var(--grey2); }
       #works b { color: var(--ink); font-weight: 600; }
 
-      /* ---------- S7 logo ---------- */
-      #s7 { background: var(--paper); }
-      #lockup { position: absolute; left: 50%; top: 340px; height: 230px; transform: translateX(-50%); display: flex; align-items: center; gap: 30px; }
+      /* ---------- L wipe ---------- */
+      #wipe { pointer-events: none; }
+      #wipe svg { position: absolute; left: -200px; top: 0; width: 2320px; height: 1400px; overflow: visible; }
+
+      /* ---------- M logo ---------- */
+      #sM { background: var(--paper); }
+      #lockup { position: absolute; left: 0; width: 1920px; top: 330px; height: 230px; display: flex; justify-content: center; align-items: center; gap: 30px; transform-origin: 960px 115px; }
       #lg-icon { width: 230px; height: 230px; overflow: visible; }
       #lg-wordwrap { overflow: hidden; height: 230px; display: flex; align-items: center; }
       #lg-word { height: 182px; width: auto; }
-      #tag7 { position: absolute; left: 0; width: 1920px; top: 640px; text-align: center; font: 600 46px var(--display); letter-spacing: -0.02em; }
-      #cta7 { position: absolute; left: 0; width: 1920px; top: 760px; text-align: center; font: 500 28px var(--text); color: var(--grey); }
+      #tag7 { position: absolute; left: 0; width: 1920px; top: 640px; text-align: center; font: 600 50px var(--display); letter-spacing: -0.02em; }
+      #cta7 { position: absolute; left: 0; width: 1920px; top: 760px; text-align: center; font: 500 30px var(--text); color: var(--grey2); }
       #cta7 b { color: var(--ink); font-weight: 600; }
     </style>
   </head>
@@ -172,115 +168,96 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
       <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
 
-      <!-- S1 -->
-      <div id="s1" class="clip" data-start="0" data-duration="4.9" data-track-index="1">
-        <div class="abs wrap" id="s1w">
-          <div class="h"><span class="ln" id="l1"><span>Make your website faster.</span></span></div>
-          <div class="h g"><span class="ln" id="l2"><span>Keep your hosting.</span></span></div>
+      <!-- A 0 – 2.895 -->
+      <div id="sA" class="clip" data-start="0" data-duration="2.895" data-track-index="1">
+        <div class="abs wrap" id="aw">
+          <div class="h"><span class="w a1">Make</span> <span class="w a1">your</span> <span class="w a1">website</span></div>
+          <div class="h" id="fast"><span class="ln"><span>faster.</span></span></div>
         </div>
       </div>
 
-      <!-- S2 -->
-      <div id="s2" class="clip" data-start="4.5" data-duration="5.8" data-track-index="2">
-        <div id="cam2">
-          <div id="browser">
-            <div class="chrome">
-              <div class="dot" style="left:22px;background:#ff5f57"></div>
-              <div class="dot" style="left:44px;background:#febc2e"></div>
-              <div class="dot" style="left:66px;background:#28c840"></div>
-              <div class="url"><svg width="12" height="14" viewBox="0 0 12 14"><rect x="1" y="6" width="10" height="7.5" rx="1.6" fill="#6e6e73"/><path d="M3.3 6V4.2a2.7 2.7 0 0 1 5.4 0V6" stroke="#6e6e73" stroke-width="1.5" fill="none"/></svg>yourshop.com</div>
-              <div class="prog" id="prog"></div>
-            </div>
-            <div class="page">
-              <div class="nav"><div class="brand">MERIDIAN</div><div class="links"><span>New</span><span>Men</span><span>Women</span><span>Accessories</span><span>Bag (0)</span></div></div>
-              <div class="hero-txt" id="htxt">
-                <div class="k">New Season</div>
-                <div class="t">Light.<br />Considered.<br />Made to move.</div>
-                <div class="btn">Shop now</div>
-              </div>
-              <div class="himg"><img id="img-hero" src="assets/img/hero.jpg" /><div class="sk" id="sk0"></div></div>
-              <div class="cards">
-                <div class="card"><img src="assets/img/bottle.jpg" style="object-position:50% 60%" /><div class="sk" id="sk1"></div></div>
-                <div class="card"><img src="assets/img/beanie.jpg" style="object-position:50% 60%" /><div class="sk" id="sk2"></div></div>
-                <div class="card"><img src="assets/img/hero.jpg" style="object-position:65% 40%;transform:scale(1.5)" /><div class="sk" id="sk3"></div></div>
-                <div class="card"><img src="assets/img/beanie.jpg" style="object-position:50% 50%;transform:scale(1.7)" /><div class="sk" id="sk4"></div></div>
-              </div>
-            </div>
-          </div>
-          <div id="hdr">
-            <div><span class="k">HTTP/2</span> 200</div>
-            <div><span class="k">cache-status:</span> <span class="hit">HIT</span></div>
-            <div><span class="k">served-by:</span> edge</div>
-            <div><span class="k">content-type:</span> image/webp</div>
-          </div>
-        </div>
-        <div id="togw"><div id="toggle">
-          <svg class="ic" viewBox="0 0 200 200">{{TOP}}{{BOT}}</svg>
-          <span>fast.site</span>
-          <div class="sw"><div class="on" id="swon"></div><div class="kn" id="swkn"></div></div>
-        </div></div>
-        <div id="cap2">
-          <div class="h"><span class="ln"><span>Served from the edge.</span></span></div>
-          <div class="s">Your hosting stays exactly where it is.</div>
+      <!-- B 2.895 – 5.31 -->
+      <div id="sB" class="clip" data-start="2.895" data-duration="2.415" data-track-index="2">
+        <div class="abs wrap" id="bw">
+          <div class="h g"><span class="ln"><span class="w b1">Keep</span> <span class="w b1">your</span> <span class="w b1">hosting.</span></span></div>
         </div>
       </div>
 
-      <!-- S3 -->
-      <div id="s3" class="clip" data-start="10.0" data-duration="5.75" data-track-index="3">
+      <!-- C race 5.31 – 9.536 -->
+      <div id="sC" class="clip" data-start="5.31" data-duration="4.226" data-track-index="3">
+        <div id="camC">
+          <div class="lane" id="laneL" style="left:120px">
+            <div class="lab g">Without</div>
+            <div class="frame"><div class="bw" id="bL"></div></div>
+            <div class="stat"><div class="trk"><div class="fill" id="fillL" style="background:#aeaeb2"></div></div><div class="st g" id="stL">Loading…</div></div>
+          </div>
+          <div class="lane" id="laneR" style="left:982px">
+            <div class="lab"><svg viewBox="0 0 200 200">{{TOP}}{{BOT}}</svg>With fast.site<div class="sw"><div class="on" id="swon"></div><div class="kn" id="swkn"></div></div></div>
+            <div class="frame"><div class="bw" id="bR"></div></div>
+            <div class="stat"><div class="trk"><div class="fill" id="fillR" style="background:var(--green)"></div></div><div class="st" id="stR" style="color:var(--green)">Ready</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- D slam 9.536 – 10.139 -->
+      <div id="sD" class="clip slam" data-start="9.536" data-duration="0.603" data-track-index="4">
+        <div class="big" id="dBig">Faster.</div>
+      </div>
+
+      <!-- E globe 10.139 – 14.365 -->
+      <div id="sE" class="clip" data-start="10.139" data-duration="4.226" data-track-index="5">
         <canvas id="globe" width="1920" height="1080"></canvas>
-        <div class="abs wrap">
-          <div class="h"><span class="ln" id="l3a"><span>Edge caching.</span></span></div>
-          <div class="s" id="l3b">Every page, closer to every visitor.</div>
+        <div class="abs wrap" id="ew">
+          <div class="h"><span class="ln" id="lE"><span>Edge caching.</span></span></div>
+          <div class="s" id="lE2">Every page, closer to every visitor.</div>
         </div>
       </div>
 
-      <!-- S4 -->
-      <div id="s4" class="clip" data-start="15.45" data-duration="5.5" data-track-index="4">
-        <div id="cam4">
-          <div class="abs left">
-            <div class="eb" id="eb4">Image optimization</div>
-            <div class="h"><span class="ln" id="l4a"><span>Faster images.</span></span></div>
-            <div class="h g"><span class="ln" id="l4b"><span>Automatically.</span></span></div>
-            <div id="pct" class="tab"><span id="pctv">−0</span><small>%</small></div>
-            <div id="pcap">smaller, same picture.</div>
-          </div>
-          <div id="photo">
-            <img id="ph-a" src="assets/img/hero.jpg" />
-            <img id="ph-b" src="assets/img/hero.jpg" />
-            <div id="scan"></div>
-            <div id="chip"><span class="fmt" id="fmt">JPG</span><span id="fname">hero.jpg</span></div>
-          </div>
-          <div class="bars">
-            <div class="br"><div class="l">JPG</div><div class="trk"><div class="fill" id="f1" style="width:100%;background:#c7c7cc"></div></div><div class="v tab">303.4 KB</div></div>
-            <div class="br"><div class="l">WebP</div><div class="trk"><div class="fill" id="f2" style="width:65.3%;background:var(--green)"></div></div><div class="v tab" id="wv">198.2 KB</div></div>
-          </div>
-          <div id="foot4">Converted to WebP. No code, no plugins.</div>
-        </div>
+      <!-- F fly 14.365 – 16.78 -->
+      <div id="sF" class="clip" data-start="14.365" data-duration="2.415" data-track-index="6">
+        <div id="flyw"><div class="bw" id="fb"></div></div>
       </div>
 
-      <!-- S5 -->
-      <div id="s5" class="clip" data-start="20.8" data-duration="3.3" data-track-index="5">
+      <!-- G macro 16.78 – 19.195 -->
+      <div id="sG" class="clip" data-start="16.78" data-duration="2.415" data-track-index="7">
+        <div id="mac"><img src="assets/img/hero.jpg" /><div id="grid"></div><div id="scan"></div></div>
+        <div id="gtxt"><div class="eb" id="geb">Image optimization</div><div id="pct" class="tab"><span id="pctv">−0</span><small>%</small></div></div>
+        <div id="chip"><span class="fmt" id="fmt">JPG</span><span id="fname">hero.jpg</span><span class="kb tab" id="fkb">303.4 KB</span></div>
+      </div>
+
+      <!-- H slam 19.195 – 20.402 -->
+      <div id="sH" class="clip slam" data-start="19.195" data-duration="1.207" data-track-index="8">
+        <div class="big" id="hBig">Lighter.</div>
+        <div class="sub" id="hSub">303.4 KB → 198.2 KB</div>
+      </div>
+
+      <!-- I protection 20.402 – 22.817 -->
+      <div id="sI" class="clip" data-start="20.402" data-duration="2.415" data-track-index="9">
         <div class="abs left">
           <svg id="shield" viewBox="0 0 120 140" fill="none" stroke="#1d1d1f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
             <path id="sh-o" d="M60 6 L108 24 V66 C108 98 87 121 60 134 C33 121 12 98 12 66 V24 Z" />
             <path id="sh-c" d="M38 70 L54 86 L84 54" stroke="#0c9958" stroke-width="7" />
           </svg>
-          <div class="h"><span class="ln" id="l5a"><span>Protection.</span></span></div>
-          <div class="h g"><span class="ln" id="l5b"><span>Built in.</span></span></div>
-          <div class="s" id="s5s">DDoS protection for the site you already run.</div>
+          <div class="h"><span class="ln" id="lI1"><span>Protection.</span></span></div>
+          <div class="h g"><span class="ln" id="lI2"><span>Built in.</span></span></div>
         </div>
         <div id="log">
           <div class="hd"><div class="t">Edge traffic<span>Illustrative data</span></div><div class="n tab"><span>Blocked</span><b id="blk">0</b></div></div>
           <div id="rows"></div>
-          <div id="fade5"></div>
+          <div id="fadeI"></div>
         </div>
       </div>
 
-      <!-- S6 -->
-      <div id="s6" class="clip" data-start="23.95" data-duration="2.8" data-track-index="6">
+      <!-- J slam 22.817 – 23.421 -->
+      <div id="sJ" class="clip slam" data-start="22.817" data-duration="0.604" data-track-index="10">
+        <div class="big" id="jBig">Safer.</div>
+      </div>
+
+      <!-- K dashboard 23.421 – 26.8 -->
+      <div id="sK" class="clip" data-start="23.421" data-duration="3.379" data-track-index="11">
         <div class="abs wrap">
-          <div class="h"><span class="ln" id="l6a"><span>Less to manage.</span></span></div>
-          <div class="h g"><span class="ln" id="l6b"><span>More working for you.</span></span></div>
+          <div class="h"><span class="ln" id="lK1"><span>Less to manage.</span></span></div>
+          <div class="h g"><span class="ln" id="lK2"><span>More working for you.</span></span></div>
         </div>
         <div id="dash">
           <div class="top"><div class="b"><svg viewBox="0 0 200 200">{{TOP}}{{BOT}}</svg>Dashboard</div><div class="il">Illustrative data</div></div>
@@ -296,14 +273,24 @@
         <div id="works">Works with <b>WordPress, Shopify, Shopware, Next.js</b> and more.</div>
       </div>
 
-      <!-- S7 -->
-      <div id="s7" class="clip" data-start="26.55" data-duration="3.45" data-track-index="7">
+      <!-- M logo 26.8 – 30 -->
+      <div id="sM" class="clip" data-start="26.8" data-duration="3.2" data-track-index="12">
         <div id="lockup">
           <svg id="lg-icon" viewBox="0 0 200 200"><g id="lg-top">{{TOP}}</g><g id="lg-bot">{{BOT}}</g></svg>
           <div id="lg-wordwrap">{{WORD}}</div>
         </div>
         <div id="tag7"><span class="ln"><span>Make your website faster. <span class="g">Keep your hosting.</span></span></span></div>
         <div id="cta7">Try it free for 7 days at <b>fast.site</b></div>
+      </div>
+
+      <!-- L chevron wipe 26.25 – 27.35 -->
+      <div id="wipe" class="clip" data-start="26.25" data-duration="1.1" data-track-index="13">
+        <svg viewBox="0 0 2320 1400">
+          <polyline class="cv" points="-100,1250 1160,250 2420,1250" stroke="#3e71b6" />
+          <polyline class="cv" points="-100,1250 1160,250 2420,1250" stroke="#0c9958" />
+          <polyline class="cv" points="-100,1250 1160,250 2420,1250" stroke="#df482b" />
+          <polyline class="cv" points="-100,1250 1160,250 2420,1250" stroke="#fbb419" />
+        </svg>
       </div>
     </div>
 
@@ -312,46 +299,74 @@
       const $ = (s) => document.querySelector(s);
       const $$ = (s) => Array.from(document.querySelectorAll(s));
       const tl = gsap.timeline({ paused: true });
-      const E = "power3.out", E2 = "power2.inOut", EX = "expo.out";
-      const lineIn = (sel, t, d = 1.0) => tl.fromTo(sel + " > span", { yPercent: 110 }, { yPercent: 0, duration: d, ease: EX }, t);
-      const fadeUp = (sel, t, d = 0.9, y = 30) => tl.fromTo(sel, { y, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: E }, t);
+      const E = "power3.out", EX = "expo.out", E2 = "power2.inOut";
+      const B = (n) => +(0.48 + n * 0.60373).toFixed(3); // beat grid of the music (99.4 BPM)
+      const lineIn = (sel, t, d = 0.8) => tl.fromTo(sel + " > span", { yPercent: 110 }, { yPercent: 0, duration: d, ease: EX }, t);
+      const fadeUp = (sel, t, d = 0.6, y = 24) => tl.fromTo(sel, { y, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: E }, t);
       const counter = (el, from, to, t, d, fmt) => { const o = { v: from }; tl.fromTo(o, { v: from }, { v: to, duration: d, ease: "power2.out", onUpdate: () => (el.textContent = fmt(o.v)) }, t); el.textContent = fmt(from); };
+      const punch = (sel, t, s = 1.08, d = 0.55) => tl.fromTo(sel, { scale: s }, { scale: 1, duration: d, ease: EX }, t);
 
-      // ================= S1  0 – 4.9 =================
-      tl.fromTo("#s1w", { scale: 1.0 }, { scale: 1.045, duration: 4.9, ease: "none" }, 0);
-      lineIn("#l1", 0.45, 1.3);
-      lineIn("#l2", 2.15, 1.3);
-      tl.to("#s1w", { y: -90, opacity: 0, duration: 0.55, ease: "power2.in" }, 3.95);
+      // ---------- browser markup ----------
+      const browserHTML = (p) => `
+        <div class="chrome"><div class="dot" style="left:22px;background:#ff5f57"></div><div class="dot" style="left:44px;background:#febc2e"></div><div class="dot" style="left:66px;background:#28c840"></div>
+          <div class="url"><svg width="12" height="14" viewBox="0 0 12 14"><rect x="1" y="6" width="10" height="7.5" rx="1.6" fill="#6e6e73"/><path d="M3.3 6V4.2a2.7 2.7 0 0 1 5.4 0V6" stroke="#6e6e73" stroke-width="1.5" fill="none"/></svg>yourshop.com</div>
+          <div class="prog" id="${p}prog"></div></div>
+        <div class="page">
+          <div class="nav"><div class="brand">MERIDIAN</div><div class="links"><span>New</span><span>Men</span><span>Women</span><span>Accessories</span><span>Bag (0)</span></div></div>
+          <div class="hero-txt" id="${p}htxt"><div class="k">New Season</div><div class="t">Light.<br />Considered.<br />Made to move.</div><div class="btn">Shop now</div></div>
+          <div class="himg"><img src="assets/img/hero.jpg" /><div class="sk" id="${p}sk0"></div></div>
+          <div class="cards">
+            <div class="card"><img src="assets/img/bottle.jpg" style="object-position:50% 60%" /><div class="sk" id="${p}sk1"></div></div>
+            <div class="card"><img src="assets/img/beanie.jpg" style="object-position:50% 60%" /><div class="sk" id="${p}sk2"></div></div>
+            <div class="card"><img src="assets/img/hero.jpg" style="object-position:65% 40%;transform:scale(1.5)" /><div class="sk" id="${p}sk3"></div></div>
+            <div class="card"><img src="assets/img/beanie.jpg" style="transform:scale(1.7)" /><div class="sk" id="${p}sk4"></div></div>
+          </div>
+        </div>`;
+      $("#bL").innerHTML = browserHTML("L");
+      $("#bR").innerHTML = browserHTML("R");
+      $("#fb").innerHTML = browserHTML("F");
+      $$("#fb .sk").forEach((s) => (s.style.display = "none"));
+      $("#Fprog").style.display = "none";
 
-      // ================= S2  4.5 – 10.3 =================
-      tl.fromTo("#s2", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "none" }, 4.5);
-      tl.fromTo("#browser", { y: 520, rotationX: 28, scale: 0.92, transformPerspective: 2200 }, { y: 0, rotationX: 0, scale: 1, duration: 1.6, ease: "power3.out" }, 4.5);
-      // slow, old loading
-      tl.fromTo("#prog", { scaleX: 0 }, { scaleX: 0.42, duration: 1.8, ease: "power1.out" }, 5.0);
-      $$(".sk").forEach((s, i) => tl.fromTo(s, { "--sh": "-100%" }, { "--sh": "100%", duration: 1.0, ease: "none", repeat: 1 }, 5.0 + i * 0.08));
-      tl.fromTo("#htxt", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 5.9);
-      fadeUp("#toggle", 5.4, 0.8, 24);
-      // switch on
-      tl.to("#swkn", { x: 26, duration: 0.35, ease: "power2.inOut" }, 6.85);
-      tl.to("#swon", { opacity: 1, duration: 0.3, ease: "none" }, 6.85);
-      // instant load
-      tl.fromTo("#prog", { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: "power2.in", immediateRender: false }, 7.2);
-      tl.to("#prog", { opacity: 0, duration: 0.2 }, 7.5);
-      tl.to("#htxt", { opacity: 1, duration: 0.25 }, 7.3);
-      tl.to(".sk", { opacity: 0, duration: 0.22, stagger: 0.03, ease: "none" }, 7.35);
-      tl.fromTo(".page img", { scale: 1.04 }, { scale: 1, duration: 1.2, ease: E, immediateRender: false }, 7.35);
-      // caption swap
-      tl.to("#toggle", { y: -20, opacity: 0, duration: 0.4, ease: "power2.in" }, 7.5);
-      lineIn("#cap2 .ln", 7.85, 1.0);
-      fadeUp("#cap2 .s", 8.05, 0.8, 16);
-      tl.set("#cap2 .s", { opacity: 0 }, 0);
-      // response header card
-      tl.fromTo("#hdr", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 1.0, ease: E }, 7.75);
-      // camera
-      tl.fromTo("#cam2", { scale: 1, y: 0 }, { scale: 1.07, y: -10, duration: 4.2, ease: "sine.inOut" }, 6.1);
-      tl.to("#s2", { opacity: 0, duration: 0.35, ease: "none" }, 9.95);
+      // ================= A  0 – 2.895 =================
+      $$(".a1").forEach((w, i) => tl.fromTo(w, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: EX }, [0.3, 0.62, 0.95][i]));
+      tl.fromTo("#fast > .ln > span", { yPercent: 110, skewX: -14, x: 160 }, { yPercent: 0, skewX: 0, x: 0, duration: 0.7, ease: EX }, B(2) - 0.05);
+      tl.fromTo("#aw", { scale: 1 }, { scale: 1.06, duration: 2.9, ease: "none" }, 0);
+      tl.to("#aw", { x: -260, opacity: 0, duration: 0.3, ease: "power3.in" }, 2.6);
 
-      // ================= S3  10.0 – 15.75 : globe =================
+      // ================= B  2.895 – 5.31 =================
+      $$(".b1").forEach((w, i) => tl.fromTo(w, { yPercent: 110 }, { yPercent: 0, duration: 0.55, ease: EX }, B(4) + i * 0.2));
+      tl.fromTo("#bw", { x: 260, scale: 1 }, { x: 0, scale: 1.04, duration: 2.4, ease: "expo.out" }, B(4) - 0.1);
+      tl.to("#bw", { y: -80, opacity: 0, duration: 0.3, ease: "power3.in" }, 5.0);
+
+      // ================= C race 5.31 – 9.536 =================
+      tl.set(".lane .bw", { scale: 818 / 1320, transformOrigin: "0 0" }, 0);
+      tl.fromTo("#laneL", { y: 500, rotationX: 30, transformPerspective: 2000 }, { y: 0, rotationX: 0, duration: 0.8, ease: EX }, 5.31);
+      tl.fromTo("#laneR", { y: 500, rotationX: 30, transformPerspective: 2000 }, { y: 0, rotationX: 0, duration: 0.8, ease: EX }, 5.39);
+      // switch on (beat 9)
+      tl.to("#swkn", { x: 26, duration: 0.25, ease: "power2.inOut" }, B(9));
+      tl.to("#swon", { opacity: 1, duration: 0.2, ease: "none" }, B(9));
+      // left: slow crawl
+      tl.fromTo("#Lprog", { scaleX: 0 }, { scaleX: 0.78, duration: 3.5, ease: "power1.out" }, B(9));
+      tl.fromTo("#fillL", { scaleX: 0 }, { scaleX: 0.74, duration: 3.5, ease: "power1.out" }, B(9));
+      ["#Lsk0", "#Lsk1", "#Lsk2", "#Lsk3", "#Lsk4"].forEach((s, i) => tl.fromTo(s, { "--sh": "-100%" }, { "--sh": "100%", duration: 0.9, ease: "none", repeat: 3 }, B(9) + i * 0.05));
+      tl.fromTo("#Lhtxt", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 7.6);
+      tl.to("#Lsk0", { opacity: 0, duration: 0.5 }, 8.7);
+      // right: instant
+      tl.fromTo("#Rprog", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.in" }, B(9) + 0.15);
+      tl.to("#Rprog", { opacity: 0, duration: 0.15 }, B(9) + 0.5);
+      tl.fromTo("#Rhtxt", { opacity: 0 }, { opacity: 1, duration: 0.2 }, B(9) + 0.4);
+      tl.to(["#Rsk0", "#Rsk1", "#Rsk2", "#Rsk3", "#Rsk4"], { opacity: 0, duration: 0.18, stagger: 0.04, ease: "none" }, B(9) + 0.42);
+      tl.fromTo("#fillR", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, B(9) + 0.15);
+      tl.fromTo("#stR", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.4, ease: E }, B(10));
+      tl.fromTo("#stL", { opacity: 0 }, { opacity: 1, duration: 0.3 }, B(10));
+      // camera: push toward the fast lane
+      tl.fromTo("#camC", { scale: 1, x: 0 }, { scale: 1.1, x: -150, y: 10, duration: 3.0, ease: "power2.inOut" }, B(11));
+
+      // ================= D slam "Faster." =================
+      punch("#dBig", B(15), 1.18, 0.5);
+
+      // ================= E globe 10.139 – 14.365 =================
       const cv = $("#globe"), cx = cv.getContext("2d");
       const R = 470, GX = 960, GY = 900;
       const nodes = [
@@ -360,163 +375,153 @@
         ["Chicago", 41.9, -87.6], ["Ashburn", 39.0, -77.5], ["São Paulo", -23.5, -46.6], ["Johannesburg", -26.2, 28.0], ["Dubai", 25.2, 55.3],
         ["Mumbai", 19.1, 72.9], ["Singapore", 1.35, 103.8], ["Lagos", 6.5, 3.4], ["Istanbul", 41.0, 29.0], ["Cairo", 30.0, 31.2], ["Reykjavík", 64.1, -21.9]
       ];
-      const ORIGIN = 0; // Frankfurt-ish hub
       const cols = ["#3e71b6", "#0c9958", "#df482b", "#fbb419"];
       const gs = { p: 0 };
       const rad = (d) => (d * Math.PI) / 180;
       function proj(lat, lon, rot, tilt, r = R) {
         const la = rad(lat), lo = rad(lon + rot);
-        let x = Math.cos(la) * Math.sin(lo), y = Math.sin(la), z = Math.cos(la) * Math.cos(lo);
+        const x = Math.cos(la) * Math.sin(lo), y = Math.sin(la), z = Math.cos(la) * Math.cos(lo);
         const ct = Math.cos(tilt), st = Math.sin(tilt);
-        const y2 = y * ct - z * st, z2 = y * st + z * ct;
-        return [GX + x * r, GY - y2 * r, z2];
+        return [GX + x * r, GY - (y * ct - z * st) * r, y * st + z * ct];
       }
-      function vec(lat, lon) { const la = rad(lat), lo = rad(lon); return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)]; }
+      const vec = (lat, lon) => { const la = rad(lat), lo = rad(lon); return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)]; };
+      function arcPts(o, v, rot, tilt) {
+        const dot = Math.max(-1, Math.min(1, o[0] * v[0] + o[1] * v[1] + o[2] * v[2])), om = Math.acos(dot), pts = [];
+        for (let j = 0; j <= 48; j++) {
+          const s = j / 48, a = Math.sin((1 - s) * om) / Math.sin(om), b = Math.sin(s * om) / Math.sin(om);
+          const x = a * o[0] + b * v[0], y = a * o[1] + b * v[1], z = a * o[2] + b * v[2];
+          const lift = 1 + Math.min(0.08, 0.06 * om) * Math.sin(Math.PI * s);
+          pts.push(proj(Math.asin(y) * 180 / Math.PI, Math.atan2(x, z) * 180 / Math.PI, rot, tilt, R * lift));
+        }
+        return pts;
+      }
       function drawGlobe() {
-        const p = gs.p, T = 10 + p * 5.75; // absolute time
-        const rot = -16 + p * 18, tilt = rad(13 + p * 5);
+        const p = gs.p, T = 10.139 + p * 4.226;
+        const rot = -16 + p * 30, tilt = rad(13 + p * 5);
         cx.clearRect(0, 0, 1920, 1080);
-        // sphere body
         cx.beginPath(); cx.arc(GX, GY, R, 0, Math.PI * 2);
-        const gr = cx.createRadialGradient(GX - 120, GY - 260, 40, GX, GY, R); gr.addColorStop(0, "#17171a"); gr.addColorStop(1, "#060607"); cx.fillStyle = gr; cx.fill();
-        cx.lineWidth = 1.5; cx.strokeStyle = "rgba(255,255,255,0.22)"; cx.stroke();
-        // graticule
-        const lineA = Math.min(1, Math.max(0, (T - 10.2) / 1.0));
-        cx.lineWidth = 1;
+        const gr = cx.createRadialGradient(GX - 120, GY - 260, 40, GX, GY, R); gr.addColorStop(0, "#17171a"); gr.addColorStop(1, "#060607");
+        cx.fillStyle = gr; cx.fill(); cx.lineWidth = 1.5; cx.strokeStyle = "rgba(255,255,255,0.22)"; cx.stroke();
         const seg = (pts) => { let pen = false; cx.beginPath(); for (const q of pts) { if (q[2] > 0) { pen ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]); pen = true; } else pen = false; } cx.stroke(); };
-        cx.strokeStyle = `rgba(255,255,255,${0.10 * lineA})`;
+        cx.lineWidth = 1; cx.strokeStyle = `rgba(255,255,255,${0.11 * Math.min(1, Math.max(0, (T - 10.15) / 0.5))})`;
         for (let lon = -180; lon < 180; lon += 15) { const pts = []; for (let lat = -90; lat <= 90; lat += 3) pts.push(proj(lat, lon, rot, tilt)); seg(pts); }
         for (let lat = -75; lat <= 75; lat += 15) { const pts = []; for (let lon = -180; lon <= 180; lon += 3) pts.push(proj(lat, lon, rot, tilt)); seg(pts); }
-        // arcs from origin to nodes
-        const o = vec(nodes[ORIGIN][1], nodes[ORIGIN][2]);
+        const o = vec(nodes[0][1], nodes[0][2]);
         nodes.forEach((n, i) => {
-          if (i === ORIGIN) return;
-          const t0 = 11.6 + i * 0.07, k = Math.min(1, Math.max(0, (T - t0) / 0.9));
+          if (i === 0) return;
+          const t0 = B(17) + Math.floor((i - 1) / 4) * 0.60373, k = Math.min(1, Math.max(0, (T - t0) / 0.45));
           if (k <= 0) return;
-          const e = 1 - Math.pow(1 - k, 3);
-          const v = vec(n[1], n[2]);
-          const dot = Math.max(-1, Math.min(1, o[0] * v[0] + o[1] * v[1] + o[2] * v[2])), om = Math.acos(dot);
-          const pts = []; const N = 48;
-          for (let j = 0; j <= N * e; j++) {
-            const s = j / N, a = Math.sin((1 - s) * om) / Math.sin(om), b = Math.sin(s * om) / Math.sin(om);
-            const x = a * o[0] + b * v[0], y = a * o[1] + b * v[1], z = a * o[2] + b * v[2];
-            const lat = Math.asin(y) * 180 / Math.PI, lon = Math.atan2(x, z) * 180 / Math.PI;
-            const lift = 1 + Math.min(0.07, 0.05 * om) * Math.sin(Math.PI * s);
-            pts.push(proj(lat, lon, rot, tilt, R * lift));
-          }
-          cx.strokeStyle = cols[i % 4]; cx.globalAlpha = 0.9; cx.lineWidth = 2;
+          const e = 1 - Math.pow(1 - k, 3), pts = arcPts(o, vec(n[1], n[2]), rot, tilt), upto = Math.floor(48 * e);
+          cx.strokeStyle = cols[i % 4]; cx.lineWidth = 2.2; cx.globalAlpha = 0.95;
           let pen = false; cx.beginPath();
-          for (const q of pts) { const vis = q[2] > 0; if (vis) { pen ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]); pen = true; } else pen = false; }
-          cx.stroke(); cx.globalAlpha = 1;
+          for (let j = 0; j <= upto; j++) { const q = pts[j]; if (q[2] > 0) { pen ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]); pen = true; } else pen = false; }
+          cx.stroke();
+          // packet travelling along the arc
+          if (k >= 1) {
+            const s = ((T - t0 - 0.45) * 1.1) % 1, q = pts[Math.floor(s * 48)];
+            if (q[2] > 0) { cx.globalAlpha = 1; cx.fillStyle = "#ffffff"; cx.beginPath(); cx.arc(q[0], q[1], 3.5, 0, Math.PI * 2); cx.fill(); }
+          }
+          cx.globalAlpha = 1;
         });
-        // nodes
         nodes.forEach((n, i) => {
-          const t0 = 10.9 + i * 0.06, k = Math.min(1, Math.max(0, (T - t0) / 0.5));
+          const t0 = (i === 0 ? 10.3 : B(17) + Math.floor((i - 1) / 4) * 0.60373 + 0.35), k = Math.min(1, Math.max(0, (T - t0) / 0.3));
           if (k <= 0) return;
           const q = proj(n[1], n[2], rot, tilt);
           if (q[2] < 0.02) return;
           const fz = Math.min(1, q[2] * 3);
-          cx.globalAlpha = k * fz;
-          cx.fillStyle = i === ORIGIN ? "#ffffff" : cols[i % 4];
-          cx.beginPath(); cx.arc(q[0], q[1], i === ORIGIN ? 7 : 5, 0, Math.PI * 2); cx.fill();
-          // ring pulse
-          const ph = ((T - t0) % 1.6) / 1.6;
-          cx.strokeStyle = i === ORIGIN ? "#ffffff" : cols[i % 4]; cx.lineWidth = 1.5;
-          cx.globalAlpha = k * fz * (1 - ph) * 0.6;
+          cx.globalAlpha = k * fz; cx.fillStyle = i === 0 ? "#ffffff" : cols[i % 4];
+          cx.beginPath(); cx.arc(q[0], q[1], i === 0 ? 7 : 5, 0, Math.PI * 2); cx.fill();
+          const ph = ((T - t0) % 0.60373) / 0.60373;
+          cx.strokeStyle = cx.fillStyle; cx.lineWidth = 1.5; cx.globalAlpha = k * fz * (1 - ph) * 0.6;
           cx.beginPath(); cx.arc(q[0], q[1], 6 + ph * 18, 0, Math.PI * 2); cx.stroke();
-          // labels for a few
-          if ([0, 1, 8, 16, 12, 14].includes(i)) {
-            cx.globalAlpha = k * fz * 0.85; cx.fillStyle = "#a1a1a6"; cx.font = "500 19px Text";
-            cx.fillText(n[0], q[0] + 14, q[1] + 6);
-          }
+          if ([0, 1, 8, 16, 12, 14].includes(i)) { cx.globalAlpha = k * fz * 0.85; cx.fillStyle = "#a1a1a6"; cx.font = "500 19px Text"; cx.fillText(n[0], q[0] + 14, q[1] + 6); }
           cx.globalAlpha = 1;
         });
       }
-      tl.fromTo(gs, { p: 0 }, { p: 1, duration: 5.75, ease: "none", onUpdate: drawGlobe }, 10.0);
-      tl.fromTo("#globe", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 2.0, ease: "power3.out" }, 10.0);
-      tl.fromTo("#s3", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "none" }, 10.0);
-      lineIn("#l3a", 10.35, 1.1);
-      fadeUp("#l3b", 10.8, 1.0, 20);
-      tl.to("#globe", { scale: 1.08, y: -40, duration: 3.6, ease: "sine.inOut" }, 12.0);
-      tl.to("#s3", { opacity: 0, duration: 0.3, ease: "none" }, 15.45);
+      tl.fromTo(gs, { p: 0 }, { p: 1, duration: 4.226, ease: "none", onUpdate: drawGlobe }, 10.139);
+      tl.fromTo("#globe", { y: 300, scale: 0.9 }, { y: 0, scale: 1, duration: 1.0, ease: EX }, 10.139);
+      tl.to("#globe", { scale: 1.12, duration: 2.7, ease: "none" }, 11.14);
+      lineIn("#lE", 10.2, 0.7);
+      fadeUp("#lE2", 10.45, 0.6, 16);
+      tl.to("#ew", { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, 13.85);
+      tl.to("#globe", { scale: 4.5, duration: 0.5, ease: "power3.in" }, 13.865);
 
-      // ================= S4  15.45 – 20.95 : images =================
-      tl.fromTo("#s4", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 15.45);
-      tl.fromTo("#cam4", { scale: 1.0 }, { scale: 1.035, duration: 5.5, ease: "none" }, 15.45);
-      fadeUp("#eb4", 15.55, 0.8, 16);
-      lineIn("#l4a", 15.65, 1.0);
-      lineIn("#l4b", 15.9, 1.0);
-      tl.fromTo("#photo", { y: 90, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 1.3, ease: E }, 15.5);
-      tl.fromTo(".bars .br", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: E }, 16.0);
-      tl.fromTo("#f1", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: E }, 16.2);
-      tl.set("#f2", { scaleX: 0 }, 0);
-      tl.set("#wv", { opacity: 0 }, 0);
-      // scan conversion
-      tl.fromTo("#scan", { x: 0, opacity: 0 }, { x: 910, opacity: 1, duration: 1.4, ease: E2 }, 16.75);
-      tl.to("#scan", { opacity: 0, duration: 0.2 }, 18.05);
-      tl.fromTo("#ph-b", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: E2 }, 16.75);
-            tl.set("#fmt", { textContent: "JPG" }, 0); tl.set("#fname", { textContent: "hero.jpg" }, 0);
-      tl.set("#fmt", { textContent: "WebP" }, 17.45); tl.set("#fname", { textContent: "hero.webp" }, 17.45);
-      tl.fromTo("#chip", { scale: 1 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1, ease: "power1.inOut" }, 17.45);
-      tl.to("#f2", { scaleX: 1, duration: 1.1, ease: E }, 17.6);
-      tl.to("#wv", { opacity: 1, duration: 0.4 }, 17.7);
-      fadeUp("#pct", 17.6, 0.8, 30);
-      tl.set("#pct", { opacity: 0 }, 0);
-      counter($("#pctv"), 0, 35, 17.7, 1.4, (v) => "−" + Math.round(v));
-      fadeUp("#pcap", 18.3, 0.8, 14);
-      tl.set("#pcap", { opacity: 0 }, 0);
-      fadeUp("#foot4", 18.6, 0.8, 10);
-      tl.set("#foot4", { opacity: 0 }, 0);
-      tl.to("#s4", { opacity: 0, duration: 0.3, ease: "none" }, 20.65);
+      // ================= F fly 14.365 – 16.78 =================
+      tl.fromTo("#fb", { y: 380, scale: 0.28, rotationX: 55, rotationZ: -10, transformPerspective: 2400 }, { y: 0, scale: 1, rotationX: 0, rotationZ: 0, duration: 1.1, ease: EX }, 14.365);
+      tl.fromTo("#flyw", { scale: 1, x: 0 }, { scale: 2.62, x: -232, duration: 0.85, ease: "power3.in" }, 15.93);
 
-      // ================= S5  20.8 – 24.1 : protection =================
-      tl.fromTo("#s5", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 20.8);
-      ["#sh-o", "#sh-c"].forEach((s) => { const L = $(s).getTotalLength(); $(s).style.strokeDasharray = L; });
-      tl.fromTo("#sh-o", { strokeDashoffset: $("#sh-o").getTotalLength() }, { strokeDashoffset: 0, duration: 1.0, ease: E2 }, 20.85);
-      tl.fromTo("#sh-c", { strokeDashoffset: $("#sh-c").getTotalLength() }, { strokeDashoffset: 0, duration: 0.5, ease: E }, 21.6);
-      lineIn("#l5a", 21.0, 0.95);
-      lineIn("#l5b", 21.2, 0.95);
-      fadeUp("#s5s", 21.35, 0.7, 14);
-      tl.set("#s5s", { opacity: 0 }, 0);
-      tl.fromTo("#log", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 1.0, ease: E }, 20.85);
-      const paths = ["/", "/product/runner-01", "/cart", "/checkout", "/wp-login.php", "/api/stock", "/images/hero.webp", "/xmlrpc.php", "/category/new", "/.env", "/search?q=bottle", "/account", "/product/beanie", "/admin", "/blog/spring", "/images/bottle.webp", "/wp-admin", "/sitemap.xml", "/product/flask", "/cart/add", "/login", "/robots.txt", "/collections/all", "/api/cart"];
-      const cc = ["DE", "US", "FR", "NL", "CN", "GB", "RU", "BR", "AT", "SG", "CH", "VN", "SE", "IN", "ES", "UA", "DE", "KR", "IT", "US", "PL", "TR", "DE", "JP"];
-      const bad = new Set([4, 7, 9, 13, 16, 20]);
+      // ================= G macro 16.78 – 19.195 =================
+      tl.fromTo("#mac", { scale: 1.0 }, { scale: 1.1, duration: 2.42, ease: "none" }, 16.78);
+      tl.fromTo("#grid", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 16.85);
+      tl.fromTo("#grid", { clipPath: "inset(0 0 0 0%)" }, { clipPath: "inset(0 0 0 100%)", duration: 0.9, ease: E2 }, B(28) + 0.1);
+      tl.fromTo("#scan", { x: 0, opacity: 0 }, { x: 1918, opacity: 1, duration: 0.9, ease: E2 }, B(28) + 0.1);
+      tl.to("#scan", { opacity: 0, duration: 0.1 }, B(28) + 1.0);
+      tl.set("#fmt", { textContent: "JPG" }, 0); tl.set("#fname", { textContent: "hero.jpg" }, 0);
+      tl.set("#fmt", { textContent: "WebP" }, B(29)); tl.set("#fname", { textContent: "hero.webp" }, B(29));
+      counter($("#fkb"), 303.4, 198.2, B(29), 0.8, (v) => v.toFixed(1) + " KB");
+      punch("#chip", B(29), 1.08, 0.4);
+      fadeUp("#chip", 16.95, 0.5, 30);
+      fadeUp("#geb", 16.9, 0.5, 16);
+      fadeUp("#pct", B(29), 0.5, 40);
+      counter($("#pctv"), 0, 35, B(29), 0.9, (v) => "−" + Math.round(v));
+
+      // ================= H slam "Lighter." =================
+      punch("#hBig", B(31), 1.18, 0.5);
+      tl.fromTo("#hSub", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, B(32));
+
+      // ================= I protection 20.402 – 22.817 =================
+      ["#sh-o", "#sh-c"].forEach((s) => ($(s).style.strokeDasharray = $(s).getTotalLength()));
+      tl.fromTo("#sh-o", { strokeDashoffset: $("#sh-o").getTotalLength() }, { strokeDashoffset: 0, duration: 0.7, ease: E2 }, 20.42);
+      tl.fromTo("#sh-c", { strokeDashoffset: $("#sh-c").getTotalLength() }, { strokeDashoffset: 0, duration: 0.35, ease: E }, 21.0);
+      lineIn("#lI1", B(33), 0.7);
+      lineIn("#lI2", B(34), 0.7);
+      tl.fromTo("#log", { x: 140, rotationY: -22, transformPerspective: 2400 }, { x: 0, rotationY: -6, duration: 0.9, ease: EX }, 20.402);
+      tl.to("#log", { rotationY: -2, duration: 1.5, ease: "none" }, 21.3);
+      const paths = ["/", "/product/runner-01", "/cart", "/checkout", "/wp-login.php", "/api/stock", "/images/hero.webp", "/xmlrpc.php", "/category/new", "/.env", "/search?q=bottle", "/account", "/product/beanie", "/admin", "/blog/spring", "/images/bottle.webp", "/wp-admin", "/sitemap.xml", "/product/flask", "/cart/add", "/login", "/robots.txt", "/collections/all", "/api/cart", "/phpmyadmin", "/product/runner-02"];
+      const cc = ["DE", "US", "FR", "NL", "CN", "GB", "RU", "BR", "AT", "SG", "CH", "VN", "SE", "IN", "ES", "UA", "DE", "KR", "IT", "US", "PL", "TR", "DE", "JP", "RU", "AT"];
+      const bad = new Set([4, 7, 9, 13, 16, 20, 24]);
       paths.forEach((p, i) => {
-        const r = document.createElement("div"); r.className = "row";
+        const r = document.createElement("div"); r.className = "row" + (bad.has(i) ? " bad" : "");
         r.innerHTML = `<span class="m">${bad.has(i) ? "POST" : "GET"}</span><span>${p}</span><span class="c">${cc[i]}</span><span class="pill ${bad.has(i) ? "bl" : "ok"}">${bad.has(i) ? "Blocked" : "200 · Edge"}</span>`;
         $("#rows").appendChild(r);
       });
-      tl.fromTo("#rows", { y: 0 }, { y: -66 * 13, duration: 3.2, ease: "none" }, 20.9);
-      counter($("#blk"), 0, 12480, 21.0, 3.0, (v) => Math.round(v).toLocaleString("en-US"));
-      tl.to("#s5", { opacity: 0, duration: 0.3, ease: "none" }, 23.8);
+      tl.fromTo("#rows", { y: 0 }, { y: -66 * 15, duration: 2.4, ease: "none" }, 20.402);
+      counter($("#blk"), 0, 12480, 20.5, 2.2, (v) => Math.round(v).toLocaleString("en-US"));
 
-      // ================= S6  23.95 – 27.05 : dashboard =================
-      tl.fromTo("#s6", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 23.95);
-      lineIn("#l6a", 24.0, 0.9);
-      lineIn("#l6b", 24.2, 0.9);
-      tl.fromTo("#dash", { y: 120, opacity: 0, rotationX: 14, transformPerspective: 2000 }, { y: 0, opacity: 1, rotationX: 0, duration: 1.2, ease: E }, 24.05);
-      tl.fromTo(".tile", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: E }, 24.35);
-      counter($("#d1"), 0, 1.28, 24.5, 1.6, (v) => v.toFixed(2));
-      counter($("#d2"), 0, 84.6, 24.6, 1.6, (v) => v.toFixed(1));
-      counter($("#d3"), 0, 96, 24.7, 1.6, (v) => Math.round(v));
-      tl.fromTo("#rg", { strokeDashoffset: 389.6 }, { strokeDashoffset: 389.6 * 0.04, duration: 1.6, ease: "power2.out" }, 24.7);
-      ["#sp1", "#sp2"].forEach((s, i) => { const L = $(s).getTotalLength(); $(s).style.strokeDasharray = L; tl.fromTo(s, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.5, ease: E2 }, 24.5 + i * 0.1); });
-      fadeUp("#works", 24.7, 0.7, 12);
-      tl.set("#works", { opacity: 0 }, 0);
-      tl.to("#s6", { opacity: 0, duration: 0.3, ease: "none" }, 26.45);
+      // ================= J slam "Safer." =================
+      punch("#jBig", B(37), 1.18, 0.5);
 
-      // ================= S7  26.9 – 30 : logo =================
-      tl.fromTo("#s7", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, 26.55);
-      tl.fromTo("#lg-top", { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: EX }, 26.6);
-      tl.fromTo("#lg-bot", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: EX }, 26.7);
-      tl.fromTo("#lg-word", { xPercent: -105 }, { xPercent: 0, duration: 1.0, ease: EX }, 27.1);
-      tl.fromTo("#lockup", { gap: 0 }, { gap: 30, duration: 1.0, ease: EX }, 27.1);
-      tl.fromTo("#lg-wordwrap", { width: 0 }, { width: 296, duration: 1.0, ease: EX }, 27.1);
-      lineIn("#tag7 .ln", 27.45, 1.0);
-      fadeUp("#cta7", 27.75, 0.8, 12);
-      tl.set("#cta7", { opacity: 0 }, 0);
-      tl.fromTo("#lockup", { scale: 1 }, { scale: 1.03, duration: 3.45, ease: "none" }, 26.55);
+      // ================= K dashboard 23.421 – 26.8 =================
+      lineIn("#lK1", B(38) + 0.02, 0.7);
+      lineIn("#lK2", B(38) + 0.25, 0.7);
+      tl.fromTo("#dash", { y: 160, rotationX: 24, opacity: 0, transformPerspective: 2400 }, { y: 0, rotationX: 0, opacity: 1, duration: 0.9, ease: EX }, B(38));
+      $$(".tile").forEach((t, i) => tl.fromTo(t, { y: 260, z: -400, rotationX: 50, opacity: 0, transformPerspective: 1600 }, { y: 0, z: 0, rotationX: 0, opacity: 1, duration: 0.7, ease: EX }, B(39 + i)));
+      counter($("#d1"), 0, 1.28, B(39), 1.4, (v) => v.toFixed(2));
+      counter($("#d2"), 0, 84.6, B(40), 1.4, (v) => v.toFixed(1));
+      counter($("#d3"), 0, 96, B(41), 1.2, (v) => Math.round(v));
+      tl.fromTo("#rg", { strokeDashoffset: 389.6 }, { strokeDashoffset: 389.6 * 0.04, duration: 1.2, ease: "power2.out" }, B(41));
+      ["#sp1", "#sp2"].forEach((s, i) => { const L = $(s).getTotalLength(); $(s).style.strokeDasharray = L; tl.fromTo(s, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.1, ease: E2 }, B(39 + i) + 0.1); });
+      fadeUp("#works", B(40), 0.6, 12);
+      tl.fromTo("#dash", { scale: 1 }, { scale: 1.04, duration: 2.6, ease: "none" }, 24.0);
+
+      tl.to(["#sK .wrap", "#dash", "#works"], { y: -160, opacity: 0, duration: 0.35, ease: "power2.in", stagger: 0.03 }, 26.4);
+
+      // ================= L chevron wipe 26.25 – 27.35 =================
+      $$(".cv").forEach((c, i) => {
+        c.setAttribute("fill", "none"); c.setAttribute("stroke-width", "300"); c.setAttribute("stroke-linecap", "round"); c.setAttribute("stroke-linejoin", "round");
+        tl.fromTo(c, { y: 1500 + i * 300 }, { y: -2400 + i * 300, duration: 1.0, ease: "power2.inOut" }, 26.25 + i * 0.03);
+      });
+
+      // ================= M logo 26.8 – 30 =================
+      tl.fromTo("#lg-top", { y: -80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: EX }, 26.85);
+      tl.fromTo("#lg-bot", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: EX }, 26.9);
+      punch("#lg-icon", B(44), 1.1, 0.6);
+      tl.fromTo("#lg-word", { xPercent: -105 }, { xPercent: 0, duration: 0.8, ease: EX }, B(44) + 0.25);
+      tl.fromTo("#lockup", { gap: 0 }, { gap: 30, duration: 0.8, ease: EX }, B(44) + 0.25);
+      tl.fromTo("#lg-wordwrap", { width: 0 }, { width: 296, duration: 0.8, ease: EX }, B(44) + 0.25);
+      lineIn("#tag7 .ln", B(45), 0.8);
+      fadeUp("#cta7", B(45) + 0.3, 0.6, 12);
+      tl.fromTo("#lockup", { scale: 1 }, { scale: 1.03, duration: 3.2, ease: "none" }, 26.8);
 
       window.__timelines["main"] = tl;
       tl.seek(0);
