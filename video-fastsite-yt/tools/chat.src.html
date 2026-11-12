@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; font-weight: 400; src: url(assets/fonts/inter-tight-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url(assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 900; src: url(assets/fonts/inter-tight-latin-900-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Noto Color Emoji"; src: url(assets/fonts/NotoColorEmoji.ttf) format("truetype"); }
+      @font-face { font-family: "JB"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #f4efe6; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter Tight", "Noto Color Emoji", sans-serif; color: #101827; background: #f4efe6; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .a { position: absolute; }
+      #bg { background: radial-gradient(70% 90% at 30% 40%, #fff7e3 0%, #f4efe6 55%, #ece4d4 100%); }
+      .blob { position: absolute; border-radius: 50%; filter: blur(60px); }
+      #cam { transform-origin: 50% 50%; }
+      .phone { position: absolute; left: 300px; top: 70px; width: 470px; height: 950px; border-radius: 70px; background: #101827; padding: 16px; box-shadow: 0 60px 120px rgba(16,24,39,.28), 0 0 0 3px #2a3242 inset; transform-origin: 50% 60%; }
+      .scr { position: relative; width: 438px; height: 918px; border-radius: 56px; overflow: hidden; background: #efe9df; }
+      .isl { position: absolute; left: 160px; top: 14px; width: 118px; height: 34px; border-radius: 20px; background: #101827; z-index: 5; }
+      .sb { height: 58px; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 36px 8px; font-weight: 800; font-size: 17px; }
+      .hd { display: flex; align-items: center; gap: 14px; padding: 12px 20px 14px; background: #fffdf8; border-bottom: 1px solid #e3ddd0; position: relative; z-index: 3; }
+      .av { width: 50px; height: 50px; border-radius: 50%; background: #101827; color: #fbb419; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 22px; }
+      .hn { font-weight: 800; font-size: 20px; } .hs { font-size: 15px; color: #08794a; }
+      .vp { position: absolute; left: 0; right: 0; top: 136px; bottom: 84px; overflow: hidden; background-image: radial-gradient(rgba(16,24,39,.05) 1.5px, transparent 1.5px); background-size: 22px 22px; }
+      #col { position: absolute; left: 16px; right: 16px; top: 0; display: flex; flex-direction: column; gap: 10px; padding-bottom: 14px; }
+      .b { max-width: 78%; padding: 12px 16px; border-radius: 22px; font-size: 19px; line-height: 1.3; box-shadow: 0 2px 0 rgba(16,24,39,.06); position: relative; }
+      .in { align-self: flex-start; background: #fff; border-bottom-left-radius: 6px; transform-origin: 0% 100%; }
+      .out { align-self: flex-end; background: #fbb419; border-bottom-right-radius: 6px; transform-origin: 100% 100%; }
+      .meta { display: block; text-align: right; font-size: 12px; color: rgba(16,24,39,.5); margin-top: 4px; }
+      .card { width: 300px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 0 rgba(16,24,39,.06); }
+      .card.o { align-self: flex-end; background: #fff7dd; transform-origin: 100% 100%; }
+      .card.i { align-self: flex-start; transform-origin: 0% 100%; }
+      .card .im { height: 150px; background: #e9e4dc; position: relative; overflow: hidden; }
+      .card .im img { width: 100%; height: 100%; object-fit: cover; }
+      .card .tx { padding: 10px 14px 12px; font-size: 16px; } .u { font-family: JB; font-size: 13px; color: #6b6457; }
+      .feat { background: #fff7dd !important; display: flex; gap: 12px; align-items: flex-start; max-width: 88% !important; }
+      .feat .e { font-size: 34px; line-height: 1; } .feat b { font-size: 19px; } .feat .s { font-size: 16px; color: #6b6457; margin-top: 2px; }
+      .inp { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: #fffdf8; border-top: 1px solid #e3ddd0; display: flex; align-items: center; gap: 12px; padding: 0 18px; z-index: 3; }
+      .inp .f { flex: 1; height: 46px; border-radius: 23px; background: #efe9df; padding: 0 18px; display: flex; align-items: center; font-size: 17px; color: #9a948a; }
+      .inp .s { width: 46px; height: 46px; border-radius: 50%; background: #101827; display: flex; align-items: center; justify-content: center; color: #fbb419; font-size: 20px; }
+      .typing { position: absolute; left: 16px; bottom: 96px; background: #fff; border-radius: 22px; padding: 14px 18px; display: flex; gap: 6px; z-index: 2; }
+      .typing i { width: 9px; height: 9px; border-radius: 50%; background: #9a948a; display: block; }
+      .spin { width: 44px; height: 44px; border-radius: 50%; border: 6px solid rgba(16,24,39,.12); border-top-color: #df482b; position: absolute; left: 128px; top: 53px; }
+      .wave { display: flex; align-items: center; gap: 3px; height: 34px; } .wave i { width: 4px; border-radius: 2px; background: #101827; display: block; }
+      .cap { position: absolute; left: 900px; font-weight: 900; letter-spacing: -.045em; line-height: .95; color: #101827; white-space: nowrap; }
+      .sub { position: absolute; left: 904px; font-weight: 800; font-size: 44px; color: #6b6457; letter-spacing: -.02em; white-space: nowrap; }
+      .hl { background: linear-gradient(transparent 62%, #fbb419 62%, #fbb419 92%, transparent 92%); }
+      .w { display: inline-block; white-space: pre; }
+      .sticker { position: absolute; font-weight: 900; border-radius: 22px; padding: 14px 26px; box-shadow: 0 18px 40px rgba(16,24,39,.18); white-space: nowrap; }
+      .notif { position: absolute; left: 900px; width: 640px; background: rgba(255,253,248,.95); border-radius: 28px; padding: 20px 26px; box-shadow: 0 24px 60px rgba(16,24,39,.18); display: flex; gap: 18px; align-items: center; }
+      .ni { width: 64px; height: 64px; border-radius: 18px; background: #101827; display: flex; align-items: center; justify-content: center; font-size: 32px; flex: none; }
+      .nt { font-weight: 800; font-size: 24px; } .ns { font-size: 19px; color: #6b6457; }
+      .emo { position: absolute; font-size: 60px; }
+      .tap { position: absolute; width: 40px; height: 40px; margin: -20px; border-radius: 50%; border: 5px solid #101827; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+      <div id="bg" class="clip" data-start="0" data-duration="30" data-track-index="0">
+        <div class="blob" id="bl1" style="left:-200px;top:-200px;width:900px;height:800px;background:#ffe7a8;opacity:.6"></div>
+        <div class="blob" id="bl2" style="left:1300px;top:500px;width:800px;height:700px;background:#f6d6c4;opacity:.45"></div>
+      </div>
+      <div id="cam" class="clip" data-start="0" data-duration="30" data-track-index="1">
+        <div class="phone" id="phone"><div class="scr"><div class="isl"></div><div class="sb"><span>9:41</span><span>5G ▮▮▮</span></div>
+          <div class="hd"><div style="font-size:26px;color:#6b6457">‹</div><div class="av">A</div><div><div class="hn">ATELIER Shop</div><div class="hs" id="hs">online</div></div></div>
+          <div class="vp"><div id="col"></div></div>
+          <div class="typing" id="typ"><i></i><i></i><i></i></div>
+          <div class="inp"><div style="font-size:26px">＋</div><div class="f" id="inpf">Nachricht</div><div class="s">➤</div></div>
+        </div></div>
+        <div id="right" class="a" style="inset:0"></div>
+        <div id="emos" class="a" style="inset:0"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+      const $ = (s) => document.querySelector(s);
+      const V = 0.9;
+      let sd = 4711; const rnd = () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }; const R = (a, b) => a + (b - a) * rnd();
+      const ICON = `{{ICON}}`, WORD = `{{WORD}}`;
+      function el(p, cls, html, css) { const d = document.createElement("div"); d.className = cls; if (html !== undefined) d.innerHTML = html; Object.assign(d.style, css || {}); p.appendChild(d); return d; }
+      const wave = (n) => `<div class="wave">${Array.from({ length: n }, (_, i) => `<i style="height:${8 + Math.abs(Math.sin(i * 1.7)) * 24}px"></i>`).join("")}</div>`;
+
+      // ---------------- chat messages ----------------
+      const col = $("#col");
+      const M = [];
+      function msg(t, cls, html) { const m = el(col, cls, html); M.push([t, m]); return m; }
+      msg(0.45, "b out", "Hey! 👋 Schau mal in unseren neuen Shop");
+      const link = msg(0.9, "card o", `<div class="im" id="lim"><div style="position:absolute;inset:0;background:repeating-linear-gradient(-45deg,#ebe5da 0 14px,#f3eee5 14px 28px)"></div><div class="spin" id="spin"></div><img id="limg" src="assets/img/hero.jpg" style="position:absolute;inset:0"></div><div class="tx"><b>dein-shop.de</b><div class="u" id="lst">lädt …</div></div>`);
+      msg(V + 2.04, "b in", 'lädt bei mir nicht 😕<span class="meta">20:14</span>');
+      msg(V + 3.32, "b in", 'immer noch …<span class="meta">20:15</span>');
+      msg(5.0, "b in", 'hallo??? 😩<span class="meta">20:16</span>');
+      const voice = msg(8.55, "b out", `<div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:50%;background:#101827;color:#fbb419;display:flex;align-items:center;justify-content:center">▶</div>${wave(24)}<span style="font-size:14px">0:04</span></div>`);
+      msg(9.5, "b in", 'WOW, jetzt geht\'s sofort!! 😍<span class="meta">20:16</span>');
+      msg(V + 10.36, "b out feat", '<div class="e">🏠</div><div><b>Kein Umzug</b><div class="s">dein Hosting bleibt, wo es ist</div></div>');
+      msg(12.45, "b in", "wie habt ihr das gemacht? 🤯");
+      msg(V + 12.05, "b out feat", '<div class="e">🌍</div><div><b>Edge-Caching</b><div class="s">Seiten kommen aus der Nähe</div></div>');
+      msg(V + 15.2, "b out feat", '<div class="e">🖼️</div><div><b>Bilder → WebP</b><div class="s">automatisch schlanker</div></div>');
+      msg(V + 18.1, "b out feat", '<div class="e">🛡️</div><div><b>DDoS-Schutz</b><div class="s">Angriffe bleiben draußen</div></div>');
+      msg(20.9, "b in", "läuft das auch am Laptop? 💻");
+      const plat = msg(V + 20.6, "b out", 'Desktop <span id="c1">✅</span> &nbsp;Handy <span id="c2">✅</span> &nbsp;überall <span id="c3">✅</span>');
+      msg(24.05, "b in", "gerade bestellt 🛍️ danke!!");
+      msg(24.5, "card i", '<div class="im" style="height:120px"><img src="assets/img/p1.jpg"></div><div class="tx"><b>Bestellung bestätigt ✓</b><div class="u">Wollmantel Camel · 289 €</div></div>');
+      const cta = msg(V + 24.8, "card o", `<div class="tx" style="padding:16px"><div style="display:flex;align-items:center;gap:10px"><svg viewBox="0 0 147 147" width="34" height="34">${ICON}</svg><b style="font-size:20px">fast.site</b></div><div style="margin-top:8px;font-size:17px">7 Tage kostenlos testen.<br>Keine Kreditkarte nötig.</div><div id="ctab" style="margin-top:12px;background:#101827;color:#fbb419;border-radius:14px;padding:12px;text-align:center;font-weight:800;font-size:18px">Jetzt testen →</div></div>`);
+      const VPH = 918 - 136 - 84;
+      // reveal each message and scroll the column so the newest sits at the bottom
+      M.forEach(([t, m], i) => {
+        tl.set(m, { opacity: 0 }, 0);
+        tl.fromTo(m, { opacity: 1, scale: 0.4 }, { scale: 1, duration: 0.5, ease: "back.out(2.2)", immediateRender: false }, t);
+        tl.to(col, { y: () => Math.min(0, VPH - (m.offsetTop + m.offsetHeight + 14)), duration: 0.4, ease: "power3.out" }, t);
+      });
+      tl.set(col, { y: 0 }, 0);
+      // typing indicator + header status
+      [[2.3, 2.9], [3.6, 4.2], [4.55, 5.0], [11.9, 12.45], [20.4, 20.9], [23.5, 24.05]].forEach(([a, b]) => { tl.fromTo("#typ", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, immediateRender: false }, a); tl.to("#typ", { opacity: 0, duration: 0.1 }, b - 0.05); });
+      tl.set("#typ", { opacity: 0 }, 0);
+      tl.fromTo("#typ i", { y: 0 }, { y: -5, duration: 0.2, yoyo: true, repeat: 140, stagger: 0.08, ease: "sine.inOut" }, 0);
+      tl.set("#hs", { textContent: "online", color: "#08794a" }, 0);
+      tl.set("#hs", { textContent: "tippt …" }, 2.3); tl.set("#hs", { textContent: "online" }, 2.95);
+      tl.set("#hs", { textContent: "hat den Warenkorb verlassen", color: "#df482b" }, 5.9);
+      tl.set("#hs", { textContent: "online", color: "#08794a" }, 9.3);
+      tl.fromTo("#spin", { rotation: 0 }, { rotation: 360 * 9, duration: 7.1, ease: "none" }, 0.9);
+      tl.set("#limg", { opacity: 0 }, 0);
+      tl.set("#lst", { textContent: "lädt …", color: "#6b6457" }, 0);
+      tl.fromTo(voice.querySelectorAll(".wave i"), { scaleY: 1 }, { scaleY: 0.4, duration: 0.18, yoyo: true, repeat: 7, stagger: 0.03, ease: "sine.inOut", immediateRender: false }, 8.9);
+
+      // ---------------- right side ----------------
+      const right = $("#right");
+      function words(node) { const out = []; [...node.childNodes].forEach((n) => { if (n.nodeType === 3) { n.textContent.split(/(\s+)/).forEach((p) => { if (!p) return; if (p.includes("\n")) { node.insertBefore(document.createElement("br"), n); return; } const s = document.createElement("span"); s.className = "w"; s.textContent = p; node.insertBefore(s, n); if (p.trim()) out.push(s); }); node.removeChild(n); } else if (n.nodeName !== "BR") { n.classList.add("w"); out.push(n); } }); return out; }
+      function cap(html, t, top, size, out) {
+        const c = el(right, "cap", html, { top: top + "px", fontSize: size + "px" });
+        tl.set(c, { opacity: 0 }, 0); tl.set(c, { opacity: 1 }, t);
+        tl.fromTo(words(c), { y: 60, opacity: 0, rotation: 4 }, { y: 0, opacity: 1, rotation: 0, duration: 0.55, stagger: 0.06, immediateRender: false }, t);
+        if (out) tl.to(c, { y: -40, opacity: 0, duration: 0.3, ease: "power2.in" }, out);
+        return c;
+      }
+      function sub(text, t, top, out) { const s = el(right, "sub", text, { top: top + "px" }); tl.set(s, { opacity: 0 }, 0); tl.fromTo(s, { opacity: 1, y: 20 }, { y: 0, duration: 0.4, immediateRender: false }, t); tl.fromTo(s, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.out", immediateRender: false }, t); if (out) tl.to(s, { opacity: 0, duration: 0.25 }, out); return s; }
+      function sticker(html, t, x, y, bg, color, size, rot, out) { const s = el(right, "sticker", html, { left: x + "px", top: y + "px", background: bg, color, fontSize: size + "px" }); tl.set(s, { opacity: 0 }, 0); tl.fromTo(s, { opacity: 1, scale: 2.4, rotation: rot - 20 }, { scale: 1, rotation: rot, duration: 0.45, ease: "back.out(2)", immediateRender: false }, t); if (out) tl.to(s, { scale: 0, opacity: 0, duration: 0.25, ease: "back.in(2)" }, out); return s; }
+      function notif(icon, ibg, title, txt, t, top, out, from = -1) { const n = el(right, "notif", `<div class="ni" style="background:${ibg}">${icon}</div><div><div class="nt">${title}</div><div class="ns">${txt}</div></div>`, { top: top + "px" }); tl.set(n, { opacity: 0 }, 0); tl.fromTo(n, { opacity: 1, y: from * 200, scale: 0.9 }, { y: 0, scale: 1, duration: 0.55, ease: "back.out(1.6)", immediateRender: false }, t); if (out) tl.to(n, { x: 900, opacity: 0, duration: 0.4, ease: "power3.in" }, out); return n; }
+      function burst(t, x, y, list, n = 12) { for (let i = 0; i < n; i++) { const e = el($("#emos"), "emo", list[i % list.length], { left: x + "px", top: y + "px", fontSize: R(40, 72) + "px" }); tl.set(e, { opacity: 0 }, 0); tl.fromTo(e, { opacity: 1, x: 0, y: 0, scale: 0.3, rotation: 0 }, { x: R(-260, 260), y: R(-420, -160), scale: 1, rotation: R(-40, 40), duration: R(1.0, 1.6), ease: "power2.out", immediateRender: false }, t + i * 0.03); tl.to(e, { opacity: 0, duration: 0.35 }, t + 1.2 + i * 0.03); } }
+
+      // 0 – 8: slow
+      const c1 = cap('Deine Website\nlädt <span class="hl">…</span>', V, 230, 120, V + 4.4);
+      const s1 = sub("… und lädt.", V + 2.04, 500, V + 3.3);
+      sub("… und lädt. Und lädt.", V + 3.32, 500, V + 4.4);
+      const timer = sticker('<span id="tv">0,0 s</span> 🐌', 1.5, 1480, 640, "#df482b", "#fff", 64, 6, null);
+      const tv = { v: 0 };
+      tl.fromTo(tv, { v: 0 }, { v: 8.4, duration: 6.4, ease: "none", onUpdate: () => ($("#tv").textContent = tv.v.toFixed(1).replace(".", ",") + " s") }, 1.5);
+      cap('Jede Sekunde kostet\ndich <span style="color:#df482b">Besucher.</span>', V + 4.63, 230, 100, 7.6);
+      const nA = notif("🛒", "#df482b", "Lena hat den Warenkorb verlassen", "Jede Sekunde kostet dich Besucher.", 5.9, 470, 7.55);
+      const nB = notif("🛒", "#df482b", "Tom hat den Warenkorb verlassen", "nach 6 Sekunden Ladezeit", 6.8, 600, 7.6);
+      for (let i = 0; i < 6; i++) tl.fromTo("#phone", { rotation: -4 + (i % 2 ? 0.8 : -0.8) }, { rotation: -4, duration: 0.12, immediateRender: false }, 7.2 + i * 0.12);
+      tl.set("#phone", { rotation: -4 }, 0);
+
+      // 7.98 DROP
+      const D = 7.98;
+      tl.fromTo("#cam", { scale: 1.06 }, { scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false }, D);
+      tl.set("#spin", { opacity: 0 }, D); tl.fromTo("#limg", { opacity: 1, scale: 1.3 }, { scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false }, D);
+      tl.set("#lst", { textContent: "⚡ sofort geladen · via fast.site", color: "#0c9958" }, D);
+      tl.to(timer, { backgroundColor: "#0c9958", duration: 0.1 }, D); tl.set("#tv", { textContent: "sofort" }, D + 0.02);
+      tl.to(timer, { scale: 1.25, duration: 0.12, yoyo: true, repeat: 1 }, D);
+      notif(`<svg viewBox="0 0 147 147" width="42" height="42">${ICON}</svg>`, "#101827", "fast.site", "dein-shop.de ist jetzt beschleunigt ⚡", D, 90, 9.9, -1);
+      burst(D + 0.05, 640, 470, ["⚡", "🔥", "😍", "🚀"], 14);
+      cap('Mit fast.site\nwird sie <span class="hl">schnell.</span>', V + 7.1, 300, 118, 9.95);
+      sticker("SOFORT DA ⚡", 8.6, 1500, 760, "#0c9958", "#fff", 52, -5, 9.95);
+      tl.to(timer, { opacity: 0, scale: 0, duration: 0.25 }, 9.9);
+
+      // hosting
+      cap('Ohne Umzug.\nDein Hosting <span class="hl">bleibt.</span>', V + 9.25, 300, 112, 12.6);
+      sticker("🏠 bleibt, wo es ist", V + 10.4, 1460, 660, "#fff", "#101827", 40, 4, 12.6);
+      // edge caching
+      cap('Edge-Caching.\n<span class="hl">Aus der Nähe.</span>', V + 12.01, 300, 112, 15.7);
+      sticker("🌍 blitzschnell ausgeliefert", V + 12.6, 1250, 640, "#101827", "#fbb419", 40, -4, 15.7);
+      // webp
+      cap('Bilder werden\nautomatisch <span class="hl">WebP.</span>', V + 15.14, 200, 104, 18.7);
+      const imgc = el(right, "card", `<div class="im" style="height:220px"><img src="assets/img/hero.jpg"></div><div class="tx" style="display:flex;justify-content:space-between;align-items:center;font-size:20px"><div><b id="fnm">bild.jpg</b><div class="u">Beispiel von fast.site</div></div><div style="font-weight:900;font-size:40px" id="kb">303,4 KB</div></div>`, { position: "absolute", left: "960px", top: "480px", width: "540px", boxShadow: "0 24px 60px rgba(16,24,39,.18)" });
+      tl.set(imgc, { opacity: 0 }, 0); tl.fromTo(imgc, { opacity: 1, y: 120, rotation: -6 }, { y: 0, rotation: 3, duration: 0.6, ease: "back.out(1.6)", immediateRender: false }, 16.3);
+      const kb = { v: 303.4 };
+      tl.fromTo(kb, { v: 303.4 }, { v: 198.2, duration: 0.8, ease: "expo.inOut", onUpdate: () => ($("#kb").textContent = kb.v.toFixed(1).replace(".", ",") + " KB") }, V + 15.9);
+      tl.set("#fnm", { textContent: "bild.jpg" }, 0); tl.set("#fnm", { textContent: "bild.webp" }, V + 16.3);
+      tl.to(imgc.querySelector(".im"), { scaleX: 0.86, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.inOut" }, V + 15.9);
+      sticker("−35 %", V + 16.6, 1440, 420, "#fbb419", "#101827", 72, 8, 18.7);
+      tl.to(imgc, { opacity: 0, y: 80, duration: 0.3, ease: "power2.in" }, 18.7);
+      // ddos
+      cap('Angriffe bleiben\n<span class="hl">draußen.</span>', V + 18.09, 220, 112, 21.2);
+      [0, 1, 2].forEach((i) => notif("🛡️", "#0c9958", "Angriff abgewehrt", "DDoS-Schutz aktiv", 19.4 + i * 0.4, 500 + i * 130, 21.2, 1));
+      // everywhere
+      const g1 = cap("Desktop.", V + 20.55, 380, 180, V + 21.35);
+      const g2 = cap("Handy.", V + 21.65, 380, 180, V + 22.3);
+      const g3 = cap('<span class="hl">Überall.</span>', V + 22.62, 380, 200, 24.3);
+      ["#c1", "#c2", "#c3"].forEach((c, i) => { tl.set(c, { opacity: 0 }, 0); tl.fromTo(c, { opacity: 1, scale: 2.5 }, { scale: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false }, [V + 20.65, V + 21.7, V + 22.7][i]); });
+      burst(V + 22.7, 1300, 700, ["💻", "📱", "🌍", "✨", "🎉"], 16);
+      // logo + cta
+      const LOGO = V + 23.67;
+      const lg = el(right, "a", `<svg viewBox="0 0 428.82 146.98" width="640" height="219">${ICON}<g fill="#101827">${WORD}</g></svg>`, { left: "930px", top: "170px" });
+      tl.set(lg, { opacity: 0 }, 0); tl.fromTo(lg, { opacity: 1, clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.6, ease: "power3.inOut", immediateRender: false }, LOGO - 0.1);
+      cap('Jetzt <span class="hl">7 Tage</span>\n<span class="hl">kostenlos</span> testen.', V + 24.8, 470, 100, null);
+      sticker("Keine Kreditkarte · fast.site/de", V + 26.0, 940, 820, "#101827", "#fbb419", 34, 0, null);
+      tl.to("#phone", { rotation: -2, x: 20, duration: 1.2, ease: "power2.inOut" }, 24.6);
+      // tap the CTA button
+      const CLICK = 28.35;
+      const tap = el($("#emos"), "tap", "", { left: "640px", top: "900px" }); tl.set(tap, { opacity: 0 }, 0);
+      tl.fromTo(tap, { opacity: 0.9, scale: 0.4 }, { scale: 2.4, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false }, CLICK);
+      tl.set("#ctab", { textContent: "Jetzt testen →", backgroundColor: "#101827", color: "#fbb419" }, 0);
+      tl.set("#ctab", { textContent: "✓ Los geht's!", backgroundColor: "#0c9958", color: "#ffffff" }, CLICK + 0.05);
+      tl.to("#ctab", { scale: 0.94, duration: 0.08, yoyo: true, repeat: 1 }, CLICK);
+      burst(CLICK + 0.05, 640, 860, ["🎉", "❤️", "⚡"], 10);
+
+      // ambient
+      tl.fromTo("#bl1", { x: 0, y: 0 }, { x: 300, y: 120, duration: 30, ease: "sine.inOut" }, 0);
+      tl.fromTo("#bl2", { x: 0, y: 0 }, { x: -300, y: -160, duration: 30, ease: "sine.inOut" }, 0);
+      tl.fromTo("#phone", { y: 900 }, { y: 0, duration: 0.8, ease: "expo.out" }, 0);
+      tl.fromTo("#phone", { scale: 1 }, { scale: 1.03, duration: 7, ease: "sine.inOut", immediateRender: false }, 0.8);
+      tl.to("#cam", { opacity: 0, duration: 0.5, ease: "power1.in" }, 29.45);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
