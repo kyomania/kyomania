@@ -34,6 +34,18 @@
 
       /* captions */
       #cap { position: absolute; left: 120px; bottom: 110px; font: 600 80px/1.05 var(--display); letter-spacing: -0.03em; text-shadow: 0 4px 30px rgba(0,0,0,0.35); }
+      /* scene captions */
+      .sc { position: absolute; left: 120px; top: 104px; }
+      .sc .e { font: 600 22px var(--text); letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.75; margin-bottom: 10px; }
+      .sc .l { font: 600 84px/1.04 var(--display); letter-spacing: -0.03em; }
+      .sc .l.g { opacity: 0.62; }
+      .sc .ln { display: block; overflow: hidden; padding-bottom: 0.08em; }
+      .sc .ln > span { display: inline-block; }
+      .sc.lt { color: #fff; text-shadow: 0 2px 28px rgba(10,20,40,0.55), 0 1px 3px rgba(10,20,40,0.35); }
+      #sE .l div { white-space: nowrap; }
+      #sF { left: auto; right: 120px; text-align: right; }
+      .sc.dk { color: #1d1d1f; }
+      .sc.dk .e { opacity: 0.6; }
     </style>
   </head>
   <body>
@@ -51,9 +63,18 @@
       <div id="oE" class="clip ov" data-start="13.6" data-duration="7.4" data-track-index="7"></div>
       <video id="vF" class="clip" src="assets/clips/f.mp4" muted playsinline data-start="21.0" data-duration="4.3" data-media-start="0" data-track-index="8"></video>
       <div id="oF" class="clip ov" data-start="21.0" data-duration="4.3" data-track-index="9">
-        <div class="pill" id="o1" style="left:1150px;top:300px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€129</small></div>
-        <div class="pill" id="o2" style="left:1240px;top:420px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€89</small></div>
-        <div class="pill" id="o3" style="left:1180px;top:540px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€39</small></div>
+        <div class="pill" id="o1" style="left:1150px;top:390px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€129</small></div>
+        <div class="pill" id="o2" style="left:1240px;top:510px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€89</small></div>
+        <div class="pill" id="o3" style="left:1180px;top:630px"><div class="ck"><svg width="22" height="22" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>New order<small>€39</small></div>
+      </div>
+      <div id="caps" class="clip ov" data-start="0" data-duration="25.3" data-track-index="11">
+        <div class="sc lt" id="sA"><div class="e">Day one</div><div class="l"><span class="ln"><span>Finally live.</span></span></div></div>
+        <div class="sc lt" id="sB"><div class="e">Then</div><div class="l"><span class="ln"><span>It loads.</span></span></div><div class="l g"><span class="ln"><span>And loads.</span></span></div></div>
+        <div class="sc lt" id="sC"><div class="e">Every second counts</div><div class="l"><span class="ln"><span>Customers drop off.</span></span></div></div>
+        <div class="sc lt" id="sD"><div class="e">fast.site</div><div class="l"><span class="ln"><span>To the rescue.</span></span></div></div>
+        <div class="sc lt" id="sE"><div class="e">How fast.site works</div>
+          <div class="l" style="position:relative;height:92px"><div id="e1" style="position:absolute">Nearest edge.</div><div id="e2" style="position:absolute">Straight from cache.</div><div id="e3" style="position:absolute">Lighter images.</div><div id="e4" style="position:absolute">Protected.</div></div></div>
+        <div class="sc dk" id="sF"><div class="e">The result</div><div class="l"><span class="ln"><span>Same site. Same hosting.</span></span></div><div class="l g"><span class="ln"><span>Back on cloud nine.</span></span></div></div>
       </div>
       <video id="sting" class="clip" src="assets/clips/sting.mp4" muted playsinline data-start="25.3" data-duration="5.8" data-media-start="0.7" data-track-index="10"></video>
     </div>
@@ -87,6 +108,24 @@
       // F: orders pop in
       ["#o1", "#o2", "#o3"].forEach((s, i) => tl.fromTo(s, { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 22.0 + i * 0.55));
       tl.to("#oF", { y: -20, duration: 2.6, ease: "sine.inOut" }, 23.2);
+
+      // scene captions (clean, top-left, synced to the voice)
+      const capIn = (id, t) => { tl.set(id, { opacity: 1, y: 0 }, t); tl.fromTo(id + " .e", { opacity: 0, y: 10 }, { opacity: 0.75, y: 0, duration: 0.5, ease: E }, t);
+        document.querySelectorAll(id + " .ln > span").forEach((sp, i) => tl.fromTo(sp, { yPercent: 110 }, { yPercent: 0, duration: 0.75, ease: EX }, t + 0.08 + i * 0.35)); };
+      const capOut = (id, t) => tl.to(id, { opacity: 0, y: -16, duration: 0.3, ease: "power2.in" }, t);
+      ["#sA", "#sB", "#sC", "#sD", "#sE", "#sF"].forEach((id) => tl.set(id, { opacity: 0 }, 0));
+      capIn("#sA", 0.6); capOut("#sA", 3.85);
+      capIn("#sB", 4.55); capOut("#sB", 7.9);
+      capIn("#sC", 8.55); capOut("#sC", 10.75);
+      capIn("#sD", 11.35); capOut("#sD", 13.35);
+      tl.set("#sE", { opacity: 1, y: 0 }, 13.8);
+      tl.fromTo("#sE .e", { opacity: 0, y: 10 }, { opacity: 0.75, y: 0, duration: 0.5, ease: E }, 13.8);
+      [["#e1", 13.95, 15.8], ["#e2", 16.1, 17.7], ["#e3", 17.95, 19.1], ["#e4", 19.35, 20.7]].forEach(([s2, a, b]) => {
+        tl.fromTo(s2, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.5, ease: EX }, a);
+        tl.to(s2, { opacity: 0, y: -16, duration: 0.25, ease: "power2.in" }, b);
+      });
+      capOut("#sE", 20.7);
+      capIn("#sF", 21.3); capOut("#sF", 25.0);
 
       window.__timelines["main"] = tl;
       tl.seek(0);
