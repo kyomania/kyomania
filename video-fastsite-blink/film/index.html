@@ -55,8 +55,8 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="25" data-width="1920" data-height="1080" data-fps="30">
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="25" data-volume="1"></audio>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="25.8" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="25.8" data-volume="1"></audio>
 
       <!-- 1: POV, loading → blink → instant (0 – 5.5) -->
       <video id="pov1" class="clip" src="assets/clips/pov.mp4" muted playsinline data-start="0" data-duration="5.5" data-media-start="0" data-track-index="1"></video>
@@ -76,15 +76,11 @@
         <div id="toastw"><div id="toast"><div class="ck"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Order confirmed</div></div>
       </div>
 
-      <!-- 4: logo turn + end (19.3 – 25) -->
-      <div id="endbg" class="clip" data-start="19.3" data-duration="5.7" data-track-index="8" style="background:#000"></div>
-      <video id="logo" class="clip" src="assets/clips/logo.mp4" muted playsinline data-start="19.3" data-duration="5.7" data-media-start="0" data-track-index="9"></video>
-      <div id="endl" class="clip ov" data-start="19.3" data-duration="5.7" data-track-index="10">
-        <div id="endtx"><div class="t"><span class="ln" id="et"><span>Faster than a blink. <span class="g">Keep your hosting.</span></span></span></div><div class="c" id="ec"><b>fast.site</b> · Try it free for 7 days</div></div>
-      </div>
+      <!-- 4: logo sting (19.3 – 25.8) -->
+      <video id="sting" class="clip" src="assets/clips/sting.mp4" muted playsinline data-start="19.3" data-duration="6.5" data-media-start="0" data-track-index="8"></video>
 
       <!-- eyelids on top of everything -->
-      <div id="lids" class="clip ov" data-start="0" data-duration="25" data-track-index="11"><div class="lid" id="lidT"></div><div class="lid" id="lidB"></div></div>
+      <div id="lids" class="clip ov" data-start="0" data-duration="25.8" data-track-index="11"><div class="lid" id="lidT"></div><div class="lid" id="lidB"></div></div>
     </div>
 
     <script>
@@ -125,11 +121,7 @@
       const TAP = 18.45;
       tl.fromTo("#toast", { opacity: 0, y: -30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: EX }, TAP);
       blink(15.66, 0.1, 0.04, 0.18);
-
-      // 4: logo turns, then scales up into place; end text
-      tl.fromTo("#logo", { scale: 1, y: 0 }, { scale: 0.62, y: -190, duration: 0.9, ease: "power3.inOut", immediateRender: false }, 23.0);
-      lineIn("#et", 23.45, 0.8);
-      tl.fromTo("#ec", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 23.8);
+      blink(19.16, 0.12, 0.05, 0.22);
 
       window.__timelines["main"] = tl;
       tl.seek(0);
