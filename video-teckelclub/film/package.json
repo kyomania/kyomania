@@ -1,0 +1,2 @@
+{ "name": "teckelclub-einladung", "private": true, "type": "module",
+  "scripts": { "dev": "npx --yes hyperframes@0.9.33 preview", "check": "npx --yes hyperframes@0.9.33 check", "render": "npx --yes hyperframes@0.9.33 render" } }

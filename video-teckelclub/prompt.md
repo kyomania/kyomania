@@ -71,3 +71,9 @@ Paper cut-out collage set of festive party props with space between them: two st
 
 10. Endkarte (9:16)
 Paper cut-out collage scene of the same red dachshund with green scarf and Santa hat sitting happily next to a decorated Christmas tree and a pile of presents in front of a warm fireplace, a large blank cream paper banner with torn edges hanging across the upper third leaving empty space for text, red ribbon, garlands, layered handcrafted paper with visible paper fibers and soft shadows, cozy warm Christmas mood, no text
+
+## Stand
+
+Fertig: `teckelclub-einladung-15s.mp4` (1080×1920, 15 s). Projekt: `film/index.html` – alle Texte,
+Etiketten und Keyframes editierbar, Schnittzeiten über `rip(...)`. Ton: `tools/sound.py`.
+Rendern: `VW=1080 VH=1920 node tools/capture.cjs film frames 0 450`, dann ffmpeg mit `film/assets/audio/mix.wav`.

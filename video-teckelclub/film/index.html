@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Fraunces"; font-weight: 900; src: url(assets/fonts/fraunces-latin-900-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Fraunces"; font-weight: 600; src: url(assets/fonts/fraunces-latin-600-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Fraunces"; font-weight: 600; font-style: italic; src: url(assets/fonts/fraunces-latin-600-italic.woff2) format("woff2"); }
+      @font-face { font-family: "Hand"; font-weight: 500; src: url(assets/fonts/caveat-latin-500-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Hand"; font-weight: 700; src: url(assets/fonts/caveat-latin-700-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 500; src: url(assets/fonts/inter-latin-500-normal.woff2) format("woff2"); }
+
+      :root { --cream: #f3ebd9; --paper: #fbf6ea; --red: #c8312f; --green: #24452f; --navy: #1d2747; --gold: #c99a3e; --ink: #2b2420; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); color: var(--ink); }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      .abs { position: absolute; }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .mul { mix-blend-mode: multiply; }
+      .creambg { background: #e9dfcf; }
+      .feather { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%); mask-composite: intersect; }
+
+      /* Papier-Etiketten (Kanten werden per JS ausgerissen) */
+      .lbl { position: absolute; }
+      .lbl .boil { position: relative; }
+      .tag { position: relative; padding: 26px 46px 30px; background: var(--paper); box-shadow: 0 10px 18px rgba(60,40,20,.25); }
+      .tag.red { background: var(--red); color: #fff7ea; }
+      .tag.green { background: var(--green); color: #fff7ea; }
+      .tape { position: absolute; width: 150px; height: 44px; background: rgba(240,226,190,.78); top: -20px; left: 50%; margin-left: -75px; transform: rotate(-4deg); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+      .serif { font-family: "Fraunces"; font-weight: 900; letter-spacing: -.01em; line-height: 1; white-space: nowrap; }
+      .hand { font-family: "Hand"; font-weight: 700; line-height: 1; white-space: nowrap; }
+
+      /* Riss-Übergang */
+      #rip { position: absolute; left: -40px; top: 0; width: 1160px; height: 2700px; z-index: 70; filter: drop-shadow(0 -14px 18px rgba(50,30,10,.28)) drop-shadow(0 14px 18px rgba(50,30,10,.28)); }
+      #ripIn { position: absolute; inset: 0; background: var(--paper); }
+
+      /* Look */
+      #tex { z-index: 90; opacity: .22; mix-blend-mode: multiply; pointer-events: none;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .47  0 0 0 0 .36  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+      #vig { z-index: 91; pointer-events: none; background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(70,40,15,.35) 100%); }
+      .glow { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,196,90,.85) 0%, rgba(255,170,60,.35) 40%, rgba(255,150,40,0) 70%); mix-blend-mode: screen; }
+      .flake { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 2px 2px rgba(0,0,0,.15); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="15" data-volume="1"></audio>
+
+      <div class="clip" id="stage" data-start="0" data-duration="15">
+
+        <!-- 1a · Der Dackel kommt -->
+        <div class="scene creambg" id="s1">
+          
+          <div class="abs" id="dogWrap" style="left:-150px;top:880px;width:900px"><div class="boil"><img class="feather" src="assets/img/dackel.jpg" style="width:900px;display:block" /></div></div>
+          <img class="abs feather" id="baum" src="assets/img/baum.jpg" style="left:610px;top:900px;width:500px" />
+          <div class="lbl" id="bub" style="left:560px;top:690px"><div class="boil"><div class="tag" style="padding:22px 40px 26px;border-radius:0"><div class="hand" style="font-size:96px;color:var(--red)">Wuff!</div></div></div></div>
+          <div class="lbl" id="club" style="left:0;width:1080px;top:250px;display:flex;justify-content:center"><div class="boil"><div class="tag red"><div class="tape"></div><div class="serif" style="font-family:Fraunces;font-weight:600;font-style:italic;font-size:64px">Teckelclub Helmstedt</div></div></div></div>
+          <div class="lbl" id="club2" style="left:0;width:1080px;top:430px;display:flex;justify-content:center"><div class="boil"><div class="hand" style="font-size:66px;color:var(--green)">hat Post für dich …</div></div></div>
+        </div>
+
+        <!-- 1b · Der Brief -->
+        <div class="scene creambg" id="s1b">
+          <div class="abs" id="briefWrap" style="left:-60px;top:560px;width:1200px"><div class="boil"><img class="feather" src="assets/img/dackel-brief.jpg" style="width:1200px;display:block" /></div></div>
+          <div class="glow" id="seal" style="left:640px;top:1130px;width:260px;height:260px"></div>
+          <div class="lbl" id="post" style="left:0;width:1080px;top:270px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="transform:rotate(-3deg)"><div class="tape"></div><div class="hand" style="font-size:104px;color:var(--red)">Post für dich!</div></div></div></div>
+        </div>
+
+        <!-- 2 · Die Stadt -->
+        <div class="scene" id="s2">
+          <img class="full" id="stadt" src="assets/img/stadt.jpg" />
+          <div class="abs snow" id="snow2" style="inset:0"></div>
+          <div class="lbl" id="inv" style="left:0;width:1080px;top:150px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="text-align:center;padding:30px 56px 40px;transform:rotate(-2deg)"><div class="tape"></div>
+            <div class="hand" style="font-size:84px;color:var(--red)">Einladung</div>
+            <div class="serif" style="font-size:86px;color:var(--green);margin-top:10px">zur Weihnachtsfeier</div></div></div></div>
+        </div>
+
+        <!-- 3 · Das Schützenhaus -->
+        <div class="scene" id="s3" style="background:#e9e4dc">
+          <img class="full" id="haus" src="assets/img/haus.jpg" />
+          <div class="glow wg" style="left:169px;top:822px;width:180px;height:180px"></div>
+          <div class="glow wg" style="left:448px;top:822px;width:180px;height:180px"></div>
+          <div class="glow wg" style="left:726px;top:822px;width:180px;height:180px"></div>
+          <div class="glow wg" style="left:169px;top:1254px;width:180px;height:180px"></div>
+          <div class="glow wg" style="left:726px;top:1254px;width:180px;height:180px"></div>
+          <div class="abs snow" id="snow3" style="inset:0"></div>
+          <div class="lbl" id="sh" style="left:0;width:1080px;top:1620px;display:flex;justify-content:center"><div class="boil"><div class="tag green" style="transform:rotate(2deg)"><div class="tape"></div>
+            <div class="hand" style="font-size:58px;color:#f1d48a">im</div>
+            <div class="serif" style="font-size:80px;margin-top:4px">Schützenhaus</div></div></div></div>
+        </div>
+
+        <!-- 4 · Die Dackel-Parade -->
+        <div class="scene" id="s4" style="background:var(--navy)">
+          <div class="abs snow" id="snow4" style="inset:0"></div>
+          <div class="lbl" id="paradeCard" style="left:50px;top:460px"><div class="boil"><div style="background:var(--paper);padding:22px 22px 26px;transform:rotate(-2deg);box-shadow:0 18px 30px rgba(0,0,0,.4)"><div class="tape"></div><img src="assets/img/parade.jpg" style="width:936px;display:block" /></div></div></div>
+          <div class="lbl" id="zwei" style="left:0;width:1080px;top:200px;display:flex;justify-content:center"><div class="boil"><div class="tag red" style="transform:rotate(-2deg)"><div class="tape"></div><div class="serif" style="font-size:66px">Zwei- &amp; Vierbeiner</div></div></div></div>
+          <div class="lbl" id="will" style="left:0;width:1080px;top:1520px;display:flex;justify-content:center"><div class="boil"><div class="hand" style="font-size:100px;color:#fbf2dc">herzlich willkommen!</div></div></div>
+        </div>
+
+        <!-- 5 · Der Festsaal -->
+        <div class="scene" id="s5" style="background:#efe2c8">
+          <img class="full" id="saal" src="assets/img/saal.jpg" />
+          <div class="glow cg" style="left:380px;top:860px;width:190px;height:190px"></div>
+          <div class="glow cg" style="left:540px;top:760px;width:150px;height:150px"></div>
+          <div class="glow cg" style="left:700px;top:690px;width:130px;height:130px"></div>
+          <div class="glow cg" style="left:30px;top:660px;width:140px;height:140px"></div>
+          <div class="lbl" id="kerz" style="left:0;width:1080px;top:150px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="text-align:center;transform:rotate(-2deg)"><div class="tape"></div>
+            <div class="hand" style="font-size:76px;color:var(--red)">Kerzenschein, Glühwein</div>
+            <div class="hand" style="font-size:76px;color:var(--green);margin-top:6px">&amp; gute Gesellschaft</div></div></div></div>
+        </div>
+
+        <!-- 6 · Endkarte -->
+        <div class="scene" id="s6" style="background:var(--cream)">
+          <img class="full" id="endk" src="assets/img/endkarte.jpg" />
+          <div class="glow" id="fire" style="left:470px;top:1390px;width:220px;height:220px"></div>
+          <div class="abs" id="eText" style="left:160px;top:380px;width:756px;text-align:center">
+            <div class="ln hand" style="font-size:62px;color:var(--red)">Teckelclub Helmstedt</div>
+            <div class="ln serif" style="font-size:78px;color:var(--green);margin-top:18px">Weihnachtsfeier</div>
+            <div class="ln abs" style="left:0;width:756px;top:165px;height:3px"><svg width="756" height="20" viewBox="0 0 756 20"><path id="ul" pathLength="1" d="M150 10 C 300 2, 460 16, 606 8" stroke="#c99a3e" stroke-width="5" fill="none" stroke-linecap="round" /></svg></div>
+            <div class="ln serif" style="font-size:132px;color:var(--red);margin-top:58px;letter-spacing:-.03em">22.12.2026</div>
+            <div class="ln serif" style="font-size:84px;color:var(--ink);margin-top:18px;font-weight:600">18:00 Uhr</div>
+            <div class="ln" style="margin-top:34px;font-family:Inter;font-weight:500;font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:var(--green)">Schützenhaus Helmstedt</div>
+            <div class="ln hand" style="font-size:46px;color:var(--red);margin-top:34px">Wir freuen uns auf euch – mit Hund!</div>
+          </div>
+          <div class="abs mul st" style="left:118px;top:300px;width:150px;height:150px;background:url(assets/img/deko.jpg) -762px -60px / 1200px 1200px"></div>
+          <div class="abs mul st" style="left:820px;top:880px;width:120px;height:120px;background:url(assets/img/deko.jpg) -36px -650px / 960px 960px"></div>
+          <div class="abs snow" id="snow6" style="inset:0"></div>
+        </div>
+
+        <div id="rip"><div id="ripIn"></div></div>
+      </div>
+
+      <div class="clip" id="tex" data-start="0" data-duration="15"></div>
+      <div class="clip" id="vig" data-start="0" data-duration="15"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      let seed = 23; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const R = (a, b) => a + (b - a) * rnd();
+      const FPS = 12; // Stop-Motion-Takt
+
+      // ---------- ausgerissene Kanten (deterministisch) ----------
+      function tornPoly(w, h, amp = 7, step = 18) {
+        const p = [];
+        for (let x = 0; x <= w; x += step) p.push([x, R(0, amp)]);
+        for (let y = 0; y <= h; y += step) p.push([w - R(0, amp), y]);
+        for (let x = w; x >= 0; x -= step) p.push([x, h - R(0, amp)]);
+        for (let y = h; y >= 0; y -= step) p.push([R(0, amp), y]);
+        return "polygon(" + p.map(([x, y]) => `${(x / w * 100).toFixed(2)}% ${(y / h * 100).toFixed(2)}%`).join(",") + ")";
+      }
+      document.querySelectorAll(".tag").forEach((el) => { el.style.clipPath = tornPoly(el.offsetWidth, el.offsetHeight, 9, 16); });
+      // Riss-Blatt: gezackte Ober- und Unterkante
+      { const w = 1160, h = 2700, p = []; for (let x = 0; x <= w; x += 22) p.push([x, R(0, 60) + (x % 88 === 0 ? R(10, 40) : 0)]); p.push([w, h]);
+        for (let x = w; x >= 0; x -= 22) p.push([x, h - R(0, 60)]);
+        document.getElementById("ripIn").style.clipPath = "polygon(" + p.map(([x, y]) => `${x}px ${y.toFixed(1)}px`).join(",") + ")"; }
+
+      // ---------- Schneeflocken ----------
+      document.querySelectorAll(".snow").forEach((box) => {
+        for (let i = 0; i < 46; i++) { const f = document.createElement("div"); f.className = "flake"; const s = R(8, 22);
+          f.style.width = f.style.height = s + "px"; f.style.left = R(0, 1080) + "px"; f.style.top = R(-200, 1700) + "px"; f.style.opacity = R(0.7, 1); box.appendChild(f); }
+      });
+
+      // ---------- Helfer ----------
+      const stepEase = (name, dur) => { const f = gsap.parseEase(name); const n = Math.max(1, Math.round(dur * FPS)); return (p) => Math.round(f(p) * n) / n; };
+      const sm = (sel, vars, t, ease = "power2.out") => tl.to(sel, { ...vars, ease: stepEase(ease, vars.duration) }, t);
+      const smFrom = (sel, from, to, t, ease = "back.out(1.6)") => tl.fromTo(sel, from, { ...to, ease: stepEase(ease, to.duration), immediateRender: false }, t);
+      const slap = (sel, t, rot = 0) => smFrom(sel, { autoAlpha: 0, scale: 1.35, rotation: rot - 6 }, { autoAlpha: 1, scale: 1, rotation: rot, duration: 0.42 }, t);
+      const scenes = ["#s1", "#s1b", "#s2", "#s3", "#s4", "#s5", "#s6"];
+      const show = (id, t) => { scenes.forEach((s) => tl.set(s, { autoAlpha: s === id ? 1 : 0 }, t)); };
+      // Riss-Übergang: Blatt fährt durchs Bild, Szenenwechsel, wenn es alles verdeckt
+      const rip = (t, next) => { const d = 0.75, k = 9, cover = 5 / FPS;
+        tl.fromTo("#rip", { y: 1940, rotation: R(-2, 2) }, { y: -2720, duration: d, ease: (p) => Math.round(p * k) / k, immediateRender: false }, t - cover);
+        show(next, t); };
+      // „Boil“: alle Papierteile zittern leicht im Stop-Motion-Takt
+      const boils = gsap.utils.toArray(".boil");
+      for (let i = 0; i < 15 * FPS; i++) boils.forEach((b) => tl.set(b, { rotation: R(-0.7, 0.7), x: R(-1.6, 1.6), y: R(-1.6, 1.6) }, i / FPS));
+      // Schnee fällt (in Schritten)
+      gsap.utils.toArray(".snow").forEach((s) => sm(s.children, { y: "+=360", x: "+=40", duration: 15 }, 0, "none"));
+      // Fensterlicht und Kerzen flackern
+      for (let i = 0; i < 15 * FPS; i++) { tl.set(".wg", { opacity: R(0.55, 0.9) }, i / FPS); tl.set(".cg", { opacity: R(0.35, 0.8), scale: R(0.92, 1.08) }, i / FPS); tl.set("#fire", { opacity: R(0.45, 0.85), scale: R(0.9, 1.1) }, i / FPS); }
+
+      // ---------- Ausgangszustand ----------
+      show("#s1", 0);
+      tl.set(["#club", "#club2", "#bub", "#post", "#inv", "#sh", "#zwei", "#will", "#kerz", ".ln", ".st"], { autoAlpha: 0 }, 0);
+      tl.set("#rip", { y: 2000 }, 0);
+      tl.set("#ul", { strokeDasharray: 1, strokeDashoffset: 1 }, 0);
+
+      // 1a · 0 – 1,9 s: Dackel trippelt herein, „Wuff!“
+      smFrom("#baum", { autoAlpha: 0, y: 120, scale: 0.9 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.5 }, 0.05);
+      smFrom("#dogWrap", { x: -950 }, { x: 0, duration: 1.0 }, 0.25, "power2.out");
+      for (let i = 0; i < 6; i++) tl.to("#dogWrap", { y: -26, duration: 0.083, yoyo: true, repeat: 1, ease: "steps(1)" }, 0.25 + i * 0.17);
+      slap("#club", 0.35, -2);
+      smFrom("#club2", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.35 }, 0.75, "power2.out");
+      slap("#bub", 1.25, 4);
+
+      // 1b · 1,9 – 3,6 s: Brief mit Pfoten-Siegel
+      show("#s1b", 1.9);
+      smFrom("#briefWrap", { y: 520 }, { y: 0, duration: 0.6 }, 1.9, "power3.out");
+      slap("#post", 2.4, 0);
+      smFrom("#seal", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.25, duration: 0.5 }, 2.75, "power2.out");
+      sm("#seal", { opacity: 0.4, scale: 1, duration: 0.5 }, 3.25, "power2.in");
+
+      // 2 · 3,6 – 6,2 s: Einladung über der Stadt
+      rip(3.6, "#s2");
+      sm("#stadt", { scale: 1.08, duration: 2.6, transformOrigin: "50% 70%" }, 3.6, "none");
+      slap("#inv", 4.05, 0);
+
+      // 3 · 6,2 – 8,4 s: das Schützenhaus
+      rip(6.2, "#s3");
+      sm("#haus", { scale: 1.07, duration: 2.2, transformOrigin: "50% 60%" }, 6.2, "none");
+      slap("#sh", 6.65, 2);
+
+      // 4 · 8,4 – 10,4 s: die Dackel-Parade
+      rip(8.4, "#s4");
+      smFrom("#paradeCard", { y: 900, rotation: 6 }, { y: 0, rotation: 0, duration: 0.6 }, 8.45, "back.out(1.4)");
+      for (let i = 0; i < 9; i++) tl.to("#paradeCard img", { y: i % 2 ? 0 : -12, duration: 0.01 }, 9.1 + i * 0.14);
+      slap("#zwei", 8.9, -2);
+      smFrom("#will", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.4 }, 9.3, "power2.out");
+
+      // 5 · 10,4 – 11,9 s: der Festsaal
+      rip(10.4, "#s5");
+      sm("#saal", { scale: 1.08, duration: 1.5, transformOrigin: "50% 55%" }, 10.4, "none");
+      slap("#kerz", 10.75, -2);
+
+      // 6 · 11,9 – 15 s: die Einladungskarte
+      rip(11.9, "#s6");
+      gsap.utils.toArray(".ln").forEach((el, i) => slap(el, 12.25 + i * 0.22, 0));
+      tl.to("#ul", { strokeDashoffset: 0, duration: 0.4, ease: stepEase("power1.inOut", 0.4) }, 12.55);
+      gsap.utils.toArray(".st").forEach((el, i) => slap(el, 13.5 + i * 0.2, i ? 10 : -10));
+      sm("#endk", { scale: 1.03, duration: 3.1, transformOrigin: "50% 80%" }, 11.9, "none");
+      tl.set({}, {}, 15);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
