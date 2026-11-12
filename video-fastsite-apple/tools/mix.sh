@@ -11,6 +11,6 @@ f+="${vmix}amix=inputs=$nv:normalize=0,apad=whole_dur=30,atrim=0:30,loudnorm=I=-
 for e in "${ev[@]}"; do set -- $e; in+=(-i assets/sfx/$1.wav); ms=$(python3 -c "print(int($2*1000))")
   f+="[$i:a]aformat=sample_rates=48000:channel_layouts=stereo,volume=$3,adelay=${ms}|${ms}[s$i];"; smix+="[s$i]"; i=$((i+1)); done
 f+="[0:a]aformat=sample_rates=48000:channel_layouts=stereo,volume=0.55,afade=t=out:st=28.8:d=1.2[m0];"
-f+="[m0][sc]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=450[m];"
-f+="[m][vo]${smix}amix=inputs=$((2+${#ev[@]})):normalize=0:duration=first,atrim=0:30,alimiter=limit=0.95[o]"
+f+="[m0][sc]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=450,apad=whole_dur=30[m];"
+f+="[m][vo]${smix}amix=inputs=$((2+${#ev[@]})):normalize=0:duration=longest,apad=whole_dur=30,atrim=0:30,alimiter=limit=0.95[o]"
 ffmpeg -v error -y "${in[@]}" -filter_complex "$f" -map "[o]" -ar 48000 -ac 2 assets/audio/mix.wav && echo mixed
