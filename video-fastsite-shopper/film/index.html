@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Display"; font-weight: 500; src: url(assets/fonts/InterDisplay-Medium.otf); }
+      @font-face { font-family: "Display"; font-weight: 600; src: url(assets/fonts/InterDisplay-SemiBold.otf); }
+      @font-face { font-family: "Display"; font-weight: 700; src: url(assets/fonts/InterDisplay-Bold.otf); }
+      @font-face { font-family: "Text"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
+      @font-face { font-family: "Text"; font-weight: 600; src: url(assets/fonts/Inter-SemiBold.otf); }
+      @font-face { font-family: "Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2); }
+      :root { --ink: #1d1d1f; --grey: #86868b; --blue: #3e71b6; --green: #0c9958; --red: #df482b; --yellow: #fbb419;
+        --display: "Display", sans-serif; --text: "Text", sans-serif; --mono: "Mono", monospace; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; font-family: var(--text); color: #fff; -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .layer { pointer-events: none; }
+
+      /* ---------- glass product cards ---------- */
+      .card { position: absolute; left: 0; top: 0; width: 450px; height: 174px; margin: -87px 0 0 -225px; border-radius: 30px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.42), rgba(255,255,255,0.16)); border: 1.5px solid rgba(255,255,255,0.65);
+        backdrop-filter: blur(22px) saturate(1.3); -webkit-backdrop-filter: blur(22px) saturate(1.3);
+        box-shadow: 0 24px 60px rgba(40,30,20,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
+        display: flex; align-items: center; gap: 22px; padding: 18px 24px 18px 18px; color: var(--ink); will-change: transform, filter, opacity; }
+      .card .ph { position: relative; width: 136px; height: 136px; border-radius: 20px; overflow: hidden; flex: none; background: #e9e6e1; }
+      .card .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .card .sk { position: absolute; inset: 0; background: #ece9e4; opacity: 0; }
+      .card .spin { position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px; border-radius: 50%; border: 3.5px solid rgba(29,29,31,0.15); border-top-color: rgba(29,29,31,0.55); opacity: 0; }
+      .card .meta { flex: 1; min-width: 0; }
+      .card .n { font: 600 28px/1.15 var(--display); letter-spacing: -0.01em; white-space: nowrap; }
+      .card .p { font: 500 23px var(--text); color: #3a3a3c; margin-top: 4px; }
+      .card .bar { height: 5px; border-radius: 9px; background: rgba(29,29,31,0.12); margin-top: 14px; overflow: hidden; }
+      .card .bar i { display: block; height: 100%; width: 100%; background: rgba(29,29,31,0.6); transform-origin: 0 50%; transform: scaleX(1); }
+      .card .add { position: absolute; right: 18px; top: 18px; font: 600 15px var(--text); color: #fff; background: var(--ink); border-radius: 999px; padding: 7px 14px; }
+
+      /* focus card (clip B) */
+      #fc { z-index: 5; position: absolute; left: 175px; top: 250px; width: 470px; height: 190px; margin: 0; padding: 22px; gap: 24px; }
+      #fc .ph { width: 146px; height: 146px; }
+      #fc .n { font-size: 30px; }
+      #fc .p { font-size: 24px; }
+      #fc .btn { margin-top: 16px; display: inline-flex; align-items: center; gap: 10px; font: 600 20px var(--text); color: #fff; background: var(--ink); border-radius: 999px; padding: 11px 22px; }
+      #fc .ok { position: absolute; inset: 0; border-radius: 30px; background: rgba(255,255,255,0.97); display: flex; align-items: center; justify-content: center; gap: 18px; opacity: 0;
+        font: 600 34px var(--display); letter-spacing: -0.01em; color: var(--ink); }
+      #fc .ok .ck { width: 52px; height: 52px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; }
+
+      /* ---------- bridge ---------- */
+      #bridge { background: #000; display: flex; align-items: center; justify-content: center; }
+      #bridge .t { font: 600 92px var(--display); letter-spacing: -0.03em; }
+
+      /* ---------- flow graph ---------- */
+      #graph { background: radial-gradient(120% 90% at 50% 40%, #121214 0%, #050506 70%); }
+      #persp { position: absolute; inset: 0; perspective: 2200px; perspective-origin: 50% 50%; }
+      #plane { position: absolute; left: 0; top: 0; width: 5600px; height: 1500px; transform-origin: 0 0; }
+      #grid { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.10) 1.4px, transparent 1.6px); background-size: 56px 56px; }
+      #wires { position: absolute; left: 0; top: 0; width: 5600px; height: 1500px; overflow: visible; }
+      .node { position: absolute; width: 330px; height: 196px; margin: -98px 0 0 -165px; border-radius: 30px; padding: 26px 28px;
+        background: linear-gradient(160deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025)); border: 1.5px solid rgba(255,255,255,0.12); color: #8e8e93; }
+      .node .ic { width: 50px; height: 50px; border-radius: 14px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; }
+      .node .ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .node .l { font: 600 30px var(--display); letter-spacing: -0.015em; margin-top: 22px; color: #c7c7cc; }
+      .node .s { font: 500 20px var(--mono); margin-top: 6px; color: #6e6e73; }
+      .node .lit { position: absolute; inset: -1.5px; border-radius: 30px; border: 2px solid var(--c); opacity: 0; }
+      .node.faint { opacity: 0.45; }
+      #gtitle { position: absolute; left: 120px; top: 90px; font: 600 30px var(--text); color: #6e6e73; letter-spacing: 0.02em; }
+
+      /* ---------- end card ---------- */
+      #end { background: #000; }
+      #end .ic { position: absolute; left: 50%; top: 250px; width: 170px; height: 170px; margin-left: -85px; }
+      #end .t { position: absolute; left: 0; width: 1920px; top: 500px; text-align: center; font: 600 76px var(--display); letter-spacing: -0.03em; }
+      #end .t .g { color: #86868b; }
+      #end .c { position: absolute; left: 0; width: 1920px; top: 640px; text-align: center; font: 500 34px var(--text); color: #a1a1a6; }
+      #end .c b { color: #fff; font-weight: 600; }
+      .ln { display: block; overflow: hidden; padding-bottom: 0.08em; }
+      .ln > span { display: inline-block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="25" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="25" data-volume="1"></audio>
+
+      <!-- ===== 1: waiting (0 – 4.6) ===== -->
+      <video id="bgA" class="clip" src="assets/clips/manA.mp4" muted playsinline data-start="0" data-duration="4.6" data-media-start="0" data-track-index="1"></video>
+      <div id="backA" class="clip layer" data-start="0" data-duration="4.6" data-track-index="2"></div>
+      <video id="mtA" class="clip" src="assets/clips/manA_alpha.webm" muted playsinline data-start="0" data-duration="4.6" data-media-start="0" data-track-index="3"></video>
+      <div id="frontA" class="clip layer" data-start="0" data-duration="4.6" data-track-index="4"></div>
+
+      <!-- ===== 2: bridge (4.6 – 5.8) ===== -->
+      <div id="bridge" class="clip" data-start="4.6" data-duration="1.2" data-track-index="5"><div class="t"><span class="ln" id="brt"><span>Here's the fix.</span></span></div></div>
+
+      <!-- ===== 3: flow graph (5.8 – 15.06) ===== -->
+      <div id="graph" class="clip" data-start="5.8" data-duration="9.26" data-track-index="6">
+        <div id="persp"><div id="plane"><div id="grid"></div><svg id="wires" viewBox="0 0 5600 1500"></svg></div></div>
+        <div id="gtitle">HOW A REQUEST TRAVELS WITH FAST.SITE</div>
+      </div>
+
+      <!-- ===== 4: instant (15.06 – 18.6) ===== -->
+      <video id="bgB" class="clip" src="assets/clips/manB.mp4" muted playsinline data-start="15.06" data-duration="3.54" data-media-start="0.4" data-track-index="7"></video>
+      <div id="backB" class="clip layer" data-start="15.06" data-duration="3.54" data-track-index="8"></div>
+      <video id="mtB" class="clip" src="assets/clips/manB_alpha.webm" muted playsinline data-start="15.06" data-duration="3.54" data-media-start="0.4" data-track-index="9"></video>
+      <div id="frontB" class="clip layer" data-start="15.06" data-duration="3.54" data-track-index="10">
+        <div class="card" id="fc">
+          <div class="ph"><img src="assets/img/sneaker.jpg" /></div>
+          <div class="meta"><div class="n">Runner 01</div><div class="p">€129</div><div class="btn" id="fcb">Add to bag</div></div>
+          <div class="ok" id="fok" data-layout-ignore><div class="ck"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Order confirmed</div>
+        </div>
+      </div>
+
+      <!-- ===== 5: rocket (18.6 – 22.14) ===== -->
+      <video id="rocket" class="clip" src="assets/clips/rocket.mp4" muted playsinline data-start="18.6" data-duration="3.54" data-media-start="0.5" data-track-index="11"></video>
+
+      <!-- ===== 6: end card (22.14 – 25) ===== -->
+      <div id="end" class="clip" data-start="22.14" data-duration="2.86" data-track-index="12">
+        <svg class="ic" id="endic" viewBox="0 0 200 200"><path fill="#0c9958" d="M113.62,11.9l64.41,64.41c6.35,6.35,7.36,16.03,2.98,23.44-.17.27-.33.54-.51.8-.1.18-.23.36-.36.54-.03.03-.03.05-.05.08-.18.26-.39.51-.58.76-.46.59-.96,1.14-1.48,1.66-.23.23-.46.46-.71.68-.5.45-1,.85-1.52,1.23-1.31.95-2.7,1.72-4.14,2.32-.59.23-1.18.44-1.78.62-.9.26-1.8.46-2.73.59-.6.09-1.22.14-1.84.17-.31.03-.62.03-.93.03s-.62,0-.93-.03c-.62-.03-1.23-.08-1.84-.17-.76-.12-1.53-.27-2.28-.48-.37-.09-.75-.21-1.12-.35-.37-.12-.73-.24-1.09-.4-.58-.22-1.16-.49-1.71-.78-.55-.3-1.11-.62-1.63-.96-.31-.21-.62-.41-.9-.62-.49-.36-.95-.75-1.42-1.16-.24-.22-.49-.46-.72-.69l-38.17-38.17c-6.96-6.96-18.25-6.96-25.21,0l-38.15,38.15c-6.35,6.35-16.03,7.36-23.44,2.98-.17-.12-.33-.21-.5-.32-.27-.14-.53-.32-.76-.5-.32-.22-.62-.44-.91-.68-.59-.46-1.14-.96-1.66-1.48-3.76-3.76-5.66-8.7-5.65-13.62,0-.31,0-.62.03-.93.03-.62.08-1.23.17-1.84.22-1.53.63-3.05,1.22-4.49.23-.59.49-1.16.8-1.72.28-.57.62-1.11.96-1.63.18-.28.37-.55.55-.81.39-.51.8-1.03,1.22-1.5.22-.24.46-.49.69-.72L86.35,11.9c.24-.24.48-.48.72-.69.49-.44.99-.84,1.5-1.22.31-.23.63-.45.95-.64.48-.32.99-.6,1.49-.87.55-.3,1.13-.57,1.71-.78h.01c.42-.18.84-.33,1.26-.48.42-.14.85-.26,1.27-.37.05,0,.09-.01.13-.03.41-.1.81-.19,1.21-.26.45-.06.89-.14,1.34-.18.04-.01.06-.01.09-.01.04-.01.06-.01.09-.01h.01s.01,0,.01,0c.31-.03.6-.04.9-.05.31-.03.62-.03.93-.03.15,0,.32.01.48.01.23,0,.45.01.67.03.04-.01.06-.01.06.01.19-.01.39,0,.54.03.17.01.35.04.5.06.08,0,.17.01.23.03.41.03.81.09,1.21.18.6.12,1.2.27,1.8.44.3.09.59.18.89.3.01-.01.03,0,.04.01,0,0,.01-.01.03,0h.01s.04.03.05.04c.1.03.22.06.31.1.15.05.3.12.44.18.08.03.15.05.23.08.01.01.04.01.06.04.19.06.39.15.58.24.55.27,1.12.55,1.67.87.54.33,1.08.69,1.61,1.07.35.24.71.53,1.03.82.04.01.05.03.08.05l.05.05c.37.32.72.64,1.07.99Z"/><rect fill="#0c9958" x="67.38" y="38.45" width="129.64" height="38.56" rx="19.28" ry="19.28" transform="translate(79.54 -76.57) rotate(45)"/><path fill="#047844" d="M119.15,27.75l-.38,2.19-6.17,35.46c-6.95-6.95-18.25-6.95-25.21,0l-1.31,1.31-5.36-1.31,16.1-15.78,22.34-21.88Z"/><rect fill="#3e71b6" x="2.98" y="38.45" width="129.64" height="38.56" rx="19.28" ry="19.28" transform="translate(-20.97 64.85) rotate(-45)"/><path fill="#fbb419" d="M113.62,96.43l64.41,64.41c6.35,6.35,7.36,16.03,2.98,23.44-.17.27-.33.54-.51.8-.1.18-.23.36-.36.54-.03.03-.03.05-.05.08-.18.26-.39.51-.58.76-.46.59-.96,1.14-1.48,1.66-.23.23-.46.46-.71.68-.5.45-1,.85-1.52,1.23-1.31.95-2.7,1.72-4.14,2.32-.59.23-1.18.44-1.78.62-.9.26-1.8.46-2.73.59-.6.09-1.22.14-1.84.17-.31.03-.62.03-.93.03s-.62,0-.93-.03c-.62-.03-1.23-.08-1.84-.17-.76-.12-1.53-.27-2.28-.48-.37-.09-.75-.21-1.12-.35-.37-.12-.73-.24-1.09-.4-.58-.22-1.16-.49-1.71-.78-.55-.3-1.11-.62-1.63-.96-.31-.21-.62-.41-.9-.62-.49-.36-.95-.75-1.42-1.16-.24-.22-.49-.46-.72-.69l-64.41-64.41c-7.53-7.53-7.53-19.75,0-27.27.24-.24.48-.48.72-.69.49-.44.99-.84,1.5-1.22.31-.23.63-.45.95-.64.48-.32.98-.62,1.49-.87.55-.3,1.13-.57,1.71-.78h.01c.42-.18.84-.33,1.26-.48.42-.14.85-.26,1.27-.37.05,0,.09-.01.13-.03.41-.1.81-.19,1.21-.26.45-.06.89-.14,1.34-.18.04-.01.06-.01.09-.01.04-.01.06-.01.09-.01h.01s.01,0,.01,0c.31-.03.6-.04.9-.05.31-.03.62-.03.93-.03h.01c.15-.01.32,0,.46.01.06-.01.12-.01.15,0,.19-.01.36,0,.51.03.22-.01.41,0,.6.04.04-.01.08,0,.1,0,.19.02.37.06.56.08.02,0,.05,0,.07,0,.41.03.81.09,1.21.18.6.12,1.21.26,1.8.44.31.08.59.18.9.28.01.01.04.01.05.03.04.01.1.03.15.05.08.03.15.05.22.09.1.03.19.06.31.1.04.01.09.04.14.06.08.03.14.06.22.09.01.01.04.01.06.04.19.06.39.15.58.24.57.26,1.12.55,1.67.87.54.33,1.08.69,1.61,1.07.35.24.71.53,1.03.82.04.01.05.03.08.05l.05.05c.37.32.72.64,1.07.99Z"/><path fill="#fbb419" d="M181.02,184.28c-.17.27-.33.54-.52.79-.1.18-.23.37-.36.55-.03.03-.03.05-.05.08-.18.26-.38.51-.57.75-.46.6-.97,1.15-1.48,1.66-.23.23-.46.47-.71.69-.5.45-1,.84-1.52,1.24-1.3.94-2.69,1.72-4.13,2.31-.6.23-1.19.43-1.77.61-.91.27-1.81.47-2.73.6-.61.09-1.22.14-1.84.17-.32.03-.63.03-.93.03s-.61,0-.93-.03c-.61-.03-1.22-.08-1.84-.17-.75-.11-1.53-.27-2.27-.47-.38-.1-.75-.22-1.12-.36-.37-.11-.73-.24-1.1-.4-.57-.22-1.15-.48-1.71-.78-.55-.31-1.11-.63-1.63-.97-.31-.2-.61-.41-.89-.63-.5-.36-.96-.74-1.42-1.15-.26-.22-.5-.47-.73-.7l-38.17-38.17c-6.95-6.95-18.25-6.95-25.21,0l-1.31,1.31-36.84,36.84c-6.35,6.35-16.02,7.36-23.43,2.99-.17-.11-.33-.2-.5-.32-.28-.14-.54-.32-.77-.5-.32-.22-.61-.45-.92-.69-.59-.46-1.14-.96-1.66-1.48-3.75-3.75-5.65-8.69-5.64-13.62,0-.31,0-.61.03-.92.03-.63.08-1.24.17-1.84.22-1.53.63-3.05,1.22-4.49.23-.6.48-1.16.79-1.72.28-.57.63-1.11.97-1.63.18-.29.37-.56.55-.82.38-.51.8-1.03,1.22-1.51.22-.24.46-.48.69-.71l64.4-64.39c.24-.26.48-.48.73-.7.48-.43.98-.83,1.51-1.22.31-.23.63-.45.94-.64.48-.32.98-.61,1.49-.88.56-.29,1.14-.56,1.71-.78h.01c.42-.18.84-.33,1.26-.47.47-.15.93-.29,1.4-.41.41-.09.8-.18,1.21-.26h.01c.43-.08.88-.14,1.33-.18.04-.01.06-.01.09-.01.04-.01.06-.01.09-.01h.01s.01,0,.01,0c.31-.03.6-.04.91-.05.31-.03.61-.03.92-.03.13,0,.26,0,.38.01.04-.01.08-.01.11,0h.14c.09,0,.19,0,.29.01.04,0,.09,0,.14.01.03-.01.05-.01.08,0t.03-.01h.01s.01,0,.01.01h.01s.05,0,.09.01c.08,0,.14,0,.2.01.08,0,.15,0,.23.01h.05s.03.01.04.01h.03c.14.01.27.03.41.05.04,0,.08,0,.11.01.01-.01.03-.01.04,0,.03,0,.05,0,.08.01.1,0,.19.01.28.03h.01s.03,0,.04.01h.04c.05.01.09.01.14.01.23.04.46.09.7.13.6.11,1.19.27,1.8.43.14.04.29.09.43.15.15.05.31.1.45.15h.03s.01.01.03.01h.03s.04.03.05.04c.06.01.11.04.17.05s.1.03.15.05c.04.01.09.03.14.05.1.04.19.08.29.13.06.01.11.03.17.06.03,0,.04,0,.05.01s.03.01.04.01.01.01.01.01h.01s.01.01.01.01c.05.01.09.03.13.05.06.01.11.04.17.06.1.04.19.09.28.13.56.27,1.12.55,1.68.88.54.33,1.07.69,1.61,1.06.29.22.59.45.87.7.08.05.15.11.23.18l.05.05c.38.32.73.64,1.07.99l64.41,64.41c6.35,6.35,7.36,16.02,2.98,23.43Z"/><path fill="#d99e28" d="M119.15,112.28l-.38,2.19-6.17,35.46c-6.95-6.95-18.25-6.95-25.21,0l-1.31,1.31-5.36-1.31,16.1-15.78,22.34-21.88Z"/><path fill="#df482b" d="M119.28,110.09c0,.73-.04,1.47-.13,2.19-.08.74-.2,1.47-.38,2.19-.79,3.38-2.51,6.6-5.14,9.22l-27.55,27.55-36.84,36.84c-6.35,6.35-16.02,7.36-23.43,2.99-.17-.11-.33-.2-.5-.32-.28-.14-.54-.32-.77-.5-.32-.22-.61-.45-.92-.69-.59-.46-1.14-.96-1.66-1.48-3.75-3.75-5.65-8.69-5.64-13.62,0-.31,0-.61.03-.92.03-.63.08-1.24.17-1.84.22-1.53.63-3.05,1.22-4.49.23-.6.48-1.16.79-1.72.28-.57.63-1.11.97-1.63.18-.29.37-.56.55-.82.38-.51.8-1.03,1.22-1.51.22-.24.46-.48.69-.71l64.4-64.39c.24-.26.48-.48.73-.7.48-.43.98-.83,1.51-1.22.31-.23.63-.45.94-.64.48-.32.98-.61,1.49-.88.56-.29,1.14-.56,1.71-.78h.01c.42-.18.84-.33,1.26-.47.47-.15.93-.29,1.4-.41.41-.09.8-.18,1.21-.26h.01c.43-.08.88-.14,1.33-.18.06-.01.11-.01.19-.01h.01c.31-.04.6-.05.91-.06.31-.03.61-.03.92-.03h.24c.05,0,.09,0,.14.01.04-.01.08-.01.11,0h.29c.05,0,.09,0,.14.01.04,0,.09,0,.14.01.05,0,.09,0,.14.01.03-.01.05-.01.09,0,.08,0,.14,0,.2.01.08,0,.15,0,.23.01h.05s.03.01.04.01h.03c.14.01.27.03.41.05.04,0,.08,0,.11.01.01-.01.03-.01.04,0,.03,0,.05,0,.08.01.1,0,.19.01.28.03h.01s.03,0,.04.01h.04c.05.01.09.01.14.01.23.04.46.09.7.13.6.11,1.19.27,1.8.43.14.04.29.09.43.15.15.05.31.1.45.15h.03s.01.01.03.01h.03s.04.03.05.04c.06.01.11.04.17.05s.1.03.15.05c.04.01.09.03.14.05.1.04.19.08.29.13.06.01.11.03.17.06.03,0,.04,0,.05.01s.03.01.04.01.01.01.01.01h.01s.01.01.01.01c.1.04.19.08.29.11.1.04.19.09.28.13.56.27,1.12.55,1.68.88.54.33,1.07.69,1.61,1.06.29.22.59.45.87.7.08.05.15.11.23.18l.05.05c.38.32.73.64,1.07.99,3.76,3.76,5.65,8.7,5.65,13.65Z"/><path fill="#fbb419" d="M100,90.78c1.23,0,2.46.12,3.68.36-1.23-.23-2.46-.35-3.69-.35h.01Z"/><path fill="#fbb419" d="M105.48,91.58c.9.26,1.78.59,2.64.99-.86-.4-1.75-.72-2.64-.99Z"/></svg>
+        <div class="t"><span class="ln" id="endt"><span>Make your website faster. <span class="g">Keep your hosting.</span></span></span></div>
+        <div class="c" id="endc"><b>fast.site</b> · Try it free for 7 days</div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", E = "power3.out";
+      const lineIn = (sel, t, d = 0.8) => tl.fromTo(sel + " > span", { yPercent: 110 }, { yPercent: 0, duration: d, ease: EX }, t);
+
+      // ---------------- orbiting cards ----------------
+      const products = [
+        ["sneaker.jpg", "Runner 01", "€129"], ["hoodie.jpg", "Heavy Hoodie", "€89"], ["cap.jpg", "Field Cap", "€39"],
+        ["bottle.jpg", "Stone Bottle", "€34"], ["beanie.jpg", "Rib Beanie", "€29"], ["sneaker.jpg", "Runner 02", "€139"]
+      ];
+      const cardHTML = (p) => `<div class="ph"><img src="assets/img/${p[0]}" style="${p[1] === "Runner 02" ? "transform:scaleX(-1)" : ""}"/><div class="sk"></div><div class="spin"></div></div>
+        <div class="meta"><div class="n">${p[1]}</div><div class="p">${p[2]}</div><div class="bar"><i></i></div></div><div class="add">Add</div>`;
+      function makeSet(backId, frontId) {
+        return products.map((p) => {
+          const b = document.createElement("div"); b.className = "card"; b.innerHTML = cardHTML(p); $(backId).appendChild(b);
+          const f = document.createElement("div"); f.className = "card"; f.innerHTML = cardHTML(p); $(frontId).appendChild(f);
+          return [b, f];
+        });
+      }
+      const setA = makeSet("#backA", "#frontA");
+      products[0] = ["sneaker.jpg", "Trail 03", "€149"];
+      const setB = makeSet("#backB", "#frontB");
+      const ring = (i) => (i % 2 === 0 ? { cy: 300, rx: 700, ry: 70 } : { cy: 650, rx: 760, ry: 90 });
+      function place(set, cx, angle0, vis, loadK, kPop) {
+        set.forEach((pair, i) => {
+          const r = ring(i), a = angle0 + i * (Math.PI * 2 / 6) + (i % 2) * 0.5;
+          const d = Math.sin(a);                 // +1 in front of him, -1 behind him
+          const x = cx + r.rx * Math.cos(a), y = r.cy + r.ry * d;
+          const sc = (0.74 + 0.26 * (d + 1) / 2) * (kPop ?? 1);
+          const blur = d < 0 ? (-d) * 5 : 0;
+          const ry = -Math.cos(a) * 32;
+          const op = vis[i] * (d < 0 ? 0.82 + 0.18 * (1 + d) : 1);
+          const front = d >= 0;
+          const tgt = front ? pair[1] : pair[0], other = front ? pair[0] : pair[1];
+          other.style.opacity = 0;
+          tgt.style.opacity = op;
+          tgt.style.transform = `translate(${x}px, ${y}px) perspective(900px) rotateY(${ry}deg) scale(${sc})`;
+          tgt.style.filter = blur > 0.2 ? `blur(${blur.toFixed(2)}px)` : "none";
+          // loading state
+          [pair[0], pair[1]].forEach((c) => {
+            c.querySelector("img").style.filter = loadK > 0 ? `blur(${(loadK * 9).toFixed(1)}px) saturate(${1 - loadK * 0.7})` : "none";
+            c.querySelector(".sk").style.opacity = loadK * 0.75;
+            c.querySelector(".spin").style.opacity = loadK;
+            c.querySelector(".spin").style.transform = `rotate(${(loadK > 0 ? orbit.t * 360 : 0)}deg)`;
+            c.querySelector(".bar i").style.transform = `scaleX(${loadK > 0 ? (0.08 + 0.25 * ((orbit.t * 0.35 + i * 0.13) % 1)) : 1})`;
+          });
+        });
+      }
+      // scene 1 orbit: starts moving, then slows almost to a stop while loading
+      const orbit = { t: 0 };
+      const visA = [0, 0, 0, 0, 0, 0];
+      function angleA(t) { // angular speed 0.55 rad/s, decelerating to 0.05 rad/s between 2.6 s and 3.8 s
+        if (t < 2.6) return 0.55 * t;
+        if (t < 3.8) { const u = t - 2.6; return 1.43 + 0.55 * u - 0.5 * (0.5 / 1.2) * u * u; }
+        return 1.79 + 0.05 * (t - 3.8);
+      }
+      tl.fromTo(orbit, { t: 0 }, { t: 4.6, duration: 4.6, ease: "none", onUpdate: () => {
+        const t = orbit.t;
+        for (let i = 0; i < 6; i++) visA[i] = Math.min(1, Math.max(0, (t - 0.25 - i * 0.12) / 0.5));
+        const loadK = Math.min(1, Math.max(0, (t - 2.5) / 0.5));
+        const fade = t > 4.25 ? Math.max(0, 1 - (t - 4.25) / 0.35) : 1;
+        place(setA, 1060, -0.6 + angleA(t), visA.map((v) => v * fade), loadK, 0.96 + 0.04 * Math.min(1, t / 1));
+      } }, 0);
+
+      // scene 4 orbit: instant, fast spin settling down
+      const orbitB = { t: 0 };
+      const visB = [1, 1, 1, 1, 1, 1];
+      tl.fromTo(orbitB, { t: 0 }, { t: 3.54, duration: 3.54, ease: "none", onUpdate: () => {
+        const t = orbitB.t;
+        const ang = 2.4 * (1 - Math.exp(-t / 0.55)) + 0.25 * t; // whip then cruise
+        const pop = 1 + 0.08 * Math.exp(-t / 0.18);
+        place(setB, 1080, 0.9 + ang, visB, 0, pop);
+      } }, 15.06);
+
+      // focus card: tap -> added -> order confirmed
+      tl.fromTo("#fc", { opacity: 0, scale: 0.9, x: -40 }, { opacity: 1, scale: 1, x: 0, duration: 0.45, ease: EX }, 15.08);
+      tl.to("#fcb", { scale: 0.92, duration: 0.08 }, 15.62);
+      tl.to("#fcb", { scale: 1, duration: 0.25, ease: "back.out(3)" }, 15.7);
+      tl.set("#fcb", { textContent: "Added ✓", backgroundColor: "#0c9958" }, 15.7);
+      tl.set("#fcb", { textContent: "Add to bag", backgroundColor: "#1d1d1f" }, 0);
+      tl.fromTo("#fok", { opacity: 0, scale: 1.06 }, { opacity: 1, scale: 1, duration: 0.35, ease: EX }, 17.0);
+      tl.to("#fc", { y: -10, duration: 1.4, ease: "sine.inOut" }, 17.0);
+
+      // ---------------- bridge ----------------
+      lineIn("#brt", 4.68, 0.7);
+
+      // ---------------- flow graph ----------------
+      const icons = {
+        user: '<circle cx="14" cy="9" r="4.5"/><path d="M5 24c1.4-5 5-7.5 9-7.5s7.6 2.5 9 7.5"/>',
+        edge: '<circle cx="14" cy="14" r="10"/><path d="M4 14h20M14 4c3 3 4.5 6.4 4.5 10S17 21 14 24c-3-3-4.5-6.4-4.5-10S11 7 14 4z"/>',
+        cache: '<path d="M16 3L6 16h8l-2 9 10-13h-8z"/>',
+        image: '<rect x="4" y="5" width="20" height="18" rx="3"/><circle cx="10" cy="11" r="2"/><path d="M5 21l6-6 4 4 3-3 5 5"/>',
+        shield: '<path d="M14 3l9 3.5V13c0 6-4 9.8-9 12-5-2.2-9-6-9-12V6.5z"/><path d="M10 14l3 3 5-6"/>',
+        page: '<rect x="6" y="3" width="16" height="22" rx="3"/><path d="M10 9h8M10 13h8M10 17h5"/>',
+        server: '<rect x="5" y="4" width="18" height="8" rx="2"/><rect x="5" y="16" width="18" height="8" rx="2"/><path d="M9 8h.01M9 20h.01"/>',
+        bolt: '<path d="M14 4v8M14 16v.01"/><circle cx="14" cy="14" r="10"/>'
+      };
+      // main path nodes: id, x, y, icon, label, sub, color, time
+      const N = [
+        ["n0", 700, 700, "user", "Visitor", "Munich · 1 click", "#ffffff", 6.3],
+        ["n1", 1450, 520, "edge", "Nearest edge", "Frankfurt · 9 ms", "#3e71b6", 7.55],
+        ["n2", 2200, 700, "cache", "Cache", "HIT", "#0c9958", 8.95],
+        ["n3", 2950, 520, "image", "Image", "hero.jpg · 303 KB", "#fbb419", 10.95],
+        ["n4", 3700, 700, "shield", "Shield", "threat blocked", "#df482b", 13.1],
+        ["n5", 4450, 520, "page", "Page delivered", "instant ✓", "#0c9958", 14.3]
+      ];
+      const F = [ // faint context nodes
+        ["f0", 2200, 1180, "server", "Your hosting", "origin · unchanged"],
+        ["f1", 1450, 140, "edge", "Edge", "London"],
+        ["f2", 2950, 1060, "edge", "Edge", "Paris"],
+        ["f3", 3700, 220, "bolt", "Bot traffic", "unknown source"]
+      ];
+      const plane = $("#plane"), wires = $("#wires");
+      const mkNode = (n, faint) => {
+        const d = document.createElement("div"); d.className = "node" + (faint ? " faint" : ""); d.id = n[0];
+        d.style.left = n[1] + "px"; d.style.top = n[2] + "px"; if (!faint) d.style.setProperty("--c", n[6]);
+        d.innerHTML = `<div class="ic"><svg viewBox="0 0 28 28">${icons[n[3]]}</svg></div><div class="l">${n[4]}</div><div class="s">${n[5]}</div>${faint ? "" : '<div class="lit"></div>'}`;
+        plane.appendChild(d); return d;
+      };
+      F.forEach((n) => mkNode(n, true));
+      const nodeEls = N.map((n) => mkNode(n, false));
+      const NS = "http://www.w3.org/2000/svg";
+      const wire = (x1, y1, x2, y2, cls) => {
+        const p = document.createElementNS(NS, "path"); const mx = (x1 + x2) / 2;
+        p.setAttribute("d", `M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}`);
+        p.setAttribute("fill", "none"); p.setAttribute("stroke-width", cls === "base" ? 2 : 4); p.setAttribute("stroke-linecap", "round");
+        p.setAttribute("stroke", cls === "base" ? "rgba(255,255,255,0.12)" : "url(#lg)");
+        wires.appendChild(p); return p;
+      };
+      wires.innerHTML = '<defs><linearGradient id="lg" gradientUnits="userSpaceOnUse" x1="700" y1="0" x2="4450" y2="0"><stop offset="0" stop-color="#3e71b6"/><stop offset="0.35" stop-color="#0c9958"/><stop offset="0.7" stop-color="#fbb419"/><stop offset="1" stop-color="#df482b"/></linearGradient></defs>';
+      // context wires
+      wire(2200, 1082, 2200, 798, "base").setAttribute("stroke-dasharray", "8 10");
+      wire(1450, 238, 1450, 422, "base"); wire(2950, 962, 2950, 618, "base"); wire(3700, 318, 3700, 602, "base");
+      const actives = [];
+      for (let i = 0; i < N.length - 1; i++) {
+        const a = N[i], b = N[i + 1];
+        wire(a[1] + 165, a[2], b[1] - 165, b[2], "base");
+        const p = wire(a[1] + 165, a[2], b[1] - 165, b[2], "act");
+        const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; actives.push([p, L]);
+      }
+      // packet dot
+      const dot = document.createElementNS(NS, "circle"); dot.setAttribute("r", 9); dot.setAttribute("fill", "#fff"); dot.setAttribute("cx", 865); dot.setAttribute("cy", 700); wires.appendChild(dot);
+      // blocked threat packet
+      const bad = document.createElementNS(NS, "circle"); bad.setAttribute("r", 9); bad.setAttribute("fill", "#df482b"); bad.setAttribute("cx", 3700); bad.setAttribute("cy", 318); bad.setAttribute("opacity", 0); wires.appendChild(bad);
+      const badX = document.createElementNS(NS, "path"); badX.setAttribute("d", "M3688 588l24 24M3712 588l-24 24"); badX.setAttribute("stroke", "#df482b"); badX.setAttribute("stroke-width", 5); badX.setAttribute("stroke-linecap", "round"); badX.setAttribute("opacity", 0); wires.appendChild(badX);
+
+      // light up nodes + draw wires in sync with the voice
+      N.forEach((n, i) => {
+        const el = nodeEls[i], t = n[7];
+        tl.fromTo(el.querySelector(".lit"), { opacity: 0 }, { opacity: 1, duration: 0.35, ease: E }, t);
+        tl.fromTo(el, { scale: 1 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, t);
+        tl.to(el.querySelector(".l"), { color: "#ffffff", duration: 0.3 }, t);
+        tl.to(el.querySelector(".ic"), { color: n[6], backgroundColor: "rgba(255,255,255,0.1)", duration: 0.3 }, t);
+        if (i > 0) {
+          const [p, L] = actives[i - 1], t0 = N[i - 1][7] + 0.15, dur = Math.max(0.5, t - t0 - 0.05);
+          tl.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, t0);
+          const pr = { k: 0 };
+          tl.fromTo(pr, { k: 0 }, { k: 1, duration: dur, ease: "power2.inOut", onUpdate: () => { const q = p.getPointAtLength(pr.k * L); dot.setAttribute("cx", q.x); dot.setAttribute("cy", q.y); } }, t0);
+        }
+      });
+      tl.set(dot, { attr: { cx: 865, cy: 700 } }, 0);
+      // image node turns into WebP
+      tl.set("#n3 .s", { textContent: "hero.jpg · 303 KB" }, 0);
+      tl.set("#n3 .s", { textContent: "WebP · 198 KB  −35%" }, 11.75);
+      tl.set("#n3 .l", { textContent: "Image" }, 0);
+      tl.set("#n3 .l", { textContent: "Image → WebP" }, 11.75);
+      tl.fromTo("#n3", { scale: 1 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1, immediateRender: false }, 11.75);
+      // threat gets blocked at the shield
+      tl.fromTo(bad, { attr: { cx: 3700, cy: 318 }, opacity: 0 }, { attr: { cx: 3700, cy: 590 }, opacity: 1, duration: 0.6, ease: "power2.in" }, 13.25);
+      tl.to(bad, { opacity: 0, duration: 0.15 }, 13.85);
+      tl.fromTo(badX, { opacity: 0 }, { opacity: 1, duration: 0.12 }, 13.85);
+      tl.to(badX, { opacity: 0, duration: 0.4 }, 14.5);
+      // camera: tilted plane, panning with the packet
+      tl.set(plane, { rotationX: 20, z: -60 }, 0);
+      tl.set(plane, { x: 960 - 700 + 120, y: -170 }, 5.8);
+      [[5.8, 700], [7.55, 1450], [8.95, 2200], [10.95, 2950], [13.1, 3700], [14.3, 4450], [15.06, 4700]].reduce((prev, cur) => {
+        tl.fromTo(plane, { x: 960 - prev[1] + 120 }, { x: 960 - cur[1] + 120, duration: cur[0] - prev[0], ease: "power2.inOut", immediateRender: false }, prev[0]);
+        return cur;
+      });
+      tl.fromTo("#persp", { scale: 1.12 }, { scale: 0.96, duration: 9.26, ease: "none" }, 5.8);
+      tl.fromTo("#gtitle", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 6.0);
+      tl.fromTo("#graph", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 5.8);
+
+      // ---------------- end card ----------------
+      tl.fromTo("#endic", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: EX }, 22.2);
+      lineIn("#endt", 22.45, 0.8);
+      tl.fromTo("#endc", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 22.8);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
