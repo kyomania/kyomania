@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Display"; font-weight: 600; src: url(assets/fonts/InterDisplay-SemiBold.otf); }
+      @font-face { font-family: "Display"; font-weight: 700; src: url(assets/fonts/InterDisplay-Bold.otf); }
+      @font-face { font-family: "Text"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
+      @font-face { font-family: "Text"; font-weight: 600; src: url(assets/fonts/Inter-SemiBold.otf); }
+      :root { --display: "Display", sans-serif; --text: "Text", sans-serif; --green: #0c9958; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; font-family: var(--text); color: #fff; -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .ov { pointer-events: none; }
+
+      /* loading HUD */
+      #hud { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #hud .ring { width: 120px; height: 120px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.18); border-top-color: rgba(255,255,255,0.9); }
+      #hud .t { margin-top: 26px; font: 500 26px var(--text); color: rgba(255,255,255,0.8); letter-spacing: 0.04em; }
+      #hud .bar { position: absolute; left: 0; top: 0; height: 4px; width: 1920px; background: rgba(255,255,255,0.85); transform-origin: 0 50%; }
+
+      /* eyelids */
+      .lid { position: absolute; left: -10%; width: 120%; height: 62%; background: #000; }
+      #lidT { top: 0; border-radius: 0 0 50% 50% / 0 0 100% 100%; }
+      #lidB { bottom: 0; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+
+      /* captions */
+      .cap { position: absolute; left: 120px; bottom: 110px; }
+      .cap .e { font: 600 22px var(--text); color: rgba(255,255,255,0.65); letter-spacing: 0.08em; text-transform: uppercase; }
+      .cap .t { position: relative; height: 100px; margin-top: 8px; }
+      .cap .t div { position: absolute; left: 0; top: 0; white-space: nowrap; font: 600 86px/1.05 var(--display); letter-spacing: -0.03em; opacity: 0; }
+      .shade { position: absolute; left: 0; bottom: 0; width: 1920px; height: 460px; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)); }
+      #hook { position: absolute; left: 120px; bottom: 110px; }
+      #hook div { font: 600 86px var(--display); letter-spacing: -0.03em; }
+
+      /* order toast */
+      #toast { position: relative; margin-top: 110px; display: flex; align-items: center; gap: 18px; padding: 22px 34px 22px 24px;
+        border-radius: 999px; background: rgba(255,255,255,0.86); backdrop-filter: blur(18px); color: #1d1d1f; font: 600 34px var(--display); letter-spacing: -0.01em;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+      #toast .ck { width: 52px; height: 52px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; }
+      #toastw { position: absolute; left: 0; top: 0; width: 1920px; display: flex; justify-content: center; }
+
+      /* end */
+      #endtx { position: absolute; left: 0; width: 1920px; top: 760px; text-align: center; }
+      #endtx .t { font: 600 70px var(--display); letter-spacing: -0.03em; }
+      #endtx .t .g { color: #86868b; }
+      #endtx .c { margin-top: 22px; font: 500 34px var(--text); color: #a1a1a6; }
+      #endtx .c b { color: #fff; font-weight: 600; }
+      .ln { display: block; overflow: hidden; padding-bottom: 0.08em; }
+      .ln > span { display: inline-block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="25" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="25" data-volume="1"></audio>
+
+      <!-- 1: POV, loading → blink → instant (0 – 5.5) -->
+      <video id="pov1" class="clip" src="assets/clips/pov.mp4" muted playsinline data-start="0" data-duration="5.5" data-media-start="0" data-track-index="1"></video>
+      <div id="hud" class="clip ov" data-start="0" data-duration="2.8" data-track-index="2"><div class="bar" id="hbar"></div><div class="ring" id="hring"></div><div class="t">Loading…</div></div>
+      <div id="hookw" class="clip ov" data-start="0" data-duration="5.5" data-track-index="3"><div class="shade" id="hshade"></div><div id="hook"><div id="hk">In the blink of an eye.</div></div></div>
+
+      <!-- 2: tablet stack (5.5 – 15.8) -->
+      <video id="tab" class="clip" src="assets/clips/tablet.mp4" muted playsinline data-start="5.5" data-duration="10.3" data-media-start="0" data-track-index="4"></video>
+      <div id="captab" class="clip ov" data-start="5.5" data-duration="10.3" data-track-index="5">
+        <div class="shade"></div>
+        <div class="cap"><div class="e">How fast.site works</div><div class="t"><div id="c0">fast.site.</div><div id="c1">Nearest edge.</div><div id="c2">Straight from cache.</div><div id="c3">Lighter images.</div><div id="c4">Shielded.</div></div></div>
+      </div>
+
+      <!-- 3: POV checkout (15.8 – 19.3) -->
+      <video id="pov2" class="clip" src="assets/clips/pov.mp4" muted playsinline data-start="15.8" data-duration="3.5" data-media-start="6.4" data-track-index="6"></video>
+      <div id="toastl" class="clip ov" data-start="15.8" data-duration="3.5" data-track-index="7">
+        <div id="toastw"><div id="toast"><div class="ck"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Order confirmed</div></div>
+      </div>
+
+      <!-- 4: logo turn + end (19.3 – 25) -->
+      <div id="endbg" class="clip" data-start="19.3" data-duration="5.7" data-track-index="8" style="background:#000"></div>
+      <video id="logo" class="clip" src="assets/clips/logo.mp4" muted playsinline data-start="19.3" data-duration="5.7" data-media-start="0" data-track-index="9"></video>
+      <div id="endl" class="clip ov" data-start="19.3" data-duration="5.7" data-track-index="10">
+        <div id="endtx"><div class="t"><span class="ln" id="et"><span>Faster than a blink. <span class="g">Keep your hosting.</span></span></span></div><div class="c" id="ec"><b>fast.site</b> · Try it free for 7 days</div></div>
+      </div>
+
+      <!-- eyelids on top of everything -->
+      <div id="lids" class="clip ov" data-start="0" data-duration="25" data-track-index="11"><div class="lid" id="lidT"></div><div class="lid" id="lidB"></div></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", E = "power3.out";
+      const lineIn = (sel, t, d = 0.8) => tl.fromTo(sel + " > span", { yPercent: 110 }, { yPercent: 0, duration: d, ease: EX }, t);
+      const BLINK = 2.6;
+      const blink = (t, close = 0.14, hold = 0.06, open = 0.22) => {
+        tl.to("#lidT", { yPercent: 0, duration: close, ease: "power2.in" }, t);
+        tl.to("#lidB", { yPercent: 0, duration: close, ease: "power2.in" }, t);
+        tl.to("#lidT", { yPercent: -102, duration: open, ease: "power2.out" }, t + close + hold);
+        tl.to("#lidB", { yPercent: 102, duration: open, ease: "power2.out" }, t + close + hold);
+      };
+      tl.set("#lidT", { yPercent: -102 }, 0); tl.set("#lidB", { yPercent: 102 }, 0);
+
+      // 1: loading look until the blink, crisp after
+      tl.fromTo("#pov1", { filter: "blur(7px) saturate(0.55) brightness(0.8)" }, { filter: "blur(7px) saturate(0.55) brightness(0.8)", duration: BLINK + 0.15 }, 0);
+      tl.set("#pov1", { filter: "none" }, BLINK + 0.17);
+      tl.fromTo("#hring", { rotation: 0 }, { rotation: 900, duration: 2.8, ease: "none" }, 0);
+      tl.fromTo("#hbar", { scaleX: 0 }, { scaleX: 0.3, duration: 2.6, ease: "power1.out" }, 0);
+      tl.fromTo("#hud", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.1);
+      blink(BLINK);
+      tl.fromTo("#pov1", { scale: 1.04 }, { scale: 1, duration: 0.9, ease: EX, immediateRender: false }, BLINK + 0.17);
+      tl.fromTo("#hshade", { opacity: 0 }, { opacity: 1, duration: 0.4 }, BLINK + 0.3);
+      tl.fromTo("#hk", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: EX }, BLINK + 0.4);
+      tl.to("#hk", { opacity: 0, y: -14, duration: 0.35, ease: "power2.in" }, 5.05);
+
+      // 2: tablet captions in sync with the voice (b3 starts at 5.5)
+      [["#c0", 5.6, 7.75], ["#c1", 8.2, 9.95], ["#c2", 10.45, 11.7], ["#c3", 12.3, 13.45], ["#c4", 13.95, 15.6]].forEach(([s, a, b]) => {
+        tl.fromTo(s, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: EX }, a);
+        tl.to(s, { opacity: 0, y: -18, duration: 0.3, ease: "power2.in" }, b);
+      });
+      tl.fromTo("#captab .e", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 5.7);
+      tl.fromTo("#tab", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.5);
+
+      // 3: checkout tap -> toast
+      const TAP = 18.45;
+      tl.fromTo("#toast", { opacity: 0, y: -30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: EX }, TAP);
+      blink(15.66, 0.1, 0.04, 0.18);
+
+      // 4: logo turns, then scales up into place; end text
+      tl.fromTo("#logo", { scale: 1, y: 0 }, { scale: 0.62, y: -190, duration: 0.9, ease: "power3.inOut", immediateRender: false }, 23.0);
+      lineIn("#et", 23.45, 0.8);
+      tl.fromTo("#ec", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 23.8);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
