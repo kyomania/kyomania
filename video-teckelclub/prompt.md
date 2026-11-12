@@ -1,4 +1,4 @@
-# Teckelclub Helmstedt – Einladung zur Weihnachtsfeier im Schützenhaus
+# Teckelklub Helmstedt – Einladung zur Weihnachtsfeier im Schützenhaus
 
 Paper-Collage-Animation, 15 s, 9:16. Look wie die Paper-Collage-Animation zum Buch
 „Die Lizenz zum Erfolg“ (Soheil Hosseini) aus der lokalen Sitzung.
@@ -6,7 +6,7 @@ Paper-Collage-Animation, 15 s, 9:16. Look wie die Paper-Collage-Animation zum Bu
 ## Auftrag für die lokale Sitzung
 
 Du bist Motion Designer. Mach mit HyperFrames ein 15 Sekunden langes Video im Format 9:16:
-Ein Dackel aus Papier lädt zur Weihnachtsfeier des Teckelclub Helmstedt ins Schützenhaus ein.
+Ein Dackel aus Papier lädt zur Weihnachtsfeier des Teckelklub Helmstedt ins Schützenhaus ein.
 
 Look: komplette Papieroptik wie in unserer Paper-Collage-Animation zum Buch von Soheil Hosseini –
 ausgeschnittene Papierebenen, gerissene Kanten, Papierstruktur, Klebestreifen, leichte Schatten,
@@ -23,7 +23,7 @@ rotes Ziegeldach, Giebel mit goldenem Hirsch und „1938“, Rundbogentür mit S
 Schild „Schützenhaus“ und „1938“ als Papier-Schriftzug im Code auf das Haus setzen, nicht generieren.
 
 Texte (vom Verein bestätigen lassen, NICHT ins Bild generieren, sondern im Code setzen):
-- „Teckelclub Helmstedt“
+- „Teckelklub Helmstedt“
 - „Einladung zur Weihnachtsfeier“
 - „im Schützenhaus Helmstedt“
 - Datum: [TT.MM.JJJJ] · Uhrzeit: [HH:MM Uhr] · Adresse: [Straße, Helmstedt]
@@ -74,6 +74,6 @@ Paper cut-out collage scene of the same red dachshund with green scarf and Santa
 
 ## Stand
 
-Fertig: `teckelclub-einladung-23s.mp4` (1080×1920, 23 s). Projekt: `film/index.html` – alle Texte,
+Fertig: `teckelklub-einladung-23s.mp4` (1080×1920, 23 s). Projekt: `film/index.html` – alle Texte,
 Etiketten und Keyframes editierbar, Schnittzeiten über `rip(...)`. Ton: `tools/sound.py`.
 Rendern: `VW=1080 VH=1920 node tools/capture.cjs film frames 0 690`, dann ffmpeg mit `film/assets/audio/mix.wav`.
