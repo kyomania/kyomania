@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Marker"; src: url(assets/fonts/permanent-marker-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Dela"; src: url(assets/fonts/dela-gothic-one-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Boku"; src: url(assets/fonts/yuji-boku-112-400-normal.woff2) format("woff2"); unicode-range: U+63A2; }
+      @font-face { font-family: "Boku"; src: url(assets/fonts/yuji-boku-116-400-normal.woff2) format("woff2"); unicode-range: U+7D22; }
+      @font-face { font-family: "Boku"; src: url(assets/fonts/yuji-boku-117-400-normal.woff2) format("woff2"); unicode-range: U+4E2D; }
+      @font-face { font-family: "Boku"; src: url(assets/fonts/yuji-boku-110-400-normal.woff2) format("woff2"); unicode-range: U+5F85; }
+      @font-face { font-family: "Boku"; src: url(assets/fonts/yuji-boku-115-400-normal.woff2) format("woff2"); unicode-range: U+6A5F; }
+
+      :root { --red: #c8102e; --blood: #8e0c1c; --cream: #f3e9d2; --ink: #0b0909; --orange: #f28c28; --blue: #5ac8ff; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .kb { position: absolute; inset: 0; transform-origin: 50% 50%; will-change: transform; }
+      .kb img, .kb video { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; display: block; }
+      .abs { position: absolute; }
+
+      /* ---------- Szene 4: Holzwand + Fotos ---------- */
+      #wall { position: absolute; inset: -40px;
+        background:
+          radial-gradient(ellipse at 50% 40%, rgba(120, 30, 24, 0.35), transparent 60%),
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 9px, rgba(0,0,0,0.25) 9px 11px, transparent 11px 37px),
+          repeating-linear-gradient(90deg, #1b1411 0 236px, #120d0b 236px 240px),
+          #140f0d; }
+      .card { position: absolute; left: 390px; top: 150px; width: 1140px; height: 660px; }
+      .half { position: absolute; inset: 0; background: var(--cream); filter: drop-shadow(0 14px 18px rgba(0,0,0,0.55)); }
+      .half .ph { position: absolute; left: 20px; top: 20px; width: 1100px; height: 620px; overflow: hidden; }
+      .half .ph img { width: 1100px; height: 620px; object-fit: cover; display: block; }
+      #kunai { position: absolute; left: 912px; top: 64px; width: 96px; height: 250px; z-index: 30; filter: drop-shadow(4px 10px 6px rgba(0,0,0,0.6)); }
+      #strip { position: absolute; left: 240px; top: 300px; width: 1440px; height: 470px; }
+      #strip img { width: 1440px; height: 470px; display: block; }
+      #stripText { position: absolute; left: 0; top: 178px; width: 1440px; text-align: center; white-space: nowrap; font: 98px/1 "Marker"; color: #111; letter-spacing: 2px; }
+      #hanko { position: absolute; left: 1250px; top: 300px; width: 96px; height: 150px; background: var(--red); color: var(--cream);
+        font: 40px/1.15 "Boku"; writing-mode: vertical-rl; display: flex; align-items: center; justify-content: center; transform: rotate(4deg);
+        border-radius: 6px; box-shadow: inset 0 0 0 4px rgba(255,255,255,0.18); }
+
+      /* ---------- Großtexte ---------- */
+      #t1 { position: absolute; left: 70px; top: 96px; width: 1180px; height: 360px; }
+      #t1 .st { position: absolute; left: -40px; top: 46px; width: 1200px; height: 230px; }
+      #t1 .tx { position: absolute; left: 70px; top: 70px; font: 104px/0.98 "Marker"; color: var(--cream); text-shadow: 0 4px 0 rgba(0,0,0,0.35); }
+      #t1 .kj { position: absolute; left: 1080px; top: 10px; font: 84px/1.02 "Boku"; color: var(--red); writing-mode: vertical-rl; text-shadow: 0 0 12px rgba(0,0,0,0.5); }
+      #t2 { position: absolute; left: 110px; top: 560px; font: 132px/1 "Marker"; color: var(--red);
+        -webkit-text-stroke: 3px #000; text-shadow: 6px 6px 0 #000, 0 0 40px rgba(200,16,46,0.6); white-space: nowrap; }
+      #t2 span { display: inline-block; }
+      #t8 { position: absolute; left: 0; width: 1920px; top: 160px; text-align: center; font: 64px/1 "Marker"; color: var(--cream); opacity: 0;
+        text-shadow: 0 3px 14px rgba(0,0,0,0.6); }
+
+      /* ---------- Übergänge ---------- */
+      #blk { position: absolute; inset: 0; background: #000; opacity: 0; }
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+      #redflash { position: absolute; inset: 0; background: var(--red); opacity: 0; mix-blend-mode: multiply; }
+      #speed { position: absolute; left: -96px; top: -54px; width: 2112px; height: 1188px; opacity: 0; }
+      .splat { position: absolute; transform-origin: 50% 50%; }
+      #bigSh { position: absolute; left: 760px; top: 190px; width: 100px; height: 100px; opacity: 0; transform-origin: 50% 50%; }
+      #enso { position: absolute; left: 860px; top: 440px; width: 200px; height: 200px; transform-origin: 50% 50%; opacity: 0; }
+      #s6glow { position: absolute; inset: 0; background: #9cc8ff; mix-blend-mode: screen; opacity: 0; }
+      .eye { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,40,40,0.95) 0%, rgba(220,10,30,0.55) 30%, rgba(200,0,20,0) 70%); mix-blend-mode: screen; opacity: 0; }
+
+      /* ---------- HUD ---------- */
+      #hud { position: absolute; inset: 0; pointer-events: none; }
+      #tag { position: absolute; left: 54px; top: 952px; width: 214px; height: 78px; background: var(--orange); transform: rotate(-2.5deg);
+        clip-path: polygon(2% 6%, 30% 0, 62% 5%, 100% 1%, 98% 52%, 100% 96%, 66% 100%, 34% 95%, 0 100%, 3% 48%);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+      #tag b { position: absolute; left: 0; top: 15px; width: 214px; text-align: center; font: 42px/1 "Dela"; color: #111; letter-spacing: 1px; }
+      #bar { position: absolute; left: 282px; top: 930px; width: 800px; height: 130px; }
+      #bar .st { position: absolute; left: 0; top: 4px; width: 800px; height: 128px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)); }
+      #bar .tx { position: absolute; left: 66px; top: 40px; font: 46px/1 "Marker"; color: var(--cream); letter-spacing: 1px; text-shadow: 0 3px 0 rgba(0,0,0,0.55); white-space: nowrap; }
+      #dots { position: absolute; left: 668px; top: 58px; }
+      #dots svg { width: 22px; height: 22px; margin-right: 4px; }
+      #spin { position: absolute; left: 1060px; top: 944px; width: 104px; height: 104px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); }
+      #gags { position: absolute; left: 330px; top: 896px; width: 1000px; height: 40px; }
+      #gags div { position: absolute; left: 0; top: 0; font: 30px/1 "Marker"; color: var(--cream); opacity: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 0 2px #000; white-space: nowrap; }
+      #kanji { position: absolute; right: 52px; top: 58px; font: 58px/1.08 "Boku"; color: var(--cream); writing-mode: vertical-rl; opacity: 0.72;
+        text-shadow: 0 0 14px rgba(0,0,0,0.7); }
+      #kanji i { font-style: normal; display: block; margin-top: 18px; width: 54px; height: 54px; background: var(--red); border-radius: 4px; }
+
+      #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%); pointer-events: none; }
+      #noise { position: absolute; inset: 0; background: url(assets/img/tex/noise.png); opacity: 0.55; mix-blend-mode: overlay; pointer-events: none; }
+      #fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="60" data-volume="1"></audio>
+
+      <!-- S1 leere Schaukel -->
+      <section class="clip" id="s1" data-start="0" data-duration="6.7" style="z-index:1">
+        <div class="kb" id="kb1"><img src="assets/img/02.jpg" alt="" /></div>
+      </section>
+
+      <!-- S2 er wartet auf der Schaukel -->
+      <section class="clip" id="s2" data-start="5.8" data-duration="8.8" style="z-index:2">
+        <div class="kb" id="kb2">
+          <video src="assets/vid/c01.mp4" data-start="5.8" data-duration="5" data-media-start="0" muted playsinline></video>
+          <video src="assets/vid/c01.mp4" data-start="10.8" data-duration="3.8" data-media-start="0" muted playsinline></video>
+        </div>
+        <div id="t1">
+          <img class="st" src="assets/img/tex/stroke.png" alt="" />
+          <div class="tx">SEARCHING<br />FOR A GAME</div>
+          <div class="kj">探索中</div>
+        </div>
+      </section>
+
+      <!-- S3 Mondnacht -->
+      <section class="clip" id="s3" data-start="14.8" data-duration="12.7" style="z-index:3">
+        <div class="kb" id="kb3">
+          <img src="assets/img/04.jpg" alt="" />
+          <div id="roofV" class="abs" style="inset:0">
+            <video src="assets/vid/c03.mp4" data-start="14.8" data-duration="5" data-media-start="0" muted playsinline></video>
+            <video src="assets/vid/c03.mp4" data-start="19.8" data-duration="4.2" data-media-start="0" muted playsinline></video>
+          </div>
+        </div>
+        <div id="t2"></div>
+      </section>
+
+      <!-- S4 zerrissene Bilder -->
+      <section class="clip" id="s4" data-start="27.4" data-duration="9.4" style="z-index:4">
+        <div class="kb" id="kb4">
+          <div id="wall"></div>
+          <div id="strip"><img src="assets/img/tex/paper.png" alt="" /><div id="stripText">SEARCHING FOR A GAME</div><div id="hanko">探索中</div></div>
+          <div id="cards"></div>
+          <svg id="kunai" viewBox="0 0 96 250">
+            <defs>
+              <linearGradient id="steel" x1="0" x2="1"><stop offset="0" stop-color="#6c7480" /><stop offset="0.48" stop-color="#e8edf2" /><stop offset="0.52" stop-color="#9aa3ad" /><stop offset="1" stop-color="#3d434b" /></linearGradient>
+            </defs>
+            <circle cx="48" cy="20" r="15" fill="none" stroke="#2a2d31" stroke-width="7" />
+            <circle cx="48" cy="20" r="15" fill="none" stroke="#8a929b" stroke-width="2" />
+            <rect x="40" y="33" width="16" height="78" rx="3" fill="#15171a" />
+            <g stroke="#3a3f46" stroke-width="3"><line x1="40" y1="44" x2="56" y2="52" /><line x1="40" y1="58" x2="56" y2="66" /><line x1="40" y1="72" x2="56" y2="80" /><line x1="40" y1="86" x2="56" y2="94" /><line x1="40" y1="100" x2="56" y2="108" /></g>
+            <polygon points="48,108 78,140 48,246 18,140" fill="url(#steel)" stroke="#22262b" stroke-width="2" />
+            <line x1="48" y1="112" x2="48" y2="240" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" />
+          </svg>
+        </div>
+      </section>
+
+      <!-- S5 Ruhe am Baum -->
+      <section class="clip" id="s5" data-start="36.4" data-duration="3.6" style="z-index:5">
+        <div class="kb" id="kb5"><video src="assets/vid/c07.mp4" data-start="36.4" data-duration="3.6" data-media-start="0.6" muted playsinline></video></div>
+      </section>
+
+      <!-- S6 Sharingan-Portrait -->
+      <section class="clip" id="s6" data-start="40" data-duration="7.3" style="z-index:6">
+        <div class="kb" id="kb6">
+          <img src="assets/img/05.jpg" alt="" />
+          <div id="s6glow"></div>
+          <div class="eye" id="eyeL" style="left:810px;top:240px"></div>
+          <div class="eye" id="eyeR" style="left:1058px;top:240px"></div>
+        </div>
+      </section>
+
+      <!-- S7 Chidori-Himmel -->
+      <section class="clip" id="s7" data-start="47" data-duration="7.4" style="z-index:7">
+        <div class="kb" id="kb7"><img src="assets/img/06.jpg" alt="" /></div>
+      </section>
+
+      <!-- S8 zurück zur leeren Schaukel -->
+      <section class="clip" id="s8" data-start="53.2" data-duration="6.8" style="z-index:8">
+        <div class="kb" id="kb8">
+          <img src="assets/img/02.jpg" alt="" />
+          <div id="swingV" class="abs" style="inset:0">
+            <video src="assets/vid/c02.mp4" data-start="53.2" data-duration="5" data-media-start="0" muted playsinline></video>
+          </div>
+        </div>
+        <div id="t8">still searching…</div>
+      </section>
+
+      <!-- Effekt-Ebenen -->
+      <canvas id="fx" width="1920" height="1080" style="z-index:20"></canvas>
+      <div class="clip" id="trans" style="z-index:40;pointer-events:none" data-start="0" data-duration="60">
+        <img id="speed" src="assets/img/tex/speed.png" alt="" />
+        <img class="splat" id="sp1" src="assets/img/tex/splat.png" alt="" style="left:780px;top:390px;width:360px;height:310px" />
+        <img class="splat" id="sp2" src="assets/img/tex/cloud.png" alt="" style="left:420px;top:150px;width:370px;height:250px" />
+        <img class="splat" id="sp3" src="assets/img/tex/splat2.png" alt="" style="left:1240px;top:600px;width:290px;height:260px" />
+        <img class="splat" id="sp4" src="assets/img/tex/swirl.png" alt="" style="left:1280px;top:120px;width:300px;height:265px" />
+        <div id="blk"></div>
+        <svg id="bigSh" viewBox="-50 -50 100 100"><use href="#sharingan" /></svg>
+        <img id="enso" src="assets/img/tex/enso.png" alt="" />
+        <div id="redflash"></div>
+        <div id="flash"></div>
+      </div>
+
+      <!-- HUD: immer im Bild -->
+      <div class="clip" id="hud" style="z-index:50" data-start="0" data-duration="60">
+        <div id="gags">
+          <div>Queue-Jutsu wird gewirkt …</div>
+          <div>Nicht mal Kakashi kommt so spät.</div>
+          <div>Sasuke hat Itachi schneller gefunden.</div>
+          <div>Matchmaking im Tsukuyomi: gefühlt 72 Stunden.</div>
+          <div>Gleich geht's los. Bleib da.</div>
+        </div>
+        <div id="tag"><b>FUZZN</b></div>
+        <div id="bar">
+          <img class="st" src="assets/img/tex/stroke_red.png" alt="" />
+          <div class="tx">SEARCHING FOR A GAME</div>
+          <div id="dots">
+            <svg viewBox="-50 -50 100 100"><use href="#tomoe1" /></svg><svg viewBox="-50 -50 100 100"><use href="#tomoe1" /></svg><svg viewBox="-50 -50 100 100"><use href="#tomoe1" /></svg>
+          </div>
+        </div>
+        <svg id="spin" viewBox="-50 -50 100 100"><use href="#sharingan" /></svg>
+        <div id="kanji">探索中</div>
+      </div>
+
+      <div class="clip" style="z-index:60;pointer-events:none" data-start="0" data-duration="60"><div id="vig"></div><div id="noise"></div></div>
+
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <g id="tomoe1"><circle cx="0" cy="8" r="20" fill="#0b0909" /><path d="M -20 8 C -24 -14 -6 -36 24 -42 C 6 -30 -2 -14 0 -12 Z" fill="#0b0909" /></g>
+          <g id="tomoe"><circle cx="0" cy="0" r="7.5" fill="#0b0909" /><path d="M -7.5 0 C -9 -9 -2 -16 10 -18 C 3 -12 0 -6 0 -7.5 Z" fill="#0b0909" /></g>
+          <g id="sharingan">
+            <circle r="48" fill="#c8102e" stroke="#0b0909" stroke-width="4" />
+            <circle r="44" fill="none" stroke="#ff4d5e" stroke-opacity="0.35" stroke-width="2" />
+            <circle r="29" fill="none" stroke="#5a0711" stroke-width="2.2" />
+            <circle r="11" fill="#0b0909" />
+            <use href="#tomoe" transform="rotate(0) translate(0 -29)" />
+            <use href="#tomoe" transform="rotate(120) translate(0 -29)" />
+            <use href="#tomoe" transform="rotate(240) translate(0 -29)" />
+          </g>
+        </defs>
+      </svg>
+    </div>
+
+    <script>
+      const DUR = 60, FPS = 30;
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      // deterministischer Hash -> [0,1)
+      const h = (i, s = 0) => { const x = Math.sin(i * 127.1 + s * 311.7 + 0.137) * 43758.5453; return x - Math.floor(x); };
+      const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+      const ease = (u) => u * u * (3 - 2 * u);
+      const win = (t, a, b, f = 0.4) => clamp(Math.min((t - a) / f, (b - t) / f));
+
+      // ---------- Karten zum Zerreißen bauen ----------
+      const CARDS = [
+        { img: "assets/img/01.jpg", rot: -2.4, tear: 29.25 },
+        { img: "assets/img/03.jpg", rot: 2.0, tear: 30.75 },
+        { img: "assets/img/07.jpg", rot: -1.4, tear: 32.25 },
+        { img: "assets/img/05.jpg", rot: 2.6, tear: 33.75 },
+      ];
+      const W = 1140, H = 660;
+      function tearPts(seed) {
+        const pts = []; let x = W / 2 + (h(seed, 1) - 0.5) * 120;
+        for (let y = 0; y <= H; y += 22) { x += (h(seed, y) - 0.5) * 34; x = clamp(x, W * 0.38, W * 0.62); pts.push([x, y]); }
+        pts[pts.length - 1][1] = H; return pts;
+      }
+      const poly = (arr) => "polygon(" + arr.map(([x, y]) => `${x.toFixed(1)}px ${y.toFixed(1)}px`).join(",") + ")";
+      const cardsEl = $("#cards");
+      CARDS.slice().reverse().forEach((c, ri) => {
+        const i = CARDS.length - 1 - ri;
+        const pts = tearPts(i + 3);
+        const card = document.createElement("div"); card.className = "card"; card.id = "card" + i;
+        card.style.transform = `rotate(${c.rot}deg)`;
+        ["L", "R"].forEach((side) => {
+          const outer = side === "L" ? [[-30, -30], ...pts.map(([x, y]) => [x, y]), [-30, H + 30]] : [[W + 30, -30], ...pts.map(([x, y]) => [x, y]), [W + 30, H + 30]];
+          const off = side === "L" ? -7 : 7;
+          const inner = side === "L" ? [[-30, -30], ...pts.map(([x, y]) => [x + off - 20, y - 20]), [-30, H + 30]] : [[W + 30, -30], ...pts.map(([x, y]) => [x + off - 20, y - 20]), [W + 30, H + 30]];
+          const half = document.createElement("div"); half.className = "half"; half.id = `c${i}${side}`;
+          half.style.clipPath = poly(outer);
+          const ph = document.createElement("div"); ph.className = "ph"; ph.style.clipPath = poly(inner);
+          const im = document.createElement("img"); im.src = c.img; ph.appendChild(im); half.appendChild(ph); card.appendChild(half);
+        });
+        const whole = document.createElement("div"); whole.className = "half"; whole.id = `c${i}W`;
+        const ph2 = document.createElement("div"); ph2.className = "ph"; const im2 = document.createElement("img"); im2.src = c.img; ph2.appendChild(im2); whole.appendChild(ph2); card.appendChild(whole);
+        cardsEl.appendChild(card);
+      });
+
+      // ---------- Großtext 2: Buchstaben ----------
+      $("#t2").innerHTML = "STILL SEARCHING…".split("").map((ch) => `<span>${ch === " " ? "&nbsp;" : ch}</span>`).join("");
+
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- Kamera (Ken Burns) ----------
+      tl.fromTo("#kb1", { scale: 1.0 }, { scale: 1.05, duration: 6.7, ease: "none" }, 0);
+      tl.fromTo("#kb2", { scale: 1.05 }, { scale: 1.11, duration: 8.8, ease: "none" }, 5.8);
+      tl.fromTo("#kb3", { scale: 1.02, transformOrigin: "70% 55%" }, { scale: 1.12, duration: 12.7, ease: "sine.inOut" }, 14.8);
+      tl.fromTo("#kb4", { scale: 1.0 }, { scale: 1.05, duration: 9.4, ease: "none" }, 27.4);
+      tl.fromTo("#kb5", { scale: 1.0, transformOrigin: "37% 21%" }, { scale: 1.28, duration: 3.6, ease: "power1.in" }, 36.4);
+      tl.fromTo("#kb6", { scale: 1.12, transformOrigin: "49% 22%" }, { scale: 1.0, duration: 0.5, ease: "expo.out" }, 40);
+      tl.to("#kb6", { scale: 1.18, duration: 6.8, ease: "power1.in" }, 40.5);
+      tl.fromTo("#kb7", { scale: 1.1, rotation: -1.5 }, { scale: 1.0, rotation: 0, duration: 7.4, ease: "power2.out" }, 47);
+      tl.fromTo("#kb8", { scale: 1.07 }, { scale: 1.0, duration: 6.8, ease: "power2.out" }, 53.2);
+
+      // ---------- S1 -> S2: Er erscheint (Federn im Canvas) ----------
+      tl.fromTo("#s2", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 5.8);
+
+      // Großtext 1: Pinselstrich + Schrift
+      tl.fromTo("#t1 .st", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power3.out" }, 7.3);
+      tl.fromTo("#t1 .tx", { clipPath: "inset(-20% 100% -20% 0)" }, { clipPath: "inset(-20% 0% -20% 0)", duration: 0.7, ease: "power2.out" }, 7.55);
+      tl.fromTo("#t1 .kj", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 8.0);
+      tl.to("#t1", { opacity: 0, x: -40, filter: "blur(6px)", duration: 0.6, ease: "power2.in" }, 13.6);
+
+      // ---------- S2 -> S3: Tusche-Splatter ----------
+      [["#sp1", 13.95, 8.5], ["#sp2", 14.05, 7], ["#sp3", 14.12, 7.5], ["#sp4", 14.2, 6.5]].forEach(([s, t, sc], i) => {
+        tl.fromTo(s, { scale: 0, rotation: -20 + i * 15, opacity: 1 }, { scale: sc, rotation: 10 + i * 12, duration: 0.55, ease: "expo.out" }, t);
+        tl.to(s, { opacity: 0, duration: 0.5, ease: "power1.in" }, 15.0 + i * 0.05);
+      });
+      tl.fromTo("#blk", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, 14.45);
+      tl.to("#blk", { opacity: 0, duration: 0.8, ease: "power1.out" }, 15.0);
+
+      // ---------- S3: Figur zerfällt in Krähen ----------
+      tl.to("#roofV", { opacity: 0, duration: 0.55, ease: "power2.in" }, 23.2);
+      tl.fromTo("#t2 span", { opacity: 0, y: 40, scale: 1.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "back.out(2)", stagger: 0.05 }, 24.2);
+      tl.to("#t2", { opacity: 0, duration: 0.3 }, 27.0);
+
+      // ---------- S4: Kunai, Risse ----------
+      tl.fromTo("#kunai", { y: -420, rotation: -8 }, { y: 0, rotation: 0, duration: 0.14, ease: "power2.in" }, 27.75);
+      tl.fromTo("#kb4", { x: 0 }, { keyframes: [{ x: -10, duration: 0.03 }, { x: 8, duration: 0.03 }, { x: -4, duration: 0.03 }, { x: 0, duration: 0.03 }] }, 27.89);
+      CARDS.forEach((c, i) => {
+        const T = c.tear;
+        tl.fromTo("#card" + i, { x: 0 }, { keyframes: [{ x: -6, duration: 0.04 }, { x: 6, duration: 0.04 }, { x: -4, duration: 0.04 }, { x: 0, duration: 0.04 }] }, T - 0.18);
+        tl.set(`#c${i}W`, { autoAlpha: 0 }, T);
+        tl.to(`#c${i}L`, { x: -330, y: 1150, rotation: -24, duration: 0.95, ease: "power2.in" }, T);
+        tl.to(`#c${i}R`, { x: 330, y: 1150, rotation: 21, duration: 0.95, ease: "power2.in" }, T + 0.03);
+        tl.fromTo(`#c${i}L`, { x: 0 }, { x: -46, duration: 0.12, ease: "power3.out", immediateRender: false }, T);
+      });
+      tl.fromTo("#strip", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.01, immediateRender: true }, 33.65);
+      // Kunai fällt mit der letzten Karte
+      tl.to("#kunai", { y: 900, rotation: 30, duration: 1.0, ease: "power2.in" }, 33.8);
+      tl.fromTo("#stripText", { clipPath: "inset(-30% 100% -30% 0)" }, { clipPath: "inset(-30% 0% -30% 0)", duration: 0.75, ease: "power2.out" }, 34.15);
+      tl.fromTo("#hanko", { scale: 2.2, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: 4, duration: 0.18, ease: "power3.in" }, 35.0);
+      tl.fromTo("#speed", { opacity: 0.9, scale: 1.25 }, { opacity: 0, scale: 1.0, duration: 0.45, ease: "power2.out", immediateRender: false }, 27.4);
+      [29.25, 30.75, 32.25, 33.75].forEach((T) => tl.fromTo("#speed", { opacity: 0.55, scale: 1.12 }, { opacity: 0, scale: 1.0, duration: 0.35, ease: "power2.out", immediateRender: false }, T));
+
+      // S4 -> S5: durch Schwarz
+      tl.to("#blk", { opacity: 1, duration: 0.3, ease: "power1.in" }, 36.1);
+      tl.to("#blk", { opacity: 0, duration: 0.5, ease: "power1.out" }, 36.4);
+
+      // ---------- S5 -> S6: harter Schnitt, Augen auf ----------
+      tl.fromTo("#flash", { opacity: 0.95 }, { opacity: 0, duration: 0.22, ease: "power1.out", immediateRender: false }, 40.0);
+      tl.fromTo("#speed", { opacity: 1, scale: 1.3 }, { opacity: 0, scale: 1.0, duration: 0.7, ease: "power2.out", immediateRender: false }, 40.0);
+      tl.fromTo(".eye", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1.25, duration: 0.18, ease: "power3.out" }, 40.05);
+      tl.to(".eye", { opacity: 0.55, scale: 1, duration: 0.6, ease: "power2.out" }, 40.25);
+      for (let k = 0; k < 9; k++) { const t = 41.0 + k * 0.62 + h(k, 9) * 0.3; tl.fromTo(".eye", { opacity: 0.95 }, { opacity: 0.5, duration: 0.3, immediateRender: false }, t); }
+      // Blitz-Flackern im Portrait
+      for (let k = 0; k < 14; k++) { const t = 40.4 + k * 0.45 + h(k, 4) * 0.25; tl.fromTo("#s6glow", { opacity: 0.18 + h(k, 5) * 0.22 }, { opacity: 0, duration: 0.12 + h(k, 6) * 0.1, ease: "none", immediateRender: false }, t); }
+      for (let f = 0; f < 6.8 * FPS; f += 2) { const t = 40.5 + f / FPS; const a = 2 + (t - 40.5) * 0.9; tl.set("#kb6", { x: (h(f, 21) - 0.5) * a, y: (h(f, 22) - 0.5) * a }, t); }
+      // Mangekyō-Zoom: Sharingan wächst aus dem Auge
+      tl.fromTo("#bigSh", { opacity: 1, scale: 0.35, rotation: 0 }, { scale: 42, rotation: 520, duration: 0.85, ease: "power3.in", immediateRender: false }, 46.3);
+      tl.to("#bigSh", { opacity: 0, duration: 0.4, ease: "power1.out" }, 47.15);
+
+      // ---------- S7: Chidori (Canvas) + Weißblitz ----------
+      tl.fromTo("#flash", { opacity: 1 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 49.45);
+      for (let f = 0; f < 4 * FPS; f += 2) { const t = 49.45 + f / FPS; const a = Math.max(0, 14 - (t - 49.45) * 5); tl.set("#kb7", { x: (h(f, 31) - 0.5) * a, y: (h(f, 32) - 0.5) * a }, t); }
+
+      // ---------- S7 -> S8: Enso-Kreis öffnet die Dämmerung ----------
+      tl.fromTo("#s8", { clipPath: "circle(0px at 50% 50%)" }, { clipPath: "circle(1250px at 50% 50%)", duration: 1.1, ease: "power2.in" }, 53.2);
+      tl.fromTo("#enso", { opacity: 1, scale: 0, rotation: -40 }, { scale: 13.5, rotation: 80, duration: 1.1, ease: "power2.in", immediateRender: false }, 53.2);
+      tl.to("#enso", { opacity: 0, duration: 0.3 }, 54.15);
+      tl.set("#s8", { clipPath: "none" }, 54.35);
+      tl.to("#swingV", { opacity: 0, duration: 0.25, ease: "none" }, 57.95);
+      tl.fromTo("#t8", { opacity: 0, y: 14 }, { opacity: 0.9, y: 0, duration: 0.8, ease: "power2.out" }, 54.9);
+      tl.to("#t8", { opacity: 0, duration: 0.9, ease: "power1.in" }, 58.4);
+
+      // ---------- HUD ----------
+      tl.fromTo("#spin", { rotation: 0 }, { rotation: 360 * 30, duration: DUR, ease: "none" }, 0);
+      const dots = $$("#dots svg");
+      for (let c = 0; c < DUR / 1.5; c++) dots.forEach((d, i) => {
+        const t = c * 1.5 + i * 0.25;
+        tl.fromTo(d, { opacity: 0.25, scale: 0.7 }, { opacity: 1, scale: 1.1, duration: 0.2, ease: "power2.out", immediateRender: false }, t);
+        tl.to(d, { opacity: 0.25, scale: 0.7, duration: 0.5, ease: "power1.in" }, t + 0.7);
+      });
+      tl.set(dots, { opacity: 0.25, scale: 0.7 }, 0);
+      tl.set(dots, { transformOrigin: "50% 50%" }, 0);
+      const gags = $$("#gags div");
+      gags.forEach((g, i) => {
+        const a = i * 12;
+        if (i > 0) tl.fromTo(g, { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, a + 0.2);
+        tl.to(g, { opacity: 0, duration: 0.4, ease: "power1.in" }, a + 11.4);
+      });
+      tl.set(gags[0], { opacity: 1, x: 0 }, 0);
+      tl.fromTo(gags[0], { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, 59.6 - 0.0001);
+      // Grain
+      for (let f = 0; f < DUR * FPS; f += 2) tl.set("#noise", { backgroundPosition: `${Math.floor(h(f, 51) * 256)}px ${Math.floor(h(f, 52) * 256)}px` }, f / FPS);
+
+      // =====================================================================
+      // Canvas-Effekte: reine Funktion der Zeit (seek-sicher)
+      // =====================================================================
+      const cv = $("#fx"), ctx = cv.getContext("2d");
+
+      function leaf(x, y, s, r, col, a) {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s * (0.55 + 0.45 * Math.abs(Math.sin(r * 1.7))));
+        ctx.globalAlpha = a; ctx.fillStyle = col; ctx.beginPath();
+        ctx.moveTo(-10, 0); ctx.quadraticCurveTo(-2, -7, 10, 0); ctx.quadraticCurveTo(-2, 7, -10, 0); ctx.fill();
+        ctx.strokeStyle = "rgba(60,20,8,0.5)"; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(-10, 0); ctx.lineTo(9, 0); ctx.stroke();
+        ctx.restore();
+      }
+      // Krähe in Seitenansicht; dir = +1 fliegt nach rechts, -1 nach links
+      function crow(x, y, s, flap, dir, a, tilt = 0) {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(tilt); ctx.scale(s * dir, s); ctx.globalAlpha = a; ctx.fillStyle = "#06070a";
+        // Körper, Kopf, Schnabel, Schwanzfächer
+        ctx.beginPath(); ctx.ellipse(0, 0, 13, 5.5, -0.08, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(12, -2.5, 4.6, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(15, -4); ctx.lineTo(23, -1.5); ctx.lineTo(15, 0.5); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(-10, -2); ctx.lineTo(-24, -7); ctx.lineTo(-25, 1); ctx.lineTo(-23, 6); ctx.lineTo(-10, 3); ctx.fill();
+        // Flügel: Winkel schwingt zwischen oben (-1) und unten (+0.6)
+        const k = Math.sin(flap); const lift = -0.2 + k * 0.85;
+        for (const side of [0, 1]) {
+          const sh = side ? 0.55 : 1; // hinterer Flügel kleiner
+          ctx.save(); ctx.translate(-1 + side * 3, -2); ctx.scale(1.35, (lift * sh + (lift > 0 ? 0.08 : -0.08)) * 1.55);
+          ctx.globalAlpha = a * (side ? 0.85 : 1);
+          ctx.beginPath(); ctx.moveTo(-7, 0); ctx.lineTo(6, 0);
+          ctx.quadraticCurveTo(8, -14, 4, -30);
+          ctx.lineTo(1, -27); ctx.lineTo(-1, -33); ctx.lineTo(-4, -28); ctx.lineTo(-7, -32); ctx.lineTo(-9, -26); ctx.lineTo(-13, -29);
+          ctx.quadraticCurveTo(-14, -12, -7, 0); ctx.fill(); ctx.restore();
+        }
+        ctx.restore();
+      }
+      function feather(x, y, s, r, a) {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s); ctx.globalAlpha = a; ctx.fillStyle = "#0c0c10";
+        ctx.beginPath(); ctx.moveTo(-18, 0); ctx.quadraticCurveTo(0, -8, 18, -1); ctx.quadraticCurveTo(2, 6, -18, 0); ctx.fill();
+        ctx.restore();
+      }
+      function bolt(x1, y1, x2, y2, seed, disp, depth, out) {
+        if (depth === 0) { out.push([x2, y2]); return; }
+        const mx = (x1 + x2) / 2 + (h(seed, depth * 7) - 0.5) * disp, my = (y1 + y2) / 2 + (h(seed, depth * 13) - 0.5) * disp;
+        bolt(x1, y1, mx, my, seed * 2 + 1, disp / 2, depth - 1, out); bolt(mx, my, x2, y2, seed * 2 + 2, disp / 2, depth - 1, out);
+      }
+      function drawBolt(x1, y1, x2, y2, seed, disp, wdt, a) {
+        const pts = [[x1, y1]]; bolt(x1, y1, x2, y2, seed, disp, 6, pts);
+        ctx.save(); ctx.globalAlpha = a; ctx.lineJoin = "round";
+        [[wdt * 6, "rgba(90,180,255,0.18)"], [wdt * 2.4, "rgba(120,200,255,0.55)"], [wdt, "#f4fbff"]].forEach(([lw, col]) => {
+          ctx.lineWidth = lw; ctx.strokeStyle = col; ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke();
+        });
+        ctx.restore();
+      }
+
+      const LINES = ["SEARCHING", "FOR A GAME"];
+      function draw(t) {
+        ctx.clearRect(0, 0, 1920, 1080);
+
+        // Blätter: Schaukel (S1/S2/S8) und Baum (S5); Periode 10 s -> loopt nahtlos
+        const mLeaf = Math.max(t < 14.6 ? 1 : 0, t >= 53.6 ? 1 : 0, win(t, 36.4, 40.0, 0.2));
+        const mL = t < 14.6 ? clamp((14.6 - t) / 0.4) : t >= 53.6 ? clamp((t - 53.6) / 0.6) : win(t, 36.4, 40.0, 0.2);
+        if (mLeaf > 0) for (let i = 0; i < 22; i++) {
+          const P = 10, u = ((t + h(i, 1) * P) % P) / P;
+          const x = h(i, 2) * 2300 - 100 - u * (260 + 240 * h(i, 3)) + Math.sin(u * Math.PI * 4 + h(i, 4) * 6) * 50;
+          const y = -60 + u * 1220;
+          const s = 0.9 + h(i, 5) * 1.6;
+          const col = ["#d9541e", "#b8341b", "#e88a2c", "#8d2a14"][i % 4];
+          leaf(x, y, s, t * (1.2 + h(i, 6) * 2.4) + i, col, 0.85 * mL);
+        }
+
+        // Federn: er erscheint (5.6–7.6)
+        if (t > 5.5 && t < 7.8) for (let i = 0; i < 34; i++) {
+          const u = clamp((t - 5.55 - h(i, 7) * 0.4) / 1.6); if (u <= 0) continue;
+          const ang = h(i, 8) * Math.PI * 2, r = 30 + ease(u) * (240 + h(i, 9) * 420);
+          const x = 1371 + Math.cos(ang) * r * 1.3, y = 470 + Math.sin(ang) * r * 0.8 + u * u * 160;
+          feather(x, y, 0.8 + h(i, 10) * 1.4, ang + u * 6, Math.sin(u * Math.PI) * 0.9);
+        }
+
+        // Regen (S3)
+        const mR = win(t, 14.8, 27.6, 0.5);
+        if (mR > 0) {
+          ctx.save(); ctx.strokeStyle = "rgba(190,210,255,0.32)"; ctx.lineWidth = 1.3; ctx.beginPath();
+          for (let i = 0; i < 300; i++) {
+            const P = 0.55 + h(i, 11) * 0.45, u = ((t + h(i, 12) * P) % P) / P;
+            const x = h(i, 13) * 2200 - 100 - u * 140, y = -80 + u * 1260, L = 26 + h(i, 14) * 42;
+            ctx.moveTo(x, y); ctx.lineTo(x - L * 0.11, y + L);
+          }
+          ctx.globalAlpha = mR; ctx.stroke(); ctx.restore();
+        }
+
+        // Krähen-Explosion: Figur zerfällt (23.0–25.6)
+        if (t > 22.9 && t < 25.8) for (let i = 0; i < 40; i++) {
+          const u = clamp((t - 23.0 - h(i, 15) * 0.45) / 2.1); if (u <= 0) continue;
+          const ang = -Math.PI * 0.95 + h(i, 16) * Math.PI * 1.25, sp = 380 + h(i, 17) * 1000;
+          const r = (Math.exp(u * 2.2) - 1) / (Math.exp(2.2) - 1) * sp;
+          const x = 1385 + (h(i, 18) - 0.5) * 120 + Math.cos(ang) * r * 1.4, y = 600 + (h(i, 19) - 0.5) * 360 + Math.sin(ang) * r;
+          const s = (0.45 + h(i, 20) * 0.8) * (1 + u * 2.2);
+          const dx = Math.cos(ang), dy = Math.sin(ang);
+          crow(x, y, s, t * (14 + h(i, 21) * 8) + i, dx < 0 ? -1 : 1, Math.min(1, u * 6) * (1 - clamp((u - 0.8) / 0.2)), Math.atan2(dy, Math.abs(dx)) * 0.5 * (dx < 0 ? -1 : 1));
+        }
+
+        // Krähen-Wipe S3 -> S4 (26.7–28.0)
+        if (t > 26.6 && t < 28.1) for (let i = 0; i < 90; i++) {
+          const u = clamp((t - 26.65 - h(i, 22) * 0.55) / 0.85); if (u <= 0 || u >= 1) continue;
+          const x = 2300 - u * 2800 + (h(i, 23) - 0.5) * 300, y = h(i, 24) * 1200 - 60 + Math.sin(u * 6 + i) * 30;
+          crow(x, y, 1.6 + h(i, 25) * 4.2, t * 18 + i, -1, 1, (h(i, 26) - 0.5) * 0.3);
+        }
+
+        // Papierfetzen bei jedem Riss (S4)
+        CARDS.forEach((c, ci) => {
+          const T = c.tear; if (t < T || t > T + 1.6) return;
+          for (let i = 0; i < 18; i++) {
+            const u = clamp((t - T) / (1.2 + h(i + ci * 30, 26) * 0.4)); if (u >= 1) continue;
+            const x = 960 + (h(i + ci * 30, 27) - 0.5) * 120 + (h(i + ci * 30, 28) - 0.5) * 700 * u, y = 200 + h(i + ci * 30, 29) * 560 + u * u * 700 - u * 120;
+            ctx.save(); ctx.translate(x, y); ctx.rotate(u * 9 * (h(i, 30) - 0.5)); ctx.globalAlpha = 1 - u * 0.6;
+            ctx.fillStyle = i % 3 ? "#efe4cb" : "#d8c9a8"; const s = 5 + h(i + ci * 30, 31) * 12;
+            ctx.beginPath(); ctx.moveTo(-s, -s * 0.4); ctx.lineTo(s * 0.7, -s * 0.6); ctx.lineTo(s, s * 0.5); ctx.lineTo(-s * 0.4, s * 0.7); ctx.fill(); ctx.restore();
+          }
+        });
+
+        // Funken (S6)
+        const mE = win(t, 40.0, 47.3, 0.3);
+        if (mE > 0) for (let i = 0; i < 70; i++) {
+          const P = 2.2 + h(i, 32) * 2.5, u = ((t + h(i, 33) * P) % P) / P;
+          const x = h(i, 34) * 1920 + Math.sin(u * 7 + i) * 40, y = 1120 - u * 1250;
+          ctx.globalAlpha = mE * Math.sin(u * Math.PI) * 0.9; ctx.fillStyle = i % 4 ? "#ffb35c" : "#8fd3ff";
+          ctx.beginPath(); ctx.arc(x, y, 1.4 + h(i, 35) * 2.8, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // Chidori-Schrift (S7)
+        if (t > 47.3 && t < 53.9) {
+          const fade = 1 - clamp((t - 53.25) / 0.5);
+          ctx.save(); ctx.font = '138px "Dela"'; ctx.textBaseline = "middle";
+          const glyphs = []; let k = 0;
+          LINES.forEach((ln, li) => {
+            const w = ctx.measureText(ln).width; let x = 960 - w / 2; const y = 420 + li * 190;
+            ln.split("").forEach((ch) => { const cw = ctx.measureText(ch).width; glyphs.push({ ch, x, y, cw, k: k++ }); x += cw; });
+          });
+          glyphs.forEach((g) => {
+            const t0 = 47.75 + g.k * 0.085; if (t < t0) return;
+            const age = t - t0;
+            // Einschlag-Blitz
+            if (age < 0.16 && g.ch !== " ") drawBolt(g.x + g.cw / 2 + (h(g.k, 40) - 0.5) * 500, -40, g.x + g.cw / 2, g.y, g.k * 9 + 1, 160, 3, 1 - age / 0.16);
+            const fl = age < 0.25 ? 0.6 + 0.4 * h(Math.floor(t * 60), g.k) : 1;
+            ctx.globalAlpha = fade * fl;
+            ctx.shadowColor = "rgba(80,190,255,0.95)"; ctx.shadowBlur = 38; ctx.fillStyle = "#d9f2ff"; ctx.fillText(g.ch, g.x, g.y);
+            ctx.shadowBlur = 10; ctx.fillStyle = "#ffffff"; ctx.fillText(g.ch, g.x, g.y);
+          });
+          ctx.restore();
+          // Knistern um die Schrift
+          if (t > 49.0) {
+            const sd = Math.floor(t * 15);
+            for (let j = 0; j < 4; j++) {
+              const gx = 330 + h(sd, j * 3) * 1260, gy = 330 + h(sd, j * 3 + 1) * 380;
+              drawBolt(gx, gy, gx + (h(sd, j * 3 + 2) - 0.5) * 360, gy + (h(sd, j + 9) - 0.5) * 160, sd * 7 + j, 60, 1.6, 0.85 * fade);
+            }
+          }
+          // Hand-Chidori Ruf: großer Blitz zur Mitte beim Weißblitz
+          if (t > 49.3 && t < 49.7) drawBolt(960, -60, 960, 520, 77, 260, 6, 1 - (t - 49.3) / 0.4);
+        }
+      }
+      const clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: () => draw(clock.t) }, 0);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => draw(clock.t));
+      tl.seek(0);
+    </script>
+  </body>
+</html>

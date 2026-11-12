@@ -91,3 +91,18 @@ Das MP4 bleibt als Backup.
 - 16:9, 1920×1080, 30 fps, nahtloser 60-s-Loop
 - MP4 (H.264) für die OBS-Medienquelle mit „Wiederholen“, optional die HTML-Browserquelle
 - Fan-Art auf dem eigenen Stream ist üblich. Keine Original-Musik, keine 1:1-Szenen aus dem Anime.
+
+---
+
+## Umsetzung (Stand: fertig gerendert)
+
+- **Video:** `screenhide/renders/fuzzn-searching-loop-60s.mp4`, 1920×1080, 30 fps, 60 s, nahtloser Loop
+- **In OBS:** Medienquelle → Datei wählen → **„Wiederholen“** anhaken, „Quelle neu starten, wenn aktiv“ anhaken
+- **Gebaut mit:** HyperFrames (`screenhide/index.html`), Ton gemischt mit `screenhide/tools_mix.py`
+- **Higgsfield:** 7 Upscales (2K), 4 Kling-3.0-Pro-Clips (Start- = Endbild, dadurch loopbar),
+  Musik (ElevenLabs Music v2.5, auf 20 Takte / 80 BPM zur Endlosschleife geschnitten), 11 Soundeffekte
+- **Logo:** „FUZZN“ als schwarze Blockschrift auf Orange, abgeleitet vom Hoodie im Twitch-Profilbild
+- Die vier Papierrisse liegen auf den Beats (29,25 · 30,75 · 32,25 · 33,75 s)
+
+**Ändern lässt sich leicht:** Gag-Zeilen (`#gags` in `index.html`), Farben (`:root`), Lautstärken
+einzelner Sounds (`EVENTS` in `tools_mix.py`, danach `python3 tools_mix.py` und neu rendern).
