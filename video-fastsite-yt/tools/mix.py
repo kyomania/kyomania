@@ -48,7 +48,15 @@ mix[: len(music)] += music * music_gain[:, None]
 place(vo, VO_OFFSET, 1.0)
 
 # --- SFX cue sheet (seconds, video time)
-S = {n: load(f"{ROOT}/sfx/{n}.wav") for n in
+def load_soft(path):
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-af", "lowpass=f=5500,afade=t=in:d=0.012,acompressor=threshold=-20dB:ratio=3:attack=5:release=80",
+                          "-f", "f32le", "-ac", "2", "-ar", str(SR), "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, dtype="<f4").reshape(-1, 2).astype(np.float64)
+
+
+SFX_GAIN = 0.4  # overall SFX level (was 1.0)
+SWAP = {"impact": "impact_soft", "glitch": "whoosh"}
+S = {n: load_soft(f"{ROOT}/sfx/{n}.wav") for n in
      ["whoosh", "whoosh_big", "impact", "impact_soft", "riser", "glitch", "blip", "tick"]}
 V = VO_OFFSET
 cues = [
@@ -70,7 +78,9 @@ cues = [
     (V + 25.6, "blip", 0.35), (28.35, "blip", 0.45), (28.37, "impact_soft", 0.3),
 ]
 for tt, n, g in cues:
-    place(S[n], tt, g)
+    if n == "tick":
+        g *= 0.5
+    place(S[SWAP.get(n, n)], tt, g * SFX_GAIN)
 
 peak = np.abs(mix).max()
 if peak > 0.98:
