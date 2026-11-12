@@ -4,7 +4,7 @@ uv run --with numpy --with scipy python tools/sound.py film/assets/audio/mix.wav
 import sys, wave
 import numpy as np
 from scipy.signal import butter, sosfilt, fftconvolve
-SR = 48000; DUR = 20.0; N = int(SR * DUR); rng = np.random.default_rng(12)
+SR = 48000; DUR = 23.0; N = int(SR * DUR); rng = np.random.default_rng(12)
 L = np.zeros(N); Rr = np.zeros(N)
 def put(x, t, g=1.0, pan=0.0):
     i = int(t * SR)
@@ -45,7 +45,7 @@ def tap(g=1.):
 beat=.5; prog=[(48,(60,64,67)),(45,(57,60,64)),(41,(53,57,60)),(43,(55,59,62))]
 mel=[76,79,81,79, 76,72,74,76, 77,76,74,72, 74,76,79,0, 76,79,81,84, 83,81,79,76, 77,81,79,77, 76,74,72,0]
 mus=np.zeros(N)
-for b in range(int(19.0/beat)):
+for b in range(int(22.0/beat)):
     t=b*beat; bass,ch=prog[(b//4)%4]
     j=int(t*SR)
     def add(x):
@@ -55,29 +55,42 @@ for b in range(int(19.0/beat)):
     m=mel[b%len(mel)]
     if m and t>0.2: add(celesta(hz(m),1.0,.32))
     if b%2==1: add(sum(celesta(hz(c),.6,.07) for c in ch))
-for k in range(int(19.0/(beat/2))):
+for k in range(int(22.0/(beat/2))):
     put(bells(.12, .55 if k%2 else .35), k*beat/2+.02, 1., .3)
 put(verb(mus,.28), 0, .85)
-for m,g in [(48,.4),(60,.3),(64,.28),(67,.28),(72,.25),(76,.2)]: put(verb(celesta(hz(m),3.,g),.4), 18.9)
+for m,g in [(48,.4),(60,.3),(64,.28),(67,.28),(72,.25),(76,.2)]: put(verb(celesta(hz(m),3.,g),.4), 21.9)
 
 # SFX
-for c in (5.2,8.4,11.2,13.6,15.6): put(rip(.62,.24), c-.33, 1., rng.uniform(-.3,.3))
-put(rip(.6,.12), 0.35)                                               # Schild rauscht herab
-for k in range(5): put(tap(.12), 0.75+k*.24, 1., (-1)**k*.3)          # Schild pendelt
-for t in [2.07,3.3,5.65,8.85,11.5,13.9]: put(slap(.24), t+.05, 1., rng.uniform(-.25,.25))
+def twang(g=1.):
+    n=int(SR*.35); t=np.arange(n)/SR; f=220*np.exp(-t*3)+90
+    return np.sin(2*np.pi*np.cumsum(f)/SR)*np.exp(-t*12)*g
+def crumple(d=.5, g=1.):
+    n=int(SR*d); t=np.arange(n)/SR
+    clicks=(rng.random(n)<0.012)*rng.standard_normal(n)*3
+    return flt(rng.standard_normal(n)*.3+clicks,"band",[600,7000])*np.sin(np.pi*t/d)**.5*g
+for c in (8.4,11.2,15.1,18.6): put(rip(.62,.24), c-.33, 1., rng.uniform(-.3,.3))
+# Päckchen: fällt, wackelt, Kordel schnalzt, Packpapier reißt
+put(crumple(.35,.25), 4.85); put(slap(.45), 5.15)
+for i in range(4): put(tap(.18), 5.15+i/12, 1., (-1)**i*.3)
+put(twang(.35), 5.45, 1., -.2); put(twang(.25), 5.5, 1., .3)
+put(rip(.9,.45), 5.55, 1., -.3); put(rip(.9,.45), 5.58, 1., .3); put(crumple(.6,.2), 5.6)
+put(verb(celesta(hz(84),1.4,.25),.5), 6.0); put(verb(celesta(hz(88),1.4,.2),.5), 6.06); put(verb(celesta(hz(91),1.4,.18),.5), 6.12)
+put(rip(.6,.12), 0.35)
+for k in range(5): put(tap(.12), 0.75+k*.24, 1., (-1)**k*.3)
+for t in [2.07,3.3,6.05,8.85,11.5,15.4]: put(slap(.24), t+.05, 1., rng.uniform(-.25,.25))
 put(slap(.18), 0.1)
-for i in range(7): put(tap(.22), .6+i*.17+.08, 1., .3)               # Dackel-Hüpfer
+for i in range(7): put(tap(.22), .6+i*.17+.08, 1., .3)
 put(squeak(.14), 2.07); put(tap(.3), 2.6)
 for i,t in enumerate([3.75,3.92,4.09,4.25]): put(tap(.15), t, 1., (-1)**i*.3)
 put(verb(celesta(hz(88),1.6,.32),.5), 4.3, 1., .2); put(verb(celesta(hz(91),1.6,.24),.5), 4.37, 1., .2)
 put(verb(celesta(hz(84),1.2,.2),.4), 1.75); put(verb(celesta(hz(88),1.2,.16),.4), 1.82); put(verb(celesta(hz(91),1.2,.14),.4), 1.89)
 for i in range(7): put(verb(celesta(hz([72,74,76,79,81,84,86][i]),.8,.16),.4), 9.0+i*.16, 1., -.6+.2*i)
-for i in range(7): put(tap(.25), 11.85+i*.25, 1., (-1)**i*.25); put(tap(.12), 11.975+i*.25)
-for t0,n,g,gap in [(0.85,3,.05,.06),(1.0,20,.05,.035),(3.4,14,.05,.045),(5.75,28,.04,.035),(8.95,12,.05,.045),(11.6,19,.04,.03),(12.1,20,.04,.04),(14.0,40,.03,.026),(16.0,20,.04,.035),(16.45,15,.05,.045),(18.35,34,.03,.02)]:
+for i in range(12): put(tap(.25), 11.85+i*.25, 1., (-1)**i*.25); put(tap(.12), 11.975+i*.25)
+for t0,n,g,gap in [(0.85,3,.05,.06),(1.0,20,.05,.035),(3.4,18,.05,.04),(6.15,28,.04,.035),(8.95,12,.05,.045),(11.6,19,.04,.03),(12.1,20,.04,.04),(15.5,40,.03,.03),(19.0,20,.04,.035),(19.45,15,.05,.045),(21.35,34,.03,.02)]:
     for i in range(n): put(tap(g), t0+i*gap+.1, 1., rng.uniform(-.4,.4))
-put(slap(.6), 17.45); put(verb(np.sin(2*np.pi*70*np.arange(int(SR*.4))/SR)*np.exp(-np.arange(int(SR*.4))/SR*12)*.6,.3), 17.45)
-put(slap(.35), 17.97)
-put(verb(bells(.3,1.5),.5), 15.9, 1.)
+put(slap(.6), 20.45); put(verb(np.sin(2*np.pi*70*np.arange(int(SR*.4))/SR)*np.exp(-np.arange(int(SR*.4))/SR*12)*.6,.3), 20.45)
+put(slap(.35), 20.97)
+put(verb(bells(.3,1.5),.5), 18.9, 1.)
 
 mix=np.stack([L,Rr],1); t=np.arange(N)/SR
 mix*=np.clip((DUR-t)/.8,0,1)[:,None]*np.clip(t/.1,0,1)[:,None]

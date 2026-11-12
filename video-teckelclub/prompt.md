@@ -74,6 +74,6 @@ Paper cut-out collage scene of the same red dachshund with green scarf and Santa
 
 ## Stand
 
-Fertig: `teckelclub-einladung-20s.mp4` (1080×1920, 20 s). Projekt: `film/index.html` – alle Texte,
+Fertig: `teckelclub-einladung-23s.mp4` (1080×1920, 23 s). Projekt: `film/index.html` – alle Texte,
 Etiketten und Keyframes editierbar, Schnittzeiten über `rip(...)`. Ton: `tools/sound.py`.
-Rendern: `VW=1080 VH=1920 node tools/capture.cjs film frames 0 600`, dann ffmpeg mit `film/assets/audio/mix.wav`.
+Rendern: `VW=1080 VH=1920 node tools/capture.cjs film frames 0 690`, dann ffmpeg mit `film/assets/audio/mix.wav`.

@@ -40,6 +40,15 @@
       #ripIn { position: absolute; inset: 0; background: var(--paper); }
       #ripStripe { position: absolute; left: 0; width: 1160px; top: 1250px; height: 120px; background: var(--red); }
 
+
+      /* Päckchen-Übergang */
+      #parcel { position: absolute; inset: 0; z-index: 75; pointer-events: none; }
+      .ph { position: absolute; left: -60px; top: -60px; width: 1200px; height: 2040px; }
+      .ph .edge { position: absolute; inset: 0; background: #f4ead6; }
+      .ph .kraft { position: absolute; inset: 0; background-color: #b98a55;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='k'><feTurbulence type='fractalNoise' baseFrequency='0.9 0.08' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .22  0 0 0 0 .1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23k)'/></svg>"),
+          radial-gradient(120% 80% at 50% 40%, rgba(255,230,190,.25), rgba(60,30,10,.25)); }
+      .twine { position: absolute; background: repeating-linear-gradient(45deg, #b4302c 0 6px, #e8d9c0 6px 10px); box-shadow: 0 3px 4px rgba(0,0,0,.3); }
       /* Papier-Konfetti */
       #conf { z-index: 60; pointer-events: none; }
       .pc { position: absolute; left: 0; top: 0; filter: drop-shadow(0 4px 3px rgba(0,0,0,.25)); }
@@ -54,10 +63,10 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1080" data-height="1920" data-fps="30">
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="20" data-volume="1"></audio>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="23" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="23" data-volume="1"></audio>
 
-      <div class="clip" id="stage" data-start="0" data-duration="20">
+      <div class="clip" id="stage" data-start="0" data-duration="23">
 
         <!-- 1a · Der Dackel kommt (Baum links, Dackel von rechts) -->
         <div class="scene creambg" id="s1">
@@ -80,7 +89,7 @@
         <div class="scene creambg" id="s1b">
           <div class="abs" id="briefWrap" style="left:-60px;top:560px;width:1200px;transform-origin:60% 70%"><div class="boil"><img class="feather" src="assets/img/dackel-brief.jpg" style="width:1200px;display:block" /></div></div>
           <div class="glow" id="seal" style="left:640px;top:1130px;width:260px;height:260px"></div>
-          <div class="lbl" id="post" style="left:0;width:1080px;top:290px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="transform:rotate(-3deg)"><div class="tape"></div><div class="hand split" style="font-size:110px;color:var(--red)">Post für dich!</div></div></div></div>
+          <div class="lbl" id="post" style="left:0;width:1080px;top:290px;display:flex;justify-content:center"><div class="boil"><div class="tag" style="transform:rotate(-3deg)"><div class="tape"></div><div class="hand split" style="font-size:100px;color:var(--red)">hat Post für dich!</div></div></div></div>
         </div>
 
         <!-- 2 · Die Stadt -->
@@ -148,11 +157,23 @@
         </div>
 
         <div class="clip" id="conf"></div>
+        <div id="parcel" style="transform:translateY(-2200px)">
+          <div class="ph" id="phL"><div class="edge"></div><div class="kraft"></div></div>
+          <div class="ph" id="phR"><div class="edge"></div><div class="kraft"></div></div>
+          <div class="twine" id="twV" style="left:522px;top:-40px;width:36px;height:2000px"></div>
+          <div class="twine" id="twH" style="left:-40px;top:1012px;width:1160px;height:36px"></div>
+          <div class="abs" id="bow" style="left:390px;top:880px;width:300px;height:300px">
+            <svg viewBox="0 0 300 300" width="300" height="300"><g fill="#c8312f" stroke="#8f1f1d" stroke-width="4"><path d="M150 150 C 70 60, 10 90, 40 150 C 10 210, 70 240, 150 150 Z"/><path d="M150 150 C 230 60, 290 90, 260 150 C 290 210, 230 240, 150 150 Z"/><path d="M150 150 L 110 270 L 135 262 L 150 285 Z"/><path d="M150 150 L 190 270 L 165 262 L 150 285 Z"/></g><circle cx="150" cy="150" r="26" fill="#d84a43" stroke="#8f1f1d" stroke-width="4"/></svg>
+          </div>
+          <div class="abs" id="ptag" style="left:640px;top:1150px;transform:rotate(9deg);transform-origin:0 0">
+            <div class="tag" style="padding:22px 34px 26px"><div class="hand" style="font-size:72px;color:var(--red)">Für dich!</div></div>
+          </div>
+        </div>
         <div id="rip" style="transform:translateY(2000px)"><div id="ripIn"><div id="ripStripe"></div></div></div>
       </div>
 
-      <div class="clip" id="tex" data-start="0" data-duration="20"></div>
-      <div class="clip" id="vig" data-start="0" data-duration="20"></div>
+      <div class="clip" id="tex" data-start="0" data-duration="23"></div>
+      <div class="clip" id="vig" data-start="0" data-duration="23"></div>
     </div>
 
     <script>
@@ -209,7 +230,7 @@
 
       // ---------- Dauerbewegung im Stop-Motion-Takt ----------
       const boils = $$(".boil").map((b) => ({ b, ph: R(0, 6), amp: R(1.2, 2.6) }));
-      for (let i = 0; i < 20 * FPS; i++) {
+      for (let i = 0; i < 23 * FPS; i++) {
         const t = i / FPS;
         boils.forEach(({ b, ph, amp }) => tl.set(b, { rotation: amp * Math.sin(t * 4.2 + ph) + R(-0.5, 0.5), x: R(-1.6, 1.6), y: R(-1.6, 1.6) }, t));
         pieces.forEach((q) => tl.set(q.d, { x: q.x + q.w * Math.sin(t * q.f * 2 + q.p), y: q.y + q.v * t, rotation: q.r * t }, t));
@@ -218,7 +239,7 @@
         tl.set("#fire", { opacity: R(0.45, 0.9), scale: R(0.88, 1.12) }, t);
         tl.set("#endk", { scale: 1 + 0.012 * Math.sin(t * 3) }, t);
       }
-      $$(".snow").forEach((s) => sm(s.children, { y: "+=520", x: "+=60", duration: 20 }, 0, "none"));
+      $$(".snow").forEach((s) => sm(s.children, { y: "+=520", x: "+=60", duration: 23 }, 0, "none"));
 
       // ---------- Ausgangszustand ----------
       show("#s1", 0);
@@ -243,15 +264,36 @@
       // 1b · 3 – 5,2 s: Brief mit Pfoten-Siegel
       show("#s1b", 3.0);
       smFrom("#briefWrap", { y: 620, rotation: 8 }, { y: 0, rotation: 0, duration: 0.55 }, 3.0, "back.out(1.4)");
-      slap("#post", 3.3, 0); letters("#post", 3.4, 0.045);
+      slap("#post", 3.3, 0); letters("#post", 3.4, 0.04);
       [[3.75, 4], [3.92, -4], [4.09, 3], [4.25, -2], [4.42, 0]].forEach(([t, r]) => tl.set("#briefWrap", { rotation: r }, t));
       smFrom("#seal", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1.45, duration: 0.4 }, 4.3, "back.out(3)");
       sm("#seal", { opacity: 0.35, scale: 1, duration: 0.45 }, 4.7, "power2.in");
 
-      // 2 · 5,2 – 8,4 s: Einladung über der Stadt
-      rip(5.2, "#s2");
-      land("#c2", 5.2, 0.12, 3.2, -5);
-      slap("#inv", 5.65, 0); letters("#inv", 5.75, 0.035);
+      // 2 · 5,2 – 8,4 s: Päckchen wird aufgerissen, darin die Einladung
+      {
+        const H = 2040, W = 1200, cx = 600; const zz = []; for (let y = 0; y <= H; y += 46) zz.push([cx + (y % 92 ? 34 : -34) + R(-14, 14) + (y - H / 2) * 0.06, y]);
+        const poly = (pts) => "polygon(" + pts.map(([x, y]) => `${x.toFixed(1)}px ${y.toFixed(1)}px`).join(",") + ")";
+        const L = [[0, 0], ...zz, [0, H]], Rt = [[W, 0], ...zz, [W, H]];
+        const off = (pts, dx) => pts.map(([x, y], i) => (i === 0 || i === pts.length - 1 ? [x, y] : [x + dx, y]));
+        document.querySelector("#phL .kraft").style.clipPath = poly(L);
+        document.querySelector("#phL .edge").style.clipPath = poly(off(L, 14));
+        document.querySelector("#phR .kraft").style.clipPath = poly(Rt);
+        document.querySelector("#phR .edge").style.clipPath = poly(off(Rt, -14));
+      }
+      tl.set("#parcel", { y: -2200, autoAlpha: 1 }, 0);
+      tl.set(".ph .edge", { autoAlpha: 0 }, 0); tl.set(".ph .edge", { autoAlpha: 1 }, 5.58);
+      smFrom("#parcel", { y: -2200, rotation: 4 }, { y: 0, rotation: 0, duration: 0.3 }, 4.85, "power2.in");
+      shake("#parcel", 5.15, 4, 9);
+      show("#s2", 5.2);
+      tl.to("#twV", { y: -2100, rotation: 6, duration: 0.3, ease: stepEase("power2.in", 0.3) }, 5.45);
+      tl.to("#twH", { x: 1300, rotation: -4, duration: 0.3, ease: stepEase("power2.in", 0.3) }, 5.45);
+      tl.to("#bow", { y: -900, x: 260, rotation: 60, scale: 1.3, duration: 0.42, ease: stepEase("power2.in", 0.42) }, 5.45);
+      tl.to("#ptag", { y: 1200, x: -200, rotation: 70, duration: 0.45, ease: stepEase("power2.in", 0.45) }, 5.5);
+      tl.to("#phL", { x: -1250, rotation: -10, duration: 0.55, ease: stepEase("power3.in", 0.55) }, 5.6);
+      tl.to("#phR", { x: 1250, rotation: 9, duration: 0.55, ease: stepEase("power3.in", 0.55) }, 5.6);
+      tl.set("#parcel", { autoAlpha: 0 }, 6.2);
+      land("#c2", 5.6, 0.12, 2.8, -5);
+      slap("#inv", 6.05, 0); letters("#inv", 6.15, 0.035);
 
       // 3 · 8,4 – 11,2 s: Schützenhaus, Fenster gehen nacheinander an
       rip(8.4, "#s3");
@@ -260,31 +302,31 @@
         for (let k = 0; k < 24; k++) tl.set(w, { opacity: R(0.6, 0.95) }, 9.35 + i * 0.16 + k / FPS); });
       slap("#sh", 8.85, 2); letters("#sh", 8.95, 0.045);
 
-      // 4 · 11,2 – 13,6 s: Dackel-Parade hüpft im Takt
+      // 4 · 11,2 – 15,1 s: Dackel-Parade hüpft im Takt
       rip(11.2, "#s4");
       smFrom("#paradeCard", { y: 1100, rotation: 14 }, { y: 0, rotation: 0, duration: 0.55 }, 11.2, "back.out(1.5)");
-      for (let i = 0; i < 7; i++) { tl.to("#paradeCard", { y: -42, rotation: i % 2 ? 2.5 : -2.5, duration: 0.125, ease: "steps(2)" }, 11.85 + i * 0.25); tl.to("#paradeCard", { y: 0, duration: 0.125, ease: "steps(2)" }, 11.975 + i * 0.25); }
+      for (let i = 0; i < 12; i++) { tl.to("#paradeCard", { y: -42, rotation: i % 2 ? 2.5 : -2.5, duration: 0.125, ease: "steps(2)" }, 11.85 + i * 0.25); tl.to("#paradeCard", { y: 0, duration: 0.125, ease: "steps(2)" }, 11.975 + i * 0.25); }
       slap("#zwei", 11.5, -2); letters("#zwei", 11.6, 0.03);
       tl.set("#will", { autoAlpha: 1 }, 12.1); letters("#will", 12.1, 0.04);
 
-      // 5 · 13,6 – 15,6 s: Festsaal
-      rip(13.6, "#s5");
-      land("#c5", 13.6, 0.13, 2.0, -4);
-      slap("#kerz", 13.9, -2); letters("#kerz", 14.0, 0.026);
+      // 5 · 15,1 – 18,6 s: Festsaal
+      rip(15.1, "#s5");
+      land("#c5", 15.1, 0.16, 3.5, -4);
+      slap("#kerz", 15.4, -2); letters("#kerz", 15.5, 0.03);
 
-      // 6 · 15,6 – 20 s: Einladungskarte, Datum als Stempel
-      rip(15.6, "#s6");
-      land("#c6", 15.6, 0.0, 4.4, 4);
-      tl.set(["#eText .ln:nth-child(1)", "#eText .ln:nth-child(2)", "#eText .ln:nth-child(7)"], { autoAlpha: 1 }, 15.9);
-      letters("#eText .ln:nth-child(1)", 16.0, 0.035);
-      letters("#eText .ln:nth-child(2)", 16.45, 0.045);
-      tl.to("#ul", { strokeDashoffset: 0, duration: 0.45, ease: stepEase("power1.inOut", 0.45) }, 17.0);
-      smFrom("#date", { scale: 2.4, rotation: -10, autoAlpha: 0 }, { scale: 1, rotation: -2, autoAlpha: 1, duration: 0.25 }, 17.2, "power3.in");
-      shake("#c6", 17.45, 5, 12);
-      smFrom("#time", { scale: 2, rotation: 8, autoAlpha: 0 }, { scale: 1, rotation: 1, autoAlpha: 1, duration: 0.22 }, 17.75, "power3.in");
-      smFrom("#eText .ln:nth-child(6)", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.3 }, 18.1, "power2.out");
-      letters("#eText .ln:nth-child(7)", 18.35, 0.02);
-      tl.set({}, {}, 20);
+      // 6 · 18,6 – 23 s: Einladungskarte, Datum als Stempel
+      rip(18.6, "#s6");
+      land("#c6", 18.6, 0.0, 4.4, 4);
+      tl.set(["#eText .ln:nth-child(1)", "#eText .ln:nth-child(2)", "#eText .ln:nth-child(7)"], { autoAlpha: 1 }, 18.9);
+      letters("#eText .ln:nth-child(1)", 19.0, 0.035);
+      letters("#eText .ln:nth-child(2)", 19.45, 0.045);
+      tl.to("#ul", { strokeDashoffset: 0, duration: 0.45, ease: stepEase("power1.inOut", 0.45) }, 20.0);
+      smFrom("#date", { scale: 2.4, rotation: -10, autoAlpha: 0 }, { scale: 1, rotation: -2, autoAlpha: 1, duration: 0.25 }, 20.2, "power3.in");
+      shake("#c6", 20.45, 5, 12);
+      smFrom("#time", { scale: 2, rotation: 8, autoAlpha: 0 }, { scale: 1, rotation: 1, autoAlpha: 1, duration: 0.22 }, 20.75, "power3.in");
+      smFrom("#eText .ln:nth-child(6)", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.3 }, 21.1, "power2.out");
+      letters("#eText .ln:nth-child(7)", 21.35, 0.02);
+      tl.set({}, {}, 23);
 
       window.__timelines["main"] = tl;
       tl.seek(0.05); tl.seek(0);
