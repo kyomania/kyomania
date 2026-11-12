@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+
+      @font-face { font-family: "Inter Tight"; font-weight: 400; src: url(assets/fonts/inter-tight-latin-400-normal.woff2) format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url(assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2"); }
+      @font-face { font-family: "JB Mono"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+
+      :root {
+        --bg: #f6f5f1;
+        --card: #ffffff;
+        --ink: #101827;
+        --ink2: #4a5263;
+        --soft: #646b78;
+        --hair: #e3e1db;
+        --yellow: #fbb419;
+        --green: #0c9958;
+        --red: #df482b;
+        --blue: #3e71b6;
+        --sans: "Inter Tight", sans-serif;
+        --mono: "JB Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: var(--sans); color: var(--ink); }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .abs { position: absolute; }
+      .w { display: inline-block; white-space: pre; }
+      .label { font-family: var(--mono); font-weight: 500; font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--soft); }
+      .h1 { font-weight: 800; font-size: 84px; letter-spacing: -0.035em; line-height: 1.02; }
+      .h2 { font-weight: 800; font-size: 46px; letter-spacing: -0.025em; line-height: 1.1; }
+      .body { font-weight: 400; font-size: 30px; color: var(--ink2); line-height: 1.35; }
+      .card { background: var(--card); border: 2px solid var(--hair); border-radius: 28px; box-shadow: 0 20px 50px rgba(16,24,39,0.06); }
+      .hl { position: relative; white-space: pre; }
+      .hl i { position: absolute; left: -6px; right: -6px; bottom: 6px; height: 26px; background: var(--yellow); opacity: 0.55; z-index: -1; border-radius: 6px; transform-origin: 0 50%; }
+      .chip { display: inline-flex; align-items: center; gap: 12px; padding: 12px 22px; border-radius: 999px; font-weight: 800; font-size: 26px; }
+
+      /* background */
+      #bg { z-index: 0; background: var(--bg); }
+      #dots { position: absolute; inset: -40px; background-image: radial-gradient(rgba(16,24,39,0.09) 2px, transparent 2px); background-size: 40px 40px; }
+
+      /* chapter bar */
+      #chap { z-index: 50; }
+      .chapbar { position: absolute; left: 110px; bottom: 54px; display: flex; gap: 40px; align-items: center; }
+      .cstep { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 18px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--soft); }
+      .cstep b { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--soft); display: block; }
+      .cstep.on { color: var(--ink); }
+      .cstep.on b { background: var(--yellow); border-color: var(--yellow); }
+      #prog { position: absolute; left: 0; top: 0; height: 6px; width: 1920px; background: var(--yellow); transform-origin: 0 50%; }
+
+      /* flat devices */
+      .laptop { position: absolute; width: 1120px; transform-origin: 50% 50%; }
+      .lid { width: 1120px; height: 704px; border-radius: 28px; padding: 18px; background: var(--ink); }
+      .screen { position: relative; width: 1084px; height: 668px; border-radius: 12px; overflow: hidden; background: #fff; }
+      .base { width: 1300px; margin-left: -90px; height: 30px; border-radius: 4px 4px 30px 30px; background: #2a3242; position: relative; }
+      .base:after { content: ""; position: absolute; left: 560px; top: 0; width: 180px; height: 10px; border-radius: 0 0 10px 10px; background: #475066; }
+      .phone { position: absolute; width: 340px; height: 700px; border-radius: 56px; padding: 14px; background: var(--ink); transform-origin: 50% 50%; }
+      .pscreen { position: relative; width: 312px; height: 672px; border-radius: 44px; overflow: hidden; background: #fff; }
+      .island { position: absolute; left: 106px; top: 12px; width: 100px; height: 30px; border-radius: 20px; background: var(--ink); z-index: 9; }
+
+      /* shop (desktop) */
+      .site { position: absolute; inset: 0; color: #1c1a17; background: #f4f1ec; }
+      .bar { height: 42px; background: #eceae5; display: flex; align-items: center; padding: 0 16px; gap: 8px; position: relative; }
+      .bar i { width: 12px; height: 12px; border-radius: 50%; background: #cfcac2; display: block; }
+      .url { margin-left: 120px; width: 560px; height: 26px; border-radius: 13px; background: #fff; font-size: 14px; color: #6d675e; display: flex; align-items: center; padding-left: 16px; font-family: var(--mono); }
+      .prog2 { position: absolute; left: 0; bottom: 0; height: 4px; width: 1084px; transform-origin: 0 50%; background: var(--red); }
+      .nav { height: 56px; display: flex; align-items: center; padding: 0 34px; gap: 30px; border-bottom: 1px solid #e3ded5; }
+      .brand { font-weight: 400; font-size: 22px; letter-spacing: 0.42em; }
+      .nav span { font-size: 14px; color: #4d4740; }
+      .nav .sp { flex: 1; }
+      .hero { position: relative; height: 330px; overflow: hidden; }
+      .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .hero .ht { position: absolute; left: 44px; top: 70px; }
+      .hk { font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: #5c5246; }
+      .hh { font-size: 52px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-top: 12px; }
+      .hb { margin-top: 24px; display: inline-block; padding: 12px 24px; background: #1c1a17; color: #f4f1ec; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; }
+      .prods { display: flex; gap: 18px; padding: 22px 34px 0; }
+      .pc { width: 240px; }
+      .pc .im { width: 240px; height: 150px; overflow: hidden; background: #e9e4dc; }
+      .pc img { width: 100%; height: 100%; object-fit: cover; }
+      .pc .n { font-size: 14px; margin-top: 9px; }
+      .pc .p { font-size: 14px; font-weight: 800; margin-top: 2px; }
+      .skel { position: absolute; left: 0; right: 0; top: 42px; bottom: 0; background: #f7f6f3; }
+      .sk { position: absolute; border-radius: 10px; background: linear-gradient(90deg, #ebe8e2 0%, #f5f3ef 20%, #ebe8e2 40%); background-size: 600px 100%; }
+      .ring { position: absolute; width: 70px; height: 70px; border-radius: 50%; border: 7px solid #e3e0da; border-top-color: var(--red); }
+      /* shop (phone) */
+      .msite { position: absolute; inset: 0; background: #f4f1ec; color: #1c1a17; }
+      .mstat { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0; font-size: 14px; font-weight: 800; }
+      .mnav { height: 46px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e3ded5; }
+      .mnav .brand { font-size: 18px; }
+      .mhero { position: relative; height: 300px; overflow: hidden; }
+      .mhero img { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: 37% 30%; }
+      .mhero .ht { position: absolute; left: 20px; bottom: 22px; }
+      .mhero .hh { font-size: 30px; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,0.3); }
+      .mhero .hk { color: rgba(255,255,255,0.92); }
+      .mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; }
+      .mgrid .im { height: 120px; overflow: hidden; background: #e9e4dc; }
+      .mgrid img { width: 100%; height: 100%; object-fit: cover; }
+      .mgrid .n { font-size: 12px; margin-top: 6px; }
+      .mgrid .p { font-size: 12px; font-weight: 800; }
+
+      /* scene specifics */
+      .stat { padding: 26px 34px; }
+      .stat .v { font-weight: 800; font-size: 64px; letter-spacing: -0.03em; margin-top: 6px; }
+      .node { position: absolute; width: 300px; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+      .node .t { font-weight: 800; font-size: 32px; }
+      .node .s { font-family: var(--mono); font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--soft); }
+      .tick { position: absolute; top: -22px; right: -22px; width: 64px; height: 64px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(12,153,88,0.3); }
+      .imgcard { position: absolute; width: 600px; padding: 22px; }
+      .imgcard .ph { width: 556px; height: 310px; border-radius: 16px; overflow: hidden; position: relative; }
+      .imgcard img { width: 100%; height: 100%; object-fit: cover; }
+      .imgcard .row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; }
+      .imgcard .fn { font-family: var(--mono); font-size: 22px; color: var(--ink2); }
+      .imgcard .fs { font-weight: 800; font-size: 46px; letter-spacing: -0.02em; }
+      .bart { height: 16px; border-radius: 10px; background: #efede8; margin-top: 14px; position: relative; overflow: hidden; }
+      .bart i { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 10px; transform-origin: 0 50%; }
+      .dotp { position: absolute; width: 22px; height: 22px; border-radius: 50%; margin: -11px; }
+      #logo { left: 960px; top: 400px; width: 1060px; height: 363px; margin-left: -530px; margin-top: -181px; }
+      #btn { left: 960px; top: 760px; padding: 30px 60px; border-radius: 999px; background: var(--yellow); color: var(--ink); font-weight: 800; font-size: 44px; letter-spacing: -0.02em; display: flex; gap: 20px; align-items: center; white-space: nowrap; box-shadow: 0 16px 40px rgba(251,180,25,0.35); }
+      #cursor { left: 0; top: 0; width: 48px; height: 48px; z-index: 5; }
+      .rp { position: absolute; width: 20px; height: 20px; margin: -10px; border-radius: 50%; border: 4px solid var(--ink); }
+    
+      #cam { z-index: 1; }
+      #board { position: absolute; left: 0; top: 0; width: 5760px; height: 3240px; transform-origin: 0 0; }
+      #boardbg { position: absolute; inset: 0; background-color: var(--bg); background-image: radial-gradient(rgba(16,24,39,0.09) 2px, transparent 2px); background-size: 40px 40px; }
+      .pnl { position: absolute; width: 1920px; height: 1080px; }
+      .seam { position: absolute; border: 2px dashed rgba(16,24,39,0.12); border-radius: 40px; inset: 30px; }
+      .stk { position: absolute; }
+      .big { font-family: var(--sans); font-weight: 800; color: var(--ink); letter-spacing: -0.035em; line-height: 1.05; white-space: nowrap; }
+      .ch { display: inline-block; white-space: pre; }
+      .stamp { position: absolute; font-family: var(--sans); font-weight: 800; font-size: 40px; letter-spacing: -0.02em; color: var(--ink); background: var(--yellow); border: 4px solid var(--ink); padding: 12px 28px; border-radius: 999px; box-shadow: 0 16px 34px rgba(16,24,39,0.18); white-space: nowrap; }
+      .person { position: absolute; width: 46px; height: 70px; }
+      .reel { display: inline-block; height: 1.1em; overflow: hidden; vertical-align: top; }
+      .reel > span { display: block; }
+      .reel > span > b { display: block; height: 1.1em; line-height: 1.1em; font-weight: 800; }
+      #pkt { position: absolute; left: 0; top: 0; width: 56px; height: 56px; margin: -28px; border-radius: 50%; background: var(--yellow); border: 4px solid var(--ink); box-shadow: 0 10px 24px rgba(16,24,39,0.25); z-index: 30; }
+      #over { z-index: 45; }
+      .stat .label { font-size: 16px; }
+      .caret { display: inline-block; width: 2px; height: 16px; background: var(--ink); margin-left: 2px; vertical-align: middle; }
+
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+
+      <div id="cam" class="clip" data-start="0" data-duration="30" data-track-index="0">
+        <div id="board">
+          <div id="boardbg"></div>
+
+          <!-- P1 (0,0) problem -->
+          <div class="pnl" id="P1" style="left:0;top:0"><div class="seam"></div>
+            <div class="stk label" id="l1" style="left:110px;top:90px">Das Problem</div>
+            <div id="dev1" class="stk" style="left:0;top:0;width:1920px;height:1080px"></div>
+            <svg class="stk" id="snail" style="left:200px;top:318px" width="130" height="90" viewBox="0 0 130 90">
+              <path d="M10 80 Q8 60 30 58 L100 58 Q122 60 120 80 Z" fill="#3e71b6" stroke="#101827" stroke-width="6" stroke-linejoin="round"/>
+              <path d="M100 58 L108 26 M112 60 L124 32" stroke="#101827" stroke-width="5" stroke-linecap="round"/><circle cx="108" cy="24" r="6" fill="#101827"/><circle cx="124" cy="30" r="6" fill="#101827"/>
+              <circle cx="58" cy="44" r="36" fill="#fbb419" stroke="#101827" stroke-width="6"/>
+              <path d="M58 44 m0 -6 a6 6 0 1 1 -6 6 a12 12 0 1 1 12 12 a18 18 0 1 1 -18 -18" fill="none" stroke="#101827" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+            <div class="stk card" id="timer1" style="left:1440px;top:90px;width:370px;padding:20px 28px"><div class="label" style="font-size:16px">Ladezeit</div><div id="tv" style="font-weight:800;font-size:58px;color:#df482b;margin-top:6px;letter-spacing:-0.03em">0,0 s</div></div>
+            <div id="stack1" class="stk" style="left:1190px;top:300px;width:760px;height:600px">
+              <div class="big stk" id="a1" style="left:0;top:0;font-size:58px">Deine Website</div>
+              <div class="big stk" id="a2" style="left:0;top:76px;font-size:58px">lädt …</div>
+              <div class="big stk" id="a3" style="left:30px;top:180px;font-size:76px;color:#b97800">und lädt …</div>
+              <div class="big stk" id="a4" style="left:0;top:300px;font-size:104px;color:#df482b">und lädt.</div>
+            </div>
+            <div class="stk card" id="chart1" style="left:1130px;top:300px;width:690px;height:520px;padding:30px">
+              <div class="label" style="font-size:16px">Besucher</div>
+              <div class="h2" style="margin-top:14px">Jede Sekunde kostet<br/>dich <span style="color:#df482b">Besucher.</span></div>
+              <svg width="620" height="250" viewBox="0 0 620 250" style="margin-top:6px;overflow:visible"><path id="lossP" d="M0,40 C100,42 160,52 230,90 S350,170 430,200 S560,236 620,240" fill="none" stroke="#df482b" stroke-width="10" stroke-linecap="round"/></svg>
+              <div id="ppl" class="stk" style="left:30px;top:200px;width:620px;height:260px"></div>
+            </div>
+            <svg class="stk" id="bolt" style="left:620px;top:-40px" width="520" height="900" viewBox="0 0 260 450"><path d="M150 6 L30 250 L120 250 L80 444 L236 170 L140 170 L196 6 Z" fill="#fbb419" stroke="#101827" stroke-width="10" stroke-linejoin="round"/></svg>
+          </div>
+
+          <!-- P2 (1,0) solution -->
+          <div class="pnl" id="P2" style="left:1920px;top:0"><div class="seam"></div>
+            <div class="stk label" id="l2" style="left:110px;top:90px">Die Lösung</div>
+            <div class="big stk" id="b1" style="left:110px;top:170px;font-size:78px">Mit fast.site</div>
+            <div class="big stk" id="b2" style="left:110px;top:275px;font-size:78px">wird sie</div>
+            <div class="big stk" id="b3" style="left:110px;top:380px;font-size:150px;color:#0c9958">schnell.</div>
+            <svg class="stk" id="gauge" style="left:150px;top:640px" width="520" height="300" viewBox="0 0 520 300">
+              <path d="M40 270 A220 220 0 0 1 150 80" fill="none" stroke="#df482b" stroke-width="44"/>
+              <path d="M150 80 A220 220 0 0 1 370 80" fill="none" stroke="#fbb419" stroke-width="44"/>
+              <path d="M370 80 A220 220 0 0 1 480 270" fill="none" stroke="#0c9958" stroke-width="44"/>
+              <path d="M40 270 A220 220 0 0 1 480 270" fill="none" stroke="#101827" stroke-width="6"/>
+              <path d="M18 270 A242 242 0 0 1 502 270" fill="none" stroke="#101827" stroke-width="6"/>
+              <g id="needle" transform="translate(260,270)"><path d="M-12 0 L0 -200 L12 0 Z" fill="#101827"/><circle r="24" fill="#3e71b6" stroke="#101827" stroke-width="6"/></g>
+              <text x="480" y="300" text-anchor="middle" font-family="JB Mono" font-weight="800" font-size="22" fill="#646b78">SOFORT</text>
+              <text x="40" y="300" text-anchor="middle" font-family="JB Mono" font-weight="800" font-size="22" fill="#646b78">LAHM</text>
+            </svg>
+            <div id="dev2" class="stk" style="left:0;top:0;width:1920px;height:1080px"></div>
+            <div class="stamp" id="st2" style="left:1060px;top:860px;background:#e3f4ec;color:#0c9958;border-color:#0c9958">✓ SOFORT GELADEN</div>
+          </div>
+
+          <!-- P3 (2,0) keep hosting -->
+          <div class="pnl" id="P3" style="left:3840px;top:0"><div class="seam"></div>
+            <div class="stk label" id="l3" style="left:110px;top:90px">So funktioniert's</div>
+            <div class="big stk" id="c1t" style="left:110px;top:170px;font-size:84px">Kein Umzug.</div>
+            <div class="stk" id="tape" style="left:90px;top:205px;width:740px;height:46px;background:#df482b;border:5px solid #101827;transform:rotate(-3deg);transform-origin:0 50%"></div>
+            <div class="big stk" id="c2t" style="left:110px;top:170px;font-size:84px">Du behältst dein <span style="color:#0c9958">Hosting.</span></div>
+            <svg class="stk" style="left:0;top:0;overflow:visible" width="1920" height="1080"><path d="M 520 660 L 790 660 M 1130 660 L 1400 660" stroke="#101827" stroke-width="8" stroke-dasharray="16 16" fill="none" opacity="0.6"/></svg>
+            <div class="node card stk" id="n1" style="left:220px;top:510px">
+              <svg width="130" height="90" viewBox="0 0 130 90" fill="none" stroke="#101827" stroke-width="6" stroke-linejoin="round"><rect x="6" y="8" width="84" height="56" rx="6" fill="#9cc4ff"/><path d="M0 72 H96"/><rect x="100" y="22" width="26" height="56" rx="6" fill="#fbb419"/></svg>
+              <div class="t">Besucher</div><div class="s">Desktop · Handy</div></div>
+            <div class="node card stk" id="n2" style="left:810px;top:510px;background:var(--yellow)">
+              <svg viewBox="0 0 147 147" width="100" height="100"><path fill="#fbb419" d="M76.28,70.69l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-50.49-50.49c-5.9-5.9-5.9-15.48,0-21.38.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.77-.48,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02h.01c.12-.01.25,0,.36.01.05-.01.09-.01.12,0,.15-.01.28,0,.4.02.17-.01.32,0,.47.03.03-.01.06,0,.08,0,.15.01.29.05.44.06.02,0,.04,0,.06,0,.32.02.64.07.95.14.47.09.95.2,1.41.34.24.06.46.14.71.22.01.01.03.01.04.02.03.01.08.02.12.04.06.02.12.04.17.07.08.02.15.05.24.08.03.01.07.03.11.05.06.02.11.05.17.07.01.01.03.01.05.03.15.05.3.12.45.19.44.2.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#fbb419" d="M129.11,139.56c-.13.21-.26.42-.41.62-.08.14-.18.29-.28.43-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.47-.76.9-1.16,1.3-.18.18-.36.37-.56.54-.39.35-.78.66-1.19.97-1.02.74-2.11,1.35-3.24,1.81-.47.18-.93.34-1.39.48-.71.21-1.42.37-2.14.47-.48.07-.96.11-1.44.13-.25.02-.49.02-.73.02s-.48,0-.73-.02c-.48-.02-.96-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.3-.08-.59-.17-.88-.28-.29-.09-.57-.19-.86-.31-.45-.17-.9-.38-1.34-.61-.43-.24-.87-.49-1.28-.76-.24-.16-.48-.32-.7-.49-.39-.28-.75-.58-1.11-.9-.2-.17-.39-.37-.57-.55l-29.92-29.92c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.72-.02.1,0,.2,0,.3.01.03-.01.06-.01.09,0h.11c.07,0,.15,0,.23,0,.03,0,.07,0,.11.01.02-.01.04-.01.06,0t.02-.01h.01s.01,0,.01.01h.01s.04,0,.07.01c.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.04,0,.07.02.1.04.05.01.09.03.13.05.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37Z"/><path fill="#d99e28" d="M80.61,83.12l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#df482b" d="M80.71,81.4c0,.57-.03,1.15-.1,1.72-.06.58-.16,1.15-.3,1.72-.62,2.65-1.97,5.17-4.03,7.23l-21.6,21.6-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.05-.01.09-.01.15-.01h.01c.24-.03.47-.04.71-.05.24-.02.48-.02.72-.02h.19s.07,0,.11.01c.03-.01.06-.01.09,0h.23s.07,0,.11,0c.03,0,.07,0,.11.01.04,0,.07,0,.11.01.02-.01.04-.01.07,0,.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.08.03.15.06.23.09.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78,2.95,2.95,4.43,6.82,4.43,10.7Z"/><path fill="#0c9958" d="M76.28,4.43l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-29.92-29.92c-5.46-5.46-14.31-5.46-19.76,0l-29.91,29.91c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.21-.11-.41-.25-.59-.39-.25-.17-.48-.34-.72-.53-.46-.36-.9-.76-1.3-1.16C1.48,73.34,0,69.47,0,65.6,0,65.36,0,65.12.02,64.88c.02-.48.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.46.38-.91.63-1.35.22-.44.48-.87.76-1.28.14-.22.29-.43.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56L54.91,4.43c.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.78-.47,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02.12,0,.25.01.37.01.18,0,.35.01.52.02.03-.01.05-.01.05.01.15-.01.3,0,.42.02.13.01.27.03.39.05.06,0,.13.01.18.02.32.02.64.07.95.14.47.09.94.21,1.41.34.23.07.46.14.7.23.01-.01.02,0,.03.01,0,0,.01-.01.02,0h.01s.03.02.04.03c.08.02.17.05.24.08.12.04.23.09.34.14.06.02.12.04.18.06.01.01.03.01.05.03.15.05.3.12.45.19.43.21.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#047844" d="M80.61,16.85l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#fbb419" d="M65.6,66.26c.97,0,1.93.09,2.88.28-.97-.18-1.93-.27-2.89-.27h.01Z"/><path fill="#fbb419" d="M69.9,66.89c.71.2,1.39.46,2.07.78-.68-.31-1.37-.56-2.07-.78Z"/></svg>
+              <div class="t">fast.site</div><div class="s" style="color:#333">Cache · Bilder · Schutz</div></div>
+            <div class="node card stk" id="n3" style="left:1400px;top:510px">
+              <svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="#101827" stroke-width="6"><rect x="8" y="6" width="80" height="24" rx="6" fill="#3e71b6"/><rect x="8" y="36" width="80" height="24" rx="6" fill="#3e71b6"/><rect x="8" y="66" width="80" height="24" rx="6" fill="#3e71b6"/></svg>
+              <div class="t">Dein Hosting</div><div class="s">bleibt, wo es ist</div></div>
+            <div class="stamp" id="st3" style="left:1450px;top:430px;font-size:48px">BLEIBT!</div>
+          </div>
+
+          <!-- P4 (2,1) edge -->
+          <div class="pnl" id="P4" style="left:3840px;top:1080px"><div class="seam"></div>
+            <div class="stk label" id="l4" style="left:110px;top:90px">01 · Edge-Caching &amp; CDN</div>
+            <div class="big stk" id="d1" style="left:110px;top:170px;font-size:70px">Seiten kommen aus <span style="color:#0c9958">der Nähe.</span></div>
+            <svg class="stk" id="map4" style="left:110px;top:310px;overflow:visible" width="1100" height="640" viewBox="0 0 1100 640">
+              <g id="mdots"></g>
+              <path id="far" d="M 150 500 C 400 640, 800 640, 990 160" fill="none" stroke="#101827" stroke-width="6" stroke-dasharray="14 16" opacity="0.6"/>
+              <g id="origin" transform="translate(990,160)"><circle r="50" fill="#ffffff" stroke="#101827" stroke-width="6"/><g transform="translate(-22,-24)" fill="#3e71b6" stroke="#101827" stroke-width="4"><rect x="0" y="0" width="44" height="13" rx="3"/><rect x="0" y="17" width="44" height="13" rx="3"/><rect x="0" y="34" width="44" height="13" rx="3"/></g><text x="0" y="90" text-anchor="middle" font-family="JB Mono" font-weight="800" font-size="20" fill="#646b78">HOSTING</text></g>
+              <g id="user" transform="translate(150,500)"><circle r="46" fill="#3e71b6" stroke="#101827" stroke-width="6"/><circle cy="-8" r="12" fill="#101827"/><path d="M-19 22 a19 17 0 0 1 38 0" fill="#101827"/><text x="0" y="86" text-anchor="middle" font-family="JB Mono" font-weight="800" font-size="20" fill="#646b78">BESUCHER</text></g>
+              <g id="edges"></g>
+            </svg>
+            <div class="card stk stat" id="k1" style="left:1290px;top:330px;width:520px"><div class="label">Gesamte Anfragen</div><div class="v" id="kv1"></div></div>
+            <div class="card stk stat" id="k2" style="left:1290px;top:530px;width:520px"><div class="label">Übertragene Daten</div><div class="v" id="kv2"></div></div>
+            <div class="card stk stat" id="k3" style="left:1290px;top:730px;width:520px"><div class="label">Sofortige Laderate</div><div class="v" id="kv3" style="color:#0c9958"></div></div>
+            <div class="stk label" id="demo4" style="left:1294px;top:930px;font-size:15px">Demo · Beispieldaten</div>
+          </div>
+
+          <!-- P5 (1,1) webp -->
+          <div class="pnl" id="P5" style="left:1920px;top:1080px"><div class="seam"></div>
+            <div class="stk label" id="l5" style="left:110px;top:90px">02 · Bildoptimierung</div>
+            <div class="big stk" id="e1" style="left:110px;top:170px;font-size:66px">Bilder werden automatisch zu <span style="color:#0c9958">WebP.</span></div>
+            <div class="stk card" id="imgc" style="left:560px;top:330px;width:800px;padding:22px">
+              <div style="width:746px;height:400px;border-radius:16px;overflow:hidden"><img src="assets/img/hero.jpg" style="width:100%;height:100%;object-fit:cover"/></div>
+              <div style="position:relative;height:66px;margin-top:16px">
+                <div id="rowJ" class="stk" style="left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center"><div style="font-family:var(--mono);font-weight:800;font-size:26px">bild.jpg</div><div style="font-weight:800;font-size:48px">303,4 KB</div></div>
+                <div id="rowW" class="stk" style="left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center"><div style="font-family:var(--mono);font-weight:800;font-size:26px">bild.webp</div><div style="font-weight:800;font-size:48px;background:#0c9958;color:#fff;border-radius:12px;padding:0 14px">198,2 KB</div></div>
+              </div>
+            </div>
+            <div class="stk" id="jawL" style="left:120px;top:330px;width:380px;height:560px"><div style="position:absolute;right:0;top:0;width:90px;height:560px;background:#101827;border-radius:18px"></div><div style="position:absolute;right:80px;top:250px;width:300px;height:60px;background:#101827;border-radius:12px"></div><div style="position:absolute;right:20px;top:40px;width:50px;height:50px;border-radius:50%;background:var(--yellow);border:5px solid #101827"></div><div style="position:absolute;right:20px;top:470px;width:50px;height:50px;border-radius:50%;background:var(--yellow);border:5px solid #101827"></div></div>
+            <div class="stk" id="jawR" style="left:1420px;top:330px;width:380px;height:560px"><div style="position:absolute;left:0;top:0;width:90px;height:560px;background:#101827;border-radius:18px"></div><div style="position:absolute;left:80px;top:250px;width:300px;height:60px;background:#101827;border-radius:12px"></div><div style="position:absolute;left:20px;top:40px;width:50px;height:50px;border-radius:50%;background:var(--yellow);border:5px solid #101827"></div><div style="position:absolute;left:20px;top:470px;width:50px;height:50px;border-radius:50%;background:var(--yellow);border:5px solid #101827"></div></div>
+            <div class="stamp" id="st5" style="left:1300px;top:270px;background:#0c9958;color:#fff;font-size:60px">−35 %</div>
+            <div class="stk label" id="note5" style="left:560px;top:930px;font-size:15px;letter-spacing:0.06em">Werte: Beispielfoto von fast.site (1152 × 628 px) · Ersparnis variiert je Bild</div>
+          </div>
+
+          <!-- P6 (0,1) ddos -->
+          <div class="pnl" id="P6" style="left:0;top:1080px"><div class="seam"></div>
+            <div class="stk label" id="l6" style="left:110px;top:90px">03 · DDoS-Schutz</div>
+            <div class="big stk" id="f1" style="left:110px;top:170px;font-size:72px">Angriffe bleiben <span style="color:#0c9958">draußen.</span></div>
+            <svg class="stk" id="shield" style="left:820px;top:360px" width="260" height="310" viewBox="0 0 200 240"><path d="M100 8 L188 40 L188 112 C188 168 150 208 100 230 C50 208 12 168 12 112 L12 40 Z" fill="#ffffff" stroke="#101827" stroke-width="9" stroke-linejoin="round"/><g transform="translate(55,72) scale(0.62)"><path fill="#fbb419" d="M76.28,70.69l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-50.49-50.49c-5.9-5.9-5.9-15.48,0-21.38.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.77-.48,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02h.01c.12-.01.25,0,.36.01.05-.01.09-.01.12,0,.15-.01.28,0,.4.02.17-.01.32,0,.47.03.03-.01.06,0,.08,0,.15.01.29.05.44.06.02,0,.04,0,.06,0,.32.02.64.07.95.14.47.09.95.2,1.41.34.24.06.46.14.71.22.01.01.03.01.04.02.03.01.08.02.12.04.06.02.12.04.17.07.08.02.15.05.24.08.03.01.07.03.11.05.06.02.11.05.17.07.01.01.03.01.05.03.15.05.3.12.45.19.44.2.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#fbb419" d="M129.11,139.56c-.13.21-.26.42-.41.62-.08.14-.18.29-.28.43-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.47-.76.9-1.16,1.3-.18.18-.36.37-.56.54-.39.35-.78.66-1.19.97-1.02.74-2.11,1.35-3.24,1.81-.47.18-.93.34-1.39.48-.71.21-1.42.37-2.14.47-.48.07-.96.11-1.44.13-.25.02-.49.02-.73.02s-.48,0-.73-.02c-.48-.02-.96-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.3-.08-.59-.17-.88-.28-.29-.09-.57-.19-.86-.31-.45-.17-.9-.38-1.34-.61-.43-.24-.87-.49-1.28-.76-.24-.16-.48-.32-.7-.49-.39-.28-.75-.58-1.11-.9-.2-.17-.39-.37-.57-.55l-29.92-29.92c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.72-.02.1,0,.2,0,.3.01.03-.01.06-.01.09,0h.11c.07,0,.15,0,.23,0,.03,0,.07,0,.11.01.02-.01.04-.01.06,0t.02-.01h.01s.01,0,.01.01h.01s.04,0,.07.01c.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.04,0,.07.02.1.04.05.01.09.03.13.05.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37Z"/><path fill="#d99e28" d="M80.61,83.12l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#df482b" d="M80.71,81.4c0,.57-.03,1.15-.1,1.72-.06.58-.16,1.15-.3,1.72-.62,2.65-1.97,5.17-4.03,7.23l-21.6,21.6-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.05-.01.09-.01.15-.01h.01c.24-.03.47-.04.71-.05.24-.02.48-.02.72-.02h.19s.07,0,.11.01c.03-.01.06-.01.09,0h.23s.07,0,.11,0c.03,0,.07,0,.11.01.04,0,.07,0,.11.01.02-.01.04-.01.07,0,.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.08.03.15.06.23.09.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78,2.95,2.95,4.43,6.82,4.43,10.7Z"/><path fill="#0c9958" d="M76.28,4.43l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-29.92-29.92c-5.46-5.46-14.31-5.46-19.76,0l-29.91,29.91c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.21-.11-.41-.25-.59-.39-.25-.17-.48-.34-.72-.53-.46-.36-.9-.76-1.3-1.16C1.48,73.34,0,69.47,0,65.6,0,65.36,0,65.12.02,64.88c.02-.48.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.46.38-.91.63-1.35.22-.44.48-.87.76-1.28.14-.22.29-.43.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56L54.91,4.43c.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.78-.47,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02.12,0,.25.01.37.01.18,0,.35.01.52.02.03-.01.05-.01.05.01.15-.01.3,0,.42.02.13.01.27.03.39.05.06,0,.13.01.18.02.32.02.64.07.95.14.47.09.94.21,1.41.34.23.07.46.14.7.23.01-.01.02,0,.03.01,0,0,.01-.01.02,0h.01s.03.02.04.03c.08.02.17.05.24.08.12.04.23.09.34.14.06.02.12.04.18.06.01.01.03.01.05.03.15.05.3.12.45.19.43.21.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#047844" d="M80.61,16.85l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#fbb419" d="M65.6,66.26c.97,0,1.93.09,2.88.28-.97-.18-1.93-.27-2.89-.27h.01Z"/><path fill="#fbb419" d="M69.9,66.89c.71.2,1.39.46,2.07.78-.68-.31-1.37-.56-2.07-.78Z"/></g></svg>
+            <div class="stk card" id="site6" style="left:1400px;top:430px;width:420px;padding:28px">
+              <div style="display:flex;align-items:center;gap:14px"><div id="beat6" style="width:22px;height:22px;border-radius:50%;background:var(--green);border:4px solid #101827"></div><div class="h2" style="font-size:28px">dein-shop.de</div></div>
+              <div class="label" style="margin-top:14px;font-size:15px;box-shadow:none">Online · geschützt</div>
+            </div>
+            <div class="stk" style="left:110px;top:930px;display:flex;gap:30px" id="leg6">
+              <div class="chip" style="background:#fff;border:2px solid var(--hair);color:var(--ink2)"><span style="width:20px;height:20px;border-radius:50%;background:var(--green);border:3px solid #101827"></span>Echte Besucher</div>
+              <div class="chip" style="background:#fff;border:2px solid var(--hair);color:var(--ink2)"><span style="width:20px;height:20px;border-radius:50%;background:#df482b;border:3px solid #101827"></span>Angriffe</div>
+            </div>
+            <div id="balls6" class="stk" style="left:0;top:0;width:1920px;height:1080px"></div>
+          </div>
+
+          <!-- P7 (0,2) devices -->
+          <div class="pnl" id="P7" style="left:0;top:2160px"><div class="seam"></div>
+            <div id="dev7" class="stk" style="left:0;top:0;width:1920px;height:1080px"></div>
+            <div class="big stk" id="g1" style="left:0;width:1920px;text-align:center;top:880px;font-size:78px">Auf dem Desktop.</div>
+            <div class="big stk" id="g2" style="left:0;width:1920px;text-align:center;top:880px;font-size:78px">Auf dem Handy.</div>
+          </div>
+
+          <!-- P8 (1,2) logo + CTA -->
+          <div class="pnl" id="P8" style="left:1920px;top:2160px"><div class="seam"></div>
+            <svg id="logo" class="stk" style="left:430px;top:150px;margin:0" width="1060" height="363" viewBox="0 0 428.82 146.98"><g id="lgIcon"><path fill="#fbb419" d="M76.28,70.69l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-50.49-50.49c-5.9-5.9-5.9-15.48,0-21.38.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.77-.48,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02h.01c.12-.01.25,0,.36.01.05-.01.09-.01.12,0,.15-.01.28,0,.4.02.17-.01.32,0,.47.03.03-.01.06,0,.08,0,.15.01.29.05.44.06.02,0,.04,0,.06,0,.32.02.64.07.95.14.47.09.95.2,1.41.34.24.06.46.14.71.22.01.01.03.01.04.02.03.01.08.02.12.04.06.02.12.04.17.07.08.02.15.05.24.08.03.01.07.03.11.05.06.02.11.05.17.07.01.01.03.01.05.03.15.05.3.12.45.19.44.2.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#fbb419" d="M129.11,139.56c-.13.21-.26.42-.41.62-.08.14-.18.29-.28.43-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.47-.76.9-1.16,1.3-.18.18-.36.37-.56.54-.39.35-.78.66-1.19.97-1.02.74-2.11,1.35-3.24,1.81-.47.18-.93.34-1.39.48-.71.21-1.42.37-2.14.47-.48.07-.96.11-1.44.13-.25.02-.49.02-.73.02s-.48,0-.73-.02c-.48-.02-.96-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.3-.08-.59-.17-.88-.28-.29-.09-.57-.19-.86-.31-.45-.17-.9-.38-1.34-.61-.43-.24-.87-.49-1.28-.76-.24-.16-.48-.32-.7-.49-.39-.28-.75-.58-1.11-.9-.2-.17-.39-.37-.57-.55l-29.92-29.92c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.72-.02.1,0,.2,0,.3.01.03-.01.06-.01.09,0h.11c.07,0,.15,0,.23,0,.03,0,.07,0,.11.01.02-.01.04-.01.06,0t.02-.01h.01s.01,0,.01.01h.01s.04,0,.07.01c.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.04,0,.07.02.1.04.05.01.09.03.13.05.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37Z"/><path fill="#d99e28" d="M80.61,83.12l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#df482b" d="M80.71,81.4c0,.57-.03,1.15-.1,1.72-.06.58-.16,1.15-.3,1.72-.62,2.65-1.97,5.17-4.03,7.23l-21.6,21.6-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.05-.01.09-.01.15-.01h.01c.24-.03.47-.04.71-.05.24-.02.48-.02.72-.02h.19s.07,0,.11.01c.03-.01.06-.01.09,0h.23s.07,0,.11,0c.03,0,.07,0,.11.01.04,0,.07,0,.11.01.02-.01.04-.01.07,0,.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.08.03.15.06.23.09.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78,2.95,2.95,4.43,6.82,4.43,10.7Z"/><path fill="#0c9958" d="M76.28,4.43l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-29.92-29.92c-5.46-5.46-14.31-5.46-19.76,0l-29.91,29.91c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.21-.11-.41-.25-.59-.39-.25-.17-.48-.34-.72-.53-.46-.36-.9-.76-1.3-1.16C1.48,73.34,0,69.47,0,65.6,0,65.36,0,65.12.02,64.88c.02-.48.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.46.38-.91.63-1.35.22-.44.48-.87.76-1.28.14-.22.29-.43.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56L54.91,4.43c.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.78-.47,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02.12,0,.25.01.37.01.18,0,.35.01.52.02.03-.01.05-.01.05.01.15-.01.3,0,.42.02.13.01.27.03.39.05.06,0,.13.01.18.02.32.02.64.07.95.14.47.09.94.21,1.41.34.23.07.46.14.7.23.01-.01.02,0,.03.01,0,0,.01-.01.02,0h.01s.03.02.04.03c.08.02.17.05.24.08.12.04.23.09.34.14.06.02.12.04.18.06.01.01.03.01.05.03.15.05.3.12.45.19.43.21.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#047844" d="M80.61,16.85l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#fbb419" d="M65.6,66.26c.97,0,1.93.09,2.88.28-.97-.18-1.93-.27-2.89-.27h.01Z"/><path fill="#fbb419" d="M69.9,66.89c.71.2,1.39.46,2.07.78-.68-.31-1.37-.56-2.07-.78Z"/></g><g id="lgWord" fill="#101827"><path d="M189.96,120.88V26.46h56.54v10.68h-44.93v83.75h-11.61ZM196.11,80v-10.55h46.02v10.55h-46.02Z"/><path d="M278.32,122.99c-5.19,0-9.74-.97-13.66-2.9-3.92-1.93-6.99-4.59-9.22-7.98-2.23-3.38-3.35-7.23-3.35-11.54,0-4.92,1.32-9.08,3.96-12.46,2.64-3.38,6.19-5.94,10.65-7.65,4.46-1.71,9.38-2.57,14.75-2.57,3.09,0,5.96.24,8.6.73,2.64.48,4.94,1.05,6.9,1.71,1.96.66,3.44,1.3,4.44,1.91v-4.09c0-5.1-1.87-9.14-5.6-12.13-3.73-2.99-8.29-4.48-13.66-4.48-3.82,0-7.4.81-10.72,2.44-3.32,1.63-5.94,3.89-7.85,6.79l-8.74-6.33c1.82-2.64,4.1-4.92,6.83-6.86,2.73-1.93,5.85-3.43,9.36-4.48,3.5-1.06,7.21-1.58,11.13-1.58,9.47,0,16.89,2.42,22.26,7.25,5.37,4.84,8.06,11.34,8.06,19.52v42.6h-11.06v-9.63h-.55c-1.18,1.94-2.87,3.8-5.05,5.6-2.19,1.8-4.76,3.28-7.72,4.42-2.96,1.14-6.21,1.71-9.77,1.71ZM279.42,113.1c4.01,0,7.67-.97,10.99-2.9,3.32-1.93,5.99-4.53,7.99-7.78,2-3.25,3-6.81,3-10.68-2.1-1.41-4.71-2.55-7.85-3.43-3.14-.88-6.58-1.32-10.31-1.32-6.65,0-11.52,1.32-14.61,3.96-3.1,2.64-4.64,5.89-4.64,9.76s1.46,6.68,4.37,8.97c2.91,2.29,6.6,3.43,11.06,3.43Z"/><path d="M352.62,122.99c-5.19,0-9.77-.81-13.73-2.44-3.96-1.63-7.24-3.82-9.83-6.59s-4.53-5.78-5.8-9.03l10.38-4.48c1.82,4.04,4.46,7.17,7.92,9.36,3.46,2.2,7.42,3.3,11.88,3.3s7.85-.83,10.72-2.51c2.87-1.67,4.3-4.13,4.3-7.39,0-2.02-.59-3.71-1.78-5.08-1.18-1.36-2.92-2.53-5.19-3.5-2.28-.97-5.05-1.85-8.33-2.64l-8.47-2.11c-3.28-.88-6.37-2.11-9.29-3.69-2.92-1.58-5.26-3.63-7.03-6.13-1.78-2.51-2.66-5.56-2.66-9.17,0-4.04,1.23-7.52,3.69-10.42,2.46-2.9,5.69-5.12,9.7-6.66,4-1.54,8.28-2.31,12.84-2.31,4.01,0,7.76.55,11.27,1.65,3.5,1.1,6.58,2.73,9.22,4.88,2.64,2.16,4.64,4.81,6.01,7.98l-10.11,4.48c-1.73-3.34-4.05-5.67-6.96-6.99-2.92-1.32-6.15-1.98-9.7-1.98-3.82,0-7.15.81-9.97,2.44-2.82,1.63-4.23,3.85-4.23,6.66s1.16,4.92,3.48,6.33c2.32,1.41,5.17,2.55,8.54,3.43l10.11,2.51c6.83,1.67,11.97,4.15,15.43,7.45,3.46,3.3,5.19,7.32,5.19,12.07,0,4.22-1.23,7.87-3.69,10.95-2.46,3.08-5.78,5.45-9.97,7.12-4.19,1.67-8.83,2.51-13.93,2.51Z"/><path d="M387.58,63.78v-10.16h12.97v10.16h-12.97ZM419.26,121.94c-5.83,0-10.52-1.69-14.07-5.08-3.55-3.38-5.33-7.93-5.33-13.65V34.63h11.61v65.81c0,3.78.8,6.57,2.39,8.37,1.59,1.8,3.98,2.7,7.17,2.7,1.46,0,2.82-.2,4.1-.59,1.27-.4,2.5-.94,3.69-1.65v10.95c-1.46.53-2.96.94-4.51,1.25-1.55.31-3.23.46-5.05.46ZM410.79,63.78v-10.16h17.75v10.16h-17.75Z"/></g></svg>
+            <div class="big stk" id="cta" style="left:0;width:1920px;text-align:center;top:570px;font-size:66px">Jetzt <span style="color:#0c9958">7 Tage kostenlos</span> testen.</div>
+            <div class="stk" id="btn" style="left:960px;top:720px">Kostenlos testen <svg width="44" height="44" viewBox="0 0 44 44"><path class="arr" d="M8 22 H34 M24 12 L34 22 L24 32" stroke="#101827" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="stk label" id="nocc" style="left:960px;top:900px;font-size:20px;white-space:nowrap">Keine Kreditkarte erforderlich · fast.site/de</div>
+            <div id="stars8" class="stk" style="left:0;top:0;width:1920px;height:1080px"></div>
+            <svg id="cursor" class="stk" viewBox="0 0 46 46" style="left:0;top:0;width:54px;height:54px"><path d="M6 4 L6 38 L15 29 L21 43 L28 40 L22 26 L35 26 Z" fill="#101827" stroke="#101827" stroke-width="3" stroke-linejoin="round"/></svg>
+          </div>
+
+          <!-- P9 (2,2) collage, seen in the overview -->
+          <div class="pnl" id="P9" style="left:3840px;top:2160px"><div class="seam"></div>
+            <div class="stk card" style="left:260px;top:180px;width:820px;height:460px;padding:18px;transform:rotate(-4deg)"><img src="assets/img/hero.jpg" style="width:100%;height:100%;object-fit:cover;border:5px solid #101827;border-radius:14px"/></div>
+            <div class="stamp" style="left:980px;top:560px;font-size:84px;transform:rotate(6deg);background:var(--yellow)">7 TAGE GRATIS</div>
+            <div class="stamp" style="left:300px;top:760px;font-size:60px;transform:rotate(-5deg);background:#3e71b6">ATELIER × fast.site</div>
+          </div>
+
+          <div id="minis" class="stk" style="left:0;top:0;width:5760px;height:3240px"></div>
+          <div id="pkt"></div>
+        </div>
+      </div>
+
+      <div id="over" class="clip" data-start="0" data-duration="30" data-track-index="1" data-layout-ignore>
+        <div class="big stk" id="ueb" style="left:0;width:1920px;text-align:center;top:360px;font-size:280px;letter-spacing:-0.06em;color:#101827;text-shadow:0 0 40px #f6f5f1, 0 0 80px #f6f5f1, 0 0 120px #f6f5f1">Überall.</div>
+      </div>
+
+      <div id="chap" class="clip" data-start="0" data-duration="24.3" data-track-index="2" data-layout-ignore>
+        <div id="prog"></div>
+        <div class="chapbar">
+          <div class="cstep" id="cs0"><b></b>Problem</div>
+          <div class="cstep" id="cs1"><b></b>Lösung</div>
+          <div class="cstep" id="cs2"><b></b>Funktionen</div>
+          <div class="cstep" id="cs3"><b></b>Überall</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      const NS = "http://www.w3.org/2000/svg";
+      const V = 0.9;
+      let sd = 2024; const rnd = () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }; const R = (a, b) => a + (b - a) * rnd();
+      function mk(parent, cls, css, html) { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css || {}); if (html) d.innerHTML = html; parent.appendChild(d); return d; }
+      const P = [["Wollmantel Camel", "289 €", "p1"], ["Sneaker Weiß", "129 €", "p2"], ["Ledertasche Cognac", "219 €", "p3"], ["Strickpullover Creme", "99 €", "p4"]];
+      function deskSite(loading) {
+        return `<div class="site"><div class="bar"><i></i><i></i><i></i><div class="url">dein-shop.de</div>${loading ? '<div class="prog2"></div>' : ""}</div>
+          <div class="nav"><div class="brand">ATELIER</div><span>Neu</span><span>Damen</span><span>Herren</span><span>Accessoires</span><span style="color:#b0442a">Sale</span><div class="sp"></div><span>Suche</span><span>Konto</span><span>Warenkorb (0)</span></div>
+          <div class="hero"><img src="assets/img/hero.jpg"/><div class="ht"><div class="hk">Herbst / Winter 26</div><div class="hh">Die neue<br/>Kollektion</div><div class="hb">Jetzt entdecken</div></div></div>
+          <div class="prods">${P.map((p) => `<div class="pc"><div class="im"><img src="assets/img/${p[2]}.jpg"/></div><div class="n">${p[0]}</div><div class="p">${p[1]}</div></div>`).join("")}</div>
+          ${loading ? `<div class="skel"><div class="sk" style="left:34px;top:14px;width:140px;height:28px"></div><div class="sk" style="left:220px;top:18px;width:420px;height:20px"></div>
+            <div class="sk" style="left:0;top:58px;width:1084px;height:330px;border-radius:0"></div>
+            ${[0, 1, 2, 3].map((i) => `<div class="sk" style="left:${34 + i * 258}px;top:410px;width:240px;height:150px"></div><div class="sk" style="left:${34 + i * 258}px;top:572px;width:160px;height:14px"></div>`).join("")}
+            <div class="ring" style="left:507px;top:186px"></div></div>` : ""}</div>`;
+      }
+      function phoneSite(loading) {
+        return `<div class="msite"><div class="mstat"><span>9:41</span><span>5G</span></div><div class="mnav"><div class="brand">ATELIER</div></div>
+          <div class="mhero"><img src="assets/img/hero.jpg"/><div class="ht"><div class="hk">Herbst / Winter 26</div><div class="hh">Die neue<br/>Kollektion</div></div></div>
+          <div class="mgrid">${P.map((p) => `<div><div class="im"><img src="assets/img/${p[2]}.jpg"/></div><div class="n">${p[0]}</div><div class="p">${p[1]}</div></div>`).join("")}</div>
+          ${loading ? `<div class="skel" style="top:52px"><div class="sk" style="left:100px;top:12px;width:112px;height:22px"></div><div class="sk" style="left:0;top:46px;width:312px;height:300px;border-radius:0"></div>
+            ${[0, 1, 2, 3].map((i) => `<div class="sk" style="left:${14 + (i % 2) * 147}px;top:${360 + Math.floor(i / 2) * 170}px;width:137px;height:120px"></div>`).join("")}
+            <div class="ring" style="left:121px;top:161px"></div></div>` : ""}</div>`;
+      }
+      function laptop(parent, x, y, s, loading) { const d = mk(parent, "laptop", { left: x + "px", top: y + "px" }, `<div class="lid"><div class="screen" data-layout-ignore>${deskSite(loading)}</div></div><div class="base"></div>`); gsap.set(d, { scale: s }); d.dataset.base = s; return d; }
+      function phone(parent, x, y, s, loading) { const d = mk(parent, "phone", { left: x + "px", top: y + "px" }, `<div class="pscreen" data-layout-ignore>${phoneSite(loading)}<div class="island"></div></div>`); gsap.set(d, { scale: s }); d.dataset.base = s; return d; }
+
+
+      // ---------- motion vocabulary: stickers, bouncy letters, stamps ----------
+      function hide(el, t) { tl.set(el, { opacity: 0 }, 0); if (t !== undefined) tl.set(el, { opacity: 1 }, t); }
+      function drop(el, t, rot = R(-5, 5), h = 700) {
+        const b = el.dataset.base ? +el.dataset.base : 1;
+        tl.set(el, { opacity: 0 }, 0);
+        tl.fromTo(el, { opacity: 1, y: -h, rotation: rot * 5, scaleX: b, scaleY: b, transformOrigin: "50% 100%" }, { y: 0, rotation: rot, duration: 0.42, ease: "power2.in", immediateRender: false }, t);
+        tl.to(el, { scaleY: 0.8 * b, scaleX: 1.14 * b, duration: 0.07, ease: "power1.out" }, t + 0.42);
+        tl.to(el, { scaleY: b, scaleX: b, duration: 0.6, ease: "elastic.out(1, 0.35)" }, t + 0.49);
+      }
+      function pop(el, t, d = 0.6) { tl.set(el, { opacity: 0 }, 0); tl.fromTo(el, { opacity: 1, scale: 0 }, { scale: 1, duration: d, ease: "elastic.out(1, 0.45)", immediateRender: false }, t); }
+      function chars(el) {
+        const out = [];
+        [...el.childNodes].forEach((n) => {
+          const txt = n.textContent, color = n.nodeType === 1 ? n.style.color : "";
+          const frag = document.createDocumentFragment();
+          [...txt].forEach((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; if (color) s.style.color = color; frag.appendChild(s); out.push(s); });
+          el.replaceChild(frag, n);
+        });
+        return out;
+      }
+      function hop(sel, t, st = 0.025) {
+        const el = typeof sel === "string" ? $(sel) : sel; const cs = chars(el);
+        tl.set(cs, { opacity: 0 }, 0);
+        tl.fromTo(cs, { opacity: 1, y: -220, rotation: () => R(-30, 30) }, { y: 0, rotation: 0, duration: 0.65, ease: "bounce.out", stagger: st, immediateRender: false }, t);
+        return cs;
+      }
+      function stamp(el, t, rot = -8) {
+        tl.set(el, { opacity: 0 }, 0);
+        tl.fromTo(el, { opacity: 1, scale: 3.2, rotation: rot - 25 }, { scale: 1, rotation: rot, duration: 0.22, ease: "power4.in", immediateRender: false }, t);
+        tl.fromTo(el, { scale: 0.9 }, { scale: 1, duration: 0.4, ease: "elastic.out(1, 0.4)", immediateRender: false }, t + 0.22);
+      }
+      function fallAway(el, t) { tl.to(el, { y: 1100, rotation: R(-40, 40), duration: 0.6, ease: "power2.in" }, t); tl.to(el, { opacity: 0, duration: 0.2 }, t + 0.4); }
+
+      // ---------- camera ----------
+      const board = $("#board");
+      function camPos(c, r, s) { return { x: 960 - (c * 1920 + 960) * s, y: 540 - (r * 1080 + 540) * s, scale: s }; }
+      gsap.set(board, camPos(0, 0, 1));
+      tl.set(board, camPos(0, 0, 1), 0);
+      function whip(t, c, r, s = 1, dur = 0.55, blur = 16) {
+        tl.to(board, { ...camPos(c, r, s), duration: dur, ease: "expo.inOut" }, t);
+        tl.to(board, { filter: `blur(${blur}px)`, duration: dur * 0.5, ease: "power2.in" }, t);
+        tl.to(board, { filter: "blur(0px)", duration: dur * 0.5, ease: "power2.out" }, t + dur * 0.5);
+      }
+      // packet ball rides along every whip
+      const pkt = $("#pkt");
+      tl.set(pkt, { opacity: 0, x: 0, y: 0 }, 0);
+      function fly(t, ax, ay, bx, by, dur = 0.55, lift = 320) {
+        tl.set(pkt, { opacity: 1, x: ax, y: ay, scale: 1 }, t);
+        tl.to(pkt, { keyframes: [{ x: (ax + bx) / 2, y: Math.min(ay, by) - lift, duration: dur / 2, ease: "power2.out" }, { x: bx, y: by, duration: dur / 2, ease: "power2.in" }] }, t);
+        tl.to(pkt, { scaleY: 0.6, scaleX: 1.35, duration: 0.07 }, t + dur);
+        tl.to(pkt, { scaleY: 1, scaleX: 1, duration: 0.4, ease: "elastic.out(1,0.4)" }, t + dur + 0.07);
+      }
+
+      // ---------- chapter + progress ----------
+      tl.fromTo("#prog", { scaleX: 0 }, { scaleX: 1, duration: 24.3, ease: "none" }, 0);
+      [[0, 0], [1, 7.98], [2, 12.8], [3, 21.4]].forEach(([i, t]) => { tl.set("#cs" + i, { attr: { class: "cstep on" } }, t); if (i) tl.set("#cs" + (i - 1), { attr: { class: "cstep" } }, t); });
+      tl.from(".chapbar", { y: 120, duration: 0.6, ease: "back.out(2)" }, 0.3);
+
+      // ================= P1: problem (0 – 8) =================
+      const dev1 = $("#dev1");
+      const lap1 = laptop(dev1, 60, 250, 0.78, true);
+      const ph1 = phone(dev1, 830, 300, 0.74, true);
+      // opening: extreme close-up on the address bar, typing, enter, pull back
+      const URLX = 560, URLY = 372, Z = 4.2;
+      const camIn = { x: 960 - URLX * Z, y: 540 - URLY * Z, scale: Z };
+      gsap.set(board, camIn); tl.set(board, camIn, 0);
+      const url = lap1.querySelector(".url");
+      const full = "dein-shop.de";
+      url.innerHTML = '<span id="utxt"></span><span class="caret" id="caret"></span>';
+      for (let i = 0; i <= full.length; i++) tl.set("#utxt", { textContent: full.slice(0, i) }, 0.12 + i * 0.05);
+      tl.set("#utxt", { textContent: "" }, 0);
+      for (let i = 0; i < 6; i++) tl.set("#caret", { opacity: i % 2 ? 1 : 0 }, 0.75 + i * 0.12);
+      tl.fromTo(url, { backgroundColor: "#ffffff" }, { backgroundColor: "#fbb419", duration: 0.08, yoyo: true, repeat: 1, immediateRender: false }, 0.78);
+      tl.fromTo(url, { scale: 1 }, { scale: 0.94, duration: 0.08, yoyo: true, repeat: 1, immediateRender: false }, 0.78);
+      tl.to(board, { ...camPos(0, 0, 0.97), duration: 1.0, ease: "expo.inOut" }, 0.85);
+      tl.to(board, { x: 960 - 960 * 1.04 + 20, y: 540 - 540 * 1.04, scale: 1.04, duration: 5.6, ease: "sine.inOut" }, 1.85);
+      // phone skids in from the side
+      tl.set(ph1, { opacity: 0 }, 0);
+      tl.fromTo(ph1, { opacity: 1, x: 900, rotation: 18 }, { x: 0, rotation: 4, duration: 0.7, ease: "back.out(1.6)", immediateRender: false }, 1.45);
+      drop($("#l1"), 1.6, -3, 300);
+      drop($("#timer1"), 1.75, 3, 400);
+      [2, 3, 4, 5, 6, 7].forEach((t) => tl.fromTo("#timer1", { scale: 1.08 }, { scale: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false }, t + 0.5));
+      const tv = { v: 0 };
+      tl.fromTo(tv, { v: 0 }, { v: 8.4, duration: 7.1, ease: "none", onUpdate: () => ($("#tv").textContent = tv.v.toFixed(1).replace(".", ",") + " s") }, 0.8);
+      tl.fromTo("#P1 .sk", { backgroundPosition: "-600px 0" }, { backgroundPosition: "1400px 0", duration: 1.4, ease: "none", repeat: 5 }, 0.8);
+      tl.fromTo("#P1 .ring", { rotation: 0 }, { rotation: 360 * 6, duration: 7.2, ease: "none" }, 0.8);
+
+      tl.fromTo("#P1 .prog2", { scaleX: 0 }, { scaleX: 0.3, duration: 7.0, ease: "power1.out" }, 0.8);
+      // the snail crawls the progress bar
+      tl.set("#snail", { opacity: 0 }, 0);
+      tl.fromTo("#snail", { opacity: 1, x: -380 }, { x: 260, duration: 6.4, ease: "none", immediateRender: false }, 1.4);
+      for (let i = 0; i < 12; i++) tl.fromTo("#snail", { scaleX: 1 }, { scaleX: 1.08, duration: 0.25, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false }, 1.4 + i * 0.53);
+      // stacked "lädt" lines
+      hop("#a1", V, 0.03); hop("#a2", V + 0.7, 0.04);
+      drop($("#a3"), V + 2.04, -4, 500);
+      drop($("#a4"), V + 3.32, 5, 600);
+      tl.to(lap1, { rotation: -4, duration: 0.5, ease: "back.out(3)" }, V + 2.1);
+      tl.to(lap1, { rotation: -9, y: 40, duration: 0.5, ease: "back.out(3)" }, V + 3.4);
+      // stack falls, chart drops, visitors fall off the curve
+      fallAway("#stack1", V + 4.45);
+      drop($("#chart1"), V + 4.6, 2, 900);
+      const lp = $("#lossP"); lp.style.strokeDasharray = 760;
+      tl.fromTo(lp, { strokeDashoffset: 760 }, { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut" }, V + 5.0);
+      const PC = ["#df482b", "#fbb419", "#3e71b6", "#0c9958", "#fbb419", "#ffffff"];
+      for (let i = 0; i < 6; i++) {
+        const p = mk($("#ppl"), "person", { left: 40 + i * 90 + "px", top: 0 + i * 30 + "px" }, `<svg width="46" height="70" viewBox="0 0 46 70"><circle cx="23" cy="15" r="12" fill="${PC[i]}" stroke="#101827" stroke-width="4"/><path d="M5 66 Q5 32 23 32 Q41 32 41 66 Z" fill="${PC[i]}" stroke="#101827" stroke-width="5" stroke-linejoin="round"/></svg>`);
+        pop(p, V + 5.0 + i * 0.12, 0.5);
+        tl.to(p, { y: 700, x: R(-60, 60), rotation: R(-200, 200), duration: 0.7, ease: "power2.in" }, V + 5.6 + i * 0.16); tl.to(p, { opacity: 0, duration: 0.2 }, V + 6.1 + i * 0.16);
+      }
+      // tension + the lightning bolt flicks the snail away
+      for (let i = 0; i < 8; i++) tl.set("#snail", { rotation: i % 2 ? 8 : -8 }, 7.3 + i * 0.07);
+      hide("#bolt");
+      tl.fromTo("#bolt", { opacity: 1, x: 900, y: -900, rotation: 20 }, { x: 0, y: 0, rotation: 0, duration: 0.16, ease: "power4.in", immediateRender: false }, 7.82);
+      tl.to("#bolt", { scale: 1.1, duration: 0.06 }, 7.98); tl.to("#bolt", { scale: 1, duration: 0.3, ease: "elastic.out(1,0.4)" }, 8.04);
+      tl.to("#snail", { x: -500, y: -700, rotation: -720, duration: 0.6, ease: "power2.out" }, 7.98);
+      tl.to("#P1 .skel", { opacity: 0, duration: 0.12 }, 7.98);
+      tl.to("#P1 .prog2", { scaleX: 1, backgroundColor: "#0c9958", duration: 0.15 }, 7.98);
+      tl.to(lap1, { rotation: 0, y: 0, duration: 0.5, ease: "elastic.out(1,0.4)" }, 7.98);
+      tl.to("#tv", { color: "#0c9958", duration: 0.1 }, 7.98);
+      // whip to P2
+      whip(8.05, 1, 0);
+      fly(8.05, 1100, 640, 1920 + 1350, 560);
+
+      // ================= P2: solution (8 – 10.1) =================
+      drop($("#l2"), 8.35, -3, 300);
+      hop("#b1", 8.4, 0.03); hop("#b2", 8.65, 0.03); hop("#b3", 8.85, 0.05);
+      const dev2 = $("#dev2");
+      const ph2 = phone(dev2, 1280, 140, 1.12, false);
+      drop(ph2, 8.3, 4, 900);
+      tl.fromTo(ph2.querySelector(".msite"), { y: 0 }, { y: -230, duration: 1.2, ease: "power2.inOut" }, 8.9);
+      pop($("#gauge"), 8.55, 0.7);
+      tl.fromTo("#needle", { rotation: -82, svgOrigin: "260 270" }, { rotation: 72, duration: 0.9, ease: "elastic.out(1, 0.35)", svgOrigin: "260 270" }, 8.95);
+      stamp($("#st2"), 9.35, -6);
+      tl.set(pkt, { opacity: 0 }, 8.9);
+
+      // ================= P3: keep hosting (10.1 – 12.8) =================
+      whip(9.95, 2, 0);
+      fly(9.95, 1920 + 1350, 560, 3840 + 370, 560);
+      drop($("#l3"), 10.25, -3, 300);
+      hop("#c1t", V + 9.3, 0.035);
+      tl.set("#tape", { opacity: 0 }, 0);
+      tl.fromTo("#tape", { opacity: 1, scaleX: 0 }, { scaleX: 1, duration: 0.2, ease: "power4.out", immediateRender: false }, V + 9.85);
+      fallAway(["#c1t", "#tape"], V + 10.2);
+      hop("#c2t", V + 10.36, 0.025);
+      drop($("#n1"), 10.3, -3); drop($("#n2"), 10.42, 2); drop($("#n3"), 10.54, -2);
+      // packet hops node to node, nodes squash when hit
+      tl.to(pkt, { keyframes: [{ x: 3840 + 960, y: 470, duration: 0.25, ease: "power2.out" }, { x: 3840 + 960, y: 520, duration: 0.2, ease: "power2.in" }] }, 10.75);
+      [["#n2", 11.2], ["#n3", 11.75]].forEach(([n, t]) => { tl.to(n, { scaleY: 0.86, scaleX: 1.08, transformOrigin: "50% 100%", duration: 0.07 }, t); tl.to(n, { scaleY: 1, scaleX: 1, duration: 0.5, ease: "elastic.out(1,0.35)" }, t + 0.07); });
+      tl.to(pkt, { keyframes: [{ x: 3840 + 1255, y: 380, duration: 0.25, ease: "power2.out" }, { x: 3840 + 1550, y: 520, duration: 0.25, ease: "power2.in" }] }, 11.25);
+      stamp($("#st3"), V + 11.0, 10);
+
+      // ================= P4: edge (12.8 – 15.9) =================
+      whip(12.6, 2, 1);
+      fly(12.6, 3840 + 1550, 520, 3840 + 260, 1080 + 810, 0.6, 200);
+      drop($("#l4"), 12.95, -3, 300);
+      hop("#d1", V + 12.05, 0.022);
+      const md = $("#mdots");
+      for (let y = 20; y < 630; y += 28) for (let x = 20; x < 1090; x += 28) {
+        const nx = x / 1100, ny = y / 640; const land = Math.sin(nx * 9.1) * Math.cos(ny * 6.3) + Math.sin(nx * 3.7 + ny * 4.1) * 0.8;
+        if (land > 0.35) { const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 5); c.setAttribute("fill", "#dcd9d2"); md.appendChild(c); }
+      }
+      tl.from("#mdots circle", { scale: 0, transformOrigin: "50% 50%", duration: 0.4, stagger: { amount: 0.7, from: "start" }, ease: "back.out(3)" }, 12.9);
+      pop($("#user"), 13.0); pop($("#origin"), 13.1);
+      tl.from("#far", { opacity: 0, duration: 0.4 }, 13.2);
+      const edgePos = [[300, 390], [520, 220], [760, 340], [430, 540], [880, 480], [640, 110]];
+      edgePos.forEach(([x, y], i) => {
+        const g = document.createElementNS(NS, "g"); g.setAttribute("transform", `translate(${x},${y})`);
+        g.innerHTML = `<circle r="36" fill="#ffffff" stroke="#101827" stroke-width="6"/><g transform="translate(-18,-18) scale(0.245)"><path fill="#fbb419" d="M76.28,70.69l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-50.49-50.49c-5.9-5.9-5.9-15.48,0-21.38.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.77-.48,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02h.01c.12-.01.25,0,.36.01.05-.01.09-.01.12,0,.15-.01.28,0,.4.02.17-.01.32,0,.47.03.03-.01.06,0,.08,0,.15.01.29.05.44.06.02,0,.04,0,.06,0,.32.02.64.07.95.14.47.09.95.2,1.41.34.24.06.46.14.71.22.01.01.03.01.04.02.03.01.08.02.12.04.06.02.12.04.17.07.08.02.15.05.24.08.03.01.07.03.11.05.06.02.11.05.17.07.01.01.03.01.05.03.15.05.3.12.45.19.44.2.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#fbb419" d="M129.11,139.56c-.13.21-.26.42-.41.62-.08.14-.18.29-.28.43-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.47-.76.9-1.16,1.3-.18.18-.36.37-.56.54-.39.35-.78.66-1.19.97-1.02.74-2.11,1.35-3.24,1.81-.47.18-.93.34-1.39.48-.71.21-1.42.37-2.14.47-.48.07-.96.11-1.44.13-.25.02-.49.02-.73.02s-.48,0-.73-.02c-.48-.02-.96-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.3-.08-.59-.17-.88-.28-.29-.09-.57-.19-.86-.31-.45-.17-.9-.38-1.34-.61-.43-.24-.87-.49-1.28-.76-.24-.16-.48-.32-.7-.49-.39-.28-.75-.58-1.11-.9-.2-.17-.39-.37-.57-.55l-29.92-29.92c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.72-.02.1,0,.2,0,.3.01.03-.01.06-.01.09,0h.11c.07,0,.15,0,.23,0,.03,0,.07,0,.11.01.02-.01.04-.01.06,0t.02-.01h.01s.01,0,.01.01h.01s.04,0,.07.01c.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.04,0,.07.02.1.04.05.01.09.03.13.05.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37Z"/><path fill="#d99e28" d="M80.61,83.12l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#df482b" d="M80.71,81.4c0,.57-.03,1.15-.1,1.72-.06.58-.16,1.15-.3,1.72-.62,2.65-1.97,5.17-4.03,7.23l-21.6,21.6-28.88,28.88c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.22-.11-.42-.25-.6-.39-.25-.17-.48-.35-.72-.54-.46-.36-.89-.75-1.3-1.16C1.48,139.61,0,135.74,0,131.87c0-.24,0-.48.02-.72.02-.49.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.47.38-.91.62-1.35.22-.45.49-.87.76-1.28.14-.23.29-.44.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56l50.48-50.48c.19-.2.38-.38.57-.55.38-.34.77-.65,1.18-.96.24-.18.49-.35.74-.5.38-.25.77-.48,1.17-.69.44-.23.89-.44,1.34-.61h.01c.33-.14.66-.26.99-.37.37-.12.73-.23,1.1-.32.32-.07.63-.14.95-.2h.01c.34-.06.69-.11,1.04-.14.05-.01.09-.01.15-.01h.01c.24-.03.47-.04.71-.05.24-.02.48-.02.72-.02h.19s.07,0,.11.01c.03-.01.06-.01.09,0h.23s.07,0,.11,0c.03,0,.07,0,.11.01.04,0,.07,0,.11.01.02-.01.04-.01.07,0,.06,0,.11,0,.16.01.06,0,.12,0,.18.01h.04s.02.01.03.01h.02c.11.01.21.02.32.04.03,0,.06,0,.09.01.01-.01.02-.01.03,0,.02,0,.04,0,.06.01.08,0,.15.01.22.02h.01s.02,0,.03.01h.03s.07.01.11.01c.18.03.36.07.55.1.47.09.93.21,1.41.34.11.03.23.07.34.12.12.04.24.08.35.12h.02s.01.01.02.01h.02s.03.02.04.03c.05,0,.09.03.13.04s.08.02.12.04c.03.01.07.02.11.04.08.03.15.06.23.1.05.01.09.02.13.05.02,0,.03,0,.04.01s.02.01.03.01.01.01.01.01h.01s.01.01.01.01c.08.03.15.06.23.09.08.03.15.07.22.1.44.21.88.43,1.32.69.42.26.84.54,1.26.83.23.17.46.35.68.55.06.04.12.09.18.14l.04.04c.3.25.57.5.84.78,2.95,2.95,4.43,6.82,4.43,10.7Z"/><path fill="#0c9958" d="M76.28,4.43l50.49,50.49c4.98,4.98,5.77,12.56,2.34,18.37-.13.21-.26.42-.4.63-.08.14-.18.28-.28.42-.02.02-.02.04-.04.06-.14.2-.3.4-.45.59-.36.46-.76.9-1.16,1.3-.18.18-.36.36-.55.53-.39.35-.79.67-1.19.97-1.03.75-2.12,1.35-3.25,1.82-.46.18-.93.34-1.39.48-.71.2-1.41.36-2.14.46-.47.07-.96.11-1.44.13-.24.02-.48.02-.73.02s-.48,0-.73-.02c-.48-.02-.97-.06-1.44-.13-.59-.09-1.2-.21-1.78-.37-.29-.07-.58-.16-.88-.27-.29-.09-.57-.19-.86-.31-.45-.17-.91-.38-1.34-.62-.43-.23-.87-.48-1.28-.76-.24-.16-.48-.32-.71-.48-.38-.28-.75-.58-1.11-.91-.19-.17-.38-.36-.56-.54l-29.92-29.92c-5.46-5.46-14.31-5.46-19.76,0l-29.91,29.91c-4.98,4.98-12.56,5.77-18.37,2.34-.13-.09-.26-.16-.39-.25-.21-.11-.41-.25-.59-.39-.25-.17-.48-.34-.72-.53-.46-.36-.9-.76-1.3-1.16C1.48,73.34,0,69.47,0,65.6,0,65.36,0,65.12.02,64.88c.02-.48.06-.97.13-1.44.17-1.2.49-2.39.96-3.52.18-.46.38-.91.63-1.35.22-.44.48-.87.76-1.28.14-.22.29-.43.43-.64.3-.4.63-.81.96-1.18.17-.19.36-.38.54-.56L54.91,4.43c.19-.19.37-.37.56-.54.38-.34.78-.66,1.18-.96.24-.18.49-.35.75-.5.37-.25.78-.47,1.17-.69.43-.23.89-.44,1.34-.62h.01c.33-.14.66-.26.99-.37.33-.11.67-.2,1-.29.04,0,.07-.01.1-.02.32-.08.64-.15.95-.2.35-.05.7-.11,1.05-.14.03-.01.05-.01.07-.01.03-.01.05-.01.07-.01h.01s.01,0,.01,0c.24-.02.47-.03.71-.04.24-.02.48-.02.73-.02.12,0,.25.01.37.01.18,0,.35.01.52.02.03-.01.05-.01.05.01.15-.01.3,0,.42.02.13.01.27.03.39.05.06,0,.13.01.18.02.32.02.64.07.95.14.47.09.94.21,1.41.34.23.07.46.14.7.23.01-.01.02,0,.03.01,0,0,.01-.01.02,0h.01s.03.02.04.03c.08.02.17.05.24.08.12.04.23.09.34.14.06.02.12.04.18.06.01.01.03.01.05.03.15.05.3.12.45.19.43.21.88.43,1.31.69.42.26.85.54,1.26.84.27.19.55.41.81.65.03.01.04.02.06.04l.04.04c.29.25.56.5.84.78Z"/><path fill="#047844" d="M80.61,16.85l-.3,1.72-4.84,27.8c-5.45-5.45-14.31-5.45-19.76,0l-1.03,1.03-4.2-1.03,12.62-12.37,17.51-17.15Z"/><path fill="#fbb419" d="M65.6,66.26c.97,0,1.93.09,2.88.28-.97-.18-1.93-.27-2.89-.27h.01Z"/><path fill="#fbb419" d="M69.9,66.89c.71.2,1.39.46,2.07.78-.68-.31-1.37-.56-2.07-.78Z"/></g>`; $("#edges").appendChild(g);
+        tl.fromTo(g, { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.6, ease: "elastic.out(1,0.4)" }, 13.3 + i * 0.12);
+      });
+      // packet: user -> nearest edge with a bounce, far path fades
+      tl.to(pkt, { keyframes: [{ x: 3840 + 110 + 225, y: 1080 + 310 + 330, duration: 0.25, ease: "power2.out" }, { x: 3840 + 110 + 300, y: 1080 + 310 + 390, duration: 0.25, ease: "bounce.out" }] }, V + 13.3);
+      tl.to("#far", { opacity: 0.15, duration: 0.4 }, V + 13.3);
+      drop($("#k1"), 13.2, -2, 500); drop($("#k2"), 13.32, 2, 500); drop($("#k3"), 13.44, -1, 500);
+      pop($("#demo4"), 14.2, 0.5);
+      // slot-machine reels
+      function reel(el, txt, t) {
+        el.innerHTML = "";
+        [...txt].forEach((c, i) => {
+          if (!/[0-9]/.test(c)) { const s = document.createElement("span"); s.textContent = c; el.appendChild(s); return; }
+          const r = document.createElement("span"); r.className = "reel";
+          const inner = document.createElement("span"); const n = 20 + +c;
+          for (let k = 0; k <= n; k++) { const b = document.createElement("b"); b.textContent = k % 10; inner.appendChild(b); }
+          r.appendChild(inner); el.appendChild(r);
+          tl.fromTo(inner, { yPercent: 0 }, { yPercent: (-n / (n + 1)) * 100, duration: 1.3 + i * 0.12, ease: "power4.out" }, t);
+        });
+      }
+      reel($("#kv1"), "1,2 Mio.", 13.6); reel($("#kv2"), "48 GB", 13.7); reel($("#kv3"), "92 %", 13.8);
+
+      // ================= P5: webp vise (15.9 – 18.9) =================
+      whip(15.7, 1, 1);
+      fly(15.7, 3840 + 410, 1080 + 700, 1920 + 960, 1080 + 300, 0.6, 250);
+      tl.set(pkt, { opacity: 0 }, 16.5);
+      drop($("#l5"), 16.05, -3, 300);
+      hop("#e1", V + 15.14, 0.02);
+      drop($("#imgc"), 16.1, 1, 900);
+      hide("#rowW"); tl.set("#rowJ", { opacity: 1 }, 0);
+      tl.set(["#jawL", "#jawR"], { opacity: 0 }, 0);
+      tl.fromTo("#jawL", { opacity: 1, x: -600 }, { x: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, 16.35);
+      tl.fromTo("#jawR", { opacity: 1, x: 600 }, { x: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, 16.35);
+      const SQ = V + 15.9; // "automatisch"
+      tl.to("#jawL", { x: 196, duration: 0.3, ease: "power4.in" }, SQ);
+      tl.to("#jawR", { x: -196, duration: 0.3, ease: "power4.in" }, SQ);
+      tl.to("#imgc", { scaleX: 0.66, scaleY: 1.04, transformOrigin: "50% 50%", duration: 0.3, ease: "power4.in" }, SQ);
+      tl.set("#rowJ", { opacity: 0 }, SQ + 0.3); tl.set("#rowW", { opacity: 1 }, SQ + 0.3);
+      tl.to("#jawL", { x: -700, duration: 0.45, ease: "back.in(1.5)" }, SQ + 0.55);
+      tl.to("#jawR", { x: 700, duration: 0.45, ease: "back.in(1.5)" }, SQ + 0.55); tl.to(["#jawL", "#jawR"], { opacity: 0, duration: 0.15 }, SQ + 0.9);
+      tl.to("#imgc", { scaleX: 0.8, scaleY: 1, duration: 0.7, ease: "elastic.out(1, 0.35)" }, SQ + 0.4);
+      stamp($("#st5"), V + 16.6, 8);
+      pop($("#note5"), V + 16.9, 0.5);
+
+      // ================= P6: ddos goalkeeper (18.9 – 21.4) =================
+      whip(18.7, 0, 1);
+      drop($("#l6"), 19.05, -3, 300);
+      hop("#f1", V + 18.1, 0.025);
+      pop($("#shield"), 19.05, 0.7);
+      drop($("#site6"), 19.2, 2, 600);
+      drop($("#leg6"), 19.35, -1, 300);
+      for (let i = 0; i < 10; i++) tl.fromTo("#beat6", { scale: 1.4 }, { scale: 1, duration: 0.25, immediateRender: false }, 19.5 + i * 0.2);
+      const SX = 950, SY = 515;
+      for (let i = 0; i < 14; i++) {
+        const t0 = 19.4 + i * 0.13, y0 = R(300, 900);
+        const b = mk($("#balls6"), "dotp", { left: "0px", top: "0px", background: "#df482b", width: "34px", height: "34px", margin: "-17px" });
+        hide(b);
+        tl.set(b, { opacity: 1, x: -60, y: y0, rotation: 0 }, t0);
+        const hy = SY + R(-110, 110);
+        tl.to(b, { keyframes: [{ x: SX - 140, y: hy, duration: 0.32, ease: "power1.in" }, { x: R(80, 500), y: R(-100, 200), rotation: R(-360, 360), duration: 0.5, ease: "power2.out" }] }, t0);
+        tl.set(b, { opacity: 0 }, t0 + 0.82);
+        tl.fromTo("#shield", { x: -14, rotation: R(-6, 6) }, { x: 0, rotation: 0, duration: 0.3, ease: "elastic.out(1,0.4)", immediateRender: false }, t0 + 0.32);
+      }
+      for (let i = 0; i < 6; i++) {
+        const t0 = 19.5 + i * 0.3;
+        const b = mk($("#balls6"), "dotp", { left: "0px", top: "0px", background: "#0c9958", width: "34px", height: "34px", margin: "-17px" });
+        hide(b);
+        tl.set(b, { opacity: 1, x: -60, y: 860 }, t0);
+        tl.to(b, { keyframes: [{ x: 700, y: 980, duration: 0.35, ease: "none" }, { x: 1200, y: 990, duration: 0.3, ease: "none" }, { x: 1600, y: 600, duration: 0.35, ease: "power2.out" }] }, t0);
+        tl.set(b, { opacity: 0 }, t0 + 1.0);
+      }
+
+      // ================= P7: devices (21.4 – 24.4) =================
+      whip(21.2, 0, 2);
+      const dev7 = $("#dev7");
+      const lap7 = laptop(dev7, 260, 90, 0.92, false);
+      const ph7 = phone(dev7, 1330, 140, 0.92, false);
+      drop(lap7, V + 20.5, -2, 900);
+      hide("#g1"); hide("#g2");
+      tl.set("#g1", { opacity: 1 }, V + 20.55); hop("#g1", V + 20.55, 0.025);
+      tl.to("#g1", { opacity: 0, duration: 0.15 }, V + 21.6);
+      tl.to(lap7, { x: -170, duration: 0.45, ease: "back.out(2)" }, V + 21.6);
+      drop(ph7, V + 21.62, 5, 900);
+      tl.set("#g2", { opacity: 1 }, V + 21.7); hop("#g2", V + 21.7, 0.025);
+      // "Überall.": zoom out to the whole board, devices everywhere
+      const OV = V + 22.62;
+      tl.to(board, { ...camPos(1, 1, 1 / 3), duration: 0.75, ease: "expo.inOut" }, OV - 0.1);
+      const spots = [[2700, 300], [4300, 1000], [5300, 600], [700, 2000], [2500, 1450], [4700, 1700], [4200, 2850], [5200, 2500], [1600, 1300], [300, 3000], [3500, 1500], [900, 600]];
+      spots.forEach(([x, y], i) => {
+        const isP = i % 2 === 1;
+        const m = mk($("#minis"), "stk card", { left: x + "px", top: y + "px", width: isP ? "220px" : "520px", height: isP ? "440px" : "330px", padding: "14px", borderRadius: isP ? "40px" : "26px", background: "#101827" }, `<div style="width:100%;height:100%;border-radius:${isP ? 28 : 12}px;background:url(assets/img/${isP ? "p" + (1 + (i % 4)) : "hero"}.jpg) center/cover"></div>`);
+        hide(m);
+        tl.fromTo(m, { opacity: 1, scale: 0, rotation: R(-40, 40) }, { scale: 1, rotation: R(-10, 10), duration: 0.6, ease: "elastic.out(1,0.45)", immediateRender: false }, OV + 0.25 + i * 0.04);
+      });
+      hide("#ueb");
+      tl.set("#ueb", { opacity: 1 }, OV + 0.1); hop("#ueb", OV + 0.1, 0.05);
+      tl.to("#ueb", { scale: 1.6, opacity: 0, duration: 0.3, ease: "power2.in" }, 24.25);
+
+      // ================= P8: logo + CTA (24.45 – 30) =================
+      const LOGO = V + 23.67;
+      tl.to(board, { ...camPos(1, 2, 1), duration: 0.6, ease: "expo.inOut" }, 24.1);
+      $$("#lgIcon path").forEach((p, i) => { tl.set(p, { opacity: 0 }, 0); tl.fromTo(p, { opacity: 1, scale: 2.6, rotation: (i % 2 ? 1 : -1) * 45, transformOrigin: "50% 50%" }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.5)", immediateRender: false }, LOGO - 0.05 + i * 0.06); });
+      $$("#lgWord path").forEach((p, i) => { tl.set(p, { opacity: 0 }, 0); tl.fromTo(p, { opacity: 1, y: -160 }, { y: 0, duration: 0.6, ease: "bounce.out", immediateRender: false }, LOGO + 0.25 + i * 0.07); });
+      tl.to("#logo", { y: -40, scale: 0.8, transformOrigin: "50% 0%", duration: 0.6, ease: "back.inOut(2)" }, V + 24.6);
+      hop("#cta", V + 24.8, 0.03);
+      gsap.set("#btn", { xPercent: -50 }); gsap.set("#nocc", { xPercent: -50 });
+      drop($("#btn"), V + 25.6, -2, 500);
+      drop($("#nocc"), V + 26.0, 1, 300);
+      tl.fromTo("#btn .arr", { x: 0 }, { x: 10, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut" }, 27.0);
+      hide("#cursor");
+      tl.fromTo("#cursor", { opacity: 1, x: 1500, y: 1080 }, { x: 1120, y: 780, duration: 0.9, ease: "power2.out", immediateRender: false }, 27.3);
+      const CLICK = 28.35;
+      tl.to("#cursor", { scale: 0.85, duration: 0.08 }, CLICK); tl.to("#cursor", { scale: 1, duration: 0.15 }, CLICK + 0.08);
+      tl.to("#btn", { x: 8, y: 8, boxShadow: "0 4px 10px rgba(251,180,25,0.35)", duration: 0.08 }, CLICK);
+      tl.to("#btn", { x: 0, y: 0, boxShadow: "0 16px 40px rgba(251,180,25,0.35)", duration: 0.35, ease: "elastic.out(1,0.4)" }, CLICK + 0.12);
+      const starCol = ["#fbb419", "#0c9958", "#df482b", "#3e71b6", "#fbb419"];
+      for (let i = 0; i < 10; i++) {
+        const a = (i / 10) * Math.PI * 2, rr = R(240, 360);
+        const st = mk($("#stars8"), "stk", { left: 960 + Math.cos(a) * rr * 1.5 - 30 + "px", top: 765 + Math.sin(a) * rr * 0.55 - 30 + "px", width: "60px", height: "60px" }, `<svg viewBox="-44 -44 88 88" width="60" height="60"><path d="M0 -40 Q6 -6 40 0 Q6 6 0 40 Q-6 6 -40 0 Q-6 -6 0 -40 Z" fill="${starCol[i % 5]}" stroke="#101827" stroke-width="7" stroke-linejoin="round"/></svg>`);
+        pop(st, CLICK + 0.05 + i * 0.03, 0.6);
+        tl.to(st, { rotation: 180, duration: 1.4, ease: "none" }, CLICK + 0.05);
+      }
+      tl.to("#cam", { opacity: 0, duration: 0.5, ease: "power1.in" }, 29.45);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
