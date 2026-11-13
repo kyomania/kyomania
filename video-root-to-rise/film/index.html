@@ -5,193 +5,185 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-      @font-face { font-family: "CormorantG"; font-weight: 400; src: url(assets/fonts/cormorant-garamond-latin-400-normal.woff2); }
-      @font-face { font-family: "CormorantG"; font-weight: 500; src: url(assets/fonts/cormorant-garamond-latin-500-normal.woff2); }
-      @font-face { font-family: "CormorantG"; font-weight: 400; font-style: italic; src: url(assets/fonts/cormorant-garamond-latin-400-italic.woff2); }
-      @font-face { font-family: "CormorantG"; font-weight: 500; font-style: italic; src: url(assets/fonts/cormorant-garamond-latin-500-italic.woff2); }
-      @font-face { font-family: "InterT"; font-weight: 400; src: url(assets/fonts/Inter-Regular.otf); }
-      @font-face { font-family: "InterT"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
-      :root { --cream: #ebe4f2; --lav: #d5cae4; --ink: #4e3672; --purple: #6a4c93; --soft: #6a4c93; --gold: #6a4c93; --coral: #f8716b; --lime: #cfff03; --serif: "CormorantG", Georgia, serif; --sans: "InterT", sans-serif; }
+      /* brand fonts from worklifehappiness.de */
+      @font-face { font-family: "WLHGaramond"; font-weight: 500; src: url(assets/fonts/CormorantGaramond-Medium-1.woff2); }
+      @font-face { font-family: "WLHGaramond"; font-weight: 600; src: url(assets/fonts/CormorantGaramond-SemiBold-1.woff2); }
+      @font-face { font-family: "WLHScript"; font-weight: 500; src: url(assets/fonts/RoyaltyFree-4.woff2); }
+      @font-face { font-family: "WLHWork"; font-weight: 400; src: url(assets/fonts/WorkSans-Regular.woff2); }
+      @font-face { font-family: "WLHWork"; font-weight: 500; src: url(assets/fonts/WorkSans-Medium.woff2); }
+      @font-face { font-family: "WLHNunito"; font-weight: 600; src: url(assets/fonts/NunitoSans-SemiBold-1.woff2); }
+      :root { --cream: #ebe4f2; --lav: #d5cae4; --ink: #4e3672; --purple: #6a4c93; --coral: #f8716b; --lime: #cfff03;
+        --serif: "WLHGaramond", Georgia, serif; --script: "WLHScript", cursive; --sans: "WLHWork", sans-serif; --btn: "WLHNunito", sans-serif; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); color: var(--ink); -webkit-font-smoothing: antialiased; }
       .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
       video.clip { object-fit: cover; }
       .paper { background: var(--cream); }
-      .ln { display: block; overflow: hidden; padding-bottom: 0.1em; }
+      .ln { display: block; overflow: hidden; padding: 0.06em 0.1em 0.16em; }
       .ln > span { display: inline-block; }
-      .eb { font: 500 28px var(--sans); letter-spacing: 0.32em; text-transform: uppercase; }
-      .serif { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
-      i, .it { font-style: italic; }
+      .eb { font: 500 28px var(--sans); letter-spacing: 0.3em; text-transform: uppercase; }
+      .hd { font-family: var(--serif); font-weight: 500; letter-spacing: -0.005em; }
+      .sc { font-family: var(--script); font-weight: 500; letter-spacing: 0; }
 
-      /* 1: roots */
-      #s1txt { position: absolute; left: 0; width: 1080px; top: 520px; text-align: center; }
-      #s1txt .serif { font-size: 104px; line-height: 1.04; }
-      #s1txt .g { color: var(--gold); }
-      #roots { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
-      #roots path { fill: none; stroke: var(--coral); stroke-linecap: round; }
+      /* 1: opener over the roots film */
+      #s1txt { position: absolute; left: 0; width: 1080px; top: 250px; text-align: center; color: var(--ink); }
+      #s1txt .hd { font-size: 96px; line-height: 1.05; }
+      #s1txt .sc { font-size: 150px; line-height: 1.1; color: var(--purple); margin-top: 6px; }
 
-      /* 2: arrival */
-      #s2eb { position: absolute; left: 0; width: 1080px; top: 520px; text-align: center; color: var(--soft); }
-      #drone1 { top: 640px; height: 596px; }
-      #band { top: 300px; height: 640px; } #bandimg { position: absolute; left: 0; top: 0; width: 1080px; height: 640px; object-fit: cover; transform-origin: 50% 40%; }
-      #s2txt { position: absolute; left: 0; width: 1080px; top: 1310px; text-align: center; }
-      #s2txt .a { font-size: 120px; line-height: 1; }
-      #s2txt .b { margin-top: 26px; font: 400 44px/1.25 var(--serif); font-style: italic; color: var(--soft); }
+      /* 2: arrival triptych */
+      #s2eb { position: absolute; left: 0; width: 1080px; top: 150px; text-align: center; color: var(--purple); }
+      #tA, #tB, #tC { left: 60px; width: 960px; height: 338px; border-radius: 6px; }
+      #tA { top: 230px; } #tB { top: 598px; } #tC { top: 966px; }
+      #s2txt { position: absolute; left: 0; width: 1080px; top: 1350px; text-align: center; }
+      #s2txt .a { font-size: 124px; line-height: 1; }
+      #s2txt .b { margin-top: 18px; font: 400 40px/1.3 var(--sans); color: var(--purple); }
 
       /* footage captions */
-      .shadeB { position: absolute; left: 0; bottom: 0; width: 1080px; height: 900px; background: linear-gradient(rgba(20,16,12,0), rgba(20,16,12,0.62)); }
-      .shadeT { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; background: linear-gradient(rgba(20,16,12,0.5), rgba(20,16,12,0)); }
+      .shadeB { position: absolute; left: 0; bottom: 0; width: 1080px; height: 900px; background: linear-gradient(rgba(28,18,40,0), rgba(28,18,40,0.62)); }
+      .shadeT { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; background: linear-gradient(rgba(28,18,40,0.5), rgba(28,18,40,0)); }
       .cap { position: absolute; left: 90px; color: #fff; }
-      .cap .eb { color: var(--lime); font-size: 28px; }
-      .cap .t { position: relative; height: 130px; margin-top: 18px; width: 900px; }
-      .cap .t > div { position: absolute; left: 0; top: 0; white-space: nowrap; font: 400 100px/1.1 var(--serif); letter-spacing: -0.01em; }
-      #c3 { top: 1380px; }
-      #c4 { top: 210px; left: 470px; color: #3a2856; }
-      #c4 .eb { letter-spacing: 0.32em; }
+      .cap .eb { color: var(--lime); }
+      .cap .t { position: relative; height: 170px; margin-top: 14px; width: 940px; }
+      .cap .t > div { position: absolute; left: 0; top: 0; white-space: nowrap; }
+      .cap .hd { font-size: 100px; line-height: 1.1; }
+      .cap .sc { font-size: 130px; line-height: 1.1; }
+      #c3 { top: 1370px; }
+      #c4 { top: 190px; left: 400px; color: #3a2856; }
+      #c4 .sc { font-size: 116px; }
       #c4 .eb { color: #3a2856; }
-      #c5 { top: 230px; }
+      #c5 { top: 220px; }
 
       /* end card */
       #end { text-align: center; background: var(--purple); color: #fff; }
-      #e1 { position: absolute; left: 0; width: 1080px; top: 1010px; font: 400 150px/1 var(--serif); letter-spacing: -0.02em; }
-      #e1 .it { color: var(--lime); }
-      #e2 { position: absolute; left: 0; width: 1080px; top: 1205px; color: var(--lav); font-size: 28px; }
-      #rule { position: absolute; left: 539px; top: 1280px; width: 2px; height: 90px; background: var(--lime); transform-origin: 50% 100%; }
-      #e3 { position: absolute; left: 0; width: 1080px; top: 1400px; font: 400 64px var(--serif); font-style: italic; }
-      #e3b { position: absolute; left: 0; width: 1080px; top: 1500px; font: 400 30px var(--sans); letter-spacing: 0.04em; color: var(--lav); }
-      #e4w { position: absolute; left: 0; width: 1080px; top: 1600px; display: flex; justify-content: center; }
-      #e4 { padding: 22px 46px; border-radius: 999px; background: var(--lime); color: var(--purple); font: 500 30px var(--sans); letter-spacing: 0.04em; }
+      #band { top: 250px; height: 640px; } #bandimg { position: absolute; left: 0; top: 0; width: 1080px; height: 640px; object-fit: cover; transform-origin: 50% 40%; }
+      #e1 { position: absolute; left: 0; width: 1080px; top: 960px; font-size: 140px; line-height: 1; }
+      #e1 .sc { color: var(--lime); font-size: 190px; }
+      #e2 { position: absolute; left: 0; width: 1080px; top: 1160px; font: 500 78px var(--script); color: var(--lav); }
+      #rule { position: absolute; left: 539px; top: 1280px; width: 2px; height: 80px; background: var(--lime); transform-origin: 50% 0%; }
+      #e3 { position: absolute; left: 0; width: 1080px; top: 1385px; font-size: 66px; }
+      #e3b { position: absolute; left: 0; width: 1080px; top: 1480px; font: 400 30px var(--sans); letter-spacing: 0.02em; color: var(--lav); }
+      #e4w { position: absolute; left: 0; width: 1080px; top: 1570px; display: flex; justify-content: center; }
+      #e4 { padding: 22px 50px; border-radius: 999px; background: var(--lime); color: var(--purple); font: 600 32px var(--btn); letter-spacing: 0.02em; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="30.5" data-width="1080" data-height="1920" data-fps="30">
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30.5" data-volume="1"></audio>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="31" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="31" data-volume="1"></audio>
 
-      <!-- 1: roots (0 - 4.4) -->
-      <div id="s1" class="clip paper" data-start="0" data-duration="4.4" data-track-index="1">
-        <svg id="roots" viewBox="0 0 1080 1920">
-          <path id="r0" pathLength="1" stroke-width="3" d="M540 980 C540 1150 528 1300 545 1500 S 534 1750 540 1920" />
-          <path id="r1" pathLength="1" stroke-width="2.2" d="M540 1060 C480 1140 400 1200 330 1330 S 250 1520 170 1610" />
-          <path id="r2" pathLength="1" stroke-width="2.2" d="M541 1090 C610 1170 700 1230 760 1360 S 840 1560 910 1660" />
-          <path id="r3" pathLength="1" stroke-width="1.6" d="M538 1250 C500 1320 445 1400 420 1530" />
-          <path id="r4" pathLength="1" stroke-width="1.6" d="M543 1300 C590 1380 640 1450 655 1590" />
-          <path id="r5" pathLength="1" stroke-width="1.2" d="M330 1330 C300 1400 300 1460 262 1505" />
-          <path id="r6" pathLength="1" stroke-width="1.2" d="M760 1360 C800 1420 820 1460 868 1482" />
-          <circle id="seed" cx="540" cy="980" r="9" fill="#f8716b" />
-        </svg>
+      <!-- 1: roots film (0 - 4.7) -->
+      <video id="v0" class="clip" src="assets/clips/roots.mp4" muted playsinline data-start="0" data-duration="4.7" data-media-start="0" data-track-index="1"></video>
+      <div id="o1" class="clip" data-start="0" data-duration="4.7" data-track-index="2">
         <div id="s1txt">
-          <div class="serif"><span class="ln" id="l1"><span>Manchmal musst du</span></span><span class="ln" id="l2"><span>nicht weiter.</span></span></div>
-          <div class="serif g it" style="margin-top: 26px"><span class="ln" id="l3"><span>Sondern tiefer.</span></span></div>
+          <div class="hd"><span class="ln" id="l1"><span>Manchmal musst du</span></span><span class="ln" id="l2"><span>nicht weiter.</span></span></div>
+          <div class="sc"><span class="ln" id="l3"><span>Sondern tiefer.</span></span></div>
         </div>
       </div>
 
-      <!-- 2: arrival (4.0 - 8.8) -->
-      <div id="s2" class="clip paper" data-start="4.0" data-duration="4.8" data-track-index="2">
+      <!-- 2: arrival triptych (4.4 - 9.6) -->
+      <div id="s2" class="clip paper" data-start="4.4" data-duration="5.2" data-track-index="3">
         <div id="s2eb" class="eb">ahead Burghotel · Elbtalaue</div>
         <div id="s2txt">
-          <div class="serif a"><span class="ln" id="l4"><span>Ankommen.</span></span></div>
+          <div class="hd a"><span class="ln" id="l4"><span>Ankommen.</span></span></div>
           <div class="b"><span class="ln" id="l5"><span>Zwischen alten Mauern und weitem Land.</span></span></div>
         </div>
       </div>
-      <video id="drone1" class="clip" src="assets/clips/drone1.mp4" muted playsinline data-start="4.0" data-duration="4.43" data-media-start="0" data-track-index="3"></video>
+      <video id="tA" class="clip" src="assets/clips/tA.mp4" muted playsinline data-start="4.5" data-duration="4.53" data-media-start="0" data-track-index="4"></video>
+      <video id="tB" class="clip" src="assets/clips/tB.mp4" muted playsinline data-start="4.75" data-duration="4.43" data-media-start="0" data-track-index="5"></video>
+      <video id="tC" class="clip" src="assets/clips/tC.mp4" muted playsinline data-start="5.0" data-duration="4.53" data-media-start="0" data-track-index="6"></video>
 
-      <!-- 3: yoga (8.4 - 13.3) -->
-      <video id="vy" class="clip" src="assets/clips/yoga.mp4" muted playsinline data-start="8.4" data-duration="4.9" data-media-start="0" data-track-index="4"></video>
-      <div id="o3" class="clip" data-start="8.4" data-duration="4.9" data-track-index="5">
+      <!-- 3: yoga (9.3 - 14.1) -->
+      <video id="vy" class="clip" src="assets/clips/yoga.mp4" muted playsinline data-start="9.3" data-duration="4.8" data-media-start="0" data-track-index="7"></video>
+      <div id="o3" class="clip" data-start="9.3" data-duration="4.8" data-track-index="8">
         <div class="shadeB"></div>
-        <div class="cap" id="c3"><div class="eb">Root to Rise · Yoga</div><div class="t"><div id="t3"><span class="ln"><span>Yoga im Morgenlicht.</span></span></div></div></div>
+        <div class="cap" id="c3"><div class="eb">Pause · Arrive · Thrive</div><div class="t"><div id="t3" class="hd"><span class="ln"><span>Yoga im Morgenlicht.</span></span></div></div></div>
       </div>
 
-      <!-- 4: meditation (13.0 - 18.4) -->
-      <video id="vm" class="clip" src="assets/clips/medi.mp4" muted playsinline data-start="13.0" data-duration="5.04" data-media-start="0" data-track-index="6"></video>
-      <div id="o4" class="clip" data-start="13.0" data-duration="5.04" data-track-index="7">
-        <div class="cap" id="c4"><div class="eb">Inner Growth</div><div class="t"><div id="t4a"><span class="ln"><span>Atmen. Stille.</span></span></div><div id="t4b"><span class="ln"><span class="it">Bei dir sein.</span></span></div></div></div>
+      <!-- 4: meditation (13.6 - 18.64) -->
+      <video id="vm" class="clip" src="assets/clips/medi.mp4" muted playsinline data-start="13.6" data-duration="5.04" data-media-start="0" data-track-index="9"></video>
+      <div id="o4" class="clip" data-start="13.6" data-duration="5.04" data-track-index="10">
+        <div class="cap" id="c4"><div class="eb">Inner Growth</div><div class="t"><div id="t4a" class="hd"><span class="ln"><span>Atmen.</span></span></div><div id="t4b" class="hd"><span class="ln"><span>Stille.</span></span></div><div id="t4c" class="sc"><span class="ln"><span>Bei dir sein.</span></span></div></div></div>
       </div>
 
-      <!-- 5: rise (17.8 - 22.84) -->
-      <video id="vr" class="clip" src="assets/clips/rise.mp4" muted playsinline data-start="17.8" data-duration="5.04" data-media-start="0" data-track-index="8"></video>
-      <div id="o5" class="clip" data-start="17.8" data-duration="5.04" data-track-index="9">
+      <!-- 5: rise (18.4 - 23.44) -->
+      <video id="vr" class="clip" src="assets/clips/rise.mp4" muted playsinline data-start="18.4" data-duration="5.04" data-media-start="0" data-track-index="11"></video>
+      <div id="o5" class="clip" data-start="18.4" data-duration="5.04" data-track-index="12">
         <div class="shadeT"></div>
-        <div class="cap" id="c5"><div class="eb">Rise</div><div class="t"><div id="t5a"><span class="ln"><span>Und dann:</span></span></div><div id="t5b"><span class="ln"><span class="it">wachsen.</span></span></div></div></div>
+        <div class="cap" id="c5"><div class="eb">Rise</div><div class="t"><div id="t5a" class="hd"><span class="ln"><span>Und dann</span></span></div><div id="t5b" class="sc"><span class="ln"><span>wachsen.</span></span></div></div></div>
       </div>
 
-      <!-- 6: end card (22.6 - 30.5) -->
-      <div id="end" class="clip paper" data-start="22.6" data-duration="7.9" data-track-index="10">
-        <div id="e1"><span class="ln"><span>Root to <span class="it">Rise</span></span></span></div>
-        <div id="e2" class="eb">Pause · Arrive · Thrive</div>
+      <!-- 6: end card (23.1 - 31) -->
+      <div id="end" class="clip" data-start="23.1" data-duration="7.9" data-track-index="13">
+        <div id="e1" class="hd"><span class="ln"><span>Root to <span class="sc">Rise</span></span></span></div>
+        <div id="e2">Pause • Arrive • Thrive</div>
         <div id="rule"></div>
-        <div id="e3"><span class="ln"><span>18. – 21. Februar 2027</span></span></div>
+        <div id="e3" class="hd"><span class="ln"><span>18. – 21. Februar 2027</span></span></div>
         <div id="e3b">Yoga &amp; Inner Growth Retreat · ahead Burghotel, Elbtalaue</div>
         <div id="e4w"><div id="e4">Jetzt anmelden · worklifehappiness.de</div></div>
       </div>
-      <div id="band" class="clip" data-start="23.0" data-duration="7.5" data-track-index="11"><img id="bandimg" src="assets/clips/endband.jpg" /></div>
+      <div id="band" class="clip" data-start="23.4" data-duration="7.6" data-track-index="14"><img id="bandimg" src="assets/clips/endband.jpg" /></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
       const EX = "expo.out", E = "power3.out", S = "sine.inOut";
-      const rise = (sel, t, d = 1.1) => tl.fromTo(sel + " > span", { yPercent: 110 }, { yPercent: 0, duration: d, ease: EX }, t);
+      const rise = (sel, t, d = 1.1) => tl.fromTo(sel + " > span", { yPercent: 115 }, { yPercent: 0, duration: d, ease: EX }, t);
+      const fadeUp = (sel, t, d = 0.9) => tl.fromTo(sel, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: d, ease: E }, t);
 
-      // hide timed overlays until they enter
-      tl.set(["#o3 .cap", "#o4 .cap", "#o5 .cap", "#t4b", "#t5b"], { opacity: 0 }, 0);
+      tl.set(["#c3", "#c4", "#c5", "#t4b", "#t4c", "#t5b"], { opacity: 0 }, 0);
 
-      // 1: roots grow as the line says "tiefer"
-      tl.set("#roots path", { strokeDasharray: 1, strokeDashoffset: 1 }, 0);
-      tl.fromTo("#seed", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.8, ease: "back.out(2)" }, 0.2);
-      rise("#l1", 0.45); rise("#l2", 0.7);
-      rise("#l3", 2.6, 1.2);
-      tl.to("#r0", { strokeDashoffset: 0, duration: 1.7, ease: "power2.out" }, 2.55);
-      tl.to(["#r1", "#r2"], { strokeDashoffset: 0, duration: 1.5, ease: "power2.out" }, 2.75);
-      tl.to(["#r3", "#r4"], { strokeDashoffset: 0, duration: 1.2, ease: "power2.out" }, 3.0);
-      tl.to(["#r5", "#r6"], { strokeDashoffset: 0, duration: 0.9, ease: "power2.out" }, 3.3);
-      tl.fromTo("#s1txt", { y: 0 }, { y: -40, duration: 4.4, ease: "none" }, 0);
+      // 1: opener (VO a1 at 0.5)
+      rise("#l1", 0.45); rise("#l2", 0.75);
+      rise("#l3", 2.95, 1.3);
+      tl.to("#s1txt", { opacity: 0, y: -24, duration: 0.45, ease: "power2.in" }, 4.15);
 
-      // 2: arrival, drone film opens as a band
-      tl.fromTo("#s2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: S }, 4.0);
-      tl.fromTo("#drone1", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "expo.inOut" }, 4.15);
-      tl.fromTo("#s2eb", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 4.6);
-      rise("#l4", 4.45); rise("#l5", 5.55);
+      // 2: triptych (VO a2 at 4.8)
+      tl.fromTo("#s2", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: S }, 4.4);
+      [["#tA", 4.5], ["#tB", 4.75], ["#tC", 5.0]].forEach(([id, t]) => {
+        tl.fromTo(id, { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "expo.inOut" }, t);
+      });
+      fadeUp("#s2eb", 4.9);
+      rise("#l4", 4.8); rise("#l5", 6.75);
 
-      // 3: yoga
-      tl.fromTo("#vy", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 8.4);
-      tl.set("#o3 .cap", { opacity: 1 }, 9.3);
-      tl.fromTo("#c3 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 9.3);
-      rise("#t3 .ln", 9.4);
-      tl.to("#c3", { opacity: 0, duration: 0.4, ease: "power2.in" }, 12.6);
+      // 3: yoga (VO a3 at 10.1)
+      tl.fromTo("#vy", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 9.3);
+      tl.set("#c3", { opacity: 1 }, 9.95);
+      tl.fromTo("#c3 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 9.95);
+      rise("#t3 .ln", 10.1);
+      tl.to("#c3", { opacity: 0, duration: 0.4, ease: "power2.in" }, 13.4);
 
-      // 4: meditation
-      tl.fromTo("#vm", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 13.0);
-      tl.set("#o4 .cap", { opacity: 1 }, 13.75);
-      tl.fromTo("#c4 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 13.75);
-      rise("#t4a .ln", 13.85);
-      tl.to("#t4a", { opacity: 0, y: -16, duration: 0.35, ease: "power2.in" }, 15.35);
-      tl.set("#t4b", { opacity: 1 }, 15.6);
-      rise("#t4b .ln", 15.65);
-      tl.to("#c4", { opacity: 0, duration: 0.4, ease: "power2.in" }, 17.4);
+      // 4: meditation (VO a4 at 14.0: Atmen 14.0, Stille 15.6, Bei dir sein 17.3)
+      tl.fromTo("#vm", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 13.6);
+      tl.set("#c4", { opacity: 1 }, 13.9);
+      tl.fromTo("#c4 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 13.9);
+      rise("#t4a .ln", 14.0);
+      tl.to("#t4a", { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 15.3);
+      tl.set("#t4b", { opacity: 1 }, 15.55); rise("#t4b .ln", 15.6);
+      tl.to("#t4b", { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 16.95);
+      tl.set("#t4c", { opacity: 1 }, 17.2); rise("#t4c .ln", 17.25, 1.2);
+      tl.to("#c4", { opacity: 0, duration: 0.4, ease: "power2.in" }, 18.15);
 
-      // 5: rise
-      tl.fromTo("#vr", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 17.8);
-      tl.set("#o5 .cap", { opacity: 1 }, 18.95);
-      tl.fromTo("#c5 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 18.95);
-      rise("#t5a .ln", 19.0);
-      tl.to("#t5a", { opacity: 0, y: -16, duration: 0.3, ease: "power2.in" }, 19.85);
-      tl.set("#t5b", { opacity: 1 }, 20.05);
-      rise("#t5b .ln", 20.1, 1.3);
-      tl.to("#c5", { opacity: 0, duration: 0.45, ease: "power2.in" }, 22.0);
+      // 5: rise (VO a5 at 19.4: Und dann 19.4, wachsen 20.8)
+      tl.fromTo("#vr", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 18.4);
+      tl.set("#c5", { opacity: 1 }, 19.3);
+      tl.fromTo("#c5 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 19.3);
+      rise("#t5a .ln", 19.4);
+      tl.to("#t5a", { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 20.45);
+      tl.set("#t5b", { opacity: 1 }, 20.7); rise("#t5b .ln", 20.75, 1.3);
+      tl.to("#c5", { opacity: 0, duration: 0.45, ease: "power2.in" }, 22.7);
 
-      // 6: end card
-      tl.fromTo("#bandimg", { scale: 1.12 }, { scale: 1.0, duration: 7.5, ease: "power1.out" }, 23.0);
-      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 22.6);
-      tl.fromTo("#band", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4, ease: "expo.inOut" }, 23.0);
-      rise("#e1 .ln", 23.55, 1.3);
-      tl.fromTo("#e2", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 24.5);
-      tl.fromTo("#rule", { scaleY: 0 }, { scaleY: 1, duration: 1.2, ease: "power2.out" }, 25.0);
-      rise("#e3 .ln", 25.4);
-      tl.fromTo("#e3b", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 26.0);
-      tl.fromTo("#e4", { opacity: 0, y: 16, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EX }, 27.0);
-      tl.fromTo(["#e1", "#e2", "#e3", "#e3b"], { scale: 1 }, { scale: 1.025, duration: 7.0, ease: "none" }, 23.5);
+      // 6: end card (VO a6 at 23.9: Root to Rise 23.9, rest 26.3)
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 23.1);
+      tl.fromTo("#band", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4, ease: "expo.inOut" }, 23.4);
+      tl.fromTo("#bandimg", { scale: 1.12 }, { scale: 1.0, duration: 7.6, ease: "power1.out" }, 23.4);
+      rise("#e1 .ln", 23.85, 1.3);
+      fadeUp("#e2", 24.9, 1.0);
+      tl.fromTo("#rule", { scaleY: 0 }, { scaleY: 1, duration: 1.0, ease: "power2.out" }, 25.5);
+      rise("#e3 .ln", 26.2);
+      fadeUp("#e3b", 26.9);
+      tl.fromTo("#e4", { opacity: 0, y: 16, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EX }, 27.8);
+      tl.fromTo(["#e1", "#e2", "#e3", "#e3b"], { scale: 1 }, { scale: 1.025, duration: 7.4, ease: "none" }, 23.6);
 
       window.__timelines["main"] = tl;
       tl.seek(0);
