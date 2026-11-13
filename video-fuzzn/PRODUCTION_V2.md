@@ -65,4 +65,36 @@
 ## Stand 13.11. – Keyframes erzeugt (Runde 2)
 Alle 12 Keyframes liegen in `v2/keyframes/` (Übersicht: `v2/keyframes_kontaktbogen.jpg`). Erzeugt mit Nano Banana Pro, 1K (1376×768). Alle Schriften im Bild sind deutsch und lesbar: SPÄTI, FUZZN, HAKIKI DÖNER, NOCH AM SUCHEN…
 Kleinigkeiten: Das Hertha-Poster in K08 schreibt „HERTHABSC“ ohne Leerzeichen. K04 hat zusätzlich „BESTER DÖNER IN KREUZBERG“ und „Kotbusser Str.“ (statt korrekt „Kottbusser“).
-Nächster Schritt: 8 Kling-Clips (V1–V8, etwa 60 Credits), Musik, dann der Schnitt in `film/index.html` ohne Titel-Block.
+
+## Stand 13.11. – Maximal-Version (12 KI-Videos)
+Auf Kundenwunsch wurde jeder Keyframe zu einem Kling-Clip (kling3_0 pro, 5 s, ohne Ton). C01–C12 liegen in `v2/clips/` (Job-IDs in `v2/jobs.md`). Damit gibt es keine reinen Standbild-Motion-Szenen mehr, nur der Döner-Freeze ist ein Standbild.
+Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf exakt 60 s geloopt (`v2/music_loop.wav`). Dazu SFX: Swell auf den 5 Papier-Übergängen, Ticken und Ping bei der Uhr, Sub beim Freeze, Pings bei Chat-Blasen und Herz (`film/assets/audio/mix.wav`).
+
+**Workflow**
+1. `bash v2/build_base.sh` baut aus den Clips den 60-s-Grundschnitt `film/assets/video/base.mp4` (21 Segmente, Slow-Mo/Reverse wo nötig) und die Standbilder für die Übergänge.
+2. `film/index.html` legt darüber Handkamera-Shake, Punch-Zooms an den Schnitten, Freeze-Flash, deutsche Chat-Blasen (W, GG, Ehrenmann, lass gehen, Oma > alle), Herz, Papierschnipsel, 5 Papier-Übergänge und das HUD. Kein Titel.
+3. `npm run render` im Ordner `film/`.
+
+**Schnitt (final)**
+| Zeit | Shot |
+|---|---|
+| 0,0–3,2 | C01 Kiez weit |
+| 3,2–5,0 | C03 Kette |
+| 5,0–7,6 | C02 Kiez nah |
+| 7,6–10,4 | C11 Blick auf die Uhr |
+| 10,4–12,0 | C12 Uhr „NOCH AM SUCHEN…“ → Riss |
+| 12,0–15,5 | C04 Hakiki |
+| 15,5–21,2 | C05 Biss, mit Freeze-Punch 18,5–19,3 |
+| 21,2–22,0 | C12 Uhr-Insert |
+| 22,0–23,5 | C04 Ende → Zerknüllen |
+| 23,5–27,5 | C06 Balkon |
+| 27,5–30,5 | C07 Glut |
+| 30,5–35,0 | C06 Slow-Mo → Umblättern |
+| 35,0–39,0 | C08 Zimmer |
+| 39,0–42,5 | C09 Oma + Herz |
+| 42,5–47,0 | C08 Slow-Mo → Schere |
+| 47,0–52,0 | C10 Dach |
+| 52,0–53,8 | C12 Uhr-Insert |
+| 53,8–59,2 | C10 rückwärts, Slow-Mo |
+| 59,2–60,0 | Riss zurück zu Frame 0 (Loop) |
+

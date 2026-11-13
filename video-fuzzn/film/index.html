@@ -5,40 +5,26 @@
     <meta name="viewport" content="width=1920, height=1080" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-      @font-face { font-family: "R1"; src: url(assets/fonts/anton-latin-400-normal.woff2); }
-      @font-face { font-family: "R2"; src: url(assets/fonts/abril-fatface-latin-400-normal.woff2); }
       @font-face { font-family: "R3"; src: url(assets/fonts/archivo-black-latin-400-normal.woff2); }
-      @font-face { font-family: "R4"; src: url(assets/fonts/playfair-display-latin-400-normal.woff2); }
-      @font-face { font-family: "R5"; src: url(assets/fonts/rubik-mono-one-latin-400-normal.woff2); }
-      @font-face { font-family: "R6"; src: url(assets/fonts/oswald-latin-400-normal.woff2); }
       @font-face { font-family: "R7"; src: url(assets/fonts/bebas-neue-latin-400-normal.woff2); }
-      @font-face { font-family: "R8"; src: url(assets/fonts/dm-serif-display-latin-400-normal.woff2); }
-      @font-face { font-family: "R9"; src: url(assets/fonts/alfa-slab-one-latin-400-normal.woff2); }
-      @font-face { font-family: "R10"; src: url(assets/fonts/special-elite-latin-400-normal.woff2); }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0c1c; }
       #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0b0c1c; color: #fff; }
       .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
       .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
-      .bg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
-      .fig { position: absolute; display: block; filter: drop-shadow(0 22px 24px rgba(0,0,0,0.55)); }
-      .ab { position: absolute; }
-      .drop { position: absolute; width: 4px; height: 34px; background: rgba(220,228,255,0.55); border-radius: 2px; }
-      .glow { position: absolute; width: 140px; height: 140px; margin: -70px 0 0 -70px; border-radius: 50%;
-        background: radial-gradient(circle, rgba(255,190,90,0.55) 0%, rgba(255,150,60,0.18) 45%, rgba(255,150,60,0) 70%); }
+      #cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #base { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
+      #flash { position: absolute; inset: 0; background: #fff6e0; opacity: 0; }
+      #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.42) 100%); }
+      .scrap { position: absolute; width: 18px; height: 12px; background: #f1ebdc; box-shadow: 0 4px 6px rgba(0,0,0,0.35); }
       .bub { position: absolute; padding: 14px 26px 16px; border-radius: 22px; font: 400 44px "R3", sans-serif; color: #111; background: #f3efe4;
         box-shadow: 0 8px 0 -3px rgba(0,0,0,0.25), 0 14px 26px rgba(0,0,0,0.45); white-space: nowrap; }
       .bub:after { content: ""; position: absolute; left: 30px; bottom: -16px; border: 12px solid transparent; border-top: 16px solid #f3efe4; border-bottom: 0; }
-      .half { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; filter: drop-shadow(0 0 3px #f5f0e4) drop-shadow(0 0 2px #f5f0e4) drop-shadow(0 18px 30px rgba(0,0,0,0.6)); }
+      #heart { opacity: 0; position: absolute; left: 1180px; top: 210px; font: 400 130px R3; color: #ff4f7a; text-shadow: 0 10px 24px rgba(0,0,0,0.5); }
+      .half { visibility: hidden; opacity: 0; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; filter: drop-shadow(0 0 3px #f5f0e4) drop-shadow(0 0 2px #f5f0e4) drop-shadow(0 18px 30px rgba(0,0,0,0.6)); }
       .half .in { position: absolute; inset: 0; }
       .half img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
-      #cutline { position: absolute; left: 0; top: 0; }
-      #title { position: absolute; left: 0; top: 46px; width: 1920px; display: flex; justify-content: center; align-items: flex-end; gap: 14px; }
-      .lt { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 6px 12px 8px; line-height: 1;
-        box-shadow: 0 6px 0 -2px rgba(0,0,0,0.18), 0 10px 18px rgba(0,0,0,0.45); }
-      .sp { width: 34px; }
-      #dots { display: inline-flex; gap: 10px; margin-left: 14px; align-items: flex-end; padding-bottom: 8px; }
-      #dots i { display: block; width: 22px; height: 22px; background: #f3efe4; border-radius: 3px; transform: rotate(8deg); box-shadow: 0 6px 10px rgba(0,0,0,0.4); }
+      #cutline { position: absolute; left: 0; top: 0; visibility: hidden; opacity: 0; }
       #hud { position: absolute; left: 56px; bottom: 44px; display: flex; align-items: center; gap: 18px; font: 400 30px "R3", sans-serif; letter-spacing: 0.04em;
         padding: 12px 22px; background: rgba(10,10,24,0.55); border-radius: 10px; }
       #rec { width: 22px; height: 22px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 0 6px rgba(255,59,59,0.18); }
@@ -48,110 +34,57 @@
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1920" data-height="1080" data-fps="30">
 
-      <!-- S1+S2 Kiez (0 - 18) -->
-      <div id="s1" class="clip" data-start="0" data-duration="18.8" data-track-index="1">
-        <div id="cam1" class="full"><img class="bg" src="assets/img/b1_kiez.jpg" />
-          <img id="train" class="ab" src="assets/img/p1_ubahn.png" style="left:0; top:150px; width:1200px;" />
-          <div id="walkw" class="ab" style="left:0; top:330px;"><img id="walk" class="fig" src="assets/img/f1_walk.png" style="position:relative; height:700px;" /></div>
+      <!-- Grundschnitt aus 12 Kling-Clips (v2/build_base.sh) -->
+      <div id="shot" class="full">
+        <div id="cam">
+          <video id="base" class="clip" data-start="0" data-duration="60" data-track-index="0" src="assets/video/base.mp4" muted playsinline></video>
+          <div id="flash"></div>
         </div>
-        <div id="rain" class="full"></div>
+        <div id="vig"></div>
       </div>
 
-      <!-- S3 Hakiki (18 - 32) -->
-      <div id="s3" class="clip" data-start="18" data-duration="14.8" data-track-index="2">
-        <div id="cam3" class="full"><img class="bg" src="assets/img/b2_hakiki.jpg" />
-          <div id="stw" class="full"></div>
-          <div id="donw" class="ab" style="left:250px; top:250px;"><img id="don" class="fig" src="assets/img/f2_doener.png" style="position:relative; height:860px;" /></div>
-        </div>
+      <!-- Overlays: Chat-Blasen (Balkon), Herz (Oma), Papierschnipsel -->
+      <div id="fx" class="clip" data-start="0" data-duration="60" data-track-index="5">
+        <div id="bubs" class="full"></div>
+        <div id="heart">&#10084;</div>
+        <div id="scraps" class="full"></div>
       </div>
 
-      <!-- S4 Balkon (32 - 42) -->
-      <div id="s4" class="clip" data-start="31.6" data-duration="11.2" data-track-index="3">
-        <div id="cam4" class="full"><img class="bg" src="assets/img/b3_balkon.jpg" />
-          <div id="smk" class="full"></div>
-          <div id="jw" class="ab" style="left:1180px; top:60px;"><img id="joint" class="fig" src="assets/img/f3_joint.png" style="position:relative; height:1080px;" /></div>
-          <div id="bubs" class="full"></div>
-        </div>
-      </div>
-
-      <!-- S5 Zimmer (42 - 52) -->
-      <div id="s5" class="clip" data-start="41.6" data-duration="11.2" data-track-index="4">
-        <div id="cam5" class="full"><img class="bg" src="assets/img/b4_zimmer.jpg" />
-          <div id="glows" class="full"></div>
-          <div id="spin" class="ab" style="left:1420px; top:520px; width:90px; height:90px; border-radius:50%; border:8px solid rgba(255,255,255,0.15); border-top-color:#8be0c6;"></div>
-          <div id="gw" class="ab" style="left:1060px; top:300px;"><img id="gam" class="fig" src="assets/img/f4_gaming.png" style="position:relative; height:780px;" /></div>
-          <div id="heart" class="ab" style="left:1330px; top:150px; font: 400 90px R3; color:#ff4f7a;">&#10084;</div>
-        </div>
-      </div>
-
-      <!-- S6 Dach (52 - 60) -->
-      <div id="s6" class="clip" data-start="51.6" data-duration="8.4" data-track-index="5">
-        <div id="cam6" class="full"><img class="bg" src="assets/img/b5_dach.jpg" />
-          <div id="rw" class="ab" style="left:828px; top:300px;"><img id="roof" class="fig" src="assets/img/f5_roof.png" style="position:relative; height:760px;" /></div>
-        </div>
-      </div>
-
-      <!-- kiez again under the loop tear (identical to frame 0) -->
-      <div id="s7" class="clip" data-start="59.2" data-duration="0.8" data-track-index="6"><img class="bg" src="assets/img/b1_kiez.jpg" /></div>
-
-      <!-- transition layer -->
+      <!-- Papier-Übergänge: ausgehender Frame als Papier -->
       <div id="tx" class="clip" data-start="0" data-duration="60" data-track-index="15">
-        <div class="half" id="tA1"><div class="in"><img src="assets/img/b1_kiez.jpg" /></div></div>
-        <div class="half" id="tA2"><div class="in"><img src="assets/img/b1_kiez.jpg" /></div></div>
-        <div class="half" id="crum"><div class="in" style="overflow:hidden;"><img src="assets/img/b2_hakiki.jpg" /></div></div>
-        <div class="half" id="page"><div class="in"><img src="assets/img/b3_balkon.jpg" /></div></div>
+        <div class="half" id="tA1"><div class="in"><img src="assets/img/v2/out_12.0.jpg" /></div></div>
+        <div class="half" id="tA2"><div class="in"><img src="assets/img/v2/out_12.0.jpg" /></div></div>
+        <div class="half" id="crum"><div class="in" style="overflow:hidden;"><img src="assets/img/v2/out_23.5.jpg" /></div></div>
+        <div class="half" id="page"><div class="in"><img src="assets/img/v2/out_35.0.jpg" /></div></div>
         <svg id="cutline" width="1920" height="1080" viewBox="0 0 1920 1080"><path id="cutp" pathLength="1" d="M-20 700 L1940 380" fill="none" stroke="#f5f0e4" stroke-width="6" stroke-dasharray="0.012 0.008" /></svg>
-        <div class="half" id="sc1"><div class="in"><img src="assets/img/b4_zimmer.jpg" /></div></div>
-        <div class="half" id="sc2"><div class="in"><img src="assets/img/b4_zimmer.jpg" /></div></div>
-        <div class="half" id="tB1"><div class="in"><img src="assets/img/b5_dach.jpg" /></div></div>
-        <div class="half" id="tB2"><div class="in"><img src="assets/img/b5_dach.jpg" /></div></div>
+        <div class="half" id="sc1"><div class="in"><img src="assets/img/v2/out_47.0.jpg" /></div></div>
+        <div class="half" id="sc2"><div class="in"><img src="assets/img/v2/out_47.0.jpg" /></div></div>
+        <div class="half" id="tB1"><div class="in"><img src="assets/img/v2/out_59.2.jpg" /></div></div>
+        <div class="half" id="tB2"><div class="in"><img src="assets/img/v2/out_59.2.jpg" /></div></div>
       </div>
+
+      <!-- Musik (ElevenLabs, als 60-s-Loop) + Papier-/Uhr-SFX, gemischt -->
+      <audio id="mix" data-start="0" data-duration="60" data-track-index="30" src="assets/audio/mix.wav"></audio>
 
       <div id="ovl" class="clip" data-start="0" data-duration="60" data-track-index="20">
-        <div id="title"></div>
         <div id="hud"><div id="rec"></div><span>SCREEN HIDDEN</span><span class="tw">twitch.tv/fuzzn</span></div>
       </div>
     </div>
 
     <script>
-      let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+      let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 
-      const TEXT = "SEARCHING FOR A GAME";
-      const looks = [
-        ["R1", "#f3efe4", "#111", 112], ["R2", "#111", "#f3efe4", 104], ["R3", "#f2d14b", "#111", 96], ["R4", "#ffffff", "#c8102e", 118],
-        ["R5", "#d63a2f", "#fff", 84], ["R6", "#e9e1cf", "#1b1b1b", 120], ["R7", "#8be0c6", "#111", 116], ["R8", "#111", "#f2d14b", 110],
-        ["R9", "#f6b3c8", "#111", 92], ["R10", "#f3efe4", "#222", 104], ["R1", "#3a5bd9", "#fff", 108], ["R2", "#f3efe4", "#d63a2f", 112]
-      ];
-      const rot = [-6, 4, -3, 7, -5, 2, -8, 5, -2, 6, -4, 3, -7, 4, -3, 8, -5];
-      const dy = [0, -8, 6, -4, 10, -6, 2, -10, 4, 0, 8, -6, 4, -8, 6, -2, 2];
-      const title = document.getElementById("title");
-      let li = 0;
-      TEXT.split("").forEach((ch) => {
-        if (ch === " ") { const s = document.createElement("div"); s.className = "sp"; title.appendChild(s); return; }
-        const L = looks[(li * 5) % looks.length];
-        const d = document.createElement("div");
-        d.className = "lt"; d.id = "L" + li;
-        d.style.background = L[1]; d.style.color = L[2]; d.style.fontFamily = L[0]; d.style.fontSize = Math.round(L[3] * 0.78) + "px";
-        d.style.marginTop = dy[li % dy.length] + "px"; d.textContent = ch; d.dataset.rot = rot[li % rot.length];
-        title.appendChild(d); li++;
-      });
-      const dots = document.createElement("div"); dots.id = "dots"; dots.innerHTML = "<i></i><i></i><i></i>"; title.appendChild(dots);
-      const bang = document.createElement("div"); bang.className = "lt"; bang.id = "Lbang"; bang.textContent = "!";
-      bang.style.cssText = "background:#d63a2f;color:#fff;font-family:R2;font-size:90px;margin-left:12px;"; title.appendChild(bang);
-
-      const rain = document.getElementById("rain");
-      for (let i = 0; i < 70; i++) { const d = document.createElement("div"); d.className = "drop"; d.id = "rd" + i; d.style.left = Math.round(rnd() * 1960 - 20) + "px"; d.style.top = "-60px"; rain.appendChild(d); }
-      const stw = document.getElementById("stw");
-      for (let i = 0; i < 3; i++) { const im = document.createElement("img"); im.className = "ab"; im.id = "st" + i; im.src = "assets/img/smoke_r" + (i + 1) + ".png"; im.style.cssText = "left:" + (520 + i * 40) + "px; top:330px; width:260px; opacity:0;"; stw.appendChild(im); }
-      const smk = document.getElementById("smk");
-      for (let i = 0; i < 6; i++) { const im = document.createElement("img"); im.className = "ab"; im.id = "sm" + i; im.src = "assets/img/smoke_r" + (i + 1) + ".png"; im.style.cssText = "left:" + (1480 - (i % 3) * 120) + "px; top:340px; width:" + (300 + (i % 3) * 60) + "px; opacity:0;"; smk.appendChild(im); }
+      // Chat-Blasen (deutsch)
       const bubs = document.getElementById("bubs");
-      [["W", 1040, 470], ["GG EZ", 700, 560], ["fuzzn GOAT", 520, 300], ["lets gooo", 900, 330], ["Oma > alle", 640, 470]].forEach(([t, x, y], i) => {
+      [["W", 1180, 420], ["GG", 1420, 300], ["Ehrenmann", 1060, 250], ["lass gehen", 1300, 520], ["Oma > alle", 980, 380]].forEach(([t, x, y], i) => {
         const b = document.createElement("div"); b.className = "bub"; b.id = "bu" + i; b.textContent = t; b.style.left = x + "px"; b.style.top = y + "px"; b.style.opacity = 0; bubs.appendChild(b);
       });
-      const glows = document.getElementById("glows");
-      [[669, 368], [648, 498], [622, 612], [600, 736], [830, 608]].forEach(([x, y], i) => { const g = document.createElement("div"); g.className = "glow"; g.id = "cg" + i; g.style.left = x + "px"; g.style.top = y + "px"; glows.appendChild(g); });
+      // Papierschnipsel
+      const scraps = document.getElementById("scraps");
+      for (let i = 0; i < 14; i++) { const s = document.createElement("div"); s.className = "scrap"; s.id = "sp" + i; s.style.left = Math.round(rnd() * 1880) + "px"; s.style.top = "-40px";
+        s.style.background = ["#f1ebdc", "#e6d9b8", "#d63a2f", "#8be0c6", "#f2d14b"][i % 5]; scraps.appendChild(s); }
 
+      // Riss-Kanten
       const tearPts = []; for (let k = 0; k <= 24; k++) tearPts.push([960 + Math.round((rnd() - 0.5) * 70), k * 45]);
       const pts = tearPts.map((p) => p[0] + "px " + p[1] + "px").join(", ");
       const leftPoly = "polygon(0px 0px, " + pts + ", 0px 1080px)";
@@ -163,104 +96,60 @@
 
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      tl.set(["#tA1", "#tA2", "#crum", "#page", "#sc1", "#sc2", "#tB1", "#tB2", "#cutline"], { autoAlpha: 0 }, 0);
-      tl.set("#heart", { opacity: 0 }, 0);
-
-      // ===== title =====
-      document.querySelectorAll("#title .lt").forEach((el) => tl.set(el, { rotation: +(el.dataset.rot || 0), transformOrigin: "50% 100%" }, 0));
-      tl.set("#Lbang", { opacity: 0, y: -400 }, 0);
-      for (let i = 0; i < 17; i++) { const d = 1.5 + (i % 4) * 0.3; tl.to("#L" + i, { y: (i % 2 ? 4 : -4), duration: d, ease: "steps(3)", yoyo: true, repeat: Math.floor(58 / d) - 1 }, (i % 5) * 0.2); }
-      for (let k = 0; k < 3; k++) tl.fromTo("#dots i:nth-child(" + (k + 1) + ")", { y: 0 }, { y: -18, duration: 0.3, ease: "power2.out", yoyo: true, repeat: 99, repeatDelay: 0.6 }, 0.3 * k);
       tl.fromTo("#rec", { opacity: 1 }, { opacity: 0.2, duration: 0.6, ease: "steps(1)", yoyo: true, repeat: 99 }, 0);
-      tl.to("#L13", { rotation: -100, duration: 0.5, ease: "bounce.out", transformOrigin: "0% 100%" }, 5.0);
-      tl.to("#L13", { rotation: -80, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.6);
-      tl.to("#L13", { rotation: -7, duration: 0.45, ease: "back.out(2)" }, 7.0);
-      tl.to("#L3", { y: 900, rotation: 200, duration: 0.8, ease: "power2.in" }, 12.0);
-      tl.to("#L3", { x: 420, rotation: 560, duration: 1.0, ease: "power1.out" }, 12.8);
-      tl.to("#L3", { x: 0, y: 0, rotation: 7, duration: 0.9, ease: "back.out(1.4)" }, 14.2);
-      tl.to("#L12", { x: -620, y: 380, rotation: -30, duration: 0.7, ease: "power3.in" }, 24.0);
-      tl.to("#L12", { y: 400, duration: 0.15, ease: "power1.out", yoyo: true, repeat: 3 }, 24.7);
-      tl.to("#L12", { x: 0, y: 0, rotation: -7, duration: 0.8, ease: "back.out(1.6)" }, 26.2);
-      tl.to("#L0", { x: -260, y: -120, rotation: -40, opacity: 0, duration: 1.6, ease: "sine.inOut" }, 36.0);
-      tl.fromTo("#L0", { x: 300, y: 200, rotation: 30, opacity: 0 }, { x: 0, y: 0, rotation: -6, opacity: 1, duration: 2.0, ease: "sine.out", immediateRender: false }, 38.2);
-      [1, 4, 7, 10, 15].forEach((i, k) => tl.to("#L" + i, { x: 6, duration: 0.05, ease: "none", yoyo: true, repeat: 15 }, 46.0 + k * 0.08));
-      tl.to("#Lbang", { opacity: 1, y: 0, rotation: 9, duration: 0.6, ease: "bounce.out" }, 55.0);
-      tl.to("#Lbang", { opacity: 0, y: -400, duration: 0.6, ease: "power2.in" }, 58.4);
 
-      // ===== S1/S2 Kiez =====
-      tl.fromTo("#cam1", { scale: 1.0, x: 0 }, { scale: 1.12, x: -60, duration: 8, ease: "sine.inOut", transformOrigin: "50% 60%" }, 0);
-      tl.to("#cam1", { scale: 1.0, x: 0, duration: 10, ease: "sine.inOut" }, 8);
-      tl.fromTo("#train", { x: -1400 }, { x: 2100, duration: 3.6, ease: "power1.in" }, 1.2);
-      tl.fromTo("#train", { y: 0 }, { y: 3, duration: 0.12, ease: "steps(1)", yoyo: true, repeat: 29 }, 1.2);
-      for (let i = 0; i < 70; i++) { const d = 0.7 + rnd() * 0.5; tl.fromTo("#rd" + i, { y: 0, rotation: 12 }, { y: 1200, rotation: 12, duration: d, ease: "none", repeat: Math.floor(18.8 / d) }, rnd() * 0.8); }
-      tl.fromTo("#walkw", { x: -500 }, { x: 2100, duration: 9.5, ease: "none" }, 8.2);
-      tl.fromTo("#walk", { y: 0, rotation: -2 }, { y: -18, rotation: 2, duration: 0.32, ease: "steps(2)", yoyo: true, repeat: 29 }, 8.2);
+      // Handkamera-Micro-Shake (deterministisch), Kamera leicht überskaliert gegen Ränder
+      tl.set("#cam", { scale: 1.04, transformOrigin: "50% 50%" }, 0);
+      let t = 0; while (t < 60) { const d = 0.5 + rnd() * 0.5; tl.to("#cam", { x: (rnd() - 0.5) * 14, y: (rnd() - 0.5) * 10, rotation: (rnd() - 0.5) * 0.5, duration: d, ease: "sine.inOut" }, t); t += d; }
 
-      // T1 tear
-      tl.set(["#tA1", "#tA2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 18.0);
-      tl.to("#tA1", { x: -1150, y: 60, rotation: -9, duration: 0.8, ease: "power3.in" }, 18.05);
-      tl.to("#tA2", { x: 1150, y: -40, rotation: 8, duration: 0.8, ease: "power3.in" }, 18.1);
-      tl.set(["#tA1", "#tA2"], { autoAlpha: 0 }, 18.95);
+      // Punch-Zoom an harten Schnitten (Whip-Gefühl)
+      [3.2, 5.0, 7.6, 10.4, 15.5, 21.2, 22.0, 27.5, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
+        tl.fromTo("#base", { scale: 1.09, filter: "blur(6px)" }, { scale: 1.0, filter: "blur(0px)", duration: 0.28, ease: "power3.out", immediateRender: false }, c);
+      });
+      // Freeze-Frame-Punch beim Döner-Biss
+      tl.fromTo("#base", { scale: 1.0 }, { scale: 1.22, duration: 0.18, ease: "power4.out", immediateRender: false }, 18.5);
+      tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 18.5);
+      tl.to("#base", { scale: 1.0, duration: 0.25, ease: "power2.inOut" }, 19.1);
 
-      // ===== S3 Hakiki =====
-      tl.fromTo("#cam3", { scale: 1.18 }, { scale: 1.0, duration: 2.2, ease: "expo.out", transformOrigin: "60% 30%" }, 18.0);
-      tl.to("#cam3", { scale: 1.06, x: 40, duration: 11.5, ease: "sine.inOut" }, 20.2);
-      tl.fromTo("#donw", { y: 900, rotation: -10 }, { y: 0, rotation: 0, duration: 0.8, ease: "back.out(1.5)" }, 19.6);
-      for (let k = 0; k < 5; k++) {
-        const t = 21.2 + k * 2.1;
-        tl.fromTo("#don", { scaleY: 1, scaleX: 1 }, { scaleY: 0.93, scaleX: 1.05, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 100%" }, t);
-        tl.fromTo("#cam3", { y: 0 }, { y: 8, duration: 0.05, ease: "steps(1)", yoyo: true, repeat: 3 }, t);
-      }
-      for (let i = 0; i < 3; i++) tl.fromTo("#st" + i, { y: 0, opacity: 0, scale: 0.6 }, { y: -260, opacity: 0.8, scale: 1.1, duration: 2.4, ease: "sine.out", repeat: 4, repeatDelay: 0.2 }, 20.0 + i * 0.8);
-
-      // T2 crumple
-      tl.set("#crum", { autoAlpha: 1, scale: 1, rotation: 0, x: 0, y: 0 }, 31.6);
-      tl.fromTo("#crum .in", { borderRadius: "0%" }, { borderRadius: "50%", duration: 0.4, ease: "power2.in" }, 31.6);
-      tl.to("#crum", { scale: 0.12, rotation: 420, duration: 0.5, ease: "power3.in" }, 31.6);
-      tl.to("#crum", { x: 1300, y: -700, rotation: 900, duration: 0.45, ease: "power2.in" }, 32.1);
-      tl.set("#crum", { autoAlpha: 0 }, 32.6);
-
-      // ===== S4 Balkon =====
-      tl.fromTo("#cam4", { scale: 1.0, x: 0 }, { scale: 1.1, x: -40, duration: 10.4, ease: "sine.inOut", transformOrigin: "70% 50%" }, 31.6);
-      tl.fromTo("#jw", { x: 700 }, { x: 0, duration: 1.0, ease: "expo.out" }, 32.2);
-      tl.fromTo("#joint", { rotation: -1 }, { rotation: 1, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 7, transformOrigin: "50% 100%" }, 33.0);
-      for (let i = 0; i < 6; i++) tl.fromTo("#sm" + i, { x: 0, y: 0, opacity: 0, scale: 0.4, rotation: 0 }, { x: -260 - i * 30, y: -320, opacity: 0.85, scale: 1.2, rotation: (i % 2 ? 8 : -8), duration: 3.2, ease: "sine.out", repeat: 2, repeatDelay: 0.1 }, 33.2 + i * 0.5);
-      [33.8, 35.0, 36.4, 37.8, 39.2].forEach((t, i) => {
-        tl.fromTo("#bu" + i, { opacity: 0, scale: 0.3, y: 40, rotation: (i % 2 ? 6 : -6) }, { opacity: 1, scale: 1, y: 0, rotation: (i % 2 ? -3 : 3), duration: 0.45, ease: "back.out(2)" }, t);
-        tl.to("#bu" + i, { y: -70, opacity: 0, duration: 1.0, ease: "sine.in" }, t + 1.4);
+      // Chat-Blasen auf dem Balkon
+      [24.6, 25.8, 27.0, 31.2, 32.6].forEach((s, i) => {
+        tl.fromTo("#bu" + i, { opacity: 0, scale: 0.3, y: 40, rotation: (i % 2 ? 6 : -6) }, { opacity: 1, scale: 1, y: 0, rotation: (i % 2 ? -3 : 3), duration: 0.45, ease: "back.out(2)", immediateRender: false }, s);
+        tl.to("#bu" + i, { y: -80, opacity: 0, duration: 1.0, ease: "sine.in" }, s + 1.5);
       });
 
-      // T3 page flip
-      tl.set("#page", { autoAlpha: 1, rotationY: 0, transformPerspective: 2200, transformOrigin: "0% 50%" }, 41.6);
-      tl.to("#page", { rotationY: -100, duration: 0.85, ease: "power2.in" }, 41.6);
-      tl.set("#page", { autoAlpha: 0 }, 42.5);
+      // Herz am Oma-Foto
+      tl.fromTo("#heart", { scale: 0, opacity: 0 }, { scale: 1.25, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false }, 40.0);
+      tl.to("#heart", { scale: 1.1, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: 3 }, 40.4);
+      tl.to("#heart", { y: -90, opacity: 0, duration: 0.7, ease: "sine.in" }, 41.6);
 
-      // ===== S5 Zimmer =====
-      tl.fromTo("#cam5", { scale: 1.04 }, { scale: 1.0, duration: 4, ease: "sine.out", transformOrigin: "50% 50%" }, 41.6);
-      tl.fromTo("#gw", { y: 800 }, { y: 0, duration: 0.8, ease: "back.out(1.3)" }, 42.4);
-      tl.fromTo("#gam", { x: 0 }, { x: 3, duration: 0.08, ease: "steps(1)", yoyo: true, repeat: 40 }, 43.4);
-      for (let i = 0; i < 5; i++) tl.fromTo("#cg" + i, { opacity: 0.55, scale: 0.9 }, { opacity: 1, scale: 1.08, duration: 0.18 + i * 0.03, ease: "steps(2)", yoyo: true, repeat: 50 }, 41.6 + i * 0.07);
-      tl.fromTo("#spin", { rotation: 0 }, { rotation: 1440, duration: 10, ease: "none" }, 41.6);
-      tl.to("#cam5", { scale: 2.2, x: -420, y: 520, duration: 0.5, ease: "power3.inOut" }, 47.6);
-      tl.fromTo("#heart", { scale: 0, opacity: 0 }, { scale: 1.3, opacity: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false }, 48.1);
-      tl.to("#heart", { y: -60, opacity: 0, duration: 0.6, ease: "sine.in" }, 48.9);
-      tl.to("#cam5", { scale: 1.0, x: 0, y: 0, duration: 0.6, ease: "power3.inOut" }, 49.3);
+      // Papierschnipsel treiben durchs Bild
+      for (let i = 0; i < 14; i++) { const d = 6 + rnd() * 5;
+        tl.fromTo("#sp" + i, { y: 0, x: 0, rotation: rnd() * 360 }, { y: 1160, x: (rnd() - 0.5) * 300, rotation: "+=" + Math.round(400 + rnd() * 500), duration: d, ease: "none", repeat: Math.max(0, Math.floor(60 / d) - 1) }, rnd() * 4); }
 
-      // T4 scissors
-      tl.set("#cutline", { autoAlpha: 1 }, 51.0);
-      tl.fromTo("#cutp", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: "power1.in" }, 51.0);
-      tl.set("#cutline", { autoAlpha: 0 }, 51.62);
-      tl.set(["#sc1", "#sc2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 51.6);
-      tl.to("#sc1", { y: -900, rotation: -6, duration: 0.7, ease: "power3.in" }, 51.65);
-      tl.to("#sc2", { y: 900, rotation: 5, duration: 0.7, ease: "power3.in" }, 51.7);
-      tl.set(["#sc1", "#sc2"], { autoAlpha: 0 }, 52.45);
-
-      // ===== S6 Dach =====
-      tl.fromTo("#cam6", { scale: 1.15 }, { scale: 1.0, duration: 6, ease: "sine.out", transformOrigin: "50% 40%" }, 51.6);
-      tl.fromTo("#rw", { y: 700 }, { y: 0, duration: 0.9, ease: "back.out(1.4)" }, 52.3);
-      tl.fromTo("#roof", { rotation: -1 }, { rotation: 1, duration: 1.0, ease: "steps(2)", yoyo: true, repeat: 5, transformOrigin: "50% 100%" }, 53.2);
-
-      // T5 loop tear
+      // T1 Riss (12.0)
+      tl.set(["#tA1", "#tA2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 12.0);
+      tl.to("#tA1", { x: -1150, y: 60, rotation: -9, duration: 0.8, ease: "power3.in" }, 12.05);
+      tl.to("#tA2", { x: 1150, y: -40, rotation: 8, duration: 0.8, ease: "power3.in" }, 12.1);
+      tl.set(["#tA1", "#tA2"], { autoAlpha: 0 }, 12.95);
+      // T2 Zerknüllen (23.5)
+      tl.set("#crum", { autoAlpha: 1, scale: 1, rotation: 0, x: 0, y: 0 }, 23.5);
+      tl.fromTo("#crum .in", { borderRadius: "0%" }, { borderRadius: "50%", duration: 0.4, ease: "power2.in", immediateRender: false }, 23.5);
+      tl.to("#crum", { scale: 0.12, rotation: 420, duration: 0.5, ease: "power3.in" }, 23.5);
+      tl.to("#crum", { x: 1300, y: -700, rotation: 900, duration: 0.45, ease: "power2.in" }, 24.0);
+      tl.set("#crum", { autoAlpha: 0 }, 24.5);
+      // T3 Umblättern (35.0)
+      tl.set("#page", { autoAlpha: 1, rotationY: 0, transformPerspective: 2200, transformOrigin: "0% 50%" }, 35.0);
+      tl.to("#page", { rotationY: -100, duration: 0.85, ease: "power2.in" }, 35.0);
+      tl.set("#page", { autoAlpha: 0 }, 35.9);
+      // T4 Schere (47.0) – Schnittlinie läuft im letzten Moment der Zimmer-Szene
+      tl.set("#cutline", { autoAlpha: 1 }, 46.4);
+      tl.fromTo("#cutp", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: "power1.in", immediateRender: false }, 46.4);
+      tl.set("#cutline", { autoAlpha: 0 }, 47.02);
+      tl.set(["#sc1", "#sc2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 47.0);
+      tl.to("#sc1", { y: -900, rotation: -6, duration: 0.7, ease: "power3.in" }, 47.05);
+      tl.to("#sc2", { y: 900, rotation: 5, duration: 0.7, ease: "power3.in" }, 47.1);
+      tl.set(["#sc1", "#sc2"], { autoAlpha: 0 }, 47.85);
+      // T5 Loop-Riss (59.2) zurück zu Frame 0
       tl.set(["#tB1", "#tB2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 59.2);
       tl.to("#tB1", { x: -1150, y: -50, rotation: -8, duration: 0.7, ease: "power3.in" }, 59.22);
       tl.to("#tB2", { x: 1150, y: 60, rotation: 9, duration: 0.7, ease: "power3.in" }, 59.26);
