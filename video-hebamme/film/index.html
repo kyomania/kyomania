@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "HFraunces"; font-weight: 600; src: url(assets/fonts/fraunces-latin-600-normal.woff2); }
+      @font-face { font-family: "HFraunces"; font-weight: 500; font-style: italic; src: url(assets/fonts/fraunces-latin-500-italic.woff2); }
+      @font-face { font-family: "HCaveat"; font-weight: 600; src: url(assets/fonts/caveat-latin-600-normal.woff2); }
+      @font-face { font-family: "HCaveat"; font-weight: 700; src: url(assets/fonts/caveat-latin-700-normal.woff2); }
+      :root { --cream: #f6efe4; --paper: #fbf6ee; --brown: #5a3a26; --cocoa: #8a5a3c; --blush: #e9a99a; --coral: #c45f4b; --sage: #8fa57e;
+        --serif: "HFraunces", Georgia, serif; --hand: "HCaveat", cursive; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); color: var(--brown); -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .bg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .el { position: absolute; display: block; filter: drop-shadow(0 18px 18px rgba(70,40,20,0.22)); }
+      .paperbg { background: radial-gradient(ellipse at 50% 40%, #fbf6ee 0%, #f2e7d8 70%, #ead9c5 100%); }
+
+      /* captions: paper tags */
+      .cap { position: absolute; left: 0; width: 1080px; top: 1250px; display: flex; justify-content: center; }
+      .tag { padding: 18px 40px 22px; background: var(--paper); border-radius: 6px; font: 700 76px/1.05 var(--hand); color: var(--brown);
+        box-shadow: 0 10px 0 -4px #e6d6c2, 0 18px 30px rgba(70,40,20,0.22); white-space: nowrap; }
+      .tag b { color: var(--coral); font-weight: 700; }
+
+      /* title */
+      #ttl { position: absolute; left: 0; width: 1080px; top: 210px; text-align: center; }
+      #ttl .k { font: 600 40px var(--serif); letter-spacing: 0.32em; text-transform: uppercase; color: var(--cocoa); }
+      #ttl .h { font: 700 150px/0.95 var(--hand); color: var(--brown); margin-top: 6px; }
+      #ttl .h span { display: inline-block; }
+
+      /* line wipes */
+      .wipe { position: absolute; left: -200px; width: 1480px; height: 2400px; top: -240px; background: var(--paper);
+        box-shadow: 0 0 0 10px #eadcc9, 0 30px 60px rgba(70,40,20,0.3); transform-origin: 0% 50%; }
+      #wipes svg { position: absolute; left: 0; top: 0; }
+
+      /* end */
+      #endttl { position: absolute; left: 0; width: 1080px; top: 170px; text-align: center; }
+      #endttl .h { font: 700 132px/0.95 var(--hand); color: var(--brown); }
+      #endttl .s { margin-top: 18px; font: 600 54px var(--serif); color: var(--cocoa); }
+      #endttl .s i { font-style: italic; font-weight: 500; }
+      #handle { position: absolute; left: 0; width: 1080px; top: 1500px; display: flex; justify-content: center; }
+      #handle div { padding: 18px 40px; border-radius: 999px; background: var(--brown); color: var(--paper); font: 600 34px var(--serif); letter-spacing: 0.01em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-volume="1"></audio>
+
+      <!-- 1 hook: walking with the line (0 - 4.3) -->
+      <video id="v1" class="clip" src="assets/clips/walk.mp4" muted playsinline data-start="0" data-duration="4.3" data-media-start="0" data-track-index="1"></video>
+      <div id="o1" class="clip" data-start="0" data-duration="4.3" data-track-index="2">
+        <div id="ttl"><div class="k">Hebamme</div><div class="h"><span>auf</span> <span>ganzer</span> <span>Linie</span></div></div>
+      </div>
+
+      <!-- 2 the test (4.3 - 7.5) -->
+      <div id="s2" class="clip" data-start="4.3" data-duration="3.2" data-track-index="3">
+        <img class="bg" id="b2" src="assets/img/bg_day.jpg" />
+        <img class="el" id="w2" src="assets/img/w_test.png" style="left:330px; top:620px; width:640px;" />
+        <img class="el" id="t2" src="assets/img/p_test.png" style="left:20px; top:420px; width:520px;" />
+        <div class="cap"><div class="tag" id="c2">Vom ersten <b>Strich</b> …</div></div>
+      </div>
+
+      <!-- 3 heartbeat (7.5 - 11.1) -->
+      <div id="s3" class="clip" data-start="7.5" data-duration="3.6" data-track-index="4">
+        <img class="bg" id="b3" src="assets/img/bg_room.jpg" />
+        <img class="el" id="w3" src="assets/img/w_daybed.png" style="left:-40px; top:780px; width:720px;" />
+        <img class="el" id="m3" src="assets/img/m_doppler.png" style="left:520px; top:760px; width:560px; transform: scaleX(-1);" />
+        <svg id="ekg" width="1080" height="400" style="position:absolute; left:0; top:300px;" viewBox="0 0 1080 400">
+          <path id="ekgp" pathLength="1" d="M0 200 L300 200 L340 200 L370 120 L400 290 L430 60 L465 330 L495 200 L560 200 L590 150 L620 200 L1080 200" fill="none" stroke="#d9735f" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <img class="el" id="h3a" src="assets/img/p_heart.png" style="left:760px; top:250px; width:200px;" />
+        <div class="cap"><div class="tag" id="c3">… über jeden <b>Herzschlag</b> …</div></div>
+      </div>
+
+      <!-- 4 breathing (11.1 - 14.4) -->
+      <div id="s4" class="clip" data-start="11.1" data-duration="3.3" data-track-index="5">
+        <img class="bg" id="b4" src="assets/img/bg_day.jpg" />
+        <img class="el" id="d4" src="assets/img/p_deco.png" style="left:60px; top:120px; width:560px; opacity:0.95;" />
+        <img class="el" id="w4" src="assets/img/w_ball.png" style="left:150px; top:560px; width:780px;" />
+        <div class="cap"><div class="tag" id="c4">… jeden <b>Atemzug</b> …</div></div>
+      </div>
+
+      <!-- 5 the longest night (14.4 - 17.8) -->
+      <div id="s5" class="clip" data-start="14.4" data-duration="3.4" data-track-index="6">
+        <img class="bg" id="b5" src="assets/img/bg_night.jpg" />
+        <img class="el" id="moon" src="assets/img/p_moon.png" style="left:520px; top:-60px; width:520px; transform-origin: 50% 0%;" />
+        <img class="el" id="hands" src="assets/img/p_hands.png" style="left:150px; top:560px; width:780px;" />
+        <div class="cap"><div class="tag" id="c5">… durch die <b>längste Nacht</b> …</div></div>
+      </div>
+
+      <!-- 6 home visit by bike (17.8 - 21.9) -->
+      <video id="v6" class="clip" src="assets/clips/bike.mp4" muted playsinline data-start="17.8" data-duration="4.1" data-media-start="0" data-track-index="7"></video>
+      <div id="o6" class="clip" data-start="17.8" data-duration="4.1" data-track-index="8">
+        <img class="el" id="house" src="assets/img/p_house.png" style="left:740px; top:330px; width:320px;" />
+        <div class="cap" style="top:1420px"><div class="tag" id="c6">… bis ihr <b>zu Hause</b> angekommen seid.</div></div>
+      </div>
+
+      <!-- 7 the hand-over (21.9 - 25.4) -->
+      <video id="v7" class="clip" src="assets/clips/handover.mp4" muted playsinline data-start="21.9" data-duration="3.5" data-media-start="0.4" data-track-index="9"></video>
+      <div id="o7" class="clip" data-start="21.9" data-duration="3.5" data-track-index="10">
+        <div class="cap" style="top:200px"><div class="tag" id="c7">Ich begleite dich.</div></div>
+        <div class="cap" style="top:330px"><div class="tag" id="c7b"><b>Auf ganzer Linie.</b></div></div>
+      </div>
+
+      <!-- 8 end card (25.4 - 30) -->
+      <div id="s8" class="clip paperbg" data-start="25.4" data-duration="4.6" data-track-index="11">
+        <img class="el" id="heart8" src="assets/img/p_heart.png" style="left:140px; top:520px; width:800px; opacity:0.9;" />
+        <svg id="loop" width="1080" height="1920" style="position:absolute; left:0; top:0;" viewBox="0 0 1080 1920">
+          <path id="loopp" pathLength="1" d="M-40 1460 C 200 1460 260 1380 300 1300 C 340 1220 250 1120 180 1040 C 60 900 120 650 330 640 C 450 634 520 720 540 800 C 560 720 630 634 750 640 C 960 650 1020 900 900 1040 C 830 1120 740 1220 780 1300 C 820 1380 880 1460 1120 1460" fill="none" stroke="#fbf6ee" stroke-width="16" stroke-linecap="round" style="filter: drop-shadow(0 6px 6px rgba(70,40,20,0.3));" />
+        </svg>
+        <img class="el" id="fam" src="assets/img/w_family.png" style="left:250px; top:700px; width:560px;" />
+        <img class="el" id="mw" src="assets/img/m_wave.png" style="left:-30px; top:820px; width:440px;" />
+        <div id="endttl"><div class="h">Marie Louise</div><div class="s">Hebamme <i>auf ganzer Linie</i></div></div>
+        <div id="handle"><div>@hebamme_aufganzerlinie_marielo</div></div>
+      </div>
+
+      <!-- paper strip wipes between scenes -->
+      <div id="wipes" class="clip" data-start="0" data-duration="30" data-track-index="20">
+        <div class="wipe" id="wp1"></div><div class="wipe" id="wp2"></div><div class="wipe" id="wp3"></div><div class="wipe" id="wp4"></div><div class="wipe" id="wp5"></div><div class="wipe" id="wp6"></div><div class="wipe" id="wp7"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", BK = "back.out(1.7)", ST = "steps(6)";
+      // pop-up like a paper cut-out folding up from the page
+      const popUp = (sel, t, d = 0.7) => tl.fromTo(sel, { rotationX: -88, transformPerspective: 1600, transformOrigin: "50% 100%", opacity: 0 }, { rotationX: 0, opacity: 1, duration: d, ease: BK }, t);
+      const tagIn = (sel, t) => tl.fromTo(sel, { scale: 0.4, rotation: -8, opacity: 0 }, { scale: 1, rotation: -2, opacity: 1, duration: 0.5, ease: BK }, t);
+      const tagOut = (sel, t) => tl.to(sel, { scale: 0.7, opacity: 0, rotation: 4, duration: 0.25, ease: "power2.in" }, t);
+      // stop-motion wobble: small stepped rotation, paper "alive"
+      const wobble = (sel, t, d, amp = 1.6) => tl.fromTo(sel, { rotation: -amp }, { rotation: amp, duration: d, ease: "steps(" + Math.round(d * 6) + ")", yoyo: true, repeat: 1 }, t);
+      // a cream paper strip sweeps across = the "Linie" carrying us to the next scene
+      const wipe = (id, t, rot) => {
+        tl.set(id, { rotation: rot, xPercent: -110 }, 0);
+        tl.to(id, { xPercent: 0, duration: 0.32, ease: "power3.in" }, t - 0.32);
+        tl.to(id, { xPercent: 110, duration: 0.38, ease: "power3.out" }, t);
+      };
+      tl.set(["#c7b"], { opacity: 0 }, 0);
+
+      // 1 hook
+      tl.fromTo("#v1", { scale: 1.06 }, { scale: 1, duration: 4.3, ease: "none" }, 0);
+      tl.fromTo("#ttl .k", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5, ease: EX }, 0.2);
+      tl.fromTo("#ttl .h span", { yPercent: 80, rotation: -10, opacity: 0 }, { yPercent: 0, rotation: 0, opacity: 1, duration: 0.55, ease: BK, stagger: 0.18 }, 0.45);
+      tl.to("#ttl", { y: -12, duration: 3, ease: "none" }, 1.2);
+      wipe("#wp1", 4.3, -12);
+
+      // 2 test (VO @4.4)
+      popUp("#w2", 4.35); popUp("#t2", 4.6, 0.6);
+      tl.fromTo("#t2", { rotation: -30 }, { rotation: -14, duration: 0.6, ease: BK }, 4.6);
+      wobble("#w2", 5.0, 1.2, 1.2);
+      tl.fromTo("#t2", { scale: 1 }, { scale: 1.12, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.out" }, 5.6);
+      tagIn("#c2", 4.45); tagOut("#c2", 7.1);
+      tl.fromTo("#b2", { scale: 1.04 }, { scale: 1, duration: 3.2, ease: "none" }, 4.3);
+      wipe("#wp2", 7.5, 10);
+
+      // 3 heartbeat (VO @7.8)
+      popUp("#w3", 7.55); popUp("#m3", 7.75);
+      tl.fromTo("#ekgp", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.4, ease: "power1.inOut" }, 8.0);
+      tl.fromTo("#h3a", { scale: 0, rotation: -20 }, { scale: 1, rotation: 0, duration: 0.45, ease: BK }, 8.75);
+      tl.to("#h3a", { scale: 1.15, duration: 0.18, yoyo: true, repeat: 5, ease: "power1.inOut" }, 9.25);
+      tagIn("#c3", 7.85); tagOut("#c3", 10.7);
+      wipe("#wp3", 11.1, -8);
+
+      // 4 breathing (VO @11.3)
+      popUp("#w4", 11.15);
+      tl.fromTo("#w4", { scale: 1 }, { scale: 1.035, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 3, transformOrigin: "50% 100%" }, 11.9);
+      tl.fromTo("#d4", { y: 20, opacity: 0 }, { y: -30, opacity: 0.95, duration: 3, ease: "sine.out" }, 11.2);
+      tagIn("#c4", 11.35); tagOut("#c4", 14.0);
+      wipe("#wp4", 14.4, 12);
+
+      // 5 night (VO @14.5)
+      tl.fromTo("#moon", { y: -500 }, { y: 0, duration: 0.8, ease: BK }, 14.45);
+      tl.fromTo("#moon", { rotation: -4 }, { rotation: 4, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 2 }, 15.2);
+      popUp("#hands", 14.7, 0.8);
+      tl.fromTo("#hands", { y: 0 }, { y: -20, duration: 2.4, ease: "sine.inOut" }, 15.4);
+      tagIn("#c5", 14.55); tagOut("#c5", 17.4);
+      tl.fromTo("#b5", { scale: 1.05 }, { scale: 1, duration: 3.4, ease: "none" }, 14.4);
+      wipe("#wp5", 17.8, -10);
+
+      // 6 bike (VO @18.0)
+      tl.fromTo("#house", { x: 500, rotation: 8 }, { x: 0, rotation: 0, duration: 1.2, ease: BK }, 19.6);
+      wobble("#house", 20.8, 1.0, 1);
+      tagIn("#c6", 18.05); tagOut("#c6", 21.5);
+      wipe("#wp6", 21.9, 9);
+
+      // 7 hand-over (VO @22.0 "Ich begleite dich", @23.4 "Auf ganzer Linie")
+      tagIn("#c7", 22.05);
+      tl.set("#c7b", { opacity: 1 }, 23.35); tagIn("#c7b", 23.4);
+      tagOut("#c7", 25.0); tagOut("#c7b", 25.05);
+      wipe("#wp7", 25.4, -12);
+
+      // 8 end (VO @25.6 "Marie Louise. Deine Hebamme.")
+      popUp("#heart8", 25.45, 0.8);
+      tl.fromTo("#loopp", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut" }, 25.6);
+      popUp("#fam", 25.8); popUp("#mw", 26.0);
+      wobble("#mw", 26.8, 0.9, 2.5);
+      tl.fromTo("#endttl .h", { scale: 0.5, rotation: -6, opacity: 0 }, { scale: 1, rotation: -2, opacity: 1, duration: 0.6, ease: BK }, 25.6);
+      tl.fromTo("#endttl .s", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: EX }, 26.6);
+      tl.fromTo("#handle", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: BK }, 27.3);
+      tl.to("#heart8", { scale: 1.04, duration: 0.6, yoyo: true, repeat: 3, ease: "sine.inOut" }, 27.4);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
