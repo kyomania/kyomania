@@ -18,8 +18,11 @@
       #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.42) 100%); }
       .rain { position: absolute; top: -220px; }
       #plate { transform-origin: 50% 50%; }
-      #chatbox { position: absolute; left: 1534px; top: 450px; width: 310px; height: 138px; overflow: hidden;
-        display: flex; flex-direction: column; justify-content: flex-end; gap: 5px; padding: 0 4px 6px;
+      /* Chat-Ebene per Homographie auf die schräge Monitorfläche gelegt (Ecken aus dem Video gemessen) */
+      #chatplane { position: absolute; left: 0; top: 0; width: 300px; height: 150px; transform-origin: 0 0;
+        transform: matrix3d(0.71519199,-0.04219349,0,-0.00016151,-0.01660597,1.04540224,0,-0.00000213,0,0,1,0,1542,438,0,1); }
+      #chatbox { position: absolute; left: 0; top: 0; width: 300px; height: 150px; overflow: hidden;
+        display: flex; flex-direction: column; justify-content: flex-end; gap: 5px; padding: 0 4px 16px;
         font: 600 15px/1.25 "Inter", "Helvetica Neue", Arial, sans-serif; color: #efeff1;
         text-shadow: 0 0 6px rgba(190,170,255,0.35); filter: blur(0.3px); opacity: 0.93; }
       .msg { display: none; }
@@ -42,12 +45,12 @@
             <video id="base" class="clip" data-start="0" data-duration="60" data-track-index="0" src="assets/video/base.mp4" muted playsinline></video>
             <!-- Twitch-Chat auf dem rechten Monitor (Zimmer 35-47 s, ohne Oma-Insert 39-42.5) -->
             <div id="chat" class="clip" data-start="35" data-duration="12" data-track-index="2">
-              <div id="chatbox">
+              <div id="chatplane"><div id="chatbox">
                 <div class="msg" id="m0"><b style="color:#ff7f50">VanooO_</b>: bin schon wieder voll wow</div>
                 <div class="msg" id="m1"><b style="color:#9acd32">AbuKaetzchen</b>: any Sider?</div>
                 <div class="msg" id="m2"><b style="color:#4aa8ff">satyrbe</b>: FeelsOkayMan</div>
                 <div class="msg" id="m3"><b style="color:#daa520">dilard47</b>: Boah bin ich alt</div>
-              </div>
+              </div></div>
             </div>
           </div>
           <div id="flash"></div>
@@ -78,7 +81,7 @@
       let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 
       // Riss-Übergänge: [Zeit, Richtung]  v = links/rechts, h = oben/unten
-      const TEARS = [["12.0", "v"], ["23.5", "h"], ["35.0", "v"], ["47.0", "h"], ["59.2", "v"]];
+      const TEARS = [["14.5", "v"], ["23.5", "h"], ["35.0", "v"], ["47.0", "h"], ["59.4", "v"]];
       const tx = document.getElementById("tx");
       TEARS.forEach(([t, dir], k) => ["a", "b"].forEach((p) => {
         const im = document.createElement("img"); im.className = "piece"; im.id = "t" + k + p;
@@ -104,16 +107,17 @@
 
       // Handkamera-Micro-Shake (deterministisch), Kamera leicht überskaliert gegen Ränder
       tl.set("#cam", { scale: 1.04, transformOrigin: "50% 50%" }, 0);
-      let t = 0; while (t < 60) { const d = 0.5 + rnd() * 0.5; tl.to("#cam", { x: (rnd() - 0.5) * 14, y: (rnd() - 0.5) * 10, rotation: (rnd() - 0.5) * 0.5, duration: d, ease: "sine.inOut" }, t); t += d; }
+      let t = 0; while (t < 59.0) { const d = 0.5 + rnd() * 0.5; tl.to("#cam", { x: (rnd() - 0.5) * 14, y: (rnd() - 0.5) * 10, rotation: (rnd() - 0.5) * 0.5, duration: d, ease: "sine.inOut" }, t); t += d; }
+      tl.to("#cam", { x: 0, y: 0, rotation: 0, duration: 60 - t, ease: "sine.inOut" }, t); // endet wie Frame 0 → nahtloser Loop
 
       // Punch-Zoom an harten Schnitten
-      [3.2, 5.0, 7.6, 10.4, 16.0, 16.8, 19.6, 27.0, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
+      [3.2, 5.0, 8.6, 12.2, 17.3, 22.3, 27.0, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
         tl.fromTo("#plate", { scale: 1.09, filter: "blur(6px)" }, { scale: 1.0, filter: "blur(0px)", duration: 0.28, ease: "power3.out", immediateRender: false }, c);
       });
       // Freeze-Frame-Punch beim Döner-Biss
-      tl.fromTo("#plate", { scale: 1.0 }, { scale: 1.22, duration: 0.18, ease: "power4.out", immediateRender: false }, 18.8);
-      tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 18.8);
-      tl.to("#plate", { scale: 1.0, duration: 0.25, ease: "power2.inOut" }, 19.4);
+      tl.fromTo("#plate", { scale: 1.0 }, { scale: 1.22, duration: 0.18, ease: "power4.out", immediateRender: false }, 16.5);
+      tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 16.5);
+      tl.to("#plate", { scale: 1.0, duration: 0.25, ease: "power2.inOut" }, 17.05);
 
       // Chat: Nachrichten kommen nacheinander rein, während des Oma-Inserts ausgeblendet
       [36.0, 37.0, 38.1, 43.2].forEach((ct, i) => {
@@ -145,18 +149,20 @@
         const T = parseFloat(ts), A = "#t" + k + "a", B = "#t" + k + "b", v = dir === "v";
         const o = v ? "50% 100%" : "0% 50%";
         tl.set([A, B], { autoAlpha: 1, x: 0, y: 0, rotation: 0, rotationX: 0, rotationY: 0, transformPerspective: 1800, transformOrigin: o }, T);
+        const last = k === TEARS.length - 1; // Loop-Riss: kürzer, Hälften genau bei 60.0 aus dem Bild
+        const o1 = last ? 0.2 : 0.34, p0 = last ? 0.2 : 0.36, p1 = last ? 0.38 : 0.55;
         if (v) {
-          tl.to(A, { rotation: -2.6, x: -18, rotationY: 7, duration: 0.34, ease: "power2.out" }, T + 0.02);
-          tl.to(B, { rotation: 2.6, x: 18, rotationY: -7, duration: 0.34, ease: "power2.out" }, T + 0.02);
-          tl.to(A, { x: -1350, y: 90, rotation: -13, rotationY: 22, duration: 0.55, ease: "power2.in" }, T + 0.36);
-          tl.to(B, { x: 1350, y: -50, rotation: 11, rotationY: -22, duration: 0.55, ease: "power2.in" }, T + 0.40);
+          tl.to(A, { rotation: -2.6, x: -18, rotationY: 7, duration: o1, ease: "power2.out" }, T + 0.02);
+          tl.to(B, { rotation: 2.6, x: 18, rotationY: -7, duration: o1, ease: "power2.out" }, T + 0.02);
+          tl.to(A, { x: -1350, y: 90, rotation: -13, rotationY: 22, duration: p1, ease: "power2.in" }, T + p0);
+          tl.to(B, { x: 1350, y: -50, rotation: 11, rotationY: -22, duration: last ? p1 - 0.02 : p1, ease: "power2.in" }, T + p0 + (last ? 0.02 : 0.04));
         } else {
           tl.to(A, { rotation: -2.2, y: -16, rotationX: -7, duration: 0.34, ease: "power2.out" }, T + 0.02);
           tl.to(B, { rotation: 2.2, y: 16, rotationX: 7, duration: 0.34, ease: "power2.out" }, T + 0.02);
           tl.to(A, { y: -1150, x: 80, rotation: -8, rotationX: -20, duration: 0.55, ease: "power2.in" }, T + 0.36);
           tl.to(B, { y: 1150, x: -60, rotation: 7, rotationX: 20, duration: 0.55, ease: "power2.in" }, T + 0.40);
         }
-        tl.set([A, B], { autoAlpha: 0 }, Math.min(T + 0.97, 59.99));
+        tl.set([A, B], { autoAlpha: 0 }, last ? 59.99 : T + 0.97);
         tl.fromTo("#cam", { y: 0 }, { y: 6, duration: 0.05, ease: "steps(1)", yoyo: true, repeat: 3, immediateRender: false }, T + 0.02);
       });
 

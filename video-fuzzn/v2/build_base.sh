@@ -24,18 +24,17 @@ still() { # clip time dur
   ffmpeg -v error -y -loop 1 -i "$S/still.png" -vf "$NORM" -t "$dur" -an -c:v libx264 -crf 16 -preset fast "$o"
   echo "file '$(basename "$o")'" >> "$S/list.txt"
 }
-# --- Kiez 0.0-12.0
-seg C01 0.0 3.2
+# --- Kiez 0.0-14.5 (C01 startet bei 0.6 s, weil 0.0-0.6 schon unter dem Loop-Riss am Ende läuft)
+seg C01 0.6 3.2
 seg C03 0.6 1.8
-seg C02 0.8 2.6
-seg C11 0.4 2.8
-seg C12 0.5 1.6
-# --- Hakiki 12.0-23.5
-seg C04 0.3 4.0
-seg C12 2.0 0.8
+seg C02 0.0 3.6
+seg C11 0.2 3.6
+seg C12 0.3 2.3
+# --- Döner 14.5-23.5 (nur Essen, kein zweites Überreichen)
 seg C05 0.0 2.0
 still C05 2.0 0.8
-seg C05 2.0 3.9 0.77
+seg C05 2.0 5.0 0.6
+seg C03 2.5 1.2
 # --- Balkon 23.5-35.0
 seg C06 0.0 3.5
 seg C07 0.5 3.5
@@ -47,17 +46,17 @@ seg C08 2.5 4.5 0.55
 # --- Dach 47.0-60.0
 seg C10 0.0 5.0
 seg C12 2.8 1.8
-seg C10 1.0 5.4 0.74 rev
-still C01 0.0 0.8
+seg C10 1.0 5.6 0.72 rev
+seg C01 0.0 0.6
 ffmpeg -v error -y -f concat -safe 0 -i "$S/list.txt" -c:v libx264 -crf 16 -preset fast -r 30 -an "$OUT/base.mp4"
 ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/base.mp4"
 # Standbilder der ausgehenden Frames für die Papier-Übergänge
 mkdir -p ../film/assets/img/v2
-for t in 12.0 23.5 35.0 47.0 59.2; do
+for t in 14.5 23.5 35.0 47.0 59.4; do
   ffmpeg -v error -y -ss "$(python3 -c "print($t-0.04)")" -i "$OUT/base.mp4" -frames:v 1 -q:v 2 "../film/assets/img/v2/out_${t}.jpg"
 done
 # Papier-Risse aus den ausgehenden Frames (Richtung/Seed/Schräge je Übergang)
-for spec in "12.0 v 3 120" "23.5 h 5 -90" "35.0 v 9 -150" "47.0 h 13 110" "59.2 v 21 60"; do
+for spec in "14.5 v 3 120" "23.5 h 5 -90" "35.0 v 9 -150" "47.0 h 13 110" "59.4 v 21 60"; do
   set -- $spec
   python3 tear.py "../film/assets/img/v2/out_$1.jpg" "../film/assets/img/v2/tear_$1" "$2" "$3" "$4"
 done

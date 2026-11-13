@@ -75,28 +75,28 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 2. `film/index.html` legt darüber Handkamera-Shake, Punch-Zooms an den Schnitten, Freeze-Flash, deutsche Chat-Blasen (W, GG, Ehrenmann, lass gehen, Oma > alle), Herz, Papierschnipsel, 5 Papier-Übergänge und das HUD. Kein Titel.
 3. `npm run render` im Ordner `film/`.
 
-**Schnitt (final)**
+**Schnitt (final, Stand Runde 5)**
 | Zeit | Shot |
 |---|---|
-| 0,0–3,2 | C01 Kiez weit |
+| 0,0–3,2 | C01 Kiez weit (ab 0,6 s im Clip, 0,0–0,6 laufen schon unter dem Loop-Riss) |
 | 3,2–5,0 | C03 Kette |
-| 5,0–7,6 | C02 Kiez nah |
-| 7,6–10,4 | C11 Blick auf die Uhr |
-| 10,4–12,0 | C12 Uhr „NOCH AM SUCHEN…“ → Riss |
-| 12,0–16,0 | C04 Hakiki: er bekommt den Döner |
-| 16,0–16,8 | C12 Uhr-Insert |
-| 16,8–23,5 | C05 er isst, Freeze-Punch 18,8–19,6, Rest leicht Slow-Mo → Riss |
+| 5,0–8,6 | C02 Kiez nah |
+| 8,6–12,2 | C11 Blick auf die Uhr |
+| 12,2–14,5 | C12 Uhr „NOCH AM SUCHEN…“ → Riss |
+| 14,5–16,5 | C05 er isst |
+| 16,5–17,3 | Freeze-Punch beim Biss |
+| 17,3–22,3 | C05 weiter, Slow-Mo |
+| 22,3–23,5 | C03 Kette → Riss |
 | 23,5–27,0 | C06 Balkon |
-| 27,0–30,5 | C07 Glut |
-| 30,5–35,0 | C06 Slow-Mo → Umblättern |
-| 35,0–39,0 | C08 Zimmer |
+| 27,0–30,5 | C07 Glut (drinnen, kein Regen) |
+| 30,5–35,0 | C06 Slow-Mo → Riss |
+| 35,0–39,0 | C08 Zimmer mit Chat |
 | 39,0–42,5 | C09 Oma + Herz |
-| 42,5–47,0 | C08 Slow-Mo → Schere |
+| 42,5–47,0 | C08 Slow-Mo mit Chat → Riss |
 | 47,0–52,0 | C10 Dach |
 | 52,0–53,8 | C12 Uhr-Insert |
-| 53,8–59,2 | C10 rückwärts, Slow-Mo |
-| 59,2–60,0 | Riss zurück zu Frame 0 (Loop) |
-
+| 53,8–59,4 | C10 rückwärts, Slow-Mo |
+| 59,4–60,0 | Loop-Riss, darunter C01 0,0–0,6 in Bewegung; Hälften sind genau bei 60,0 aus dem Bild |
 
 ## Stand 13.11. – Runde 3 (Kundenfeedback)
 - **Gaming-Zimmer neu (K08c / C08):** Links Warzone-artiges Gameplay, fuzzn hält einen Controller, rechts ein leeres Twitch-Chat-Panel. Darüber hängt die LED-Schrift „FUZZN“ in warmem Orange-Weiß, das alte F-Logo ist entfernt. Der Kling-Clip hat eine feste Kamera, damit später echte Chat-Nachrichten auf den rechten Monitor gelegt werden können (Platzhalter im `#cam`-Container von `film/index.html`). Das Poster zeigt „HERTHA BSC“, das Leerzeichen ist aber eng.
@@ -109,3 +109,8 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 - Döner-Reihenfolge korrigiert: erst bekommt er den Döner, dann Blick auf die Uhr, dann isst er.
 - Kein Regen in der Glut-Szene (27,0–30,5 s), da er drinnen am Fenster steht.
 - Chat auf dem rechten Monitor im Zimmer, Twitch-Stil, nacheinander eingeblendet: VanooO_ (36,0 s), AbuKaetzchen (37,0 s), satyrbe (38,1 s), dilard47 (43,2 s). Das Video und der Chat liegen im gemeinsamen Container `#plate`, damit sie sich bei Zooms zusammen bewegen.
+
+## Stand 13.11. – Runde 5
+- **Döner:** C04 (Überreichen) ist raus, weil er dort schon einen Döner in der Hand hält. Die Döner-Szene zeigt nur noch das Essen, der Kiez-Teil ist dafür bis 14,5 s verlängert.
+- **Nahtloser Loop:** Der letzte Riss endet genau bei 60,0 s. Darunter läuft C01 schon in Bewegung an, und der Anfang setzt bei C01 0,6 s fort. Das Kamera-Wackeln kehrt am Ende auf null zurück, das Reiß-Geräusch wird über die Loop-Grenze an den Anfang gefaltet (`v2/mix.py`).
+- **Chat schräg:** Die Chat-Ebene liegt per `matrix3d` (Homographie aus den vier gemessenen Ecken der Monitorfläche) exakt auf dem geneigten Bildschirm.
