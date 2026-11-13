@@ -5,10 +5,11 @@
 
 ## Eckdaten
 - 16:9, 1920×1080, 60 s, nahtloser Loop, Twitch-Hidescreen (Weed ist erlaubt)
-- Durchgehend: Titel „SEARCHING FOR A GAME…“ aus Zeitungsbuchstaben, Buchstaben fallen ab. Der Code steht in `film/index.html` (Titel-Block wiederverwenden), plus HUD „SCREEN HIDDEN · twitch.tv/fuzzn“.
+- **Kein „SEARCHING FOR A GAME“-Titel mehr im Bild.** Die Botschaft „sucht noch ein Spiel“ erzählt jetzt die Uhr: fuzzn schaut auf seine Uhr, Close-up zeigt „NOCH AM SUCHEN…“. Das kehrt als Running Gag wieder. Nur das kleine HUD „SCREEN HIDDEN · twitch.tv/fuzzn“ bleibt als Overlay.
+- **Texte im Bild:** ausschließlich Deutsch und exakt vorgegeben (SPÄTI, FUZZN, HAKIKI DÖNER, HERTHA BSC, NOCH AM SUCHEN…). Sonst keine Wörter im Bild.
 - **Charakter-Referenz:** `src/f0_base.webp` (Papier-Anime-fuzzn: schwarze Stachelhaare, silberne Visor-Brille auf der Stirn, schwarze Monogramm-Windjacke mit Kapuze, goldene Cuban-Kette mit FUZZN-Anhänger, schwarze Monogramm-Jogger, weiße Low-Top-Sneaker). Bei JEDEM Bild als Referenz hochladen.
 - **Szenen-Referenzen** (Stil und Ort): `src/b1_kiez.webp`, `src/b2_hakiki.webp`, `src/b3_balkon.webp`, `src/b4_zimmer.webp`, `src/b5_dach.webp`
-- **Bilder:** GPT Image 2.6 Sunburst, 16:9, Low, 1K, PNG, nicht transparent (Kundenvorgabe). Je Bild etwa 0,25 Credits.
+- **Bilder:** Nano Banana Pro (statt GPT Image 2.6 Sunburst, dessen Schrift teils unlesbar und nicht deutsch war), 16:9, 1K. fuzzn trägt in allen Shots eine schwarze Digitaluhr am linken Handgelenk.
 - **Videos:** kling3_0, Modus pro, sound off, 5 s, 16:9, Startbild = Keyframe. Je Clip etwa 7,5 Credits.
 - **Musik:** elevenlabs_music, etwa 62 s, Lo-Fi-Trap mit 85–90 BPM, ohne Gesang und loop-fähig (Anfang = Ende), dazu Papier-SFX.
 
@@ -28,6 +29,8 @@
 | K8 | Zimmer | The gaming room from b4 (Hertha poster, Oma photo, aluminium ladder with candles, neon cyan/magenta). fuzzn sits AT this desk in a black gaming chair, headset on, lit by monitor glow and neon rim light, seen from behind-side. |
 | K9 | Oma-Foto Detail | Close-up of the framed photo of the sweet smiling grandma on the wall, candle light flickering on it, neon glow edge. |
 | K10 | Dach | The rooftop from b5 with Fernsehturm and paper moon; fuzzn stands on the roof edge seen from behind, moonlight rim on his hair and jacket, wind. |
+| K11 | Blick auf die Uhr | Under a street lamp in the rain, fuzzn raises his left arm and looks at his chunky black digital watch, impatient, eyebrow raised, cyan screen glow. |
+| K12 | Uhr Close-up | Extreme close-up of the watch: cyan screen with exactly „NOCH AM / SUCHEN…“ plus loading spinner, raindrops, neon bokeh. |
 
 ## Kling-Clips (Startbild = Keyframe)
 | Clip | Start | Bewegung |
@@ -39,21 +42,27 @@
 | V5 | K6 | he takes a drag and exhales, smoke billows and drifts across the night city, camera slowly arcs |
 | V6 | K8 | he plays intensely, hands fast on keyboard/mouse, monitor light flickers, candles flicker, camera slowly pushes in |
 | V7 | K10 | camera cranes up and around him revealing the skyline and Fernsehturm, wind in his hair |
+| V8 | K11 | he lifts his wrist, glances at the watch, sighs and rolls his eyes, rain keeps falling, slow push-in toward the watch |
 
-## Schnitt (60 s, etwa 22 Shots, Cut alle 2–3 s)
-- 0–9: V1 → K3 (Punch-in auf die Kette, Handkamera) → V2. Das „G“ kippt bei 5 s.
-- 9–10: Übergang Papier zerreißt
-- 10–22: V3 → V4 → K5-Freeze mit Zoom-Punch → V4-Rest. Das „A“ fällt bei 15 s in den Döner.
-- 22–23: Übergang Zerknüllen
-- 23–35: V5 → K7 (Glut-Detail mit Rauch-Overlay) → V5-Ende. Rauch formt Chat-Blasen, das „S“ verweht.
-- 35–36: Übergang Umblättern
-- 36–50: V6 → K9 (Oma-Zoom mit Herz) → V6. Buchstaben zittern, ein Kerzen-Flicker-Overlay.
-- 50–51: Übergang Schere
-- 51–60: V7, ab 58 s ein „!“. Bei 59,2 s Riss zurück zu V1, Frame 0.
-- Durchgehend: Handkamera-Micro-Shake, Whip-Pans zwischen Shots, Papierschnipsel-Partikel, Neon-Flicker, Lichtwechsel auf dem Titel je Szene.
+## Schnitt (60 s, etwa 24 Shots, Cut alle 2–3 s)
+- 0–10: V1 → K3 (Punch-in auf die Kette, Handkamera) → V8 (Blick auf die Uhr) → **K12 Uhr-Close-up „NOCH AM SUCHEN…“** (Spinner dreht als Overlay) → V2.
+- 10–11: Übergang Papier zerreißt
+- 11–23: V3 → V4 → K5-Freeze mit Zoom-Punch → V4-Rest. Kurzer Insert K12 (0,6 s), Spinner dreht weiter.
+- 23–24: Übergang Zerknüllen
+- 24–36: V5 → K7 (Glut-Detail mit Rauch-Overlay) → V5-Ende. Rauch formt Chat-Blasen („W“, „GG“, „Oma > alle“).
+- 36–37: Übergang Umblättern
+- 37–51: V6 → K9 (Oma-Zoom mit Herz) → V6. Kerzen-Flicker-Overlay.
+- 51–52: Übergang Schere
+- 52–60: V7, ab 57 s ein letzter K12-Insert mit „NOCH AM SUCHEN…“. Bei 59,2 s Riss zurück zu V1, Frame 0.
+- Durchgehend: Handkamera-Micro-Shake, Whip-Pans zwischen Shots, Papierschnipsel-Partikel, Neon-Flicker. Kein Titel-Overlay, nur HUD unten links.
 
 ## Kosten
 - 10 Keyframes: etwa 2,5 Credits
 - 7 Clips: etwa 52 Credits
 - Musik: etwa 5 Credits
 - **Gesamt: etwa 60 Credits.** Plan wird am 17.11. erneuert, vorher ggf. Kontostand prüfen.
+
+## Stand 13.11. – Keyframes erzeugt (Runde 2)
+Alle 12 Keyframes liegen in `v2/keyframes/` (Übersicht: `v2/keyframes_kontaktbogen.jpg`). Erzeugt mit Nano Banana Pro, 1K (1376×768). Alle Schriften im Bild sind deutsch und lesbar: SPÄTI, FUZZN, HAKIKI DÖNER, NOCH AM SUCHEN…
+Kleinigkeiten: Das Hertha-Poster in K08 schreibt „HERTHABSC“ ohne Leerzeichen. K04 hat zusätzlich „BESTER DÖNER IN KREUZBERG“ und „Kotbusser Str.“ (statt korrekt „Kottbusser“).
+Nächster Schritt: 8 Kling-Clips (V1–V8, etwa 60 Credits), Musik, dann der Schnitt in `film/index.html` ohne Titel-Block.
