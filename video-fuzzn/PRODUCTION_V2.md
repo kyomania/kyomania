@@ -98,3 +98,10 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 | 53,8–59,2 | C10 rückwärts, Slow-Mo |
 | 59,2–60,0 | Riss zurück zu Frame 0 (Loop) |
 
+
+## Stand 13.11. – Runde 3 (Kundenfeedback)
+- **Gaming-Zimmer neu (K08c / C08):** Links Warzone-artiges Gameplay, fuzzn hält einen Controller, rechts ein leeres Twitch-Chat-Panel. Darüber hängt die LED-Schrift „FUZZN“ in warmem Orange-Weiß, das alte F-Logo ist entfernt. Der Kling-Clip hat eine feste Kamera, damit später echte Chat-Nachrichten auf den rechten Monitor gelegt werden können (Platzhalter im `#cam`-Container von `film/index.html`). Das Poster zeigt „HERTHA BSC“, das Leerzeichen ist aber eng.
+- **Regen:** Die bunten Papierschnipsel sind raus. Stattdessen fallen in den Außenszenen (0–35 s) dezent ein Papier-Regenstreifen und ein Papier-Tropfen aus Higgsfield (`v2/sprites/`, freigestellt nach `film/assets/img/v2/streak.png` und `drop.png`).
+- **Übergänge:** Alle 5 sind jetzt realistische Papier-Risse (`v2/tear.py`). Die Risskante ist zackig auf mehreren Ebenen, eine Hälfte zeigt das weiße, faserige Papierinnere, dazu feine Fasern und ein Schlagschatten. Erst reißt das Papier von einer Seite her auf, dann werden die Hälften mit leichter 3D-Wölbung weggezogen. Ton: echtes Reiß-Geräusch (Mirelo SFX, `film/assets/sfx/rip.wav`).
+- **Chat:** Die erfundenen Chat-Blasen sind entfernt. Echte Nachrichten samt Benutzernamen liefert der Kunde.
+- Mix: `cd film && python3 ../v2/mix.py`

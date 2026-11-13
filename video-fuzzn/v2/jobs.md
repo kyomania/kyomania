@@ -12,3 +12,8 @@ C09 K09 47a75d32-1bc7-47fe-b281-20b4e6925bab
 C10 K10 8e2dac00-944d-40d7-9b38-1096b7d05120
 C11 K11 c0d62fe0-cdd7-41d6-bc05-7d450a04ec1d
 C12 K12 612f99f6-feeb-467b-9653-af01867009bf
+C08b K08c 601422d9-ecd3-472e-97b7-da4024cc69be (neues Zimmer, feste Kamera)
+
+## Runde 3
+K08 neu: af53ab7d (v1), 98ba58a0 (v2), a2765bd4 (final, Poster + F-Logo korrigiert)
+Sprites: drop 7fdd7310, streak 2b236a00, rip-SFX 4d33a53f

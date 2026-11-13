@@ -16,15 +16,9 @@
       #base { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
       #flash { position: absolute; inset: 0; background: #fff6e0; opacity: 0; }
       #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.42) 100%); }
-      .scrap { position: absolute; width: 18px; height: 12px; background: #f1ebdc; box-shadow: 0 4px 6px rgba(0,0,0,0.35); }
-      .bub { position: absolute; padding: 14px 26px 16px; border-radius: 22px; font: 400 44px "R3", sans-serif; color: #111; background: #f3efe4;
-        box-shadow: 0 8px 0 -3px rgba(0,0,0,0.25), 0 14px 26px rgba(0,0,0,0.45); white-space: nowrap; }
-      .bub:after { content: ""; position: absolute; left: 30px; bottom: -16px; border: 12px solid transparent; border-top: 16px solid #f3efe4; border-bottom: 0; }
+      .rain { position: absolute; top: -220px; }
       #heart { opacity: 0; position: absolute; left: 1180px; top: 210px; font: 400 130px R3; color: #ff4f7a; text-shadow: 0 10px 24px rgba(0,0,0,0.5); }
-      .half { visibility: hidden; opacity: 0; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; filter: drop-shadow(0 0 3px #f5f0e4) drop-shadow(0 0 2px #f5f0e4) drop-shadow(0 18px 30px rgba(0,0,0,0.6)); }
-      .half .in { position: absolute; inset: 0; }
-      .half img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
-      #cutline { position: absolute; left: 0; top: 0; visibility: hidden; opacity: 0; }
+      .piece { visibility: hidden; opacity: 0; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; filter: drop-shadow(0 16px 26px rgba(0,0,0,0.65)); }
       #hud { position: absolute; left: 56px; bottom: 44px; display: flex; align-items: center; gap: 18px; font: 400 30px "R3", sans-serif; letter-spacing: 0.04em;
         padding: 12px 22px; background: rgba(10,10,24,0.55); border-radius: 10px; }
       #rec { width: 22px; height: 22px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 0 6px rgba(255,59,59,0.18); }
@@ -38,32 +32,24 @@
       <div id="shot" class="full">
         <div id="cam">
           <video id="base" class="clip" data-start="0" data-duration="60" data-track-index="0" src="assets/video/base.mp4" muted playsinline></video>
+          <!-- Platz für Chat-Nachrichten auf dem rechten Monitor (Zimmer 35-47 s), folgen später -->
           <div id="flash"></div>
         </div>
         <div id="vig"></div>
       </div>
 
-      <!-- Overlays: Chat-Blasen (Balkon), Herz (Oma), Papierschnipsel -->
+      <!-- Papier-Regen (Higgsfield-Sprites) in den Außenszenen 0-35 s -->
+      <div id="rain" class="clip" data-start="0" data-duration="35" data-track-index="4"></div>
+
+      <!-- Herz am Oma-Foto -->
       <div id="fx" class="clip" data-start="0" data-duration="60" data-track-index="5">
-        <div id="bubs" class="full"></div>
         <div id="heart">&#10084;</div>
-        <div id="scraps" class="full"></div>
       </div>
 
-      <!-- Papier-Übergänge: ausgehender Frame als Papier -->
-      <div id="tx" class="clip" data-start="0" data-duration="60" data-track-index="15">
-        <div class="half" id="tA1"><div class="in"><img src="assets/img/v2/out_12.0.jpg" /></div></div>
-        <div class="half" id="tA2"><div class="in"><img src="assets/img/v2/out_12.0.jpg" /></div></div>
-        <div class="half" id="crum"><div class="in" style="overflow:hidden;"><img src="assets/img/v2/out_23.5.jpg" /></div></div>
-        <div class="half" id="page"><div class="in"><img src="assets/img/v2/out_35.0.jpg" /></div></div>
-        <svg id="cutline" width="1920" height="1080" viewBox="0 0 1920 1080"><path id="cutp" pathLength="1" d="M-20 700 L1940 380" fill="none" stroke="#f5f0e4" stroke-width="6" stroke-dasharray="0.012 0.008" /></svg>
-        <div class="half" id="sc1"><div class="in"><img src="assets/img/v2/out_47.0.jpg" /></div></div>
-        <div class="half" id="sc2"><div class="in"><img src="assets/img/v2/out_47.0.jpg" /></div></div>
-        <div class="half" id="tB1"><div class="in"><img src="assets/img/v2/out_59.2.jpg" /></div></div>
-        <div class="half" id="tB2"><div class="in"><img src="assets/img/v2/out_59.2.jpg" /></div></div>
-      </div>
+      <!-- Papier-Risse: ausgehender Frame, mit v2/tear.py in zwei Hälften gerissen -->
+      <div id="tx" class="clip" data-start="0" data-duration="60" data-track-index="15"></div>
 
-      <!-- Musik (ElevenLabs, als 60-s-Loop) + Papier-/Uhr-SFX, gemischt -->
+      <!-- Musik (ElevenLabs, als 60-s-Loop) + Riss-/Uhr-SFX, gemischt -->
       <audio id="mix" data-start="0" data-duration="60" data-track-index="30" src="assets/audio/mix.wav"></audio>
 
       <div id="ovl" class="clip" data-start="0" data-duration="60" data-track-index="20">
@@ -74,25 +60,26 @@
     <script>
       let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 
-      // Chat-Blasen (deutsch)
-      const bubs = document.getElementById("bubs");
-      [["W", 1180, 420], ["GG", 1420, 300], ["Ehrenmann", 1060, 250], ["lass gehen", 1300, 520], ["Oma > alle", 980, 380]].forEach(([t, x, y], i) => {
-        const b = document.createElement("div"); b.className = "bub"; b.id = "bu" + i; b.textContent = t; b.style.left = x + "px"; b.style.top = y + "px"; b.style.opacity = 0; bubs.appendChild(b);
-      });
-      // Papierschnipsel
-      const scraps = document.getElementById("scraps");
-      for (let i = 0; i < 14; i++) { const s = document.createElement("div"); s.className = "scrap"; s.id = "sp" + i; s.style.left = Math.round(rnd() * 1880) + "px"; s.style.top = "-40px";
-        s.style.background = ["#f1ebdc", "#e6d9b8", "#d63a2f", "#8be0c6", "#f2d14b"][i % 5]; scraps.appendChild(s); }
+      // Riss-Übergänge: [Zeit, Richtung]  v = links/rechts, h = oben/unten
+      const TEARS = [["12.0", "v"], ["23.5", "h"], ["35.0", "v"], ["47.0", "h"], ["59.2", "v"]];
+      const tx = document.getElementById("tx");
+      TEARS.forEach(([t, dir], k) => ["a", "b"].forEach((p) => {
+        const im = document.createElement("img"); im.className = "piece"; im.id = "t" + k + p;
+        im.src = "assets/img/v2/tear_" + t + "_" + p + ".png"; tx.appendChild(im);
+      }));
 
-      // Riss-Kanten
-      const tearPts = []; for (let k = 0; k <= 24; k++) tearPts.push([960 + Math.round((rnd() - 0.5) * 70), k * 45]);
-      const pts = tearPts.map((p) => p[0] + "px " + p[1] + "px").join(", ");
-      const leftPoly = "polygon(0px 0px, " + pts + ", 0px 1080px)";
-      const rightPoly = "polygon(1920px 0px, " + pts + ", 1920px 1080px)";
-      ["#tA1 .in", "#tB1 .in"].forEach((s) => (document.querySelector(s).style.clipPath = leftPoly));
-      ["#tA2 .in", "#tB2 .in"].forEach((s) => (document.querySelector(s).style.clipPath = rightPoly));
-      document.querySelector("#sc1 .in").style.clipPath = "polygon(0px 0px, 1920px 0px, 1920px 380px, 0px 700px)";
-      document.querySelector("#sc2 .in").style.clipPath = "polygon(0px 700px, 1920px 380px, 1920px 1080px, 0px 1080px)";
+      // Regen: Streifen + Tropfen
+      const rain = document.getElementById("rain");
+      const RS = 38, RD = 7;
+      for (let i = 0; i < RS + RD; i++) {
+        const im = document.createElement("img"); im.className = "rain"; im.id = "r" + i;
+        const streak = i < RS; im.src = "assets/img/v2/" + (streak ? "streak" : "drop") + ".png";
+        const sc = streak ? 0.35 + rnd() * 0.45 : 0.25 + rnd() * 0.25;
+        im.style.left = Math.round(rnd() * 2100 - 120) + "px";
+        im.style.width = Math.round((streak ? 16 : 56) * sc) + "px";
+        im.style.opacity = (streak ? 0.22 : 0.4) + rnd() * 0.25;
+        rain.appendChild(im);
+      }
 
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
@@ -102,7 +89,7 @@
       tl.set("#cam", { scale: 1.04, transformOrigin: "50% 50%" }, 0);
       let t = 0; while (t < 60) { const d = 0.5 + rnd() * 0.5; tl.to("#cam", { x: (rnd() - 0.5) * 14, y: (rnd() - 0.5) * 10, rotation: (rnd() - 0.5) * 0.5, duration: d, ease: "sine.inOut" }, t); t += d; }
 
-      // Punch-Zoom an harten Schnitten (Whip-Gefühl)
+      // Punch-Zoom an harten Schnitten
       [3.2, 5.0, 7.6, 10.4, 15.5, 21.2, 22.0, 27.0, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
         tl.fromTo("#base", { scale: 1.09, filter: "blur(6px)" }, { scale: 1.0, filter: "blur(0px)", duration: 0.28, ease: "power3.out", immediateRender: false }, c);
       });
@@ -111,49 +98,38 @@
       tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 18.5);
       tl.to("#base", { scale: 1.0, duration: 0.25, ease: "power2.inOut" }, 19.1);
 
-      // Chat-Blasen auf dem Balkon
-      [24.6, 25.8, 27.0, 31.2, 32.6].forEach((s, i) => {
-        tl.fromTo("#bu" + i, { opacity: 0, scale: 0.3, y: 40, rotation: (i % 2 ? 6 : -6) }, { opacity: 1, scale: 1, y: 0, rotation: (i % 2 ? -3 : 3), duration: 0.45, ease: "back.out(2)", immediateRender: false }, s);
-        tl.to("#bu" + i, { y: -80, opacity: 0, duration: 1.0, ease: "sine.in" }, s + 1.5);
-      });
+      // Regen fällt leicht schräg, Streifen schnell, Tropfen langsamer
+      for (let i = 0; i < RS + RD; i++) {
+        const streak = i < RS; const d = streak ? 0.55 + rnd() * 0.35 : 1.1 + rnd() * 0.7;
+        const reps = Math.max(0, Math.floor(35 / d) - 1);
+        tl.fromTo("#r" + i, { x: 0, y: 0, rotation: 9 }, { x: -200, y: 1400, rotation: 9, duration: d, ease: "none", repeat: reps }, rnd() * d);
+      }
 
       // Herz am Oma-Foto
       tl.fromTo("#heart", { scale: 0, opacity: 0 }, { scale: 1.25, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false }, 40.0);
       tl.to("#heart", { scale: 1.1, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: 3 }, 40.4);
       tl.to("#heart", { y: -90, opacity: 0, duration: 0.7, ease: "sine.in" }, 41.6);
 
-      // Papierschnipsel treiben durchs Bild
-      for (let i = 0; i < 14; i++) { const d = 6 + rnd() * 5;
-        tl.fromTo("#sp" + i, { y: 0, x: 0, rotation: rnd() * 360 }, { y: 1160, x: (rnd() - 0.5) * 300, rotation: "+=" + Math.round(400 + rnd() * 500), duration: d, ease: "none", repeat: Math.max(0, Math.floor(60 / d) - 1) }, rnd() * 4); }
-
-      // T1 Riss (12.0)
-      tl.set(["#tA1", "#tA2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 12.0);
-      tl.to("#tA1", { x: -1150, y: 60, rotation: -9, duration: 0.8, ease: "power3.in" }, 12.05);
-      tl.to("#tA2", { x: 1150, y: -40, rotation: 8, duration: 0.8, ease: "power3.in" }, 12.1);
-      tl.set(["#tA1", "#tA2"], { autoAlpha: 0 }, 12.95);
-      // T2 Zerknüllen (23.5)
-      tl.set("#crum", { autoAlpha: 1, scale: 1, rotation: 0, x: 0, y: 0 }, 23.5);
-      tl.fromTo("#crum .in", { borderRadius: "0%" }, { borderRadius: "50%", duration: 0.4, ease: "power2.in", immediateRender: false }, 23.5);
-      tl.to("#crum", { scale: 0.12, rotation: 420, duration: 0.5, ease: "power3.in" }, 23.5);
-      tl.to("#crum", { x: 1300, y: -700, rotation: 900, duration: 0.45, ease: "power2.in" }, 24.0);
-      tl.set("#crum", { autoAlpha: 0 }, 24.5);
-      // T3 Umblättern (35.0)
-      tl.set("#page", { autoAlpha: 1, rotationY: 0, transformPerspective: 2200, transformOrigin: "0% 50%" }, 35.0);
-      tl.to("#page", { rotationY: -100, duration: 0.85, ease: "power2.in" }, 35.0);
-      tl.set("#page", { autoAlpha: 0 }, 35.9);
-      // T4 Schere (47.0) – Schnittlinie läuft im letzten Moment der Zimmer-Szene
-      tl.set("#cutline", { autoAlpha: 1 }, 46.4);
-      tl.fromTo("#cutp", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: "power1.in", immediateRender: false }, 46.4);
-      tl.set("#cutline", { autoAlpha: 0 }, 47.02);
-      tl.set(["#sc1", "#sc2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 47.0);
-      tl.to("#sc1", { y: -900, rotation: -6, duration: 0.7, ease: "power3.in" }, 47.05);
-      tl.to("#sc2", { y: 900, rotation: 5, duration: 0.7, ease: "power3.in" }, 47.1);
-      tl.set(["#sc1", "#sc2"], { autoAlpha: 0 }, 47.85);
-      // T5 Loop-Riss (59.2) zurück zu Frame 0
-      tl.set(["#tB1", "#tB2"], { autoAlpha: 1, x: 0, y: 0, rotation: 0 }, 59.2);
-      tl.to("#tB1", { x: -1150, y: -50, rotation: -8, duration: 0.7, ease: "power3.in" }, 59.22);
-      tl.to("#tB2", { x: 1150, y: 60, rotation: 9, duration: 0.7, ease: "power3.in" }, 59.26);
-      tl.set(["#tB1", "#tB2"], { autoAlpha: 0 }, 59.99);
+      // Riss: erst reißt das Papier von einer Seite her auf (kleine Drehung um das Rissende),
+      // dann werden beide Hälften weggezogen. Leichte 3D-Wölbung wie bei echtem Papier.
+      TEARS.forEach(([ts, dir], k) => {
+        const T = parseFloat(ts), A = "#t" + k + "a", B = "#t" + k + "b", v = dir === "v";
+        const o = v ? "50% 100%" : "0% 50%";
+        tl.set([A, B], { autoAlpha: 1, x: 0, y: 0, rotation: 0, rotationX: 0, rotationY: 0, transformPerspective: 1800, transformOrigin: o }, T);
+        if (v) {
+          tl.to(A, { rotation: -2.6, x: -18, rotationY: 7, duration: 0.34, ease: "power2.out" }, T + 0.02);
+          tl.to(B, { rotation: 2.6, x: 18, rotationY: -7, duration: 0.34, ease: "power2.out" }, T + 0.02);
+          tl.to(A, { x: -1350, y: 90, rotation: -13, rotationY: 22, duration: 0.55, ease: "power2.in" }, T + 0.36);
+          tl.to(B, { x: 1350, y: -50, rotation: 11, rotationY: -22, duration: 0.55, ease: "power2.in" }, T + 0.40);
+        } else {
+          tl.to(A, { rotation: -2.2, y: -16, rotationX: -7, duration: 0.34, ease: "power2.out" }, T + 0.02);
+          tl.to(B, { rotation: 2.2, y: 16, rotationX: 7, duration: 0.34, ease: "power2.out" }, T + 0.02);
+          tl.to(A, { y: -1150, x: 80, rotation: -8, rotationX: -20, duration: 0.55, ease: "power2.in" }, T + 0.36);
+          tl.to(B, { y: 1150, x: -60, rotation: 7, rotationX: 20, duration: 0.55, ease: "power2.in" }, T + 0.40);
+        }
+        tl.set([A, B], { autoAlpha: 0 }, Math.min(T + 0.97, 59.99));
+        tl.fromTo("#cam", { y: 0 }, { y: 6, duration: 0.05, ease: "steps(1)", yoyo: true, repeat: 3, immediateRender: false }, T + 0.02);
+      });
 
       window.__timelines["main"] = tl;
       tl.seek(0);

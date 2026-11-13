@@ -57,4 +57,9 @@ mkdir -p ../film/assets/img/v2
 for t in 12.0 23.5 35.0 47.0 59.2; do
   ffmpeg -v error -y -ss "$(python3 -c "print($t-0.04)")" -i "$OUT/base.mp4" -frames:v 1 -q:v 2 "../film/assets/img/v2/out_${t}.jpg"
 done
+# Papier-Risse aus den ausgehenden Frames (Richtung/Seed/Schräge je Übergang)
+for spec in "12.0 v 3 120" "23.5 h 5 -90" "35.0 v 9 -150" "47.0 h 13 110" "59.2 v 21 60"; do
+  set -- $spec
+  python3 tear.py "../film/assets/img/v2/out_$1.jpg" "../film/assets/img/v2/tear_$1" "$2" "$3" "$4"
+done
 echo done
