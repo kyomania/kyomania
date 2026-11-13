@@ -3,3 +3,4 @@ node_modules/
 film/renders/
 .*hf-transaction*/
 work-*/
+v2/work-*
