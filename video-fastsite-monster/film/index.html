@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Display"; font-weight: 600; src: url(assets/fonts/InterDisplay-SemiBold.otf); }
+      @font-face { font-family: "Display"; font-weight: 700; src: url(assets/fonts/InterDisplay-Bold.otf); }
+      @font-face { font-family: "Text"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
+      @font-face { font-family: "Text"; font-weight: 600; src: url(assets/fonts/Inter-SemiBold.otf); }
+      :root { --display: "Display", sans-serif; --text: "Text", sans-serif; --green: #0c9958; --ink: #1d1d1f; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000; color: #fff; font-family: var(--text); -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .ov { pointer-events: none; }
+
+      /* captions (same system as the previous films) */
+      .sc { position: absolute; left: 120px; top: 104px; }
+      .sc .e { font: 600 22px var(--text); letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.8; margin-bottom: 10px; }
+      .sc .l { font: 600 84px/1.04 var(--display); letter-spacing: -0.03em; white-space: nowrap; }
+      .sc .l.g { opacity: 0.7; }
+      .ln { display: block; overflow: hidden; padding-bottom: 0.08em; }
+      .ln > span { display: inline-block; }
+      .lt { color: #fff; text-shadow: 0 2px 28px rgba(40,10,0,0.35); }
+      .dk { color: var(--ink); }
+      .dk .e { opacity: 0.55; }
+
+      /* stop type */
+      #stop { position: absolute; left: 110px; top: 560px; color: #fff; font: 700 150px/0.9 var(--display); letter-spacing: -0.045em; text-shadow: 0 6px 40px rgba(60,0,0,0.35); }
+      #stop .o { display: inline-block; width: 0.74em; height: 0.74em; border-radius: 50%; background: #ff2e1f; border: 0.07em solid #fff; vertical-align: -0.02em; margin: 0 0.02em; }
+      #lbar { position: absolute; left: 120px; top: 990px; width: 520px; height: 6px; border-radius: 6px; background: rgba(255,255,255,0.3); overflow: hidden; }
+      #lbar i { position: absolute; inset: 0; background: #fff; transform-origin: 0 50%; }
+      #lbt { position: absolute; left: 660px; top: 978px; font: 500 24px var(--text); color: rgba(255,255,255,0.9); }
+
+      /* capsules */
+      .word { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 18px; padding: 16px 30px 16px 22px; border-radius: 999px;
+        background: rgba(20,14,10,0.42); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.25);
+        font: 700 56px/1 var(--display); letter-spacing: 0.02em; white-space: nowrap; color: #fff; }
+      .word .dt { width: 20px; height: 20px; border-radius: 50%; background: var(--c); flex: none; }
+      .word i { font-style: normal; color: var(--c); }
+
+      /* order toast */
+      #toast { position: absolute; left: 120px; top: 360px; display: flex; align-items: center; gap: 16px; padding: 18px 30px 18px 22px; border-radius: 999px;
+        background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); color: var(--ink); font: 600 32px var(--display); box-shadow: 0 18px 50px rgba(60,20,10,0.25); }
+      #toast .ck { width: 44px; height: 44px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; }
+      #toast small { font: 500 24px var(--text); color: #6e6e73; margin-left: 4px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="28.2" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="28.2" data-volume="1"></audio>
+
+      <video id="vA" class="clip" src="assets/clips/flow.mp4" muted playsinline data-start="0" data-duration="4.2" data-media-start="0" data-track-index="1"></video>
+      <video id="vB" class="clip" src="assets/clips/red.mp4" muted playsinline data-start="4.2" data-duration="4.0" data-media-start="0" data-track-index="2"></video>
+      <video id="vD" class="clip" src="assets/clips/door.mp4" muted playsinline data-start="8.2" data-duration="5.0" data-media-start="0" data-track-index="3"></video>
+      <video id="vT" class="clip" src="assets/clips/rex.mp4" muted playsinline data-start="13.2" data-duration="5.0" data-media-start="0" data-track-index="4"></video>
+      <video id="vH" class="clip" src="assets/clips/happy.mp4" muted playsinline data-start="18.2" data-duration="4.2" data-media-start="0" data-track-index="5"></video>
+      <video id="sting" class="clip" src="assets/clips/sting.mp4" muted playsinline data-start="22.4" data-duration="5.8" data-media-start="0.7" data-track-index="6"></video>
+
+      <div id="ovl" class="clip ov" data-start="0" data-duration="22.4" data-track-index="7">
+        <div class="sc lt" id="cA"><div class="e">Everything in your hand</div><div class="l"><span class="ln"><span>Just one click.</span></span></div></div>
+
+        <div id="stopw"><div id="stop"><span class="ln"><span>WHAT'S</span></span><span class="ln"><span>ST<span class="o" id="rl"></span>PPING</span></span><span class="ln"><span>YOU?</span></span></div>
+          <div id="lbar"><i id="lbi"></i></div><div id="lbt">loading… <span id="lbs">1.0</span> s</div></div>
+
+        <div class="sc dk" id="cD1"><div class="e">Your website today</div><div class="l"><span class="ln"><span>Slow. Small. Stuck.</span></span></div></div>
+        <div class="sc dk" id="cD2"><div class="e">Your website on fast.site</div><div class="l"><span class="ln"><span>Monster mode.</span></span></div></div>
+
+        <div class="sc lt" id="cT"><div class="e">How fast.site works</div>
+          <div class="l" style="position:relative;height:92px"><div id="t1" style="position:absolute">Nearest edge.</div><div id="t2" style="position:absolute">Straight from cache.</div><div id="t3" style="position:absolute">Lighter images.</div><div id="t4" style="position:absolute">Protected.</div></div></div>
+        <div id="caps"></div>
+
+        <div class="sc lt" id="cH"><div class="e">The result</div><div class="l"><span class="ln"><span>Same site. Same hosting.</span></span></div><div class="l g"><span class="ln"><span>Monster speed.</span></span></div></div>
+        <div id="toast"><div class="ck"><svg width="24" height="24" viewBox="0 0 28 28"><path d="M7 14.5l4.5 4.5L21 9.5" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Order confirmed<small>3 items</small></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", E = "power3.out";
+      const BURST = 10.45; // moment the T-rex breaks through the door
+
+      const hideAll = ["#cA", "#stopw", "#cD1", "#cD2", "#cT", "#cH", "#toast"];
+      hideAll.forEach((s) => tl.set(s, { opacity: 0 }, 0));
+      const capIn = (id, t) => {
+        tl.set(id, { opacity: 1, y: 0 }, t);
+        tl.fromTo(id + " .e", { opacity: 0, y: 10 }, { opacity: 0.8, y: 0, duration: 0.5, ease: E }, t);
+        document.querySelectorAll(id + " .ln > span").forEach((sp, i) => tl.fromTo(sp, { yPercent: 110 }, { yPercent: 0, duration: 0.75, ease: EX }, t + 0.08 + i * 0.3));
+      };
+      const capOut = (id, t) => tl.to(id, { opacity: 0, y: -16, duration: 0.3, ease: "power2.in" }, t);
+
+      // 1 flow
+      capIn("#cA", 0.5); capOut("#cA", 3.9);
+
+      // 2 stop: kinetic type, red light pulses, loader crawls
+      tl.set("#stopw", { opacity: 1 }, 4.35);
+      document.querySelectorAll("#stop .ln > span").forEach((sp, i) => tl.fromTo(sp, { yPercent: 110 }, { yPercent: 0, duration: 0.6, ease: EX }, 4.4 + i * 0.22));
+      tl.fromTo("#rl", { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(2.6)" }, 4.75);
+      tl.fromTo("#rl", { opacity: 1 }, { opacity: 0.55, duration: 0.45, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false }, 5.3);
+      tl.fromTo("#lbi", { scaleX: 0 }, { scaleX: 0.22, duration: 3.2, ease: "power1.out" }, 4.6);
+      const lb = { v: 1.0 };
+      tl.fromTo(lb, { v: 1.0 }, { v: 7.8, duration: 3.2, ease: "power1.in", onUpdate: () => (document.querySelector("#lbs").textContent = lb.v.toFixed(1)) }, 4.6);
+      tl.to("#stopw", { opacity: 0, duration: 0.25 }, 7.95);
+
+      // 3 door: today vs monster mode
+      capIn("#cD1", 8.4); capOut("#cD1", BURST - 0.35);
+      capIn("#cD2", BURST + 0.1); capOut("#cD2", 12.95);
+      tl.fromTo("#vD", { scale: 1 }, { scale: 1.06, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, BURST);
+
+      // 4 rex run: captions + capsules from the dust
+      tl.set("#cT", { opacity: 1, y: 0 }, 13.3);
+      tl.fromTo("#cT .e", { opacity: 0, y: 10 }, { opacity: 0.8, y: 0, duration: 0.5, ease: E }, 13.3);
+      const TT = [["#t1", 13.4, 14.65], ["#t2", 14.8, 16.2], ["#t3", 16.38, 17.7], ["#t4", 17.89, 18.15]];
+      TT.forEach(([s, a, b]) => { tl.fromTo(s, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.45, ease: EX }, a); tl.to(s, { opacity: 0, y: -16, duration: 0.22, ease: "power2.in" }, b); });
+      capOut("#cT", 18.1);
+      const W = [["EDGE", "#4f8fe6", 13.4], ["CACHE", "#2fb35e", 14.8], ["WEBP <i>−35%</i>", "#f5b72a", 16.38], ["SHIELD", "#e2463a", 17.6]];
+      const caps = document.querySelector("#caps");
+      W.forEach(([txt, c, t]) => {
+        const d = document.createElement("div"); d.className = "word"; d.style.setProperty("--c", c); d.innerHTML = '<span class="dt"></span>' + txt; caps.appendChild(d);
+        const P = (k) => ({ x: 1380 + 330 * k, y: 600 + 150 * k });
+        tl.set(d, { xPercent: -50, yPercent: -50, opacity: 0 }, 0);
+        tl.fromTo(d, { x: P(0).x, y: P(0).y, scale: 0.35, opacity: 0, filter: "blur(6px)" }, { x: P(0.35).x, y: P(0.35).y, scale: 1.05, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, t);
+        tl.to(d, { x: P(0.95).x, y: P(0.95).y, scale: 0.8, opacity: 0, filter: "blur(3px)", duration: 1.0, ease: "power1.in" }, t + 0.55);
+      });
+
+      // 5 happy: result + order toast
+      capIn("#cH", 18.5); capOut("#cH", 22.15);
+      tl.set("#toast", { opacity: 1 }, 19.4);
+      tl.fromTo("#toast", { opacity: 0, y: 26, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 19.4);
+      tl.to("#toast", { opacity: 0, duration: 0.3 }, 22.1);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
