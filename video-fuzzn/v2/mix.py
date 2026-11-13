@@ -5,14 +5,16 @@ import subprocess
 ev = []  # (datei, zeit, lautstärke)
 for t in [12.0, 23.5, 35.0, 47.0, 59.2]:
     ev.append(("rip", max(0.0, t - 0.03), 1.0))          # Papier reißt
-for t, d in [(10.4, 1.6), (21.2, 0.8), (52.0, 1.8)]:      # Uhr: Ping + Ticken
+for t, d in [(10.4, 1.6), (16.0, 0.8), (52.0, 1.8)]:      # Uhr: Ping + Ticken
     ev.append(("pingE5", t, 0.5))
     k = 0
     while k * 0.4 < d - 0.1:
         ev.append(("tick", t + 0.2 + k * 0.4, 0.6))
         k += 1
-ev.append(("sub", 18.5, 0.9))       # Freeze beim Döner-Biss
+ev.append(("sub", 18.8, 0.9))       # Freeze beim Döner-Biss
 ev.append(("pingG5", 40.0, 0.6))    # Herz an Omas Foto
+for t in [36.0, 37.0, 38.1, 43.2]:
+    ev.append(("tick", t, 0.35))       # Chat-Nachricht
 
 ins = ["-i", "../v2/music_loop.wav"]
 f = ["[0:a]volume=0.72[m]"]

@@ -31,12 +31,11 @@ seg C02 0.8 2.6
 seg C11 0.4 2.8
 seg C12 0.5 1.6
 # --- Hakiki 12.0-23.5
-seg C04 0.3 3.5
-seg C05 0.0 3.0
-still C05 3.0 0.8
-seg C05 3.0 1.9
+seg C04 0.3 4.0
 seg C12 2.0 0.8
-seg C04 3.5 1.5
+seg C05 0.0 2.0
+still C05 2.0 0.8
+seg C05 2.0 3.9 0.77
 # --- Balkon 23.5-35.0
 seg C06 0.0 3.5
 seg C07 0.5 3.5

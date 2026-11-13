@@ -17,6 +17,13 @@
       #flash { position: absolute; inset: 0; background: #fff6e0; opacity: 0; }
       #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.42) 100%); }
       .rain { position: absolute; top: -220px; }
+      #plate { transform-origin: 50% 50%; }
+      #chatbox { position: absolute; left: 1534px; top: 450px; width: 310px; height: 138px; overflow: hidden;
+        display: flex; flex-direction: column; justify-content: flex-end; gap: 5px; padding: 0 4px 6px;
+        font: 600 15px/1.25 "Inter", "Helvetica Neue", Arial, sans-serif; color: #efeff1;
+        text-shadow: 0 0 6px rgba(190,170,255,0.35); filter: blur(0.3px); opacity: 0.93; }
+      .msg { display: none; }
+      .msg b { font-weight: 800; }
       #heart { opacity: 0; position: absolute; left: 1180px; top: 210px; font: 400 130px R3; color: #ff4f7a; text-shadow: 0 10px 24px rgba(0,0,0,0.5); }
       .piece { visibility: hidden; opacity: 0; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; filter: drop-shadow(0 16px 26px rgba(0,0,0,0.65)); }
       #hud { position: absolute; left: 56px; bottom: 44px; display: flex; align-items: center; gap: 18px; font: 400 30px "R3", sans-serif; letter-spacing: 0.04em;
@@ -31,15 +38,25 @@
       <!-- Grundschnitt aus 12 Kling-Clips (v2/build_base.sh) -->
       <div id="shot" class="full">
         <div id="cam">
-          <video id="base" class="clip" data-start="0" data-duration="60" data-track-index="0" src="assets/video/base.mp4" muted playsinline></video>
-          <!-- Platz für Chat-Nachrichten auf dem rechten Monitor (Zimmer 35-47 s), folgen später -->
+          <div id="plate" class="full">
+            <video id="base" class="clip" data-start="0" data-duration="60" data-track-index="0" src="assets/video/base.mp4" muted playsinline></video>
+            <!-- Twitch-Chat auf dem rechten Monitor (Zimmer 35-47 s, ohne Oma-Insert 39-42.5) -->
+            <div id="chat" class="clip" data-start="35" data-duration="12" data-track-index="2">
+              <div id="chatbox">
+                <div class="msg" id="m0"><b style="color:#ff7f50">VanooO_</b>: bin schon wieder voll wow</div>
+                <div class="msg" id="m1"><b style="color:#9acd32">AbuKaetzchen</b>: any Sider?</div>
+                <div class="msg" id="m2"><b style="color:#4aa8ff">satyrbe</b>: FeelsOkayMan</div>
+                <div class="msg" id="m3"><b style="color:#daa520">dilard47</b>: Boah bin ich alt</div>
+              </div>
+            </div>
+          </div>
           <div id="flash"></div>
         </div>
         <div id="vig"></div>
       </div>
 
       <!-- Papier-Regen (Higgsfield-Sprites) in den Außenszenen 0-35 s -->
-      <div id="rain" class="clip" data-start="0" data-duration="35" data-track-index="4"></div>
+      <div id="rain" class="clip" data-start="0" data-duration="35" data-track-index="4"><div id="rainin" class="full"></div></div>
 
       <!-- Herz am Oma-Foto -->
       <div id="fx" class="clip" data-start="0" data-duration="60" data-track-index="5">
@@ -69,7 +86,7 @@
       }));
 
       // Regen: Streifen + Tropfen
-      const rain = document.getElementById("rain");
+      const rain = document.getElementById("rainin");
       const RS = 38, RD = 7;
       for (let i = 0; i < RS + RD; i++) {
         const im = document.createElement("img"); im.className = "rain"; im.id = "r" + i;
@@ -90,13 +107,25 @@
       let t = 0; while (t < 60) { const d = 0.5 + rnd() * 0.5; tl.to("#cam", { x: (rnd() - 0.5) * 14, y: (rnd() - 0.5) * 10, rotation: (rnd() - 0.5) * 0.5, duration: d, ease: "sine.inOut" }, t); t += d; }
 
       // Punch-Zoom an harten Schnitten
-      [3.2, 5.0, 7.6, 10.4, 15.5, 21.2, 22.0, 27.0, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
-        tl.fromTo("#base", { scale: 1.09, filter: "blur(6px)" }, { scale: 1.0, filter: "blur(0px)", duration: 0.28, ease: "power3.out", immediateRender: false }, c);
+      [3.2, 5.0, 7.6, 10.4, 16.0, 16.8, 19.6, 27.0, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
+        tl.fromTo("#plate", { scale: 1.09, filter: "blur(6px)" }, { scale: 1.0, filter: "blur(0px)", duration: 0.28, ease: "power3.out", immediateRender: false }, c);
       });
       // Freeze-Frame-Punch beim Döner-Biss
-      tl.fromTo("#base", { scale: 1.0 }, { scale: 1.22, duration: 0.18, ease: "power4.out", immediateRender: false }, 18.5);
-      tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 18.5);
-      tl.to("#base", { scale: 1.0, duration: 0.25, ease: "power2.inOut" }, 19.1);
+      tl.fromTo("#plate", { scale: 1.0 }, { scale: 1.22, duration: 0.18, ease: "power4.out", immediateRender: false }, 18.8);
+      tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 18.8);
+      tl.to("#plate", { scale: 1.0, duration: 0.25, ease: "power2.inOut" }, 19.4);
+
+      // Chat: Nachrichten kommen nacheinander rein, während des Oma-Inserts ausgeblendet
+      [36.0, 37.0, 38.1, 43.2].forEach((ct, i) => {
+        tl.set("#m" + i, { display: "block" }, ct);
+        tl.fromTo("#m" + i, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.2, ease: "power1.out", immediateRender: false }, ct);
+      });
+      tl.set("#chatbox", { autoAlpha: 0 }, 39.0);
+      tl.set("#chatbox", { autoAlpha: 0.93 }, 42.5);
+
+      // Kein Regen in der Glut-Szene (drinnen am Fenster)
+      tl.to("#rainin", { autoAlpha: 0, duration: 0.1 }, 27.0);
+      tl.to("#rainin", { autoAlpha: 1, duration: 0.1 }, 30.5);
 
       // Regen fällt leicht schräg, Streifen schnell, Tropfen langsamer
       for (let i = 0; i < RS + RD; i++) {

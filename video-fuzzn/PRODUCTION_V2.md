@@ -83,10 +83,9 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 | 5,0–7,6 | C02 Kiez nah |
 | 7,6–10,4 | C11 Blick auf die Uhr |
 | 10,4–12,0 | C12 Uhr „NOCH AM SUCHEN…“ → Riss |
-| 12,0–15,5 | C04 Hakiki |
-| 15,5–21,2 | C05 Biss, mit Freeze-Punch 18,5–19,3 |
-| 21,2–22,0 | C12 Uhr-Insert |
-| 22,0–23,5 | C04 Ende → Zerknüllen |
+| 12,0–16,0 | C04 Hakiki: er bekommt den Döner |
+| 16,0–16,8 | C12 Uhr-Insert |
+| 16,8–23,5 | C05 er isst, Freeze-Punch 18,8–19,6, Rest leicht Slow-Mo → Riss |
 | 23,5–27,0 | C06 Balkon |
 | 27,0–30,5 | C07 Glut |
 | 30,5–35,0 | C06 Slow-Mo → Umblättern |
@@ -105,3 +104,8 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 - **Übergänge:** Alle 5 sind jetzt realistische Papier-Risse (`v2/tear.py`). Die Risskante ist zackig auf mehreren Ebenen, eine Hälfte zeigt das weiße, faserige Papierinnere, dazu feine Fasern und ein Schlagschatten. Erst reißt das Papier von einer Seite her auf, dann werden die Hälften mit leichter 3D-Wölbung weggezogen. Ton: echtes Reiß-Geräusch (Mirelo SFX, `film/assets/sfx/rip.wav`).
 - **Chat:** Die erfundenen Chat-Blasen sind entfernt. Echte Nachrichten samt Benutzernamen liefert der Kunde.
 - Mix: `cd film && python3 ../v2/mix.py`
+
+## Stand 13.11. – Runde 4
+- Döner-Reihenfolge korrigiert: erst bekommt er den Döner, dann Blick auf die Uhr, dann isst er.
+- Kein Regen in der Glut-Szene (27,0–30,5 s), da er drinnen am Fenster steht.
+- Chat auf dem rechten Monitor im Zimmer, Twitch-Stil, nacheinander eingeblendet: VanooO_ (36,0 s), AbuKaetzchen (37,0 s), satyrbe (38,1 s), dilard47 (43,2 s). Das Video und der Chat liegen im gemeinsamen Container `#plate`, damit sie sich bei Zooms zusammen bewegen.
