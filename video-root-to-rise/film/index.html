@@ -8,7 +8,7 @@
       /* brand fonts from worklifehappiness.de */
       @font-face { font-family: "WLHGaramond"; font-weight: 500; src: url(assets/fonts/CormorantGaramond-Medium-1.woff2); }
       @font-face { font-family: "WLHGaramond"; font-weight: 600; src: url(assets/fonts/CormorantGaramond-SemiBold-1.woff2); }
-      @font-face { font-family: "WLHScript"; font-weight: 500; src: url(assets/fonts/RoyaltyFree-4.woff2); }
+      @font-face { font-family: "WLHScript"; font-weight: 500; src: url(assets/fonts/ms-madi-latin-400-normal.woff2); }
       @font-face { font-family: "WLHWork"; font-weight: 400; src: url(assets/fonts/WorkSans-Regular.woff2); }
       @font-face { font-family: "WLHWork"; font-weight: 500; src: url(assets/fonts/WorkSans-Medium.woff2); }
       @font-face { font-family: "WLHNunito"; font-weight: 600; src: url(assets/fonts/NunitoSans-SemiBold-1.woff2); }
@@ -48,7 +48,10 @@
       #c4 { top: 1390px; } #c4 .hd { font-size: 140px; line-height: 1; }
       /* 5 triptych */
       #s5eb { position: absolute; left: 0; width: 1080px; top: 150px; text-align: center; color: var(--purple); }
-      #tA, #tB, #tC { left: 60px; width: 960px; height: 338px; border-radius: 6px; }
+      #tA, #tB, #tC { left: 60px; width: 960px; height: 338px; }
+      .stp { position: absolute; left: 60px; width: 960px; height: 10px; border-radius: 5px; }
+      #sp0 { top: 206px; background: var(--purple); } #sp1 { top: 578px; background: var(--lime); } #sp2 { top: 946px; background: var(--coral); } #sp3 { top: 1318px; background: var(--purple); }
+      .dot { position: absolute; width: 22px; height: 22px; border-radius: 50%; }
       #tA { top: 230px; } #tB { top: 598px; } #tC { top: 966px; }
       #s5txt { position: absolute; left: 0; width: 1080px; top: 1345px; text-align: center; }
       #s5txt .hd { font-size: 92px; line-height: 1.02; }
@@ -81,8 +84,8 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="35" data-width="1080" data-height="1920" data-fps="30">
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="35" data-volume="1"></audio>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="34.1" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="34.1" data-volume="1"></audio>
 
       <!-- 1 roots 0 - 3.8 -->
       <video id="v1" class="clip" src="assets/clips/roots.mp4" muted playsinline data-start="0" data-duration="3.8" data-media-start="0" data-track-index="1"></video>
@@ -116,9 +119,10 @@
       <!-- 5 triptych 12.35 - 15.05 -->
       <div id="s5" class="clip paper" data-start="12.35" data-duration="2.7" data-track-index="8">
         <div id="s5eb" class="eb">Pause · Arrive · Thrive</div>
+        <div class="stp" id="sp0"></div><div class="stp" id="sp1"></div><div class="stp" id="sp2"></div><div class="stp" id="sp3"></div>
         <div id="s5txt"><div class="hd sw" id="l5">Zwischen alten Mauern</div><div><span class="sc" id="s5sc">und weitem Land.</span></div></div>
       </div>
-      <video id="tA" class="clip" src="assets/clips/tA.mp4" muted playsinline data-start="12.35" data-duration="2.7" data-media-start="0.6" data-track-index="9"></video>
+      <video id="tA" class="clip" style="z-index:2" src="assets/clips/tA.mp4" muted playsinline data-start="12.35" data-duration="2.7" data-media-start="0.6" data-track-index="9"></video>
       <video id="tB" class="clip" src="assets/clips/tB.mp4" muted playsinline data-start="12.35" data-duration="2.7" data-media-start="0.6" data-track-index="10"></video>
       <video id="tC" class="clip" src="assets/clips/tC.mp4" muted playsinline data-start="12.35" data-duration="2.7" data-media-start="0.6" data-track-index="11"></video>
 
@@ -149,18 +153,13 @@
         <div class="capL" id="c9"><div class="eb">Rise</div><div class="hd sw" id="l9">Und dann</div><div><span class="sc" id="s9sc">wachsen.</span></div></div>
       </div>
 
-      <!-- 10 RISE depth still 24.4 - 25.3 -->
-      <div id="o10" class="clip" data-start="24.4" data-duration="0.9" data-track-index="20">
-        <img class="full" id="bg10" src="assets/clips/e6.jpg" />
-        <div id="rise" data-layout-ignore>RISE</div>
-        <img class="full" id="cut10" src="assets/clips/e6cut.png" />
-      </div>
-
-      <!-- 11 pull-back 25.3 - 28.5 -->
-      <video id="v11" class="clip" src="assets/clips/pull.mp4" muted playsinline data-start="25.3" data-duration="3.2" data-media-start="0" data-track-index="21"></video>
+      <!-- 10 pull-back with RISE between plate and moving cut-out 24.4 - 27.57 -->
+      <video id="v11" class="clip" src="assets/clips/pull.mp4" muted playsinline data-start="24.4" data-duration="3.17" data-media-start="0" data-track-index="20"></video>
+      <div id="o10" class="clip" data-start="24.4" data-duration="3.17" data-track-index="21"><div id="rise" data-layout-ignore>RISE</div></div>
+      <video id="v11f" class="clip" src="assets/clips/pullfg.webm" muted playsinline data-start="24.4" data-duration="3.17" data-media-start="0" data-track-index="24"></video>
 
       <!-- 12 end card 28.3 - 35 -->
-      <div id="end" class="clip" data-start="28.3" data-duration="6.7" data-track-index="22">
+      <div id="end" class="clip" data-start="27.4" data-duration="6.7" data-track-index="22">
         <div id="e1" class="hd"><span class="wd"><span>Root to <span class="sc">Rise</span></span></span></div>
         <div id="e2">Pause • Arrive • Thrive</div>
         <div id="rule"></div>
@@ -168,8 +167,8 @@
         <div id="e3b">Yoga &amp; Inner Growth Retreat · ahead Burghotel, Elbtalaue</div>
         <div id="e4w"><div id="e4">Jetzt anmelden · worklifehappiness.de</div></div>
       </div>
-      <div id="band" class="clip" data-start="28.5" data-duration="6.5" data-track-index="23"><img id="bandimg" src="assets/clips/endband.jpg" /></div>
-      <div id="vg" class="clip vig" data-start="0" data-duration="28.4" data-track-index="30"></div>
+      <div id="band" class="clip" data-start="27.6" data-duration="6.5" data-track-index="23"><img id="bandimg" src="assets/clips/endband.jpg" /></div>
+      <div id="vg" class="clip vig" data-start="0" data-duration="27.5" data-track-index="30"></div>
     </div>
 
     <script>
@@ -196,7 +195,7 @@
       punchIn("#v2", 3.8, 1.18, 12, 0.6);
       tl.fromTo("#sh2", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 5.0);
       words("l2a", 5.2, 0.08, 1.0);
-      write("s2sc", 5.75, 1.1);
+      write("s2sc", 6.75, 1.0);
       out("#c2", 7.9, 0.35);
 
       // 3 title with depth: text sits between photo and tower cutout
@@ -211,10 +210,16 @@
       words("l4", 10.45, 0.05, 0.9);
 
       // 5 triptych (VO "Zwischen alten Mauern und weitem Land" @12.38)
-      tl.fromTo("#tA", { x: -1100 }, { x: 0, duration: 0.7, ease: EX }, 12.35);
-      tl.fromTo("#tB", { x: 1100 }, { x: 0, duration: 0.7, ease: EX }, 12.47);
-      tl.fromTo("#tC", { x: -1100 }, { x: 0, duration: 0.7, ease: EX }, 12.59);
-      tl.fromTo(["#tA", "#tB", "#tC"], { scale: 1 }, { scale: 1.03, duration: 2.0, ease: "none" }, 12.9);
+      // brand stripes draw first, then the three films fly in like cards
+      tl.fromTo("#sp0", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.5, ease: EX }, 12.35);
+      tl.fromTo("#sp1", { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1, duration: 0.5, ease: EX }, 12.42);
+      tl.fromTo("#sp2", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.5, ease: EX }, 12.49);
+      tl.fromTo("#sp3", { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1, duration: 0.5, ease: EX }, 12.56);
+      tl.fromTo("#tA", { x: -1250, y: -120, rotation: -9, scale: 0.8 }, { x: 0, y: 0, rotation: 0, scale: 1, duration: 0.8, ease: EX }, 12.45);
+      tl.fromTo("#tB", { rotationX: -95, scale: 0.7, opacity: 0, transformPerspective: 1400, transformOrigin: "50% 50%" }, { rotationX: 0, scale: 1, opacity: 1, duration: 0.85, ease: EX }, 12.6);
+      tl.fromTo("#tC", { x: 1250, y: 140, rotation: 9, scale: 0.8 }, { x: 0, y: 0, rotation: 0, scale: 1, duration: 0.8, ease: EX }, 12.75);
+      tl.to("#tA", { x: 18, duration: 1.4, ease: "none" }, 13.3);
+      tl.to("#tC", { x: -18, duration: 1.4, ease: "none" }, 13.55);
       tl.fromTo("#s5eb", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 12.5);
       words("l5", 12.45, 0.07);
       write("s5sc", 13.5, 0.9);
@@ -243,24 +248,22 @@
       words("l9", 21.95, 0.08);
       write("s9sc", 23.3, 0.95);
 
-      // 10 RISE behind her
-      tl.fromTo(["#bg10", "#cut10"], { scale: 1.0 }, { scale: 1.05, duration: 0.9, ease: "none", transformOrigin: "50% 70%" }, 24.4);
-      tl.fromTo("#rise", { opacity: 0, scale: 1.6, y: -60 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: EX }, 24.4);
-
       // 11 pull-back
-      tl.fromTo("#v11", { scale: 1.06 }, { scale: 1, duration: 3.2, ease: "none" }, 25.3);
+      tl.fromTo("#rise", { opacity: 0, scale: 1.7, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: EX }, 24.45);
+      tl.to("#rise", { y: -150, duration: 2.4, ease: "none" }, 25.15);
+      tl.to("#rise", { opacity: 0, duration: 0.3 }, 27.2);
 
-      // 12 end card (VO a6 @28.6: "Root to Rise", rest @30.87)
-      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: S }, 28.3);
-      tl.fromTo("#band", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "expo.inOut" }, 28.5);
-      tl.fromTo("#bandimg", { scale: 1.15 }, { scale: 1.0, duration: 6.5, ease: "power1.out" }, 28.5);
-      tl.fromTo("#e1 .wd > span", { yPercent: 115 }, { yPercent: 0, duration: 1.2, ease: EX }, 28.65);
-      tl.fromTo("#e2", { clipPath: "inset(-20% 100% -30% -5%)" }, { clipPath: "inset(-20% -5% -30% -5%)", duration: 1.1, ease: "power2.inOut" }, 29.6);
-      tl.fromTo("#rule", { scaleY: 0 }, { scaleY: 1, duration: 0.8, ease: "power2.out" }, 30.4);
-      tl.fromTo("#e3 .wd > span", { yPercent: 115 }, { yPercent: 0, duration: 1.0, ease: EX }, 30.9);
-      tl.fromTo("#e3b", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 31.5);
-      tl.fromTo("#e4", { opacity: 0, y: 20, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.6)" }, 32.3);
-      tl.fromTo(["#e1", "#e2", "#e3", "#e3b"], { scale: 1 }, { scale: 1.03, duration: 6.2, ease: "none" }, 28.8);
+      // 12 end card (VO a6 @27.7: "Root to Rise", rest @29.97)
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: S }, 27.40);
+      tl.fromTo("#band", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "expo.inOut" }, 27.60);
+      tl.fromTo("#bandimg", { scale: 1.15 }, { scale: 1.0, duration: 6.5, ease: "power1.out" }, 27.60);
+      tl.fromTo("#e1 .wd > span", { yPercent: 115 }, { yPercent: 0, duration: 1.2, ease: EX }, 27.75);
+      tl.fromTo("#e2", { clipPath: "inset(-20% 100% -30% -5%)" }, { clipPath: "inset(-20% -5% -30% -5%)", duration: 1.1, ease: "power2.inOut" }, 28.70);
+      tl.fromTo("#rule", { scaleY: 0 }, { scaleY: 1, duration: 0.8, ease: "power2.out" }, 29.50);
+      tl.fromTo("#e3 .wd > span", { yPercent: 115 }, { yPercent: 0, duration: 1.0, ease: EX }, 30.00);
+      tl.fromTo("#e3b", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 30.60);
+      tl.fromTo("#e4", { opacity: 0, y: 20, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.6)" }, 31.40);
+      tl.fromTo(["#e1", "#e2", "#e3", "#e3b"], { scale: 1 }, { scale: 1.03, duration: 6.2, ease: "none" }, 27.90);
 
       window.__timelines["main"] = tl;
       tl.seek(0);
