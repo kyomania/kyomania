@@ -87,8 +87,8 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 | 15,5–21,2 | C05 Biss, mit Freeze-Punch 18,5–19,3 |
 | 21,2–22,0 | C12 Uhr-Insert |
 | 22,0–23,5 | C04 Ende → Zerknüllen |
-| 23,5–27,5 | C06 Balkon |
-| 27,5–30,5 | C07 Glut |
+| 23,5–27,0 | C06 Balkon |
+| 27,0–30,5 | C07 Glut |
 | 30,5–35,0 | C06 Slow-Mo → Umblättern |
 | 35,0–39,0 | C08 Zimmer |
 | 39,0–42,5 | C09 Oma + Herz |
