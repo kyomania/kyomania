@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "CormorantG"; font-weight: 400; src: url(assets/fonts/cormorant-garamond-latin-400-normal.woff2); }
+      @font-face { font-family: "CormorantG"; font-weight: 500; src: url(assets/fonts/cormorant-garamond-latin-500-normal.woff2); }
+      @font-face { font-family: "CormorantG"; font-weight: 400; font-style: italic; src: url(assets/fonts/cormorant-garamond-latin-400-italic.woff2); }
+      @font-face { font-family: "CormorantG"; font-weight: 500; font-style: italic; src: url(assets/fonts/cormorant-garamond-latin-500-italic.woff2); }
+      @font-face { font-family: "InterT"; font-weight: 400; src: url(assets/fonts/Inter-Regular.otf); }
+      @font-face { font-family: "InterT"; font-weight: 500; src: url(assets/fonts/Inter-Medium.otf); }
+      :root { --cream: #ebe4f2; --lav: #d5cae4; --ink: #4e3672; --purple: #6a4c93; --soft: #6a4c93; --gold: #6a4c93; --coral: #f8716b; --lime: #cfff03; --serif: "CormorantG", Georgia, serif; --sans: "InterT", sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); color: var(--ink); -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .paper { background: var(--cream); }
+      .ln { display: block; overflow: hidden; padding-bottom: 0.1em; }
+      .ln > span { display: inline-block; }
+      .eb { font: 500 28px var(--sans); letter-spacing: 0.32em; text-transform: uppercase; }
+      .serif { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
+      i, .it { font-style: italic; }
+
+      /* 1: roots */
+      #s1txt { position: absolute; left: 0; width: 1080px; top: 520px; text-align: center; }
+      #s1txt .serif { font-size: 104px; line-height: 1.04; }
+      #s1txt .g { color: var(--gold); }
+      #roots { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #roots path { fill: none; stroke: var(--coral); stroke-linecap: round; }
+
+      /* 2: arrival */
+      #s2eb { position: absolute; left: 0; width: 1080px; top: 520px; text-align: center; color: var(--soft); }
+      #drone1 { top: 640px; height: 596px; }
+      #band { top: 300px; height: 640px; } #bandimg { position: absolute; left: 0; top: 0; width: 1080px; height: 640px; object-fit: cover; transform-origin: 50% 40%; }
+      #s2txt { position: absolute; left: 0; width: 1080px; top: 1310px; text-align: center; }
+      #s2txt .a { font-size: 120px; line-height: 1; }
+      #s2txt .b { margin-top: 26px; font: 400 44px/1.25 var(--serif); font-style: italic; color: var(--soft); }
+
+      /* footage captions */
+      .shadeB { position: absolute; left: 0; bottom: 0; width: 1080px; height: 900px; background: linear-gradient(rgba(20,16,12,0), rgba(20,16,12,0.62)); }
+      .shadeT { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; background: linear-gradient(rgba(20,16,12,0.5), rgba(20,16,12,0)); }
+      .cap { position: absolute; left: 90px; color: #fff; }
+      .cap .eb { color: var(--lime); font-size: 28px; }
+      .cap .t { position: relative; height: 130px; margin-top: 18px; width: 900px; }
+      .cap .t > div { position: absolute; left: 0; top: 0; white-space: nowrap; font: 400 100px/1.1 var(--serif); letter-spacing: -0.01em; }
+      #c3 { top: 1380px; }
+      #c4 { top: 210px; left: 470px; color: #3a2856; }
+      #c4 .eb { letter-spacing: 0.32em; }
+      #c4 .eb { color: #3a2856; }
+      #c5 { top: 230px; }
+
+      /* end card */
+      #end { text-align: center; background: var(--purple); color: #fff; }
+      #e1 { position: absolute; left: 0; width: 1080px; top: 1010px; font: 400 150px/1 var(--serif); letter-spacing: -0.02em; }
+      #e1 .it { color: var(--lime); }
+      #e2 { position: absolute; left: 0; width: 1080px; top: 1205px; color: var(--lav); font-size: 28px; }
+      #rule { position: absolute; left: 539px; top: 1280px; width: 2px; height: 90px; background: var(--lime); transform-origin: 50% 100%; }
+      #e3 { position: absolute; left: 0; width: 1080px; top: 1400px; font: 400 64px var(--serif); font-style: italic; }
+      #e3b { position: absolute; left: 0; width: 1080px; top: 1500px; font: 400 30px var(--sans); letter-spacing: 0.04em; color: var(--lav); }
+      #e4w { position: absolute; left: 0; width: 1080px; top: 1600px; display: flex; justify-content: center; }
+      #e4 { padding: 22px 46px; border-radius: 999px; background: var(--lime); color: var(--purple); font: 500 30px var(--sans); letter-spacing: 0.04em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30.5" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="30.5" data-volume="1"></audio>
+
+      <!-- 1: roots (0 - 4.4) -->
+      <div id="s1" class="clip paper" data-start="0" data-duration="4.4" data-track-index="1">
+        <svg id="roots" viewBox="0 0 1080 1920">
+          <path id="r0" pathLength="1" stroke-width="3" d="M540 980 C540 1150 528 1300 545 1500 S 534 1750 540 1920" />
+          <path id="r1" pathLength="1" stroke-width="2.2" d="M540 1060 C480 1140 400 1200 330 1330 S 250 1520 170 1610" />
+          <path id="r2" pathLength="1" stroke-width="2.2" d="M541 1090 C610 1170 700 1230 760 1360 S 840 1560 910 1660" />
+          <path id="r3" pathLength="1" stroke-width="1.6" d="M538 1250 C500 1320 445 1400 420 1530" />
+          <path id="r4" pathLength="1" stroke-width="1.6" d="M543 1300 C590 1380 640 1450 655 1590" />
+          <path id="r5" pathLength="1" stroke-width="1.2" d="M330 1330 C300 1400 300 1460 262 1505" />
+          <path id="r6" pathLength="1" stroke-width="1.2" d="M760 1360 C800 1420 820 1460 868 1482" />
+          <circle id="seed" cx="540" cy="980" r="9" fill="#f8716b" />
+        </svg>
+        <div id="s1txt">
+          <div class="serif"><span class="ln" id="l1"><span>Manchmal musst du</span></span><span class="ln" id="l2"><span>nicht weiter.</span></span></div>
+          <div class="serif g it" style="margin-top: 26px"><span class="ln" id="l3"><span>Sondern tiefer.</span></span></div>
+        </div>
+      </div>
+
+      <!-- 2: arrival (4.0 - 8.8) -->
+      <div id="s2" class="clip paper" data-start="4.0" data-duration="4.8" data-track-index="2">
+        <div id="s2eb" class="eb">ahead Burghotel · Elbtalaue</div>
+        <div id="s2txt">
+          <div class="serif a"><span class="ln" id="l4"><span>Ankommen.</span></span></div>
+          <div class="b"><span class="ln" id="l5"><span>Zwischen alten Mauern und weitem Land.</span></span></div>
+        </div>
+      </div>
+      <video id="drone1" class="clip" src="assets/clips/drone1.mp4" muted playsinline data-start="4.0" data-duration="4.43" data-media-start="0" data-track-index="3"></video>
+
+      <!-- 3: yoga (8.4 - 13.3) -->
+      <video id="vy" class="clip" src="assets/clips/yoga.mp4" muted playsinline data-start="8.4" data-duration="4.9" data-media-start="0" data-track-index="4"></video>
+      <div id="o3" class="clip" data-start="8.4" data-duration="4.9" data-track-index="5">
+        <div class="shadeB"></div>
+        <div class="cap" id="c3"><div class="eb">Root to Rise · Yoga</div><div class="t"><div id="t3"><span class="ln"><span>Yoga im Morgenlicht.</span></span></div></div></div>
+      </div>
+
+      <!-- 4: meditation (13.0 - 18.4) -->
+      <video id="vm" class="clip" src="assets/clips/medi.mp4" muted playsinline data-start="13.0" data-duration="5.04" data-media-start="0" data-track-index="6"></video>
+      <div id="o4" class="clip" data-start="13.0" data-duration="5.04" data-track-index="7">
+        <div class="cap" id="c4"><div class="eb">Inner Growth</div><div class="t"><div id="t4a"><span class="ln"><span>Atmen. Stille.</span></span></div><div id="t4b"><span class="ln"><span class="it">Bei dir sein.</span></span></div></div></div>
+      </div>
+
+      <!-- 5: rise (17.8 - 22.84) -->
+      <video id="vr" class="clip" src="assets/clips/rise.mp4" muted playsinline data-start="17.8" data-duration="5.04" data-media-start="0" data-track-index="8"></video>
+      <div id="o5" class="clip" data-start="17.8" data-duration="5.04" data-track-index="9">
+        <div class="shadeT"></div>
+        <div class="cap" id="c5"><div class="eb">Rise</div><div class="t"><div id="t5a"><span class="ln"><span>Und dann:</span></span></div><div id="t5b"><span class="ln"><span class="it">wachsen.</span></span></div></div></div>
+      </div>
+
+      <!-- 6: end card (22.6 - 30.5) -->
+      <div id="end" class="clip paper" data-start="22.6" data-duration="7.9" data-track-index="10">
+        <div id="e1"><span class="ln"><span>Root to <span class="it">Rise</span></span></span></div>
+        <div id="e2" class="eb">Pause · Arrive · Thrive</div>
+        <div id="rule"></div>
+        <div id="e3"><span class="ln"><span>18. – 21. Februar 2027</span></span></div>
+        <div id="e3b">Yoga &amp; Inner Growth Retreat · ahead Burghotel, Elbtalaue</div>
+        <div id="e4w"><div id="e4">Jetzt anmelden · worklifehappiness.de</div></div>
+      </div>
+      <div id="band" class="clip" data-start="23.0" data-duration="7.5" data-track-index="11"><img id="bandimg" src="assets/clips/endband.jpg" /></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", E = "power3.out", S = "sine.inOut";
+      const rise = (sel, t, d = 1.1) => tl.fromTo(sel + " > span", { yPercent: 110 }, { yPercent: 0, duration: d, ease: EX }, t);
+
+      // hide timed overlays until they enter
+      tl.set(["#o3 .cap", "#o4 .cap", "#o5 .cap", "#t4b", "#t5b"], { opacity: 0 }, 0);
+
+      // 1: roots grow as the line says "tiefer"
+      tl.set("#roots path", { strokeDasharray: 1, strokeDashoffset: 1 }, 0);
+      tl.fromTo("#seed", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.8, ease: "back.out(2)" }, 0.2);
+      rise("#l1", 0.45); rise("#l2", 0.7);
+      rise("#l3", 2.6, 1.2);
+      tl.to("#r0", { strokeDashoffset: 0, duration: 1.7, ease: "power2.out" }, 2.55);
+      tl.to(["#r1", "#r2"], { strokeDashoffset: 0, duration: 1.5, ease: "power2.out" }, 2.75);
+      tl.to(["#r3", "#r4"], { strokeDashoffset: 0, duration: 1.2, ease: "power2.out" }, 3.0);
+      tl.to(["#r5", "#r6"], { strokeDashoffset: 0, duration: 0.9, ease: "power2.out" }, 3.3);
+      tl.fromTo("#s1txt", { y: 0 }, { y: -40, duration: 4.4, ease: "none" }, 0);
+
+      // 2: arrival, drone film opens as a band
+      tl.fromTo("#s2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: S }, 4.0);
+      tl.fromTo("#drone1", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "expo.inOut" }, 4.15);
+      tl.fromTo("#s2eb", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 4.6);
+      rise("#l4", 4.45); rise("#l5", 5.55);
+
+      // 3: yoga
+      tl.fromTo("#vy", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 8.4);
+      tl.set("#o3 .cap", { opacity: 1 }, 9.3);
+      tl.fromTo("#c3 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 9.3);
+      rise("#t3 .ln", 9.4);
+      tl.to("#c3", { opacity: 0, duration: 0.4, ease: "power2.in" }, 12.6);
+
+      // 4: meditation
+      tl.fromTo("#vm", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 13.0);
+      tl.set("#o4 .cap", { opacity: 1 }, 13.75);
+      tl.fromTo("#c4 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 13.75);
+      rise("#t4a .ln", 13.85);
+      tl.to("#t4a", { opacity: 0, y: -16, duration: 0.35, ease: "power2.in" }, 15.35);
+      tl.set("#t4b", { opacity: 1 }, 15.6);
+      rise("#t4b .ln", 15.65);
+      tl.to("#c4", { opacity: 0, duration: 0.4, ease: "power2.in" }, 17.4);
+
+      // 5: rise
+      tl.fromTo("#vr", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 17.8);
+      tl.set("#o5 .cap", { opacity: 1 }, 18.95);
+      tl.fromTo("#c5 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 18.95);
+      rise("#t5a .ln", 19.0);
+      tl.to("#t5a", { opacity: 0, y: -16, duration: 0.3, ease: "power2.in" }, 19.85);
+      tl.set("#t5b", { opacity: 1 }, 20.05);
+      rise("#t5b .ln", 20.1, 1.3);
+      tl.to("#c5", { opacity: 0, duration: 0.45, ease: "power2.in" }, 22.0);
+
+      // 6: end card
+      tl.fromTo("#bandimg", { scale: 1.12 }, { scale: 1.0, duration: 7.5, ease: "power1.out" }, 23.0);
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 22.6);
+      tl.fromTo("#band", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4, ease: "expo.inOut" }, 23.0);
+      rise("#e1 .ln", 23.55, 1.3);
+      tl.fromTo("#e2", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 24.5);
+      tl.fromTo("#rule", { scaleY: 0 }, { scaleY: 1, duration: 1.2, ease: "power2.out" }, 25.0);
+      rise("#e3 .ln", 25.4);
+      tl.fromTo("#e3b", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 26.0);
+      tl.fromTo("#e4", { opacity: 0, y: 16, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EX }, 27.0);
+      tl.fromTo(["#e1", "#e2", "#e3", "#e3b"], { scale: 1 }, { scale: 1.025, duration: 7.0, ease: "none" }, 23.5);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
