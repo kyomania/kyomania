@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<title>Termine 2027</title>
+<style>
+  @font-face { font-family: "Nunito Sans"; src: url(fonts/NunitoSans-Regular-1.woff2) format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Nunito Sans"; src: url(fonts/NunitoSans-SemiBold-1.woff2) format("woff2"); font-weight: 600; }
+  @font-face { font-family: "Work Sans"; src: url(fonts/WorkSans-Regular.woff2) format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Work Sans"; src: url(fonts/WorkSans-Medium.woff2) format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Work Sans"; src: url(fonts/WorkSans-SemiBold.woff2) format("woff2"); font-weight: 600; }
+  @font-face { font-family: "Royalty Free"; src: url(fonts/RoyaltyFree-4.woff2) format("woff2"); }
+
+  :root {
+    --purple: #6a4c93;
+    --lavender: #d5cae4;
+    --lavender-soft: #ece6f3;
+    --coral: #ffa07a;
+    --coral-deep: #f8716b;
+    --lime: #cfff03;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1600px; }
+  body {
+    background: linear-gradient(180deg, var(--lavender) 0%, var(--lavender) 34%, #e9b7b6 72%, var(--coral) 100%);
+    font-family: "Work Sans", sans-serif; color: var(--purple);
+    padding: 84px 110px 120px;
+  }
+  .head { text-align: center; margin-bottom: 54px; }
+  .eyebrow { font: 600 22px/1 "Nunito Sans"; color: #fff; letter-spacing: 0.04em; margin-bottom: 18px; }
+  h1 { font: 400 84px/1.05 "Nunito Sans"; color: var(--purple); letter-spacing: -0.5px; }
+  h1 .script { font-family: "Royalty Free"; font-size: 104px; color: var(--coral-deep); margin-left: 26px; position: relative; top: 10px; }
+
+  .card {
+    background: #fff; border-radius: 22px; border: 2px solid rgba(106, 76, 147, 0.35);
+    box-shadow: 0 30px 70px rgba(106, 76, 147, 0.22), 0 4px 0 rgba(106, 76, 147, 0.08);
+    padding: 26px 56px 30px; overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left; font: 600 19px/1 "Nunito Sans"; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--purple); opacity: 0.72; padding: 22px 0 22px;
+    border-bottom: 2px solid var(--lavender);
+  }
+  td { padding: 23px 0; border-bottom: 1px solid var(--lavender-soft); vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  .c1 { width: 160px; } .c2 { width: 470px; }
+  .num {
+    width: 54px; height: 54px; border-radius: 50%; background: var(--lavender);
+    display: flex; align-items: center; justify-content: center;
+    font: 600 24px/1 "Nunito Sans"; color: var(--purple);
+  }
+  .date { font: 500 28px/1 "Work Sans"; color: var(--purple); }
+  .date .dow { font-weight: 400; opacity: 0.7; margin-right: 6px; }
+  .topic { font: 400 32px/1.15 "Nunito Sans"; color: var(--purple); }
+  .re { color: var(--coral-deep); font-weight: 600; }
+  .slash { color: var(--lavender); margin: 0 10px; font-weight: 600; }
+
+  tr.special td { background: rgba(255,160,122,0.12); }
+  tr.special td:first-child { border-radius: 14px 0 0 14px; }
+  tr.special td:last-child { border-radius: 0 14px 14px 0; }
+  tr.special .num { background: var(--coral); color: #fff; }
+  .pill {
+    display: inline-block; font: 600 17px/1 "Nunito Sans"; text-transform: uppercase; letter-spacing: 0.1em;
+    color: #fff; background: var(--coral); border-radius: 999px; padding: 11px 20px 10px;
+  }
+  tr.final .num { background: var(--purple); color: var(--lime); }
+  td.c1 { padding-left: 10px; }
+
+  html { overflow: hidden; width: 1600px; }
+  body { width: 1600px; position: relative; overflow: hidden; }
+  .deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .head, .card { position: relative; z-index: 2; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(60px); }
+  .arch { position: absolute; border-radius: 400px 400px 0 0; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 35%, transparent 75%); mask-image: linear-gradient(180deg, #000 0%, #000 35%, transparent 75%); }
+  .grain { position: absolute; inset: 0; z-index: 5; opacity: 0.16; mix-blend-mode: overlay; pointer-events: none; }
+  .eyebrow { color: #fff; letter-spacing: 0.22em; text-transform: uppercase; font-size: 19px; }
+  .swash { position: absolute; left: 985px; top: 214px; width: 200px; height: 30px; }
+  .spark { position: absolute; z-index: 3; color: var(--lime); font: 400 30px/1 "Nunito Sans"; text-shadow: 0 0 12px rgba(207,255,3,0.7), 0 0 2px rgba(106,76,147,0.4); }
+  .card {
+    background: rgba(255,255,255,0.95); border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 40px 90px rgba(106,76,147,0.28), 0 0 0 10px rgba(255,255,255,0.28), inset 0 0 0 1px rgba(106,76,147,0.12);
+    border-radius: 30px;
+  }
+  thead th { background: rgba(213,202,228,0.42); border-bottom: 0; }
+  thead th:first-child { border-radius: 14px 0 0 14px; padding-left: 14px; }
+  thead th:last-child { border-radius: 0 14px 14px 0; }
+  td.c1 { position: relative; }
+  td.c1::before { content: ""; position: absolute; left: 36px; top: 0; bottom: 0; width: 0; border-left: 2px dotted rgba(106,76,147,0.35); z-index: 0; }
+  tbody tr:first-child td.c1::before { top: 50%; }
+  tbody tr:last-child td.c1::before { bottom: 50%; }
+  .num { position: relative; z-index: 1; box-shadow: 0 0 0 6px #fff, 0 6px 14px rgba(106,76,147,0.18); }
+  tr.final .num { box-shadow: 0 0 0 6px #fff, 0 0 0 9px rgba(207,255,3,0.55), 0 8px 18px rgba(106,76,147,0.35); }
+  tr.final .topic { font-weight: 600; }
+  tr.special .num { box-shadow: 0 0 0 6px #fff7f3, 0 6px 14px rgba(248,113,107,0.3); }
+</style>
+</head>
+<body>
+  <div class="deco">
+    <div class="blob" style="left:-180px;top:-160px;width:620px;height:560px;background:rgba(255,255,255,0.55)"></div>
+    <div class="blob" style="left:1150px;top:120px;width:560px;height:520px;background:rgba(255,160,122,0.45)"></div>
+    <div class="blob" style="left:980px;top:40px;width:220px;height:150px;background:rgba(207,255,3,0.14)"></div>
+    <div class="blob" style="left:-120px;top:1400px;width:700px;height:500px;background:rgba(106,76,147,0.22)"></div>
+    <div class="arch" style="left:1180px;top:300px;width:520px;height:1200px;background:linear-gradient(180deg, rgba(255,160,122,0.55), rgba(248,113,107,0.35))"></div>
+    <div class="arch" style="left:1140px;top:262px;width:520px;height:1200px;border:2px solid rgba(255,255,255,0.75);border-bottom:0"></div>
+        <svg style="position:absolute;left:40px;top:40px" width="420" height="420" viewBox="0 0 420 420" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2">
+      <circle cx="120" cy="120" r="70"/><circle cx="120" cy="120" r="110" stroke-dasharray="2 10"/><circle cx="120" cy="120" r="150" stroke-opacity="0.45"/>
+    </svg>
+    <svg style="position:absolute;left:1270px;top:1960px" width="380" height="380" viewBox="0 0 380 380" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2">
+      <circle cx="200" cy="200" r="90"/><circle cx="200" cy="200" r="130" stroke-dasharray="2 10"/>
+    </svg>
+  </div>
+  <svg class="swash" viewBox="0 0 300 40" preserveAspectRatio="none" style="z-index:3"><path d="M6 28 C 70 10, 160 6, 294 18" stroke="#cfff03" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M40 34 C 110 22, 190 20, 270 27" stroke="#cfff03" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8"/></svg>
+  <div class="spark" style="left:1230px;top:96px">✦</div>
+  <div class="spark" style="left:1268px;top:136px;font-size:18px">✦</div>
+  <div class="spark" style="left:212px;top:2440px;font-size:24px">✦</div>
+  <svg class="grain" width="100%" height="100%"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+  <div class="head">
+    <div class="eyebrow">Dein Weg</div>
+    <h1>Deine Termine<span class="script">2027</span></h1>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th class="c1">Termin</th><th class="c2">Datum</th><th>Inhalt</th></tr></thead>
+      <tbody>
+        <tr><td class="c1"><div class="num">1</div></td><td><span class="date"><span class="dow">Di.,</span>12.01.2027</span></td><td class="topic">Kick-off &amp; Re:view</td></tr>
+        <tr><td class="c1"><div class="num">2</div></td><td><span class="date"><span class="dow">Di.,</span>26.01.2027</span></td><td class="topic">Re:view<span class="slash">/</span>Re:vision</td></tr>
+        <tr><td class="c1"><div class="num">3</div></td><td><span class="date"><span class="dow">Di.,</span>09.02.2027</span></td><td class="topic">Re:vision</td></tr>
+        <tr><td class="c1"><div class="num">4</div></td><td><span class="date"><span class="dow">Di.,</span>23.02.2027</span></td><td class="topic">Re:align I</td></tr>
+        <tr><td class="c1"><div class="num">5</div></td><td><span class="date"><span class="dow">Di.,</span>09.03.2027</span></td><td class="topic">Re:align II</td></tr>
+        <tr><td class="c1"><div class="num">6</div></td><td><span class="date"><span class="dow">Di.,</span>23.03.2027</span></td><td class="topic">Re:create</td></tr>
+        <tr class="special"><td class="c1"><div class="num">7</div></td><td><span class="pill">individuell</span></td><td class="topic">1:1 Coaching</td></tr>
+        <tr class="final"><td class="c1"><div class="num">8</div></td><td><span class="date"><span class="dow">Di.,</span>04.05.2027</span></td><td class="topic">Keep-it-Up &amp; Integration</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
