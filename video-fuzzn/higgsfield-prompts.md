@@ -54,7 +54,7 @@ Handmade layered papercut diorama, wide 16:9: a Plattenbau balcony at night high
 
 **B4 · Gaming-Zimmer (b4_zimmer)**
 ```
-Handmade layered papercut diorama, wide 16:9: a small gaming room at night, a desk with two glowing monitors and a keyboard on the right half, neon LED strips in cyan and magenta, posters on the wall, a grinder and an energy drink can on the desk, a window with a view of the Berlin night skyline. The left half of the desk area stays empty for a person. Real cut paper craft photographed, visible paper texture and depth shadows, neon glow on paper.
+Handmade layered papercut diorama, wide 16:9: a small gaming room at night, a desk with two glowing monitors and a keyboard on the right half, neon LED strips in cyan and magenta, a big blue-and-white Hertha BSC Berlin football fan poster on the wall, next to it a small framed photo of a sweet smiling grandma with grey curls and round glasses, a wooden step ladder in the corner with several lit candles standing on its steps, a grinder and an energy drink can on the desk, a window with a view of the Berlin night skyline. The left half of the desk area stays empty for a person. Real cut paper craft photographed, visible paper texture and depth shadows, neon and warm candle glow on paper.
 ```
 
 **B5 · Dach mit Skyline (b5_dach)**
