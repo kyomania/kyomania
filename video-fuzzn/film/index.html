@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "R1"; src: url(assets/fonts/anton-latin-400-normal.woff2); }
+      @font-face { font-family: "R2"; src: url(assets/fonts/abril-fatface-latin-400-normal.woff2); }
+      @font-face { font-family: "R3"; src: url(assets/fonts/archivo-black-latin-400-normal.woff2); }
+      @font-face { font-family: "R4"; src: url(assets/fonts/playfair-display-latin-400-normal.woff2); }
+      @font-face { font-family: "R5"; src: url(assets/fonts/rubik-mono-one-latin-400-normal.woff2); }
+      @font-face { font-family: "R6"; src: url(assets/fonts/oswald-latin-400-normal.woff2); }
+      @font-face { font-family: "R7"; src: url(assets/fonts/bebas-neue-latin-400-normal.woff2); }
+      @font-face { font-family: "R8"; src: url(assets/fonts/dm-serif-display-latin-400-normal.woff2); }
+      @font-face { font-family: "R9"; src: url(assets/fonts/alfa-slab-one-latin-400-normal.woff2); }
+      @font-face { font-family: "R10"; src: url(assets/fonts/special-elite-latin-400-normal.woff2); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0e1020; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0e1020; color: #fff; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .bg { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+
+      /* placeholder stage until the paper scenes arrive */
+      #stage { background: radial-gradient(ellipse at 50% 70%, #2a2350 0%, #141632 55%, #0b0c1c 100%); }
+
+      /* ransom-note title */
+      #title { position: absolute; left: 0; top: 46px; width: 1920px; display: flex; justify-content: center; align-items: flex-end; gap: 14px; }
+      .lt { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 6px 12px 8px; line-height: 1;
+        box-shadow: 0 6px 0 -2px rgba(0,0,0,0.18), 0 10px 18px rgba(0,0,0,0.45); }
+      .sp { width: 34px; }
+      #dots { display: inline-flex; gap: 10px; margin-left: 14px; align-items: flex-end; padding-bottom: 8px; }
+      #dots i { display: block; width: 22px; height: 22px; background: #f3efe4; border-radius: 3px; transform: rotate(8deg); box-shadow: 0 6px 10px rgba(0,0,0,0.4); }
+      #bang { position: absolute; left: 0; top: 0; }
+
+      /* bottom overlay */
+      #hud { position: absolute; left: 56px; bottom: 44px; display: flex; align-items: center; gap: 18px; font: 400 30px "R3", sans-serif; letter-spacing: 0.04em; }
+      #rec { width: 22px; height: 22px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 0 6px rgba(255,59,59,0.18); }
+      #hud .tw { font: 400 30px "R7", sans-serif; letter-spacing: 0.08em; color: #c9b8ff; margin-left: 16px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1920" data-height="1080" data-fps="30">
+      <div id="stage" class="clip" data-start="0" data-duration="60" data-track-index="1"></div>
+
+      <div id="ovl" class="clip" data-start="0" data-duration="60" data-track-index="20">
+        <div id="title"></div>
+        <div id="hud"><div id="rec"></div><span>SCREEN HIDDEN</span><span class="tw">twitch.tv/fuzzn</span></div>
+      </div>
+    </div>
+
+    <script>
+      // ---- build the ransom-note letters (deterministic look per letter) ----
+      const TEXT = "SEARCHING FOR A GAME";
+      const looks = [
+        ["R1", "#f3efe4", "#111", 112], ["R2", "#111", "#f3efe4", 104], ["R3", "#f2d14b", "#111", 96], ["R4", "#ffffff", "#c8102e", 118],
+        ["R5", "#d63a2f", "#fff", 84], ["R6", "#e9e1cf", "#1b1b1b", 120], ["R7", "#8be0c6", "#111", 116], ["R8", "#111", "#f2d14b", 110],
+        ["R9", "#f6b3c8", "#111", 92], ["R10", "#f3efe4", "#222", 104], ["R1", "#3a5bd9", "#fff", 108], ["R2", "#f3efe4", "#d63a2f", 112]
+      ];
+      const rot = [-6, 4, -3, 7, -5, 2, -8, 5, -2, 6, -4, 3, -7, 4, -3, 8, -5];
+      const dy = [0, -8, 6, -4, 10, -6, 2, -10, 4, 0, 8, -6, 4, -8, 6, -2, 2];
+      const title = document.getElementById("title");
+      let li = 0;
+      TEXT.split("").forEach((ch) => {
+        if (ch === " ") { const s = document.createElement("div"); s.className = "sp"; title.appendChild(s); return; }
+        const L = looks[(li * 5) % looks.length];
+        const d = document.createElement("div");
+        d.className = "lt"; d.id = "L" + li;
+        d.style.background = L[1]; d.style.color = L[2]; d.style.fontFamily = L[0]; d.style.fontSize = Math.round(L[3] * 0.78) + "px";
+        d.style.marginTop = dy[li % dy.length] + "px";
+        d.textContent = ch;
+        d.dataset.rot = rot[li % rot.length];
+        title.appendChild(d); li++;
+      });
+      const dots = document.createElement("div"); dots.id = "dots"; dots.innerHTML = "<i></i><i></i><i></i>"; title.appendChild(dots);
+      const bang = document.createElement("div"); bang.className = "lt"; bang.id = "Lbang"; bang.textContent = "!";
+      bang.style.cssText = "background:#d63a2f;color:#fff;font-family:R2;font-size:90px;margin-left:12px;"; title.appendChild(bang);
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      // base rotations
+      document.querySelectorAll("#title .lt").forEach((el) => tl.set(el, { rotation: +(el.dataset.rot || 0), transformOrigin: "50% 100%" }, 0));
+      tl.set("#Lbang", { opacity: 0, y: -400 }, 0);
+
+      // idle life: letters breathe slightly (stepped, like paper on a string)
+      for (let i = 0; i < 17; i++) {
+        tl.to("#L" + i, { y: (i % 2 ? 4 : -4), duration: 1.5 + (i % 4) * 0.3, ease: "steps(3)", yoyo: true, repeat: Math.floor(58 / (1.5 + (i % 4) * 0.3)) - 1 }, (i % 5) * 0.2);
+      }
+      // searching dots loop
+      for (let k = 0; k < 3; k++) {
+        tl.fromTo("#dots i:nth-child(" + (k + 1) + ")", { y: 0 }, { y: -18, duration: 0.3, ease: "power2.out", yoyo: true, repeat: 99, repeatDelay: 0.6 }, 0.3 * k);
+      }
+      // HUD rec blink
+      tl.fromTo("#rec", { opacity: 1 }, { opacity: 0.2, duration: 0.6, ease: "steps(1)", yoyo: true, repeat: 99 }, 0);
+
+      // --- letter gags (indices: S0 E1 A2 R3 C4 H5 I6 N7 G8 F9 O10 R11 A12 G13 A14 M15 E16) ---
+      // 5s: the G of GAME tips forward on one corner, dangles, flips back up
+      tl.to("#L13", { rotation: -100, duration: 0.5, ease: "bounce.out", transformOrigin: "0% 100%" }, 5.0);
+      tl.to("#L13", { rotation: -80, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.6);
+      tl.to("#L13", { rotation: -7, duration: 0.45, ease: "back.out(2)" }, 7.0);
+      // 12s: R falls, rolls across the floor and hops back
+      tl.to("#L3", { y: 900, rotation: 200, duration: 0.8, ease: "power2.in" }, 12.0);
+      tl.to("#L3", { x: 420, rotation: 560, duration: 1.0, ease: "power1.out" }, 12.8);
+      tl.to("#L3", { x: 0, y: 0, rotation: 7, duration: 0.9, ease: "back.out(1.4)" }, 14.2);
+      // 24s: A drops (into the sauce) and gets put back
+      tl.to("#L12", { y: 760, rotation: -30, duration: 0.7, ease: "power3.in" }, 24.0);
+      tl.to("#L12", { y: 0, rotation: -7, duration: 0.8, ease: "back.out(1.6)" }, 26.2);
+      // 36s: S drifts away in the smoke and sails back like a leaf
+      tl.to("#L0", { x: -260, y: -120, rotation: -40, opacity: 0.0, duration: 1.6, ease: "sine.inOut" }, 36.0);
+      tl.fromTo("#L0", { x: 300, y: 200, rotation: 30, opacity: 0 }, { x: 0, y: 0, rotation: -6, opacity: 1, duration: 2.0, ease: "sine.out", immediateRender: false }, 38.2);
+      // 46s: several letters shiver like a match is about to pop, then calm
+      [1, 4, 7, 10, 15].forEach((i, k) => tl.to("#L" + i, { x: 6, duration: 0.05, ease: "none", yoyo: true, repeat: 15 }, 46.0 + k * 0.08));
+      // 55s: "!" drops in, then lifts away again before the loop point
+      tl.to("#Lbang", { opacity: 1, y: 0, rotation: 9, duration: 0.6, ease: "bounce.out" }, 55.0);
+      tl.to("#Lbang", { opacity: 0, y: -400, duration: 0.6, ease: "power2.in" }, 58.4);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
