@@ -43,7 +43,7 @@
       #endttl .s { margin-top: 18px; font: 600 54px var(--serif); color: var(--cocoa); }
       #endttl .s i { font-style: italic; font-weight: 500; }
       #handle { position: absolute; left: 0; width: 1080px; top: 1500px; display: flex; justify-content: center; }
-      #handle div { padding: 18px 40px; border-radius: 999px; background: var(--brown); color: var(--paper); font: 600 34px var(--serif); letter-spacing: 0.01em; }
+      #handle div { display: flex; align-items: center; gap: 16px; padding: 18px 40px 18px 30px; border-radius: 999px; background: var(--brown); color: var(--paper); font: 600 34px var(--serif); letter-spacing: 0.01em; }
     </style>
   </head>
   <body>
@@ -103,7 +103,6 @@
       <video id="v7" class="clip" src="assets/clips/handover.mp4" muted playsinline data-start="21.9" data-duration="3.5" data-media-start="0.4" data-track-index="9"></video>
       <div id="o7" class="clip" data-start="21.9" data-duration="3.5" data-track-index="10">
         <div class="cap" style="top:200px"><div class="tag" id="c7">Ich begleite dich.</div></div>
-        <div class="cap" style="top:330px"><div class="tag" id="c7b"><b>Auf ganzer Linie.</b></div></div>
       </div>
 
       <!-- 8 end card (25.4 - 30) -->
@@ -115,7 +114,7 @@
         <img class="el" id="fam" src="assets/img/w_family.png" style="left:250px; top:700px; width:560px;" />
         <img class="el" id="mw" src="assets/img/m_wave.png" style="left:-30px; top:820px; width:440px;" />
         <div id="endttl"><div class="h">Marie Louise</div><div class="s">Hebamme <i>auf ganzer Linie</i></div></div>
-        <div id="handle"><div>@hebamme_aufganzerlinie_marielo</div></div>
+        <div id="handle"><div><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fbf6ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="0.9" fill="#fbf6ee" stroke="none"/></svg><span>hebamme_aufganzerlinie_marielo</span></div></div>
       </div>
 
       <!-- paper strip wipes between scenes -->
@@ -140,8 +139,7 @@
         tl.to(id, { xPercent: 0, duration: 0.32, ease: "power3.in" }, t - 0.32);
         tl.to(id, { xPercent: 110, duration: 0.38, ease: "power3.out" }, t);
       };
-      tl.set(["#c7b"], { opacity: 0 }, 0);
-
+      
       // 1 hook
       tl.fromTo("#v1", { scale: 1.06 }, { scale: 1, duration: 4.3, ease: "none" }, 0);
       tl.fromTo("#ttl .k", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5, ease: EX }, 0.2);
@@ -190,8 +188,7 @@
 
       // 7 hand-over (VO @22.0 "Ich begleite dich", @23.4 "Auf ganzer Linie")
       tagIn("#c7", 22.05);
-      tl.set("#c7b", { opacity: 1 }, 23.75); tagIn("#c7b", 23.8);
-      tagOut("#c7", 25.12); tagOut("#c7b", 25.16);
+      tagOut("#c7", 25.0);
       wipe("#wp7", 25.4, -12);
 
       // 8 end (VO @25.6 "Marie Louise. Deine Hebamme.")
