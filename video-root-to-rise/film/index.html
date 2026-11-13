@@ -19,171 +19,248 @@
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); color: var(--ink); -webkit-font-smoothing: antialiased; }
       .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
       video.clip { object-fit: cover; }
+      .full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
       .paper { background: var(--cream); }
-      .ln { display: block; overflow: hidden; padding: 0.06em 0.1em 0.16em; }
-      .ln > span { display: inline-block; }
+      .wd { display: inline-block; overflow: hidden; padding: 0.04em 0.06em 0.14em; vertical-align: top; }
+      .wd > span { display: inline-block; }
       .eb { font: 500 28px var(--sans); letter-spacing: 0.3em; text-transform: uppercase; }
       .hd { font-family: var(--serif); font-weight: 500; letter-spacing: -0.005em; }
-      .sc { font-family: var(--script); font-weight: 500; letter-spacing: 0; }
+      .sc { font-family: var(--script); font-weight: 500; letter-spacing: 0; padding: 0.1em 0.2em 0.25em; display: inline-block; }
+      .shadeB { position: absolute; left: 0; bottom: 0; width: 1080px; height: 1000px; background: linear-gradient(rgba(28,18,40,0), rgba(28,18,40,0.66)); }
+      .shadeT { position: absolute; left: 0; top: 0; width: 1080px; height: 820px; background: linear-gradient(rgba(28,18,40,0.55), rgba(28,18,40,0)); }
+      .vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(20,10,30,0.35) 100%); }
+      .capL { position: absolute; left: 80px; color: #fff; }
+      .capL .eb { color: var(--lime); margin-bottom: 14px; }
 
-      /* 1: opener over the roots film */
-      #s1txt { position: absolute; left: 0; width: 1080px; top: 250px; text-align: center; color: var(--ink); }
-      #s1txt .hd { font-size: 96px; line-height: 1.05; }
-      #s1txt .sc { font-size: 150px; line-height: 1.1; color: var(--purple); margin-top: 6px; }
-
-      /* 2: arrival triptych */
-      #s2eb { position: absolute; left: 0; width: 1080px; top: 150px; text-align: center; color: var(--purple); }
+      /* 1 */
+      #s1txt { position: absolute; left: 0; width: 1080px; top: 230px; text-align: center; }
+      #s1txt .hd { font-size: 98px; line-height: 1.02; }
+      #s1sc { font-size: 156px; color: var(--purple); margin-top: 4px; }
+      /* 2 morph caption */
+      #c2 { position: absolute; left: 0; width: 1080px; top: 1500px; text-align: center; color: #fff; }
+      #c2 .hd { font-size: 92px; line-height: 1; }
+      #c2 .sc { font-size: 128px; color: var(--lime); }
+      /* 3 title with depth */
+      #ttl { position: absolute; left: 0; width: 1080px; top: 110px; text-align: center; color: var(--purple); }
+      #ttl .hd { font-size: 178px; line-height: 0.95; letter-spacing: 0.03em; font-weight: 600; white-space: nowrap; }
+      #ttl .sc { font-size: 290px; line-height: 1; margin-top: -60px; color: var(--purple); }
+      /* 4 fpv */
+      #c4 { top: 1390px; } #c4 .hd { font-size: 140px; line-height: 1; }
+      /* 5 triptych */
+      #s5eb { position: absolute; left: 0; width: 1080px; top: 150px; text-align: center; color: var(--purple); }
       #tA, #tB, #tC { left: 60px; width: 960px; height: 338px; border-radius: 6px; }
       #tA { top: 230px; } #tB { top: 598px; } #tC { top: 966px; }
-      #s2txt { position: absolute; left: 0; width: 1080px; top: 1350px; text-align: center; }
-      #s2txt .a { font-size: 124px; line-height: 1; }
-      #s2txt .b { margin-top: 18px; font: 400 40px/1.3 var(--sans); color: var(--purple); }
-
-      /* footage captions */
-      .shadeB { position: absolute; left: 0; bottom: 0; width: 1080px; height: 900px; background: linear-gradient(rgba(28,18,40,0), rgba(28,18,40,0.62)); }
-      .shadeT { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; background: linear-gradient(rgba(28,18,40,0.5), rgba(28,18,40,0)); }
-      .cap { position: absolute; left: 90px; color: #fff; }
-      .cap .eb { color: var(--lime); }
-      .cap .t { position: relative; height: 170px; margin-top: 14px; width: 940px; }
-      .cap .t > div { position: absolute; left: 0; top: 0; white-space: nowrap; }
-      .cap .hd { font-size: 100px; line-height: 1.1; }
-      .cap .sc { font-size: 130px; line-height: 1.1; }
-      #c3 { top: 1370px; }
-      #c4 { top: 190px; left: 400px; color: #3a2856; }
-      #c4 .sc { font-size: 116px; }
-      #c4 .eb { color: #3a2856; }
-      #c5 { top: 220px; }
-
-      /* end card */
+      #s5txt { position: absolute; left: 0; width: 1080px; top: 1345px; text-align: center; }
+      #s5txt .hd { font-size: 92px; line-height: 1.02; }
+      #s5txt .sc { font-size: 130px; color: var(--purple); }
+      /* 6 women */
+      #c6 { top: 1350px; } #c6 .hd { font-size: 120px; line-height: 1; } #c6 .sc { font-size: 160px; color: #fff; margin-left: -10px; }
+      /* 7 tea */
+      #c7 { top: 230px; } #c7 .hd { font-size: 150px; line-height: 1; }
+      /* 8 medi */
+      #c8 { position: absolute; top: 190px; left: 390px; color: #3a2856; }
+      #c8 .eb { color: #3a2856; margin-bottom: 10px; }
+      #c8 .t { position: relative; height: 200px; width: 680px; }
+      #c8 .t > div { position: absolute; left: 0; top: 0; white-space: nowrap; }
+      #c8 .hd { font-size: 120px; line-height: 1.05; } #c8 .sc { font-size: 124px; }
+      /* 9 slow */
+      #c9 { top: 110px; } #c9 .hd { font-size: 96px; line-height: 1; } #c9 .sc { font-size: 170px; line-height: 1; color: #fff; margin-left: -20px; }
+      /* 10 rise depth */
+      #rise { position: absolute; left: 0; width: 1080px; top: 830px; text-align: center; color: #fff; font: 600 360px/1 var(--serif); letter-spacing: 0.06em; text-shadow: 0 10px 50px rgba(60,30,90,0.25); }
+      /* end */
       #end { text-align: center; background: var(--purple); color: #fff; }
       #band { top: 250px; height: 640px; } #bandimg { position: absolute; left: 0; top: 0; width: 1080px; height: 640px; object-fit: cover; transform-origin: 50% 40%; }
-      #e1 { position: absolute; left: 0; width: 1080px; top: 960px; font-size: 140px; line-height: 1; }
-      #e1 .sc { color: var(--lime); font-size: 190px; }
-      #e2 { position: absolute; left: 0; width: 1080px; top: 1160px; font: 500 78px var(--script); color: var(--lav); }
-      #rule { position: absolute; left: 539px; top: 1280px; width: 2px; height: 80px; background: var(--lime); transform-origin: 50% 0%; }
-      #e3 { position: absolute; left: 0; width: 1080px; top: 1385px; font-size: 66px; }
-      #e3b { position: absolute; left: 0; width: 1080px; top: 1480px; font: 400 30px var(--sans); letter-spacing: 0.02em; color: var(--lav); }
-      #e4w { position: absolute; left: 0; width: 1080px; top: 1570px; display: flex; justify-content: center; }
+      #e1 { position: absolute; left: 0; width: 1080px; top: 940px; font-size: 140px; line-height: 1; }
+      #e1 .sc { color: var(--lime); font-size: 190px; padding: 0 0.1em; }
+      #e2 { position: absolute; left: 0; width: 1080px; top: 1165px; font: 500 78px var(--script); color: var(--lav); }
+      #rule { position: absolute; left: 539px; top: 1285px; width: 2px; height: 80px; background: var(--lime); transform-origin: 50% 0%; }
+      #e3 { position: absolute; left: 0; width: 1080px; top: 1385px; font-size: 70px; }
+      #e3b { position: absolute; left: 0; width: 1080px; top: 1485px; font: 400 30px var(--sans); letter-spacing: 0.02em; color: var(--lav); }
+      #e4w { position: absolute; left: 0; width: 1080px; top: 1575px; display: flex; justify-content: center; }
       #e4 { padding: 22px 50px; border-radius: 999px; background: var(--lime); color: var(--purple); font: 600 32px var(--btn); letter-spacing: 0.02em; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="31" data-width="1080" data-height="1920" data-fps="30">
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="31" data-volume="1"></audio>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="35" data-width="1080" data-height="1920" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="35" data-volume="1"></audio>
 
-      <!-- 1: roots film (0 - 4.7) -->
-      <video id="v0" class="clip" src="assets/clips/roots.mp4" muted playsinline data-start="0" data-duration="4.7" data-media-start="0" data-track-index="1"></video>
-      <div id="o1" class="clip" data-start="0" data-duration="4.7" data-track-index="2">
-        <div id="s1txt">
-          <div class="hd"><span class="ln" id="l1"><span>Manchmal musst du</span></span><span class="ln" id="l2"><span>nicht weiter.</span></span></div>
-          <div class="sc"><span class="ln" id="l3"><span>Sondern tiefer.</span></span></div>
+      <!-- 1 roots 0 - 3.8 -->
+      <video id="v1" class="clip" src="assets/clips/roots.mp4" muted playsinline data-start="0" data-duration="3.8" data-media-start="0" data-track-index="1"></video>
+      <div id="o1" class="clip" data-start="0" data-duration="3.8" data-track-index="2">
+        <div id="s1txt"><div class="hd sw" id="l1">Manchmal musst du</div><div class="hd sw" id="l2">nicht weiter.</div><div><span class="sc" id="s1sc">Sondern tiefer.</span></div></div>
+      </div>
+
+      <!-- 2 morph 3.8 - 8.75 -->
+      <video id="v2" class="clip" src="assets/clips/morph.mp4" muted playsinline data-start="3.8" data-duration="4.95" data-media-start="0" data-track-index="3"></video>
+      <div id="o2" class="clip" data-start="3.8" data-duration="4.95" data-track-index="4">
+        <div class="shadeB" id="sh2"></div>
+        <div id="c2"><div class="hd sw" id="l2a">4 Tage</div><div><span class="sc" id="s2sc">nur für dich.</span></div></div>
+      </div>
+
+      <!-- 3 title with depth 8.75 - 10.35 -->
+      <div id="o3" class="clip" data-start="8.75" data-duration="1.6" data-track-index="5">
+        <div id="dep" class="clip">
+          <img class="full" id="bg3" src="assets/clips/e1.jpg" />
+          <div id="ttl" data-layout-ignore><div class="hd sw" id="tt1">ROOT TO</div><div><span class="sc" id="tt2">Rise</span></div></div>
+          <img class="full" id="cut3" src="assets/clips/e1cut.png" />
         </div>
       </div>
 
-      <!-- 2: arrival triptych (4.4 - 9.6) -->
-      <div id="s2" class="clip paper" data-start="4.4" data-duration="5.2" data-track-index="3">
-        <div id="s2eb" class="eb">ahead Burghotel · Elbtalaue</div>
-        <div id="s2txt">
-          <div class="hd a"><span class="ln" id="l4"><span>Ankommen.</span></span></div>
-          <div class="b"><span class="ln" id="l5"><span>Zwischen alten Mauern und weitem Land.</span></span></div>
-        </div>
-      </div>
-      <video id="tA" class="clip" src="assets/clips/tA.mp4" muted playsinline data-start="4.5" data-duration="4.53" data-media-start="0" data-track-index="4"></video>
-      <video id="tB" class="clip" src="assets/clips/tB.mp4" muted playsinline data-start="4.75" data-duration="4.43" data-media-start="0" data-track-index="5"></video>
-      <video id="tC" class="clip" src="assets/clips/tC.mp4" muted playsinline data-start="5.0" data-duration="4.53" data-media-start="0" data-track-index="6"></video>
-
-      <!-- 3: yoga (9.3 - 14.1) -->
-      <video id="vy" class="clip" src="assets/clips/yoga.mp4" muted playsinline data-start="9.3" data-duration="4.8" data-media-start="0" data-track-index="7"></video>
-      <div id="o3" class="clip" data-start="9.3" data-duration="4.8" data-track-index="8">
+      <!-- 4 fpv 10.35 - 12.35 -->
+      <video id="v4" class="clip" src="assets/clips/fpv.mp4" muted playsinline data-start="10.35" data-duration="2.0" data-media-start="0" data-track-index="6"></video>
+      <div id="o4" class="clip" data-start="10.35" data-duration="2.0" data-track-index="7">
         <div class="shadeB"></div>
-        <div class="cap" id="c3"><div class="eb">Pause · Arrive · Thrive</div><div class="t"><div id="t3" class="hd"><span class="ln"><span>Yoga im Morgenlicht.</span></span></div></div></div>
+        <div class="capL" id="c4"><div class="eb">ahead Burghotel · Elbtalaue</div><div class="hd sw" id="l4">Ankommen.</div></div>
       </div>
 
-      <!-- 4: meditation (13.6 - 18.64) -->
-      <video id="vm" class="clip" src="assets/clips/medi.mp4" muted playsinline data-start="13.6" data-duration="5.04" data-media-start="0" data-track-index="9"></video>
-      <div id="o4" class="clip" data-start="13.6" data-duration="5.04" data-track-index="10">
-        <div class="cap" id="c4"><div class="eb">Inner Growth</div><div class="t"><div id="t4a" class="hd"><span class="ln"><span>Atmen.</span></span></div><div id="t4b" class="hd"><span class="ln"><span>Stille.</span></span></div><div id="t4c" class="sc"><span class="ln"><span>Bei dir sein.</span></span></div></div></div>
+      <!-- 5 triptych 12.35 - 15.05 -->
+      <div id="s5" class="clip paper" data-start="12.35" data-duration="2.7" data-track-index="8">
+        <div id="s5eb" class="eb">Pause · Arrive · Thrive</div>
+        <div id="s5txt"><div class="hd sw" id="l5">Zwischen alten Mauern</div><div><span class="sc" id="s5sc">und weitem Land.</span></div></div>
+      </div>
+      <video id="tA" class="clip" src="assets/clips/tA.mp4" muted playsinline data-start="12.35" data-duration="2.7" data-media-start="0.6" data-track-index="9"></video>
+      <video id="tB" class="clip" src="assets/clips/tB.mp4" muted playsinline data-start="12.35" data-duration="2.7" data-media-start="0.6" data-track-index="10"></video>
+      <video id="tC" class="clip" src="assets/clips/tC.mp4" muted playsinline data-start="12.35" data-duration="2.7" data-media-start="0.6" data-track-index="11"></video>
+
+      <!-- 6 women 15.05 - 17.45 -->
+      <video id="v6" class="clip" src="assets/clips/women.mp4" muted playsinline data-start="15.05" data-duration="2.4" data-media-start="0" data-track-index="12"></video>
+      <div id="o6" class="clip" data-start="15.05" data-duration="2.4" data-track-index="13">
+        <div class="shadeB"></div>
+        <div class="capL" id="c6"><div class="eb">Move &amp; Feel</div><div class="hd sw" id="l6">Yoga im</div><div><span class="sc" id="s6sc">Morgenlicht.</span></div></div>
       </div>
 
-      <!-- 5: rise (18.4 - 23.44) -->
-      <video id="vr" class="clip" src="assets/clips/rise.mp4" muted playsinline data-start="18.4" data-duration="5.04" data-media-start="0" data-track-index="11"></video>
-      <div id="o5" class="clip" data-start="18.4" data-duration="5.04" data-track-index="12">
+      <!-- 7 tea 17.45 - 18.55 -->
+      <video id="v7" class="clip" src="assets/clips/tea.mp4" muted playsinline data-start="17.45" data-duration="1.1" data-media-start="0.2" data-track-index="14"></video>
+      <div id="o7" class="clip" data-start="17.45" data-duration="1.1" data-track-index="15">
         <div class="shadeT"></div>
-        <div class="cap" id="c5"><div class="eb">Rise</div><div class="t"><div id="t5a" class="hd"><span class="ln"><span>Und dann</span></span></div><div id="t5b" class="sc"><span class="ln"><span>wachsen.</span></span></div></div></div>
+        <div class="capL" id="c7"><div class="eb">Nourish your Soul</div><div class="hd sw" id="l7">Atmen.</div></div>
       </div>
 
-      <!-- 6: end card (23.1 - 31) -->
-      <div id="end" class="clip" data-start="23.1" data-duration="7.9" data-track-index="13">
-        <div id="e1" class="hd"><span class="ln"><span>Root to <span class="sc">Rise</span></span></span></div>
+      <!-- 8 meditation 18.55 - 21.7 -->
+      <video id="v8" class="clip" src="assets/clips/medi.mp4" muted playsinline data-start="18.55" data-duration="3.15" data-media-start="0.3" data-track-index="16"></video>
+      <div id="o8" class="clip" data-start="18.55" data-duration="3.15" data-track-index="17">
+        <div id="c8"><div class="eb">Inner Growth</div><div class="t"><div class="hd sw" id="l8a">Stille.</div><div id="l8b"><span class="sc" id="s8sc">Bei dir sein.</span></div></div></div>
+      </div>
+
+      <!-- 9 slow-mo (music climax) 21.7 - 24.4 -->
+      <video id="v9" class="clip" src="assets/clips/slow.mp4" muted playsinline data-start="21.7" data-duration="2.7" data-media-start="0" data-track-index="18"></video>
+      <div id="o9" class="clip" data-start="21.7" data-duration="2.7" data-track-index="19">
+        <div class="shadeT"></div>
+        <div class="capL" id="c9"><div class="eb">Rise</div><div class="hd sw" id="l9">Und dann</div><div><span class="sc" id="s9sc">wachsen.</span></div></div>
+      </div>
+
+      <!-- 10 RISE depth still 24.4 - 25.3 -->
+      <div id="o10" class="clip" data-start="24.4" data-duration="0.9" data-track-index="20">
+        <img class="full" id="bg10" src="assets/clips/e6.jpg" />
+        <div id="rise" data-layout-ignore>RISE</div>
+        <img class="full" id="cut10" src="assets/clips/e6cut.png" />
+      </div>
+
+      <!-- 11 pull-back 25.3 - 28.5 -->
+      <video id="v11" class="clip" src="assets/clips/pull.mp4" muted playsinline data-start="25.3" data-duration="3.2" data-media-start="0" data-track-index="21"></video>
+
+      <!-- 12 end card 28.3 - 35 -->
+      <div id="end" class="clip" data-start="28.3" data-duration="6.7" data-track-index="22">
+        <div id="e1" class="hd"><span class="wd"><span>Root to <span class="sc">Rise</span></span></span></div>
         <div id="e2">Pause • Arrive • Thrive</div>
         <div id="rule"></div>
-        <div id="e3" class="hd"><span class="ln"><span>18. – 21. Februar 2027</span></span></div>
+        <div id="e3" class="hd"><span class="wd"><span>18. – 21. Februar 2027</span></span></div>
         <div id="e3b">Yoga &amp; Inner Growth Retreat · ahead Burghotel, Elbtalaue</div>
         <div id="e4w"><div id="e4">Jetzt anmelden · worklifehappiness.de</div></div>
       </div>
-      <div id="band" class="clip" data-start="23.4" data-duration="7.6" data-track-index="14"><img id="bandimg" src="assets/clips/endband.jpg" /></div>
+      <div id="band" class="clip" data-start="28.5" data-duration="6.5" data-track-index="23"><img id="bandimg" src="assets/clips/endband.jpg" /></div>
+      <div id="vg" class="clip vig" data-start="0" data-duration="28.4" data-track-index="30"></div>
     </div>
 
     <script>
+      // split headline lines into word masks (deterministic, before the timeline is built)
+      document.querySelectorAll(".sw").forEach((el) => {
+        el.innerHTML = el.textContent.trim().split(" ").map((w) => "<span class=\"wd\"><span>" + w + "</span></span>").join(" ");
+      });
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
       const EX = "expo.out", E = "power3.out", S = "sine.inOut";
-      const rise = (sel, t, d = 1.1) => tl.fromTo(sel + " > span", { yPercent: 115 }, { yPercent: 0, duration: d, ease: EX }, t);
-      const fadeUp = (sel, t, d = 0.9) => tl.fromTo(sel, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: d, ease: E }, t);
+      const words = (id, t, st = 0.07, d = 0.9) => tl.fromTo("#" + id + " .wd > span", { yPercent: 120, rotate: 4 }, { yPercent: 0, rotate: 0, duration: d, ease: EX, stagger: st }, t);
+      const write = (id, t, d = 1.0) => tl.fromTo("#" + id, { clipPath: "inset(-20% 100% -30% -5%)", x: -16 }, { clipPath: "inset(-20% -5% -30% -5%)", x: 0, duration: d, ease: "power2.inOut" }, t);
+      const out = (sel, t, d = 0.3) => tl.to(sel, { opacity: 0, y: -18, duration: d, ease: "power2.in" }, t);
+      const punchIn = (sel, t, from = 1.22, blur = 14, d = 0.55) => tl.fromTo(sel, { scale: from, filter: "blur(" + blur + "px)" }, { scale: 1, filter: "blur(0px)", duration: d, ease: EX }, t);
 
-      tl.set(["#c3", "#c4", "#c5", "#t4b", "#t4c", "#t5b"], { opacity: 0 }, 0);
+      // 1 roots (VO a1 @0.35; "Sondern tiefer" @2.85)
+      tl.fromTo("#v1", { scale: 1.0 }, { scale: 1.08, duration: 3.8, ease: "none" }, 0);
+      words("l1", 0.35); words("l2", 0.75);
+      write("s1sc", 2.8, 1.0);
+      tl.to("#o1", { opacity: 0, duration: 0.2 }, 3.62);
+      tl.to("#v1", { scale: 1.3, filter: "blur(10px)", duration: 0.2, ease: "power2.in" }, 3.6);
 
-      // 1: opener (VO a1 at 0.5)
-      rise("#l1", 0.45); rise("#l2", 0.75);
-      rise("#l3", 2.95, 1.3);
-      tl.to("#s1txt", { opacity: 0, y: -24, duration: 0.45, ease: "power2.in" }, 4.15);
+      // 2 morph (music build)
+      punchIn("#v2", 3.8, 1.18, 12, 0.6);
+      tl.fromTo("#sh2", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 5.0);
+      words("l2a", 5.2, 0.08, 1.0);
+      write("s2sc", 5.75, 1.1);
+      out("#c2", 7.9, 0.35);
 
-      // 2: triptych (VO a2 at 4.8)
-      tl.fromTo("#s2", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: S }, 4.4);
-      [["#tA", 4.5], ["#tB", 4.75], ["#tC", 5.0]].forEach(([id, t]) => {
-        tl.fromTo(id, { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "expo.inOut" }, t);
-      });
-      fadeUp("#s2eb", 4.9);
-      rise("#l4", 4.8); rise("#l5", 6.75);
+      // 3 title with depth: text sits between photo and tower cutout
+      tl.fromTo(["#bg3", "#cut3"], { scale: 1.0 }, { scale: 1.07, duration: 1.6, ease: "none", transformOrigin: "50% 60%" }, 8.75);
+      tl.fromTo("#ttl", { y: 60 }, { y: -30, duration: 1.6, ease: "none" }, 8.75);
+      words("tt1", 8.8, 0.06, 0.8);
+      tl.fromTo("#tt2", { opacity: 0, scale: 0.85, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: EX }, 9.05);
 
-      // 3: yoga (VO a3 at 10.1)
-      tl.fromTo("#vy", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 9.3);
-      tl.set("#c3", { opacity: 1 }, 9.95);
-      tl.fromTo("#c3 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 9.95);
-      rise("#t3 .ln", 10.1);
-      tl.to("#c3", { opacity: 0, duration: 0.4, ease: "power2.in" }, 13.4);
+      // 4 fpv (VO a2 "Ankommen" @10.4)
+      punchIn("#v4", 10.35, 1.3, 16, 0.5);
+      tl.fromTo("#c4 .eb", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: E }, 10.4);
+      words("l4", 10.45, 0.05, 0.9);
 
-      // 4: meditation (VO a4 at 14.0: Atmen 14.0, Stille 15.6, Bei dir sein 17.3)
-      tl.fromTo("#vm", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 13.6);
-      tl.set("#c4", { opacity: 1 }, 13.9);
-      tl.fromTo("#c4 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 13.9);
-      rise("#t4a .ln", 14.0);
-      tl.to("#t4a", { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 15.3);
-      tl.set("#t4b", { opacity: 1 }, 15.55); rise("#t4b .ln", 15.6);
-      tl.to("#t4b", { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 16.95);
-      tl.set("#t4c", { opacity: 1 }, 17.2); rise("#t4c .ln", 17.25, 1.2);
-      tl.to("#c4", { opacity: 0, duration: 0.4, ease: "power2.in" }, 18.15);
+      // 5 triptych (VO "Zwischen alten Mauern und weitem Land" @12.38)
+      tl.fromTo("#tA", { x: -1100 }, { x: 0, duration: 0.7, ease: EX }, 12.35);
+      tl.fromTo("#tB", { x: 1100 }, { x: 0, duration: 0.7, ease: EX }, 12.47);
+      tl.fromTo("#tC", { x: -1100 }, { x: 0, duration: 0.7, ease: EX }, 12.59);
+      tl.fromTo(["#tA", "#tB", "#tC"], { scale: 1 }, { scale: 1.03, duration: 2.0, ease: "none" }, 12.9);
+      tl.fromTo("#s5eb", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 12.5);
+      words("l5", 12.45, 0.07);
+      write("s5sc", 13.5, 0.9);
 
-      // 5: rise (VO a5 at 19.4: Und dann 19.4, wachsen 20.8)
-      tl.fromTo("#vr", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: S }, 18.4);
-      tl.set("#c5", { opacity: 1 }, 19.3);
-      tl.fromTo("#c5 .eb", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 19.3);
-      rise("#t5a .ln", 19.4);
-      tl.to("#t5a", { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 20.45);
-      tl.set("#t5b", { opacity: 1 }, 20.7); rise("#t5b .ln", 20.75, 1.3);
-      tl.to("#c5", { opacity: 0, duration: 0.45, ease: "power2.in" }, 22.7);
+      // 6 women: arch-shaped reveal (VO a3 @15.3)
+      tl.fromTo("#v6", { clipPath: "inset(100% 0% 0% 0% round 540px 540px 0px 0px)" }, { clipPath: "inset(0% 0% 0% 0% round 0px 0px 0px 0px)", duration: 0.75, ease: "expo.inOut" }, 15.0);
+      tl.fromTo("#c6 .eb", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: E }, 15.25);
+      words("l6", 15.3, 0.07);
+      write("s6sc", 15.75, 0.9);
 
-      // 6: end card (VO a6 at 23.9: Root to Rise 23.9, rest 26.3)
-      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: S }, 23.1);
-      tl.fromTo("#band", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4, ease: "expo.inOut" }, 23.4);
-      tl.fromTo("#bandimg", { scale: 1.12 }, { scale: 1.0, duration: 7.6, ease: "power1.out" }, 23.4);
-      rise("#e1 .ln", 23.85, 1.3);
-      fadeUp("#e2", 24.9, 1.0);
-      tl.fromTo("#rule", { scaleY: 0 }, { scaleY: 1, duration: 1.0, ease: "power2.out" }, 25.5);
-      rise("#e3 .ln", 26.2);
-      fadeUp("#e3b", 26.9);
-      tl.fromTo("#e4", { opacity: 0, y: 16, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EX }, 27.8);
-      tl.fromTo(["#e1", "#e2", "#e3", "#e3b"], { scale: 1 }, { scale: 1.025, duration: 7.4, ease: "none" }, 23.6);
+      // 7 tea: slides up (VO "Atmen" @17.45)
+      tl.fromTo("#v7", { yPercent: 100 }, { yPercent: 0, duration: 0.45, ease: EX }, 17.45);
+      tl.fromTo("#o7", { yPercent: 100 }, { yPercent: 0, duration: 0.45, ease: EX }, 17.45);
+      words("l7", 17.55, 0.05, 0.7);
+
+      // 8 meditation: zoom through the window (VO "Stille" @19.05, "Bei dir sein" @20.74)
+      tl.fromTo("#v8", { scale: 1.9, filter: "blur(12px)", transformOrigin: "22% 32%" }, { scale: 1, filter: "blur(0px)", duration: 0.8, ease: EX }, 18.55);
+      tl.fromTo("#c8 .eb", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 18.9);
+      words("l8a", 19.0, 0.05);
+      out("#l8a", 20.45, 0.25);
+      write("s8sc", 20.7, 0.95);
+
+      // 9 climax slow-mo (VO "Und dann" @21.95, "wachsen" @23.35)
+      punchIn("#v9", 21.7, 1.25, 0, 0.9);
+      tl.fromTo("#c9 .eb", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: E }, 21.9);
+      words("l9", 21.95, 0.08);
+      write("s9sc", 23.3, 0.95);
+
+      // 10 RISE behind her
+      tl.fromTo(["#bg10", "#cut10"], { scale: 1.0 }, { scale: 1.05, duration: 0.9, ease: "none", transformOrigin: "50% 70%" }, 24.4);
+      tl.fromTo("#rise", { opacity: 0, scale: 1.6, y: -60 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: EX }, 24.4);
+
+      // 11 pull-back
+      tl.fromTo("#v11", { scale: 1.06 }, { scale: 1, duration: 3.2, ease: "none" }, 25.3);
+
+      // 12 end card (VO a6 @28.6: "Root to Rise", rest @30.87)
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: S }, 28.3);
+      tl.fromTo("#band", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "expo.inOut" }, 28.5);
+      tl.fromTo("#bandimg", { scale: 1.15 }, { scale: 1.0, duration: 6.5, ease: "power1.out" }, 28.5);
+      tl.fromTo("#e1 .wd > span", { yPercent: 115 }, { yPercent: 0, duration: 1.2, ease: EX }, 28.65);
+      tl.fromTo("#e2", { clipPath: "inset(-20% 100% -30% -5%)" }, { clipPath: "inset(-20% -5% -30% -5%)", duration: 1.1, ease: "power2.inOut" }, 29.6);
+      tl.fromTo("#rule", { scaleY: 0 }, { scaleY: 1, duration: 0.8, ease: "power2.out" }, 30.4);
+      tl.fromTo("#e3 .wd > span", { yPercent: 115 }, { yPercent: 0, duration: 1.0, ease: EX }, 30.9);
+      tl.fromTo("#e3b", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 31.5);
+      tl.fromTo("#e4", { opacity: 0, y: 20, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.6)" }, 32.3);
+      tl.fromTo(["#e1", "#e2", "#e3", "#e3b"], { scale: 1 }, { scale: 1.03, duration: 6.2, ease: "none" }, 28.8);
 
       window.__timelines["main"] = tl;
       tl.seek(0);
