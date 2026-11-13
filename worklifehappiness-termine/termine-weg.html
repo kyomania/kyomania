@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<title>Termine 2027</title>
+<style>
+  @font-face { font-family: "Nunito Sans"; src: url(fonts/NunitoSans-Regular-1.woff2) format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Nunito Sans"; src: url(fonts/NunitoSans-SemiBold-1.woff2) format("woff2"); font-weight: 600; }
+  @font-face { font-family: "Work Sans"; src: url(fonts/WorkSans-Regular.woff2) format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Work Sans"; src: url(fonts/WorkSans-Medium.woff2) format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Work Sans"; src: url(fonts/WorkSans-SemiBold.woff2) format("woff2"); font-weight: 600; }
+  @font-face { font-family: "Royalty Free"; src: url(fonts/RoyaltyFree-4.woff2) format("woff2"); }
+
+  :root { --purple: #6a4c93; --lavender: #d5cae4; --coral: #ffa07a; --coral-deep: #f8716b; --lime: #cfff03; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1800px; height: 1150px; overflow: hidden; } #stage { position: absolute; inset: 0; overflow: hidden; }
+  body {
+    position: relative; font-family: "Work Sans", sans-serif; color: var(--purple);
+    background: linear-gradient(180deg, var(--lavender) 0%, var(--lavender) 38%, #e6b9b9 78%, var(--coral) 100%);
+  }
+  /* weiche Lichtflecken */
+  .glow { position: absolute; border-radius: 50%; filter: blur(70px); }
+
+  .head { position: absolute; left: 0; top: 70px; width: 1800px; text-align: center; }
+  .eyebrow { font: 600 20px/1 "Nunito Sans"; color: #fff; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font: 400 88px/1 "Nunito Sans"; color: var(--purple); letter-spacing: -0.5px; }
+  h1 .script { font-family: "Royalty Free"; font-weight: 400; font-size: 112px; color: var(--coral-deep); margin-left: 26px; position: relative; top: 12px; }
+
+  svg#path { position: absolute; left: 0; top: 0; }
+
+  .stop { position: absolute; width: 74px; height: 74px; margin: -37px 0 0 -37px; border-radius: 50%;
+    background: #fff; color: var(--purple); display: flex; align-items: center; justify-content: center;
+    font: 600 30px/1 "Nunito Sans"; box-shadow: 0 0 0 8px rgba(255,255,255,0.35), 0 10px 24px rgba(106,76,147,0.25); }
+  .stop.coral { background: var(--coral); color: #fff; }
+  .stop.final { background: var(--purple); color: var(--lime); }
+
+  .card { position: absolute; width: 330px; margin-left: -165px; text-align: center;
+    background: rgba(255,255,255,0.92); border: 2px solid rgba(106,76,147,0.28);
+    border-radius: 165px 165px 24px 24px / 105px 105px 24px 24px; padding: 50px 24px 30px;
+    box-shadow: 0 22px 50px rgba(106,76,147,0.18); }
+  .card .date { font: 500 21px/1 "Work Sans"; letter-spacing: 0.06em; color: var(--purple); opacity: 0.75; margin-bottom: 16px; }
+  .card .topic { font: 400 33px/1.15 "Nunito Sans"; color: var(--purple); }
+  .card.coral { background: linear-gradient(180deg, #fff 0%, #ffe8de 100%); border-color: rgba(255,160,122,0.8); }
+  .card.coral .date { color: #fff; opacity: 1; display: inline-block; background: var(--coral); border-radius: 999px; padding: 9px 18px 8px;
+    font: 600 16px/1 "Nunito Sans"; letter-spacing: 0.12em; text-transform: uppercase; }
+  .card.final { background: var(--purple); border-color: var(--purple); }
+  .card.final .date, .card.final .topic { color: #fff; }
+  .card.final .topic { font-weight: 400; }
+  .card .tick { position: absolute; left: 50%; width: 2px; margin-left: -1px; background: rgba(255,255,255,0.9); }
+
+  .spark { position: absolute; color: var(--lime); font: 400 34px/1 "Nunito Sans"; text-shadow: 0 0 10px rgba(207,255,3,0.5); }
+  .ziel { position: absolute; font: 400 64px/1 "Royalty Free"; color: var(--lime); transform: rotate(-6deg);
+    text-shadow: 0 2px 12px rgba(106,76,147,0.25); }
+</style>
+</head>
+<body>
+  <div class="glow" style="left:-120px;top:420px;width:520px;height:520px;background:rgba(255,255,255,0.45)"></div>
+  <div class="glow" style="left:1350px;top:180px;width:520px;height:420px;background:rgba(255,160,122,0.35)"></div>
+
+  <div class="head">
+    <div class="eyebrow">Dein Weg</div>
+    <h1>Deine Termine<span class="script">2027</span></h1>
+  </div>
+
+  <svg id="path" width="1800" height="1150"></svg>
+  <div id="stage"></div>
+
+  <script>
+    const T = [
+      { d: "Di., 12.01.2027", t: "Kick-off &amp; Re:view" },
+      { d: "Di., 26.01.2027", t: "Re:view / Re:vision" },
+      { d: "Di., 09.02.2027", t: "Re:vision" },
+      { d: "Di., 23.02.2027", t: "Re:align I" },
+      { d: "Di., 09.03.2027", t: "Re:align II" },
+      { d: "Di., 23.03.2027", t: "Re:create" },
+      { d: "individuell", t: "1:1 Coaching", cls: "coral" },
+      { d: "Di., 04.05.2027", t: "Keep-it-Up &amp;<br>Integration", cls: "final" },
+    ];
+    const X0 = 225, DX = 193, YC = 675, AMP = 80;
+    const pts = T.map((_, i) => [X0 + i * DX, YC + (i % 2 ? AMP : -AMP)]);
+
+    // weicher Pfad (Catmull-Rom -> Bezier), mit Auslauf links/rechts
+    const all = [[-40, YC + 40], ...pts, [1840, YC - 60]];
+    let d = `M ${all[0][0]} ${all[0][1]}`;
+    for (let i = 0; i < all.length - 1; i++) {
+      const p0 = all[Math.max(0, i - 1)], p1 = all[i], p2 = all[i + 1], p3 = all[Math.min(all.length - 1, i + 2)];
+      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ` C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${p2[0]} ${p2[1]}`;
+    }
+    document.getElementById("path").innerHTML = `
+      <path d="${d}" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="22" stroke-linecap="round"/>
+      <path d="${d}" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 16"/>`;
+
+    const stage = document.getElementById("stage");
+    pts.forEach(([x, y], i) => {
+      const it = T[i], up = i % 2 === 0;
+      const s = document.createElement("div"); s.className = "stop " + (it.cls || ""); s.style.left = x + "px"; s.style.top = y + "px"; s.textContent = i + 1;
+      const c = document.createElement("div"); c.className = "card " + (it.cls || ""); c.style.left = x + "px";
+      c.innerHTML = `<div class="date">${it.d}</div><div class="topic">${it.t}</div>`;
+      stage.append(c, s);
+      const h = c.offsetHeight;
+      const tick = document.createElement("div"); tick.className = "tick";
+      if (up) { c.style.top = (y - 70 - h) + "px"; tick.style.top = h + "px"; tick.style.height = "34px"; }
+      else { c.style.top = (y + 70) + "px"; tick.style.top = "-34px"; tick.style.height = "34px"; }
+      c.appendChild(tick);
+    });
+
+    // kleine Lime-Funken wie die Akzente der Webseite
+    [[1640, 690, "✦"], [1682, 735, "✦", 22]].forEach(([x, y, ch, fs]) => {
+      const e = document.createElement("div"); e.className = "spark"; e.style.left = x + "px"; e.style.top = y + "px"; if (fs) e.style.fontSize = fs + "px"; e.textContent = ch; stage.appendChild(e);
+    });
+  </script>
+</body>
+</html>
