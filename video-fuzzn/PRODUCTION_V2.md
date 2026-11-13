@@ -114,3 +114,7 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 - **Döner:** C04 (Überreichen) ist raus, weil er dort schon einen Döner in der Hand hält. Die Döner-Szene zeigt nur noch das Essen, der Kiez-Teil ist dafür bis 14,5 s verlängert.
 - **Nahtloser Loop:** Der letzte Riss endet genau bei 60,0 s. Darunter läuft C01 schon in Bewegung an, und der Anfang setzt bei C01 0,6 s fort. Das Kamera-Wackeln kehrt am Ende auf null zurück, das Reiß-Geräusch wird über die Loop-Grenze an den Anfang gefaltet (`v2/mix.py`).
 - **Chat schräg:** Die Chat-Ebene liegt per `matrix3d` (Homographie aus den vier gemessenen Ecken der Monitorfläche) exakt auf dem geneigten Bildschirm.
+
+## Runde 6
+- Chat stärker geneigt (Homographie mit tieferer rechter Seite).
+- HUD unten links: „LOOKING FOR MATCH · twitch.tv/fuzzn“ statt „SCREEN HIDDEN“.
