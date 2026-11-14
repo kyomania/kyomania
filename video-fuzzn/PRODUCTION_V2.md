@@ -118,3 +118,4 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 ## Runde 6
 - Chat stärker geneigt (Homographie mit tieferer rechter Seite).
 - HUD unten links: „LOOKING FOR MATCH · twitch.tv/fuzzn“ statt „SCREEN HIDDEN“.
+- HUD ergänzt: Instagram-Logo + @dfuzzn neben twitch.tv/fuzzn.
