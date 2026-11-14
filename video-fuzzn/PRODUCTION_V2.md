@@ -119,3 +119,8 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 - Chat stärker geneigt (Homographie mit tieferer rechter Seite).
 - HUD unten links: „LOOKING FOR MATCH · twitch.tv/fuzzn“ statt „SCREEN HIDDEN“.
 - HUD ergänzt: weißes Instagram-Logo + „dfuzzn“ neben twitch.tv/fuzzn.
+
+## Runde 7 – echtes Gameplay auf dem Monitor
+- Upload `v2/gameplay/warzone.mp4` (4,65 s) ersetzt das KI-Spiel auf dem linken Monitor in beiden Zimmer-Szenen (35–39 s, 42,5–47 s).
+- `v2/screen_replace.py`: Homographie auf die gemessenen Monitorecken (1162,413 / 1501,419 / 1494,620 / 1157,614), Bildschirm-Look (leicht entsättigt, weich), Maske im unteren Randstreifen hält Hand, Controller und Jacke vor dem Gameplay. Läuft in `build_base.sh` nach dem Zusammensetzen.
+- C08 1,75–2,45 s ausgelassen, weil dort das KI-Mündungsfeuer über den Monitorrand auf die Hände strahlte.

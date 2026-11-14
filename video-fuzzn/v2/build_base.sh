@@ -40,15 +40,19 @@ seg C06 0.0 3.5
 seg C07 0.5 3.5
 seg C06 0.8 4.5 0.6
 # --- Zimmer 35.0-47.0
-seg C08 0.0 4.0
+# (C08 1.75-2.45 s ausgelassen: Mündungsfeuer strahlt dort über den Monitorrand)
+seg C08 0.0 1.7
+seg C08 2.45 2.3
 seg C09 0.3 3.5
-seg C08 2.5 4.5 0.55
+seg C08 2.45 4.5 0.567
 # --- Dach 47.0-60.0
 seg C10 0.0 5.0
 seg C12 2.8 1.8
 seg C10 1.0 5.6 0.72 rev
 seg C01 0.0 0.6
-ffmpeg -v error -y -f concat -safe 0 -i "$S/list.txt" -c:v libx264 -crf 16 -preset fast -r 30 -an "$OUT/base.mp4"
+ffmpeg -v error -y -f concat -safe 0 -i "$S/list.txt" -c:v libx264 -crf 16 -preset fast -r 30 -an "$S/base_raw.mp4"
+# Echtes Gameplay auf den linken Monitor (Zimmer-Szenen), mit Maske für Hand/Controller
+python3 screen_replace.py "$S/base_raw.mp4" "$OUT/base.mp4" gameplay/warzone.mp4
 ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/base.mp4"
 # Standbilder der ausgehenden Frames für die Papier-Übergänge
 mkdir -p ../film/assets/img/v2
