@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "PGar"; font-weight: 500; src: url(assets/fonts/CormorantGaramond-Medium-1.woff2); }
+      @font-face { font-family: "PGar"; font-weight: 600; src: url(assets/fonts/CormorantGaramond-SemiBold-1.woff2); }
+      @font-face { font-family: "PSans"; font-weight: 400; src: url(assets/fonts/WorkSans-Regular.woff2); }
+      @font-face { font-family: "PSans"; font-weight: 500; src: url(assets/fonts/WorkSans-Medium.woff2); }
+      :root { --paper: #f6f2ea; --paper2: #ece5d8; --navy: #13233f; --navy2: #1d3357; --gold: #b0864a; --ink: #1b2233; --mute: #555a66;
+        --serif: "PGar", Georgia, serif; --sans: "PSans", sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--navy); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--navy); color: var(--ink); -webkit-font-smoothing: antialiased; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      video.clip { object-fit: cover; }
+      .ab { position: absolute; }
+      .page { background: radial-gradient(ellipse at 40% 30%, #fbf8f2 0%, var(--paper) 55%, var(--paper2) 100%); }
+      .runhead { position: absolute; left: 120px; right: 120px; top: 64px; display: flex; justify-content: space-between; font: 500 20px var(--sans);
+        letter-spacing: 0.22em; text-transform: uppercase; color: var(--mute); border-bottom: 1px solid rgba(19,35,63,0.18); padding-bottom: 16px; }
+      .eb { font: 500 22px var(--sans); letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); }
+      .h { font-family: var(--serif); font-weight: 600; color: var(--navy); letter-spacing: -0.01em; }
+      .wd { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 0.04em 0.1em; }
+      .wd > span { display: inline-block; }
+
+      /* cover */
+      #book { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0% 50%; }
+      #coverbg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, #223b63 0%, #13233f 60%, #0b1528 100%); }
+      #cframe { position: absolute; left: 90px; top: 70px; right: 90px; bottom: 70px; border: 2px solid rgba(176,134,74,0.75); }
+      #cframe2 { position: absolute; left: 106px; top: 86px; right: 106px; bottom: 86px; border: 1px solid rgba(176,134,74,0.4); }
+      #ctxt { position: absolute; left: 0; width: 1920px; top: 300px; text-align: center; color: #e9d7b4; }
+      #ctxt .y { font: 500 30px var(--sans); letter-spacing: 0.5em; color: var(--gold); }
+      #ctxt .t { font: 600 128px/1.02 var(--serif); margin-top: 26px; color: #f1e3c4; }
+      #ctxt .n { font: 500 54px var(--serif); margin-top: 34px; color: #e9d7b4; letter-spacing: 0.02em; }
+      #ctxt .r { font: 500 24px var(--sans); letter-spacing: 0.3em; text-transform: uppercase; margin-top: 18px; color: rgba(233,215,180,0.75); }
+      #seal { position: absolute; left: 930px; top: 830px; width: 60px; height: 60px; border: 2px solid var(--gold); transform: rotate(45deg); }
+
+      /* lower third */
+      #lt { position: absolute; left: 110px; bottom: 110px; background: rgba(246,242,234,0.94); padding: 22px 34px 24px; border-left: 6px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+      #lt .n { font: 600 52px/1 var(--serif); color: var(--navy); }
+      #lt .r { font: 500 22px var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--mute); margin-top: 8px; }
+
+      /* chapter cards */
+      .chap { background: var(--navy); }
+      .chap .num { position: absolute; left: 0; width: 1920px; top: 210px; text-align: center; font: 600 260px/1 var(--serif); color: rgba(176,134,74,0.22); }
+      .chap .lbl { position: absolute; left: 0; width: 1920px; top: 540px; text-align: center; }
+      .chap .lbl .eb { color: var(--gold); }
+      .chap .lbl .h { color: #f1e3c4; font-size: 110px; margin-top: 16px; }
+
+      /* timeline chart */
+      #chart { position: absolute; left: 120px; top: 170px; }
+      .tl-lbl { position: absolute; width: 260px; margin-left: -130px; text-align: center; }
+      .tl-lbl .y { font: 600 40px var(--serif); color: var(--navy); }
+      .tl-lbl .d { font: 400 20px/1.3 var(--sans); color: var(--ink); margin-top: 4px; }
+      .dot { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--paper); border: 5px solid var(--gold); }
+      #photo { position: absolute; right: 120px; top: 600px; width: 520px; height: 300px; border: 10px solid #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.18); overflow: hidden; }
+      #photo video { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+      #photocap { position: absolute; right: 120px; top: 922px; width: 520px; font: 400 18px var(--sans); color: var(--mute); letter-spacing: 0.04em; }
+
+      /* KPI on glass */
+      .kpi { position: absolute; color: #13233f; }
+      .kpi .v { font: 600 150px/0.9 var(--serif); color: var(--navy); }
+      .kpi .l { font: 500 26px var(--sans); letter-spacing: 0.06em; color: var(--ink); margin-top: 8px; }
+      #stamp { position: absolute; left: 160px; top: 905px; padding: 12px 30px; border: 6px solid #b23a2e; color: #b23a2e; font: 600 64px var(--sans); letter-spacing: 0.12em; border-radius: 8px; }
+
+      /* soll / ist */
+      #si { position: absolute; left: 120px; top: 190px; width: 1680px; }
+      .row { display: flex; align-items: center; height: 92px; }
+      .row .k { width: 320px; font: 600 40px var(--serif); color: var(--navy); }
+      .row .bars { position: relative; flex: 1; height: 60px; }
+      .bar { position: absolute; left: 0; height: 24px; border-radius: 3px; transform-origin: 0% 50%; }
+      .bar.s { top: 4px; background: #c9c2b4; }
+      .bar.i { top: 34px; background: linear-gradient(90deg, var(--navy2), var(--navy)); }
+      .bar .tag { position: absolute; right: -150px; top: -3px; width: 140px; font: 500 20px var(--sans); color: var(--mute); }
+      #legend { position: absolute; right: 120px; top: 140px; display: flex; gap: 34px; font: 500 22px var(--sans); color: var(--mute); }
+      #legend i { display: inline-block; width: 40px; height: 14px; border-radius: 3px; margin-right: 10px; vertical-align: middle; }
+      #values { position: absolute; left: 0; width: 1920px; top: 880px; text-align: center; font: 600 54px var(--serif); color: var(--navy); }
+      #values span { display: inline-block; margin: 0 26px; }
+      #values span.dotsep { color: var(--gold); margin: 0; }
+
+      /* excel tiles */
+      #tiles .tile { position: absolute; width: 120px; height: 120px; background: #fff; border: 1px solid #d7dbe0; font: 400 22px var(--sans); color: #7b8592; display: flex; align-items: center; justify-content: center; }
+
+      /* verdict */
+      #vstamp { position: absolute; left: 120px; top: 800px; padding: 16px 40px; border: 8px solid #b23a2e; color: #b23a2e; font: 600 96px var(--sans); letter-spacing: 0.14em; border-radius: 10px; background: rgba(246,242,234,0.0); }
+      #vtxt { position: absolute; left: 110px; top: 120px; background: rgba(246,242,234,0.94); padding: 22px 34px; border-left: 6px solid var(--gold); }
+      #vtxt .eb { color: var(--gold); }
+      #vtxt .h { font-size: 64px; margin-top: 6px; }
+
+      /* end */
+      #end { background: radial-gradient(ellipse at 50% 40%, #223b63 0%, #13233f 60%, #0b1528 100%); }
+      #etxt { position: absolute; left: 0; width: 1920px; top: 280px; text-align: center; color: #f1e3c4; }
+      #etxt .n { font: 600 120px/1 var(--serif); }
+      #etxt .r { font: 500 28px var(--sans); letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-top: 22px; }
+      #etxt .c { font: 400 34px var(--sans); color: #e9d7b4; margin-top: 70px; line-height: 1.7; }
+      #etxt .q { font: 500 40px var(--serif); font-style: normal; color: #f1e3c4; margin-top: 50px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="64" data-width="1920" data-height="1080" data-fps="30">
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="64" data-volume="1"></audio>
+
+      <!-- 1 office clip (under the cover) 3.6 - 9.6 -->
+      <video id="v1" class="clip" src="assets/clips/v1.mp4" muted playsinline data-start="3.6" data-duration="6.0" data-media-start="0" data-track-index="1"></video>
+      <div id="o1" class="clip" data-start="3.6" data-duration="6.0" data-track-index="2">
+        <div id="lt"><div class="n">Philipp Buschmeier</div><div class="r">Controller · Erfurt</div></div>
+      </div>
+
+      <!-- 0 cover 0 - 5.2 -->
+      <div id="cov" class="clip" data-start="0" data-duration="5.2" data-track-index="3" style="background: transparent;">
+        <div id="book"><div id="coverbg"></div><div id="cframe"></div><div id="cframe2"></div>
+          <div id="ctxt"><div class="y">GESCHÄFTSBERICHT 2026</div><div class="t">Philipp<br />Buschmeier</div><div class="n">Controller aus Erfurt</div></div>
+          <div id="seal"></div>
+        </div>
+      </div>
+
+      <!-- chapter 1 card 9.6 - 12.2 -->
+      <div id="c1" class="clip chap" data-start="9.6" data-duration="2.6" data-track-index="4">
+        <div class="num">01</div><div class="lbl"><div class="eb">Kapitel 1</div><div class="h">Die Entwicklung</div></div>
+      </div>
+
+      <!-- timeline page 12.2 - 25.2 -->
+      <div id="p1" class="clip page" data-start="12.2" data-duration="13.0" data-track-index="5">
+        <div class="runhead"><span>Geschäftsbericht 2026 · Philipp Buschmeier</span><span>S. 03 · Werdegang</span></div>
+        <svg id="chart" width="1180" height="760" viewBox="0 0 1180 760">
+          <line x1="40" y1="700" x2="1160" y2="700" stroke="rgba(19,35,63,0.3)" stroke-width="2" />
+          <g stroke="rgba(19,35,63,0.08)" stroke-width="1"><line x1="40" y1="560" x2="1160" y2="560"/><line x1="40" y1="420" x2="1160" y2="420"/><line x1="40" y1="280" x2="1160" y2="280"/><line x1="40" y1="140" x2="1160" y2="140"/></g>
+          <path id="area" d="M80 660 L300 600 L520 470 L740 360 L960 230 L1120 120 L1120 700 L80 700 Z" fill="rgba(176,134,74,0.12)" />
+          <path id="curve" pathLength="1" d="M80 660 L300 600 L520 470 L740 360 L960 230 L1120 120" fill="none" stroke="#13233f" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" />
+          <path id="arrow" d="M1092 112 L1140 104 L1124 150" fill="none" stroke="#b0864a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div id="tlw" class="ab" style="left:120px; top:170px; width:1180px; height:760px;"></div>
+        <div id="photo"></div>
+        <div id="photocap">Abb. 1 · Standort Erfurt – Heimat, Ausbildung, Karriere</div>
+      </div>
+
+      <video id="v3a" class="clip" src="assets/clips/v3.mp4" muted playsinline data-start="12.2" data-duration="13.0" data-media-start="0" data-track-index="16" style="left:1290px; top:610px; width:500px; height:280px;"></video>
+
+      <!-- chapter 2 card 25.2 - 27.8 -->
+      <div id="c2" class="clip chap" data-start="25.2" data-duration="2.6" data-track-index="6">
+        <div class="num">02</div><div class="lbl"><div class="eb">Kapitel 2</div><div class="h">Die Kennzahlen</div></div>
+      </div>
+
+      <!-- KPIs on the glass wall 27.8 - 39.6 -->
+      <video id="v2" class="clip" src="assets/clips/v2.mp4" muted playsinline data-start="27.8" data-duration="11.8" data-media-start="0" data-track-index="7"></video>
+      <div id="o2" class="clip" data-start="27.8" data-duration="11.8" data-track-index="8">
+        <div class="kpi" id="kp1" style="left:150px; top:150px;"><div class="v"><span id="n1">−0</span> %</div><div class="l">Reporting-Zeit durch Automatisierung</div></div>
+        <div class="kpi" id="kp2" style="left:150px; top:420px;"><div class="v"><span id="n2">0</span> %</div><div class="l">Forecast-Genauigkeit</div></div>
+        <div class="kpi" id="kp3" style="left:150px; top:690px;"><div class="v"><span id="n3">0,0</span> Mio €</div><div class="l">Einsparpotenzial identifiziert</div></div>
+        <div id="stamp">AUFGEDECKT</div>
+      </div>
+
+      <!-- chapter 3 card 39.6 - 42.4 -->
+      <div id="c3" class="clip chap" data-start="39.6" data-duration="2.8" data-track-index="9">
+        <div class="num">03</div><div class="lbl"><div class="eb">Kapitel 3</div><div class="h">Soll / Ist</div></div>
+      </div>
+
+      <!-- soll / ist page 42.4 - 52.8 -->
+      <div id="p3" class="clip page" data-start="42.4" data-duration="10.4" data-track-index="10">
+        <div class="runhead"><span>Geschäftsbericht 2026 · Philipp Buschmeier</span><span>S. 07 · Soll-Ist-Vergleich</span></div>
+        <div id="legend"><span><i style="background:#c9c2b4"></i>Was Sie suchen</span><span><i style="background:#13233f"></i>Was ich mitbringe</span></div>
+        <div id="si"></div>
+        <div id="values"><span id="va1">Struktur</span><span class="dotsep">·</span><span id="va2">Klarheit</span><span class="dotsep">·</span><span id="va3">Gespür für Zahlen</span></div>
+      </div>
+
+      <!-- excel tiles flip to Erfurt 52.4 - 55.0 -->
+      <video id="v3b" class="clip" src="assets/clips/v3.mp4" muted playsinline data-start="52.4" data-duration="2.6" data-media-start="2.4" data-track-index="11"></video>
+      <div id="tiles" class="clip" data-start="52.4" data-duration="2.6" data-track-index="12"></div>
+
+      <!-- verdict 55.0 - 60.0 -->
+      <video id="v4" class="clip" src="assets/clips/v4.mp4" muted playsinline data-start="55.0" data-duration="5.0" data-media-start="0" data-track-index="13"></video>
+      <div id="o4" class="clip" data-start="55.0" data-duration="5.0" data-track-index="14">
+        <div id="vtxt"><div class="eb">Fazit des Prüfers</div><div class="h">Investitionsempfehlung</div></div>
+        <div id="vstamp">EINLADEN</div>
+      </div>
+
+      <!-- end 59.8 - 64 -->
+      <div id="end" class="clip" data-start="59.8" data-duration="4.2" data-track-index="15">
+        <div id="etxt"><div class="n">Philipp Buschmeier</div><div class="r">Controller · Erfurt</div>
+          <div class="c">philipp.buschmeier@beispiel.de &nbsp;·&nbsp; +49 361 000 000</div>
+          <div class="q">Ich freue mich auf Ihre Nachricht.</div></div>
+      </div>
+    </div>
+
+    <script>
+      // --- placeholder CV data (replace with real data) ---
+      const TL = [
+        { x: 80, y: 660, yr: "2013", d: "Abitur in Erfurt" },
+        { x: 300, y: 600, yr: "2016", d: "Ausbildung<br>Industriekaufmann" },
+        { x: 520, y: 470, yr: "2019", d: "B.A. BWL,<br>Schwerpunkt Controlling" },
+        { x: 740, y: 360, yr: "2019", d: "Junior Controller<br>Logistik" },
+        { x: 960, y: 230, yr: "2021", d: "Controller" },
+        { x: 1120, y: 120, yr: "2026", d: "Nächster Schritt:<br>Ihr Unternehmen" }
+      ];
+      const SI = [["SAP CO", 0.78, 0.86], ["Power BI", 0.7, 0.84], ["SQL", 0.6, 0.72], ["Excel / VBA", 0.82, 0.95], ["Kommunikation", 0.75, 0.88]];
+
+      const tlw = document.getElementById("tlw");
+      TL.forEach((p, i) => {
+        const d = document.createElement("div"); d.className = "dot"; d.id = "dt" + i; d.style.left = p.x + "px"; d.style.top = p.y + "px"; tlw.appendChild(d);
+        const l = document.createElement("div"); l.className = "tl-lbl"; l.id = "tlb" + i; l.style.left = p.x + "px"; l.style.top = (p.y - (i % 2 ? -36 : 132)) + "px";
+        l.innerHTML = "<div class=\"y\">" + p.yr + "</div><div class=\"d\">" + p.d + "</div>"; tlw.appendChild(l);
+      });
+      const si = document.getElementById("si");
+      SI.forEach((r, i) => {
+        const row = document.createElement("div"); row.className = "row";
+        row.innerHTML = "<div class=\"k\">" + r[0] + "</div><div class=\"bars\"><div class=\"bar s\" id=\"bs" + i + "\" style=\"width:" + Math.round(r[1] * 1100) + "px\"></div><div class=\"bar i\" id=\"bi" + i + "\" style=\"width:" + Math.round(r[2] * 1100) + "px\"><div class=\"tag\">" + (r[2] > r[1] ? "✓ übertroffen" : "✓ erfüllt") + "</div></div></div>";
+        si.appendChild(row);
+      });
+      const tiles = document.getElementById("tiles");
+      const cols = 16, rowsN = 9;
+      for (let r = 0; r < rowsN; r++) for (let c = 0; c < cols; c++) {
+        const t = document.createElement("div"); t.className = "tile"; t.id = "ti" + r + "_" + c; t.style.left = c * 120 + "px"; t.style.top = r * 120 + "px";
+        t.textContent = (r === 0 ? String.fromCharCode(65 + c) : (c === 0 ? r : ""));
+        tiles.appendChild(t);
+      }
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EX = "expo.out", E = "power3.out", BK = "back.out(1.6)";
+      const counter = (id, from, to, t, d, fmt) => { const o = { v: from }; tl.to(o, { v: to, duration: d, ease: "power2.out", onUpdate: () => (document.getElementById(id).textContent = fmt(o.v)) }, t); tl.call(() => (document.getElementById(id).textContent = fmt(from)), null, 0); };
+
+      // 0 cover (VO p1 @0.8): fades in, then opens like a book
+      tl.fromTo("#book", { scale: 1.08, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: E }, 0);
+      tl.fromTo("#ctxt .y", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 0.5);
+      tl.fromTo("#ctxt .t", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: EX }, 0.9);
+      tl.fromTo("#ctxt .n", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 2.0);
+      tl.fromTo("#seal", { scale: 0, rotation: 45 }, { scale: 1, rotation: 225, duration: 0.9, ease: BK }, 1.6);
+      tl.to("#book", { rotationY: -96, transformPerspective: 2600, duration: 1.4, ease: "power2.inOut" }, 3.6);
+
+      // 1 office
+      tl.fromTo("#v1", { scale: 1.06 }, { scale: 1, duration: 6, ease: "none" }, 3.6);
+      tl.fromTo("#lt", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: EX }, 5.4);
+      tl.to("#lt", { opacity: 0, x: -30, duration: 0.4, ease: "power2.in" }, 9.0);
+
+      // chapter cards (page turns in)
+      [["#c1", 9.6], ["#c2", 25.2], ["#c3", 39.6]].forEach(([id, t]) => {
+        tl.fromTo(id, { rotationY: 80, transformPerspective: 2600, transformOrigin: "100% 50%" }, { rotationY: 0, duration: 0.6, ease: "power2.out" }, t);
+        tl.fromTo(id + " .num", { scale: 1.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: EX }, t + 0.2);
+        tl.fromTo(id + " .lbl", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: EX }, t + 0.35);
+      });
+
+      // timeline page (VO p3 @12.3: Ausbildung 12.3, Studium 14.5, Seit fünf Jahren 18.5, Kurve 21.9)
+      tl.fromTo("#p1", { rotationY: 80, transformPerspective: 2600, transformOrigin: "100% 50%" }, { rotationY: 0, duration: 0.6, ease: "power2.out" }, 12.2);
+      tl.fromTo("#curve", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 10.5, ease: "power1.inOut" }, 12.6);
+      tl.fromTo("#area", { opacity: 0 }, { opacity: 1, duration: 9, ease: "none" }, 13.5);
+      [12.6, 13.3, 15.2, 18.5, 20.0, 22.3].forEach((t, i) => {
+        tl.fromTo("#dt" + i, { scale: 0 }, { scale: 1, duration: 0.5, ease: BK }, t);
+        tl.fromTo("#tlb" + i, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, t + 0.1);
+      });
+      tl.fromTo("#arrow", { opacity: 0, x: -20, y: 20 }, { opacity: 1, x: 0, y: 0, duration: 0.5, ease: BK }, 22.8);
+      tl.fromTo("#photo", { opacity: 0, rotation: 4, y: 30 }, { opacity: 1, rotation: 2, y: 0, duration: 0.8, ease: E }, 13.0);
+      tl.fromTo("#photocap", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 13.6);
+      tl.fromTo("#v3a", { opacity: 0, rotation: 4, y: 30 }, { opacity: 1, rotation: 2, y: 0, duration: 0.8, ease: E }, 13.0);
+
+      // KPIs (VO p5 @28.0: -40% 28.0, 97% 31.1, 1,2 Mio 34.4, aufgedeckt 38.4)
+      tl.fromTo("#kp1", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.6, ease: EX }, 28.0);
+      counter("n1", 0, 40, 28.05, 1.6, (v) => "−" + Math.round(v));
+      tl.fromTo("#kp2", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.6, ease: EX }, 31.1);
+      counter("n2", 0, 97, 31.15, 1.6, (v) => String(Math.round(v)));
+      tl.fromTo("#kp3", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.6, ease: EX }, 34.4);
+      counter("n3", 0, 1.2, 34.45, 1.8, (v) => v.toFixed(1).replace(".", ","));
+      tl.fromTo("#stamp", { scale: 2.6, rotation: -24, opacity: 0 }, { scale: 1, rotation: -8, opacity: 1, duration: 0.35, ease: "power4.in" }, 38.3);
+      tl.fromTo("#o2", { x: 0 }, { x: 6, duration: 0.05, ease: "steps(1)", yoyo: true, repeat: 3 }, 38.65);
+
+      // soll / ist (VO p6 @39.8 "Was Sie suchen" 43.0, "was ich mitbringe" 44.3; p7 @45.8 SAP 45.8, Power BI 46.9, SQL 48.0, values 49.0+)
+      tl.fromTo("#p3", { rotationY: 80, transformPerspective: 2600, transformOrigin: "100% 50%" }, { rotationY: 0, duration: 0.6, ease: "power2.out" }, 42.4);
+      tl.fromTo("#legend", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 42.8);
+      for (let i = 0; i < 5; i++) {
+        tl.fromTo("#bs" + i, { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: E }, 43.0 + i * 0.12);
+        tl.fromTo("#bi" + i, { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: EX }, 44.3 + i * 0.15);
+      }
+      [[0, 45.8], [1, 46.9], [2, 48.0]].forEach(([i, t]) => tl.fromTo("#bi" + i, { filter: "brightness(1)" }, { filter: "brightness(1.6)", duration: 0.25, yoyo: true, repeat: 1 }, t));
+      [["#va1", 50.0], ["#va2", 50.9], ["#va3", 51.9]].forEach(([s, t]) => tl.fromTo(s, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: EX }, t));
+      tl.set("#values .dotsep", { opacity: 0 }, 0); tl.to("#values .dotsep", { opacity: 1, duration: 0.3 }, 50.6);
+
+      // excel tiles flip to reveal Erfurt (52.4 - 55)
+      for (let r = 0; r < rowsN; r++) for (let c = 0; c < cols; c++) {
+        const t = 52.5 + (c + r) * 0.045;
+        tl.to("#ti" + r + "_" + c, { rotationY: 90, transformPerspective: 900, opacity: 0, duration: 0.35, ease: "power2.in" }, t);
+      }
+
+      // verdict (VO p8 @55.0: "Fazit des Prüfers" 55.0, "Investitionsempfehlung" 57.2, "Einladen" 58.95)
+      tl.fromTo("#vtxt", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: EX }, 55.2);
+      tl.fromTo("#vstamp", { scale: 3, rotation: -20, opacity: 0 }, { scale: 1, rotation: -8, opacity: 1, duration: 0.3, ease: "power4.in" }, 58.85);
+      tl.fromTo("#o4", { x: 0 }, { x: 8, duration: 0.05, ease: "steps(1)", yoyo: true, repeat: 3 }, 59.15);
+
+      // end (VO p9 @60.4)
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 59.8);
+      tl.fromTo("#etxt .n", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: EX }, 60.0);
+      tl.fromTo("#etxt .r", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 60.5);
+      tl.fromTo("#etxt .c", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 61.0);
+      tl.fromTo("#etxt .q", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 60.4);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
