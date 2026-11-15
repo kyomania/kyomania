@@ -37,6 +37,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
 #s2 .dot2 { position:absolute; border-radius:50%; background:var(--cream); }
 
 /* S7 dashboard */
+#s7 { transform-origin:0 0; }
 .tile { position:absolute; border-radius:22px; overflow:hidden; transform-origin:50% 50%; }
 .tile .lab { position:absolute; font-family:"JBM"; font-weight:700; font-size:13px; letter-spacing:.16em; text-transform:uppercase; }
 #t1 { left:40px; top:78px; width:520px; height:390px; background:var(--navy); color:var(--cream); }
@@ -67,7 +68,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="31" data-width="1920" data-height="1080" data-fps="60">
+<div id="root" data-composition-id="main" data-start="0" data-duration="33.4" data-width="1920" data-height="1080" data-fps="60">
   <canvas id="cv" width="1920" height="1080"></canvas>
 
   <div id="s2" class="scene">
@@ -82,7 +83,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
     <div class="tile" id="t1"><div class="lab" style="left:30px;top:28px">CDN · Edge</div><div class="lab" style="right:30px;top:28px">On</div><div id="tog"><i></i></div><div class="lab" style="left:30px;bottom:28px">fast.site</div></div>
     <div class="tile" id="t2"><div class="lab" style="left:60px;top:28px">Bilder · WebP</div><div class="lab" style="right:60px;top:28px">Dateigröße</div>
       <div id="num"><span style="margin-right:10px">−</span><span class="dcol"><span class="dstrip" id="dt"></span></span><span class="dcol"><span class="dstrip" id="do"></span></span><span class="pct">%</span></div>
-      <div class="rule"></div></div>
+      <div class="lab" id="t2sub" style="left:60px;bottom:60px">hero.jpg</div><div class="lab" id="t2sub2" style="right:60px;bottom:60px">100 %</div><div class="rule"></div></div>
     <div class="tile" id="t3"><div class="lab" style="left:60px;top:28px">Edge-Cache · Hits</div><div class="lab" style="right:60px;top:28px">Live</div>
       <div id="bars"></div><svg viewBox="0 0 1150 514"><polyline id="t3line" fill="none" stroke="#fbb419" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" /><circle id="t3dot" r="10" fill="#fbb419"/></svg></div>
     <div class="tile" id="t4"><div class="lab" style="left:40px;top:28px">Ladezeit</div><div class="lab" style="right:40px;top:28px">ease · out</div>
@@ -109,7 +110,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
 </div>
 
 <script>
-const W = 1920, H = 1080, FPS = 60, DUR = 31;
+const W = 1920, H = 1080, FPS = 60, DUR = 33.4;
 const C = { navy:'#101827', red:'#df482b', blue:'#3e71b6', green:'#0c9958', dgreen:'#047844', yel:'#fbb419', cream:'#efe9de', tint:'#f3c2b3' };
 const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 const $ = id => document.getElementById(id);
@@ -211,30 +212,29 @@ const aw = .4, al = 1.08;
 const plusV = [[-aw, -al], [aw, -al], [aw, -aw], [al, -aw], [al, aw], [aw, aw], [aw, al], [-aw, al], [-aw, aw], [-al, aw], [-al, -aw], [-aw, -aw]];
 const SHAPES = [regPoly(4, 1.2, Math.PI / 4), regPoly(3, 1.3, Math.PI / 2), plusV, star(5, 1.22, .58, -Math.PI / 2), regPoly(6, 1.08, 0), null].map(V => Array.from({ length: NS }, (_, i) => V ? rayPoly(i / NS * 2 * Math.PI, V) : .98));
 let MK = [];
-function setMK(D) { MK = []; for (let t = .36; t < D - .35; t += .44) MK.push(t); }
+function setMK(D) { MK = []; for (let t = .28; t < D - .2; t += .2) MK.push(t); }
 function morphAt(u) {
   if (u < MK[0]) return { r: SHAPES[0], rot: 0 };
   let k = 0, p = 0;
-  for (let i = 0; i < MK.length; i++) if (u >= MK[i]) { k = i; p = E.ioC(seg(u, MK[i], MK[i] + .17)); }
+  for (let i = 0; i < MK.length; i++) if (u >= MK[i]) { k = i; p = E.ioC(seg(u, MK[i], MK[i] + .1)); }
   const A = SHAPES[k % 6], B = SHAPES[(k + 1) % 6];
-  let rot = 0; for (let i = 0; i < MK.length; i++) rot += (Math.PI / 3) * E.outB(seg(u, MK[i], MK[i] + .24));
+  let rot = 0; for (let i = 0; i < MK.length; i++) rot += (Math.PI / 3) * E.outB(seg(u, MK[i], MK[i] + .16));
   return { r: A.map((a, i) => lerp(a, B[i], p)), rot: rot + u * .25 };
 }
 function shapePath(m, cx, cy, s) { ctx.beginPath(); let mx = 0, my = 0; for (let i = 0; i < NS; i++) { const a = i / NS * 2 * Math.PI + m.rot; const x = cx + Math.cos(a) * m.r[i] * s, y = cy + Math.sin(a) * m.r[i] * s; mx = Math.max(mx, Math.abs(x - cx)); my = Math.max(my, Math.abs(y - cy)); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); return [mx, my]; }
 function drawS3(u, D) {
   bg(C.cream); dotGrid('rgba(16,24,39,.16)');
-  const S = 215 * E.outB(seg(u, 0, .26));
+  const S = 215 * E.outB(seg(u, 0, .2));
   const cx = 960, cy = 545;
-  [[.1, 40, 34, C.yel], [.05, 22, 18, C.blue]].forEach(([lag, ox, oy, col]) => { const m = morphAt(u - lag); const s2 = 215 * E.outB(seg(u - lag, 0, .26)); shapePath(m, cx + ox, cy + oy, s2); ctx.fillStyle = col; ctx.fill(); });
+  [[.06, 40, 34, C.yel], [.03, 22, 18, C.blue]].forEach(([lag, ox, oy, col]) => { const m = morphAt(u - lag); const s2 = 215 * E.outB(seg(u - lag, 0, .2)); shapePath(m, cx + ox, cy + oy, s2); ctx.fillStyle = col; ctx.fill(); });
   const m = morphAt(u); const [mx, my] = shapePath(m, cx, cy, S); ctx.fillStyle = C.red; ctx.fill();
   const bp = E.outC(seg(u, .12, .3));
   if (bp > 0) {
     const bx = mx + 26, by = my + 26; ctx.globalAlpha = bp; ctx.strokeStyle = C.navy; ctx.lineWidth = 1.5; ctx.strokeRect(cx - bx, cy - by, bx * 2, by * 2);
     for (const [hx, hy] of [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [0, 1], [-1, 0], [1, 0]]) { ctx.fillStyle = C.cream; ctx.fillRect(cx + hx * bx - 6, cy + hy * by - 6, 12, 12); ctx.strokeRect(cx + hx * bx - 6, cy + hy * by - 6, 12, 12); }
     const k = MK.filter(x => u >= x + .08).length;
-    monoText(`fig.${String(k + 1).padStart(2, '0')} — ${k ? 'hero.webp' : 'hero.jpg'}`, cx - bx, cy - by - 14, C.navy, 13);
-    const pct = Math.round(35 * E.ioC(seg(u, .36, D - .5)));
-    monoText(`webp  ·  −${pct} %`, cx + bx, cy + by + 26, C.navy, 13, 'right');
+    monoText(`fig.${String(k + 1).padStart(2, '0')} — form`, cx - bx, cy - by - 14, C.navy, 13);
+    monoText(['square', 'triangle', 'plus', 'star', 'hexagon', 'circle'][(k) % 6] + `  ·  ${Math.round(u * 1000)} ms`, cx + bx, cy + by + 26, C.navy, 13, 'right');
     ctx.globalAlpha = 1;
   }
 }
@@ -244,6 +244,10 @@ const CUBES = [];
 for (const x of [-.5, .5]) for (const y of [-.5, .5]) for (const z of [-.5, .5]) CUBES.push({ c: [x, y, z] });
 CUBES.forEach((cb, i) => { const r = rng(11 + i); cb.spin = [r() * 2 - 1, r() * 2 - 1, r() * 2 - 1]; cb.d = .8 + r() * .5; });
 const DIRCOL = { '2-1': C.red, '1-1': C.cream, '01': C.tint, '0-1': C.yel, '11': C.yel, '21': C.green };
+const BIG = { '2-1': { r: [1, 0, 0], d: [0, 1, 0], cols: [C.navy, C.red] }, '21': { r: [-1, 0, 0], d: [0, 1, 0], cols: [C.yel, C.navy] }, '01': { r: [0, 0, 1], d: [0, 1, 0], cols: [C.cream, C.yel] }, '0-1': { r: [0, 0, -1], d: [0, 1, 0], cols: [C.green, C.cream] }, '1-1': { r: [1, 0, 0], d: [0, 0, -1], cols: [C.red, C.navy] }, '11': { r: [1, 0, 0], d: [0, 0, 1], cols: [C.tint, C.green] } };
+const LAB = ['FA', 'ST', 'SI', 'TE'];
+const txtCol = c => (c === C.navy || c === C.red || c === C.green) ? C.cream : C.navy;
+const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const FRONT = { '-0.5,-0.5': ['FA', C.navy, C.cream, 0], '0.5,-0.5': ['ST', C.navy, C.cream, 1], '-0.5,0.5': ['SI', C.red, C.cream, 2], '0.5,0.5': ['TE', C.red, C.cream, 3] };
 function rY(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0] * c + p[2] * s, p[1], -p[0] * s + p[2] * c]; }
 function rX(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0], p[1] * c - p[2] * s, p[1] * s + p[2] * c]; }
@@ -269,10 +273,10 @@ function drawS4(u, D) {
     const top = cb.c[1] < 0, twist = top ? tw * Math.PI / 2 : -tw2 * Math.PI / 2;
     for (let ax = 0; ax < 3; ax++) for (const sg of [-1, 1]) {
       const outward = Math.sign(cb.c[ax]) === sg;
-      const verts = [];
-      const u1 = ax === 2 ? 0 : (ax + 1) % 3, u2 = ax === 2 ? 1 : (ax + 2) % 3;
-      for (const [a, b] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { const v = [0, 0, 0]; v[ax] = sg * h; v[u1] = a * h; v[u2] = b * h; verts.push(v); }
       const n = [0, 0, 0]; n[ax] = sg;
+      const bf = BIG[`${ax}${sg}`];
+      let R = bf.r, Dd = bf.d;
+      const verts = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => [0, 1, 2].map(k => (n[k] + a * R[k] + b * Dd[k]) * h));
       const tf = p => {
         let q = rX(rY(rZ(p, cb.spin[2] * spinE), cb.spin[1] * spinE), cb.spin[0] * spinE);
         q = [q[0] + cb.c[0], q[1] + cb.c[1], q[2] + cb.c[2]];
@@ -287,9 +291,9 @@ function drawS4(u, D) {
       const F = 6;
       if (nr[0] * fc[0] + nr[1] * fc[1] + nr[2] * (fc[2] + F) >= 0) continue;
       if (tv.some(v => F + v[2] < 2)) continue;
-      const isFront = outward && ax === 2 && sg < 0 && fr;
-      const col = !outward ? C.navy : isFront ? fr[1] : DIRCOL[`${ax}${sg}`];
-      faces.push({ z: fc[2], pts: tv.map(v => { const k = F / (F + v[2]); return [960 + v[0] * sc * k, 545 + v[1] * sc * k]; }), col, lab: isFront ? fr : null });
+      let col = C.navy, lab = null;
+      if (outward) { const row = dot3(cb.c, Dd) > 0 ? 1 : 0, colm = dot3(cb.c, R) > 0 ? 1 : 0; col = bf.cols[row]; lab = [LAB[colm + 2 * row], col, txtCol(col)]; }
+      faces.push({ z: fc[2], pts: tv.map(v => { const k = F / (F + v[2]); return [960 + v[0] * sc * k, 545 + v[1] * sc * k]; }), col, lab });
     }
   }
   faces.sort((a, b) => b.z - a.z);
@@ -411,9 +415,11 @@ function drawS7(u) {
   // toggle tile
   const tp = E.outB(seg(v, .12, .3)); $('tog').querySelector('i').style.left = lerp(12, 162, tp) + 'px'; $('tog').style.background = mixCol(C.cream.replace('#', '#'), C.green, seg(v, .12, .2)).replace('rgb', 'rgb');
   // number roll
-  const val = 35 * E.outC(seg(v, .08, .62));
+  const val = 35 * E.outC(seg(u, 3.75, 6.75));
   $('do').style.transform = `translateY(${-val * 270}px)`; $('dt').style.transform = `translateY(${-(Math.floor(val / 10) + E.ioC((val % 10) > 9 ? (val % 10) - 9 : 0)) * 270}px)`;
-  document.querySelector('#t2 .rule').style.transform = `scaleX(${E.outX(seg(v, .2, .6))})`;
+  document.querySelector('#t2 .rule').style.transform = `scaleX(${E.outX(seg(v, .2, .6)) * (1 - val / 100)})`;
+  $('t2sub').textContent = u > 4.6 ? 'hero.webp' : 'hero.jpg'; $('t2sub2').textContent = `${Math.round(100 - val)} %`;
+  { const k = E.ioX(seg(u, 3.0, 3.55)); const z = lerp(1, 1.42, k), zx = lerp(960, 1230, k), zy = lerp(540, 273, k); $('s7').style.transform = `translate(960px,540px) scale(${z}) translate(${-zx}px,${-zy}px)`; }
   // bars
   document.querySelectorAll('#bars b').forEach((b, i) => { b.style.transform = `scaleY(${E.outB(seg(v, .1 + i * .025, .3 + i * .025))})`; });
   const hs = [.22, .3, .26, .4, .36, .5, .46, .62, .58, .74, .82, .97];
@@ -485,7 +491,7 @@ function layoutS9() {
   const top = 132; f1.style.top = top + 'px'; f2.style.top = (top + .88 * f) + 'px';
   const d = .2 * f; const dsp = f2.querySelector('.dsp'); dsp.style.width = (d * 1.5) + 'px'; dsp.style.height = '1px';
   const serif = f2.querySelector('.serif'); serif.style.fontSize = (1.22 * f) + 'px'; serif.style.lineHeight = '0';
-  { const sr = serif.getBoundingClientRect(); const over = sr.right - 1880; if (over > 0) serif.style.fontSize = (1.22 * f * (sr.width - over) / sr.width) + 'px'; }
+  { const sr = serif.getBoundingClientRect(); const over = sr.right + .14 * 1.22 * f - 1878; if (over > 0) serif.style.fontSize = (1.22 * f * (sr.width - over) / sr.width) + 'px'; }
   const r = dsp.getBoundingClientRect();
   const base = top + .88 * f + .8 * f * .98;
   S9 = { f, d, dot: [r.left + d * .2, base - d] };
@@ -504,18 +510,18 @@ function drawS9(u) {
   else { const p = seg(u, .5, .86); const e = E.ioC(p); x = lerp(960, S9.dot[0] + d / 2, e); y = lerp(545, S9.dot[1] + d / 2, e) - 380 * 4 * p * (1 - p); s = lerp(2.4, 1, E.ioC(p)); const land = u - .86; if (land > 0 && land < .14) { const k = Math.sin(land / .14 * Math.PI) * Math.exp(-land * 10); sx = 1 + .45 * k; sy = 1 - .4 * k; } }
   ball.style.transform = `translate(${x - d / 2}px, ${y - d / 2 + (1 - sy) * d * s / 2}px) scale(${s * sx}, ${s * sy})`;
   const serif = document.querySelector('#s9 .serif'); const sp = E.outX(seg(u, .9, 1.3));
-  serif.style.clipPath = `inset(-600px ${(1 - sp) * 100}% -600px 0)`; serif.style.transform = `translateX(${(1 - sp) * -60}px)`;
+  serif.style.clipPath = sp >= 1 ? 'none' : `inset(-600px ${(1 - sp) * 100}% -600px -200px)`; serif.style.transform = `translateX(${(1 - sp) * -60}px)`;
   const ip = E.outB(seg(u, 1.12, 1.4)); $('ficon').style.transform = `translateY(${(1 - ip) * 160}px) scale(${ip})`; $('ficon').style.opacity = u < 1.12 ? 0 : 1;
   $('frule').style.transform = `scaleX(${E.outX(seg(u, 1.2, 1.6))})`;
   document.querySelectorAll('#frow .fr').forEach((e, i) => { const p = E.outC(seg(u, 1.38 + i * .08, 1.7 + i * .08)); e.style.opacity = p; e.style.transform = `translateY(${(1 - p) * 24}px)`; });
 }
 
 /* ================= TIMELINE ================= */
-const DURS = [1.8, 1.6, 5.2, 3.2, 3.4, 3.0, 3.0, 3.0, 2.6, 4.2];
+const DURS = [1.8, 1.6, 2.0, 3.2, 3.4, 3.0, 3.0, 8.6, 2.6, 4.2];
 const SC0 = [
   { draw: drawS1, hud: 'light', lab: '01  Speed' },
   { draw: drawS2, dom: 's2', hud: 'dark', lab: '02  Manifest' },
-  { draw: drawS3, hud: 'dark', lab: '03  Optimize' },
+  { draw: drawS3, hud: 'dark', lab: '03  Form' },
   { draw: drawS4, hud: 'light', lab: '04  Edge Cache' },
   { draw: drawS5, hud: 'light', lab: '05  Global CDN' },
   { draw: drawS6, hud: 'light', lab: '06  Flow' },
