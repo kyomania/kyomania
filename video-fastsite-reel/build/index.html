@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="assets/vendor/gsap.min.js"></script>
+<style>
+@font-face { font-family: "Archivo X"; font-weight: 100 900; font-stretch: 62% 125%; src: url(assets/fonts/archivo-latin-wdth-normal.woff2) format("woff2-variations"); }
+@font-face { font-family: "Serif I"; font-style: italic; font-weight: 400; src: url(assets/fonts/instrument-serif-latin-400-italic.woff2) format("woff2"); }
+@font-face { font-family: "JBM"; font-weight: 500; src: url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "JBM"; font-weight: 700; src: url(assets/fonts/jetbrains-mono-latin-700-normal.woff2) format("woff2"); }
+:root { --navy:#101827; --red:#df482b; --blue:#3e71b6; --green:#0c9958; --yel:#fbb419; --cream:#efe9de; --tint:#f3c2b3; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy); }
+#root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--navy); }
+#cv { position:absolute; inset:0; }
+.scene { position:absolute; inset:0; display:none; }
+.big { position:absolute; left:40px; font-family:"Archivo X"; font-weight:900; font-stretch:100%; line-height:.8; letter-spacing:-0.035em; white-space:nowrap; text-transform:uppercase; color:var(--navy); }
+.ch { display:inline-block; will-change:transform; }
+.mono { font-family:"JBM"; font-weight:500; text-transform:uppercase; letter-spacing:.14em; }
+
+/* HUD */
+#hud { position:absolute; inset:0; z-index:50; pointer-events:none; font-family:"JBM"; font-weight:700; font-size:14px; letter-spacing:.16em; text-transform:uppercase; color:var(--cream); }
+#hud > * { position:absolute; }
+#h-tl { left:38px; top:32px; }
+#h-tr { right:38px; top:30px; display:flex; align-items:center; gap:12px; }
+#h-tr svg { width:22px; height:22px; }
+#h-bl { left:38px; bottom:32px; }
+#h-br { right:38px; bottom:26px; display:flex; align-items:center; gap:16px; }
+#h-spk { width:30px; height:30px; border-radius:50%; background:currentColor; position:relative; }
+#h-spk::after { content:""; position:absolute; left:11px; top:9px; border-left:10px solid var(--navy); border-top:6px solid transparent; border-bottom:6px solid transparent; }
+#hud.dark { color:var(--navy); }
+#hud.dark #h-spk::after { border-left-color:var(--cream); }
+
+/* S2 */
+#s2 .l1 .w2 { color:var(--cream); }
+#s2 .dot2 { position:absolute; border-radius:50%; background:var(--cream); }
+
+/* S7 dashboard */
+.tile { position:absolute; border-radius:22px; overflow:hidden; transform-origin:50% 50%; }
+.tile .lab { position:absolute; font-family:"JBM"; font-weight:700; font-size:13px; letter-spacing:.16em; text-transform:uppercase; }
+#t1 { left:40px; top:78px; width:520px; height:390px; background:var(--navy); color:var(--cream); }
+#t2 { left:580px; top:78px; width:1300px; height:390px; background:var(--red); color:var(--cream); }
+#t3 { left:40px; top:488px; width:1150px; height:514px; background:var(--blue); color:var(--cream); }
+#t4 { left:1210px; top:488px; width:670px; height:514px; background:var(--tint); color:var(--navy); }
+#tog { position:absolute; left:110px; top:130px; width:300px; height:150px; border-radius:75px; background:var(--green); }
+#tog i { position:absolute; left:162px; top:12px; width:126px; height:126px; border-radius:50%; background:var(--cream); }
+#num { position:absolute; left:60px; top:70px; height:270px; display:flex; align-items:flex-end; font-family:"Archivo X"; font-weight:900; font-stretch:125%; font-size:300px; line-height:270px; letter-spacing:-0.04em; color:var(--cream); }
+.dcol { position:relative; height:270px; overflow:hidden; display:inline-block; }
+.dstrip { display:flex; flex-direction:column; }
+.dstrip span { height:270px; line-height:270px; display:block; text-align:center; }
+#num .pct { font-size:120px; line-height:120px; color:var(--navy); margin-left:18px; padding-bottom:28px; }
+#t2 .rule { position:absolute; left:60px; right:60px; bottom:40px; height:4px; background:var(--navy); transform-origin:0 50%; }
+#bars { position:absolute; left:60px; right:60px; bottom:50px; height:330px; display:flex; align-items:flex-end; gap:22px; }
+#bars b { flex:1; background:var(--cream); border-radius:6px 6px 0 0; transform-origin:50% 100%; }
+#bars b:last-child { background:var(--yel); }
+#t3 svg, #t4 svg { position:absolute; inset:0; }
+
+/* S9 */
+#s9 .f2 .serif { font-family:"Serif I"; font-style:italic; font-weight:400; font-stretch:100%; text-transform:none; letter-spacing:-0.01em; color:var(--red); display:inline-block; }
+#fball { position:absolute; border-radius:50%; background:var(--red); left:0; top:0; }
+#ficon { position:absolute; }
+#frule { position:absolute; left:40px; right:40px; top:920px; height:3px; background:var(--navy); transform-origin:0 50%; }
+#frow { position:absolute; left:40px; right:40px; top:942px; display:flex; justify-content:space-between; align-items:center; font-family:"JBM"; font-weight:700; font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--navy); }
+#frow img { height:62px; display:block; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1920" data-height="1080" data-fps="60">
+  <canvas id="cv" width="1920" height="1080"></canvas>
+
+  <div id="s2" class="scene">
+    <div class="big l1"><span class="ch w1">MAKE</span> <span class="ch w2">IT</span></div>
+    <div class="big l2"><span class="ch">F</span><span class="ch">A</span><span class="ch">S</span><span class="ch">T</span></div>
+    <div class="dot2"></div>
+  </div>
+
+  <div id="s7" class="scene">
+    <div class="tile" id="t1"><div class="lab" style="left:30px;top:28px">CDN · Edge</div><div class="lab" style="right:30px;top:28px">On</div><div id="tog"><i></i></div><div class="lab" style="left:30px;bottom:28px">fast.site</div></div>
+    <div class="tile" id="t2"><div class="lab" style="left:60px;top:28px">Bilder · WebP</div><div class="lab" style="right:60px;top:28px">Dateigröße</div>
+      <div id="num"><span style="margin-right:10px">−</span><span class="dcol"><span class="dstrip" id="dt"></span></span><span class="dcol"><span class="dstrip" id="do"></span></span><span class="pct">%</span></div>
+      <div class="rule"></div></div>
+    <div class="tile" id="t3"><div class="lab" style="left:60px;top:28px">Edge-Cache · Hits</div><div class="lab" style="right:60px;top:28px">Live</div>
+      <div id="bars"></div><svg viewBox="0 0 1150 514"><polyline id="t3line" fill="none" stroke="#fbb419" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" /><circle id="t3dot" r="10" fill="#fbb419"/></svg></div>
+    <div class="tile" id="t4"><div class="lab" style="left:40px;top:28px">Ladezeit</div><div class="lab" style="right:40px;top:28px">ease · out</div>
+      <svg viewBox="0 0 670 514"><g stroke="#101827" stroke-opacity=".18" stroke-width="2"><line x1="40" y1="140" x2="630" y2="140"/><line x1="40" y1="240" x2="630" y2="240"/><line x1="40" y1="340" x2="630" y2="340"/><line x1="40" y1="440" x2="630" y2="440"/><line x1="190" y1="90" x2="190" y2="470"/><line x1="340" y1="90" x2="340" y2="470"/><line x1="490" y1="90" x2="490" y2="470"/></g>
+      <path id="t4curve" d="M60 110 C 170 440, 260 450, 610 455" fill="none" stroke="#101827" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="60" cy="110" r="11" fill="#101827"/><circle id="t4dot" r="13" fill="#df482b"/></svg></div>
+  </div>
+
+  <div id="s9" class="scene">
+    <div class="big f1" id="f1"></div>
+    <div class="big f2" id="f2"></div>
+    <img id="ficon" src="assets/icon.svg" style="display:none" />
+    <div id="fball"></div>
+    <div id="frule"></div>
+    <div id="frow"><span class="fr">CDN · Edge-Caching · WebP −35 % · DDoS-Schutz</span><span class="fr">Hosting bleibt · 7 Tage kostenlos testen</span><span class="fr"><img src="assets/logo.svg" /></span></div>
+  </div>
+
+  <div id="hud">
+    <div id="h-tl">fast.site — Speed Reel</div>
+    <div id="h-tr"><span>©2026</span><svg viewBox="0 0 100 100"><path d="M14 46 L50 12 L86 46" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 84 L50 50 L86 84" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div id="h-bl">01  Speed</div>
+    <div id="h-br"><span id="h-tc">00:00:00</span><div id="h-spk"></div></div>
+  </div>
+</div>
+
+<script>
+const W = 1920, H = 1080, FPS = 60, DUR = 15;
+const C = { navy:'#101827', red:'#df482b', blue:'#3e71b6', green:'#0c9958', dgreen:'#047844', yel:'#fbb419', cream:'#efe9de', tint:'#f3c2b3' };
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (t, a, b) => cl((t - a) / (b - a));
+const lerp = (a, b, s) => a + (b - a) * s;
+const E = {
+  inC: x => x * x * x, outC: x => 1 - Math.pow(1 - x, 3),
+  ioC: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  outX: x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x), inX: x => x <= 0 ? 0 : Math.pow(2, 10 * x - 10),
+  ioX: x => x <= 0 ? 0 : x >= 1 ? 1 : x < .5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2, -20 * x + 10)) / 2,
+  outB: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+  outBounce: x => { const n = 7.5625, d = 2.75; if (x < 1 / d) return n * x * x; if (x < 2 / d) return n * (x -= 1.5 / d) * x + .75; if (x < 2.5 / d) return n * (x -= 2.25 / d) * x + .9375; return n * (x -= 2.625 / d) * x + .984375; },
+};
+function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+function circle(x, y, r, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, Math.max(0, r), 0, Math.PI * 2); ctx.fill(); }
+function bg(col) { ctx.fillStyle = col; ctx.fillRect(0, 0, W, H); }
+function dotGrid(col, sp = 48, r = 1.6) { ctx.fillStyle = col; for (let y = sp / 2; y < H; y += sp) for (let x = sp / 2; x < W; x += sp) { ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); } }
+function monoText(s, x, y, col, size = 13, align = 'left') { ctx.font = `700 ${size}px JBM`; ctx.fillStyle = col; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.save(); ctx.letterSpacing = '2px'; ctx.fillText(s.toUpperCase(), x, y); ctx.restore(); }
+
+/* ================= S1 SPEED ================= */
+const G1 = 760, BR = 36;
+const hits1 = [0.62, 1.08, 1.38];
+function ball1(u) {
+  if (u < 0.15) return null;
+  if (u < 0.62) { const s = (u - .15) / .47; return { x: lerp(840, 900, s), y: lerp(-90, G1 - BR, s * s), vy: s }; }
+  if (u < 1.08) { const s = (u - .62) / .46; return { x: lerp(900, 1090, s), y: G1 - BR - 360 * 4 * s * (1 - s), vy: Math.abs(1 - 2 * s) }; }
+  if (u < 1.38) { const s = (u - 1.08) / .30; return { x: lerp(1090, 1200, s), y: G1 - BR - 160 * 4 * s * (1 - s), vy: Math.abs(1 - 2 * s) * .7 }; }
+  if (u < 1.47) return { x: 1200, y: G1 - BR, vy: 0, wind: seg(u, 1.38, 1.47) };
+  const s = seg(u, 1.47, 1.64); return { x: lerp(1200, 2500, E.inC(s)), y: G1 - BR, vy: 0, go: s };
+}
+function drawS1(u) {
+  bg(C.navy);
+  const b = ball1(u);
+  // ground line with dip
+  let L = 820 * E.outX(seg(u, 0.0, 0.42));
+  let x0 = 960 - L, x1 = 960 + L;
+  const out = E.inX(seg(u, 1.5, 1.8)); x0 = lerp(x0, 2000, out);
+  let dip = 0, dx = b ? b.x : 960;
+  for (const h of hits1) { const d = u - h; if (d > -0.05 && d < 0.45) { const k = d < 0 ? (1 + d / 0.05) : Math.exp(-d * 9) * Math.cos(d * 38); dip += 22 * k; } }
+  if (b && b.wind !== undefined) dip += 26 * E.outC(b.wind);
+  ctx.strokeStyle = C.cream; ctx.lineWidth = 3; ctx.beginPath();
+  for (let i = 0; i <= 240; i++) { const x = lerp(x0, x1, i / 240); const y = G1 + dip * Math.exp(-Math.pow((x - dx) / 110, 2)); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+  if (x1 > x0) ctx.stroke();
+  // dotted trail
+  for (let k = 1; k <= 46; k++) { const tt = u - k * 0.011; if (tt < 0.15 || tt > 1.46) continue; const p = ball1(tt); if (!p) continue; ctx.globalAlpha = (1 - k / 46) * .85; circle(p.x, p.y, 2.4, C.cream); }
+  ctx.globalAlpha = 1;
+  // impact rays
+  for (const h of hits1) { const d = u - h; if (d < 0 || d > 0.32) continue; const p = d / 0.32; const bx = ball1(h).x;
+    ctx.strokeStyle = C.cream; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.globalAlpha = 1 - p;
+    for (let i = 0; i < 9; i++) { const a = Math.PI + (i + 1) / 10 * Math.PI; const r0 = 44 + 70 * E.outC(p), r1 = r0 + 34 * (1 - p); ctx.beginPath(); ctx.moveTo(bx + Math.cos(a) * r0, G1 + 4 + Math.sin(a) * r0 * .7); ctx.lineTo(bx + Math.cos(a) * r1, G1 + 4 + Math.sin(a) * r1 * .7); ctx.stroke(); }
+    ctx.globalAlpha = 1; }
+  if (!b) return;
+  let sx = 1, sy = 1;
+  for (const h of hits1) { const d = Math.abs(u - h); if (d < 0.06) { const k = 1 - d / 0.06; sx = 1 + .5 * k; sy = 1 - .42 * k; } }
+  if (b.wind !== undefined) { sx = 1 + .55 * E.outC(b.wind); sy = 1 - .45 * E.outC(b.wind); }
+  if (b.go !== undefined) { sx = 1 + 2.6 * E.outC(b.go * 2); sy = .62; }
+  if (sx === 1 && b.vy) { sy = 1 + .22 * b.vy; sx = 1 - .1 * b.vy; }
+  if (b.go !== undefined) { // speed lines
+    ctx.strokeStyle = C.cream; ctx.lineWidth = 3; ctx.globalAlpha = .8;
+    for (let i = 0; i < 3; i++) { const y = G1 - BR - 30 + i * 30; ctx.beginPath(); ctx.moveTo(b.x - 900 * b.go - 200, y); ctx.lineTo(b.x - 120, y); ctx.stroke(); }
+    ctx.globalAlpha = 1; }
+  const cy = b.y + BR * (1 - sy);
+  ctx.fillStyle = C.red; ctx.beginPath(); ctx.ellipse(b.x, cy, BR * sx, BR * sy, 0, 0, 6.283); ctx.fill();
+}
+
+/* ================= S2 MAKE IT FAST. ================= */
+let S2 = {};
+function layoutS2() {
+  const l1 = document.querySelector('#s2 .l1'), l2 = document.querySelector('#s2 .l2');
+  l1.style.fontSize = '100px'; const w = l1.getBoundingClientRect().width; const f = 100 * 1840 / w;
+  l1.style.fontSize = l2.style.fontSize = f + 'px';
+  const top = (H - 1.66 * f) / 2 + 10;
+  l1.style.top = top + 'px'; l2.style.top = (top + .86 * f) + 'px';
+  const w2 = l2.getBoundingClientRect().width; const d = .2 * f;
+  l2.style.left = (1880 - w2 - d * 1.35) + 'px';
+  const dot = document.querySelector('#s2 .dot2'); dot.style.width = dot.style.height = d + 'px';
+  S2 = { f, d, dotX: 1880 - d, dotY: top + .86 * f + .8 * f * .98 - d };
+  dot.style.left = S2.dotX + 'px'; dot.style.top = S2.dotY + 'px';
+}
+function drawS2(u) {
+  bg(C.red);
+  const w1 = document.querySelector('#s2 .w1'), w2 = document.querySelector('#s2 .w2');
+  const p1 = E.outX(seg(u, 0, .2)); w1.style.transform = `translateX(${(1 - p1) * -160}px) scale(${lerp(1.18, 1, p1)})`; w1.style.opacity = u < 0 ? 0 : 1;
+  const p2 = E.outX(seg(u, .2, .4)); w2.style.transform = `translateX(${(1 - p2) * 700}px)`; w2.style.visibility = u < .2 ? 'hidden' : 'visible';
+  document.querySelectorAll('#s2 .l2 .ch').forEach((c, i) => { const a = .42 + i * .045; const p = E.outX(seg(u, a, a + .3)); c.style.transform = `translateX(${(1 - p) * 1500}px) skewX(${(1 - p) * -18}deg)`; c.style.visibility = u < a ? 'hidden' : 'visible'; });
+  const dot = document.querySelector('#s2 .dot2'); const pd = seg(u, .78, 1.12);
+  dot.style.visibility = u < .78 ? 'hidden' : 'visible';
+  dot.style.transform = `translateY(${-(1 - E.outBounce(pd)) * 900}px)`;
+  const blk = document.querySelector('#s2'); blk.style.transform = `scale(${1 + .025 * u})`;
+}
+
+/* ================= S3 OPTIMIZE (morph) ================= */
+const NS = 240;
+function rayPoly(th, V) { const dx = Math.cos(th), dy = Math.sin(th); let best = 1e9; for (let i = 0; i < V.length; i++) { const [ax, ay] = V[i], [bx, by] = V[(i + 1) % V.length]; const ex = bx - ax, ey = by - ay; const den = dx * ey - dy * ex; if (Math.abs(den) < 1e-9) continue; const t = (ax * ey - ay * ex) / den; const s = (ax * dy - ay * dx) / den; if (t > 0 && s >= -1e-6 && s <= 1 + 1e-6) best = Math.min(best, t); } return best; }
+function regPoly(n, r, rot) { return Array.from({ length: n }, (_, i) => [Math.cos(rot + i * 2 * Math.PI / n) * r, Math.sin(rot + i * 2 * Math.PI / n) * r]); }
+function star(n, ro, ri, rot) { return Array.from({ length: 2 * n }, (_, i) => { const r = i % 2 ? ri : ro; const a = rot + i * Math.PI / n; return [Math.cos(a) * r, Math.sin(a) * r]; }); }
+const aw = .4, al = 1.08;
+const plusV = [[-aw, -al], [aw, -al], [aw, -aw], [al, -aw], [al, aw], [aw, aw], [aw, al], [-aw, al], [-aw, aw], [-al, aw], [-al, -aw], [-aw, -aw]];
+const SHAPES = [regPoly(4, 1.2, Math.PI / 4), regPoly(3, 1.3, Math.PI / 2), plusV, star(5, 1.22, .58, -Math.PI / 2), regPoly(6, 1.08, 0), null].map(V => Array.from({ length: NS }, (_, i) => V ? rayPoly(i / NS * 2 * Math.PI, V) : .98));
+const MK = [.36, .6, .84, 1.08, 1.3];
+function morphAt(u) {
+  let k = 0, p = 0;
+  for (let i = 0; i < MK.length; i++) { if (u >= MK[i]) { k = i; p = E.ioC(seg(u, MK[i], MK[i] + .17)); } }
+  if (u < MK[0]) return { r: SHAPES[0], rot: 0 };
+  const A = SHAPES[k], B = SHAPES[k + 1];
+  let rot = 0; for (let i = 0; i < MK.length; i++) rot += (Math.PI / 3) * E.outB(seg(u, MK[i], MK[i] + .24));
+  return { r: A.map((a, i) => lerp(a, B[i], p)), rot };
+}
+function shapePath(m, cx, cy, s) { ctx.beginPath(); let mx = 0, my = 0; for (let i = 0; i < NS; i++) { const a = i / NS * 2 * Math.PI + m.rot; const x = cx + Math.cos(a) * m.r[i] * s, y = cy + Math.sin(a) * m.r[i] * s; mx = Math.max(mx, Math.abs(x - cx)); my = Math.max(my, Math.abs(y - cy)); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); return [mx, my]; }
+function drawS3(u) {
+  bg(C.cream); dotGrid('rgba(16,24,39,.16)');
+  const S = 215 * E.outB(seg(u, 0, .26)) * (1 - E.inX(seg(u, 1.4, 1.55)) * .0);
+  const cx = 960, cy = 545;
+  [[.1, 40, 34, C.yel], [.05, 22, 18, C.blue]].forEach(([lag, ox, oy, col]) => { const m = morphAt(u - lag); const s2 = 215 * E.outB(seg(u - lag, 0, .26)); shapePath(m, cx + ox, cy + oy, s2); ctx.fillStyle = col; ctx.fill(); });
+  const m = morphAt(u); const [mx, my] = shapePath(m, cx, cy, S); ctx.fillStyle = C.red; ctx.fill();
+  // bounding box
+  const bp = E.outC(seg(u, .12, .3));
+  if (bp > 0) {
+    const bx = mx + 26, by = my + 26; ctx.globalAlpha = bp; ctx.strokeStyle = C.navy; ctx.lineWidth = 1.5; ctx.strokeRect(cx - bx, cy - by, bx * 2, by * 2);
+    for (const [hx, hy] of [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [0, 1], [-1, 0], [1, 0]]) { ctx.fillStyle = C.cream; ctx.fillRect(cx + hx * bx - 6, cy + hy * by - 6, 12, 12); ctx.strokeRect(cx + hx * bx - 6, cy + hy * by - 6, 12, 12); }
+    const names = ['hero.jpg', 'hero.webp', 'hero.webp', 'hero.webp', 'hero.webp', 'hero.webp'];
+    const k = MK.filter(x => u >= x + .08).length;
+    monoText(`fig.0${k + 1} — ${names[k]}`, cx - bx, cy - by - 14, C.navy, 13);
+    const pct = Math.round(35 * E.ioC(seg(u, .36, 1.3)));
+    monoText(`webp  ·  −${pct} %`, cx + bx, cy + by + 26, C.navy, 13, 'right');
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* ================= S4 EDGE CACHE (3D) ================= */
+const PAL = [C.cream, C.red, C.tint, C.yel, C.green, C.cream, C.red];
+const R4 = rng(42);
+const CUBES = [];
+for (const x of [-.5, .5]) for (const y of [-.5, .5]) for (const z of [-.5, .5]) CUBES.push({ c: [x, y, z], col: Array.from({ length: 6 }, () => PAL[Math.floor(R4() * PAL.length)]), spin: [R4() * 2 - 1, R4() * 2 - 1, R4() * 2 - 1], d: .8 + R4() * .6 });
+const DIRCOL = { '2-1': C.red, '1-1': C.cream, '01': C.tint, '0-1': C.tint, '11': C.yel, '21': C.green };
+function rY(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0] * c + p[2] * s, p[1], -p[0] * s + p[2] * c]; }
+function rX(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0], p[1] * c - p[2] * s, p[1] * s + p[2] * c]; }
+function rZ(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0] * c - p[1] * s, p[0] * s + p[1] * c, p[2]]; }
+function drawS4(u) {
+  bg(C.blue);
+  const sc = 235 * E.outB(seg(u, 0, .16)) / Math.max(.001, E.outB(seg(u, 0, .16))) * lerp(.72, 1, E.outB(seg(u, 0, .16)));
+  const ry = .8 * E.ioC(seg(u, .1, .5)) + .9 * Math.max(0, u - .5);
+  const rx = .58 * E.ioC(seg(u, .1, .5));
+  const gap = .09 * E.outC(seg(u, .46, .62));
+  const split = u >= .5;
+  const twist = (Math.PI / 2) * E.outB(seg(u, .7, .98));
+  const ex = E.inC(seg(u, 1.0, 1.5)) * 9 + E.outC(seg(u, 1.0, 1.5)) * 1.2;
+  const h = .5 - gap / 2;
+  const faces = [];
+  for (const cb of CUBES) {
+    for (let ax = 0; ax < 3; ax++) for (const sg of [-1, 1]) {
+      const outward = Math.sign(cb.c[ax]) === sg;
+      const verts = [];
+      const u1 = (ax + 1) % 3, u2 = (ax + 2) % 3;
+      for (const [a, b] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { const v = [0, 0, 0]; v[ax] = sg * h; v[u1] = a * h; v[u2] = b * h; verts.push(v); }
+      let n = [0, 0, 0]; n[ax] = sg;
+      const tf = p => {
+        let q = p;
+        const e = E.inC(seg(u, 1.0, 1.5)) * 7;
+        q = rX(rY(rZ(q, cb.spin[2] * e), cb.spin[1] * e), cb.spin[0] * e);
+        q = [q[0] + cb.c[0], q[1] + cb.c[1], q[2] + cb.c[2]];
+        if (cb.c[1] < 0) q = rY(q, twist);
+        let dir = cb.c[1] < 0 ? rY(cb.c, twist) : cb.c;
+        q = [q[0] + dir[0] * ex * cb.d, q[1] + dir[1] * ex * cb.d, q[2] + dir[2] * ex * cb.d * .12];
+        return rX(rY(q, ry), rx);
+      };
+      const tv = verts.map(tf);
+      const c0 = tf([0, 0, 0]); const nn = tf(n.map(x => x * .5)); const nr = [nn[0] - c0[0], nn[1] - c0[1], nn[2] - c0[2]];
+      const fc = tv.reduce((a, v) => [a[0] + v[0] / 4, a[1] + v[1] / 4, a[2] + v[2] / 4], [0, 0, 0]);
+      const F = 6;
+      const view = [fc[0], fc[1], fc[2] + F];
+      if (nr[0] * view[0] + nr[1] * view[1] + nr[2] * view[2] >= 0) continue;
+      if (tv.some(v => F + v[2] < 2)) continue;
+      let col = outward ? (split ? cb.col[ax * 2 + (sg > 0 ? 1 : 0)] : DIRCOL[`${ax}${sg}`]) : C.navy;
+      faces.push({ z: fc[2], pts: tv.map(v => { const k = F / (F + v[2]); return [960 + v[0] * sc * k, 545 + v[1] * sc * k]; }), col, outward });
+    }
+  }
+  faces.sort((a, b) => b.z - a.z);
+  const lw = 7 * seg(u, .44, .56);
+  ctx.lineJoin = 'round';
+  for (const f of faces) { ctx.beginPath(); f.pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = f.col; ctx.fill(); ctx.strokeStyle = lw > .5 ? C.navy : f.col; ctx.lineWidth = Math.max(lw, 1.5); ctx.stroke(); }
+}
+
+/* ================= S5 GLOBAL CDN (halftone globe) ================= */
+const R5 = rng(7);
+const POPS = Array.from({ length: 11 }, () => ({ lat: (R5() - .5) * 2.1, lon: R5() * 6.283, ph: R5() }));
+function land(lat, lon) { return Math.sin(2 * lon + 1) * Math.cos(1.6 * lat) + .7 * Math.sin(3.3 * lon - 2 * lat + .5) + .45 * Math.cos(5 * lon + 3 * lat) + .3 * Math.sin(7 * lat); }
+function sphPt(lat, lon, rot, tilt) { let p = [Math.cos(lat) * Math.sin(lon + rot), -Math.sin(lat), -Math.cos(lat) * Math.cos(lon + rot)]; return rX(p, tilt); }
+function drawS5(u) {
+  bg(C.navy);
+  const cx = 960, cy = 545, R = 345 * lerp(.85, 1, E.outC(seg(u, 0, .4))), sp = 22, rot = u * 1.1 + 1.2, tilt = .38;
+  const rev = E.outC(seg(u, 0, .42)) * 1250;
+  const redOn = seg(u, .55, .8);
+  for (let gy = sp / 2, row = 0; gy < H; gy += sp, row++) for (let gx = sp / 2, col = 0; gx < W; gx += sp, col++) {
+    const dx = gx - cx, dy = gy - cy, d = Math.hypot(dx, dy);
+    const a = cl((rev - d) / 120); if (a <= 0) continue;
+    if (d < R) {
+      const z = Math.sqrt(1 - (d / R) ** 2);
+      let n = [dx / R, dy / R, -z]; n = rX(n, -tilt);
+      const lat = Math.asin(-n[1]); const lon = Math.atan2(n[0], -n[2]) - rot;
+      const L = land(lat, lon); const shade = .3 + .7 * z;
+      const r = (L > .3 ? 9.6 * shade : L > .05 ? 6.4 * shade : 3.6 * shade) * E.outB(a);
+      circle(gx, gy, r, C.cream);
+    } else {
+      let colr = 'rgba(239,233,222,.2)', r = 1.7;
+      if (redOn > 0 && col % 7 === 3) { const k = ((row - u * 34 + col * 3) % 14 + 14) % 14; if (k < 4) { colr = C.red; r = 2.6 * redOn; } }
+      circle(gx, gy, r * a, colr);
+    }
+  }
+  // arcs
+  ctx.lineWidth = 3; ctx.strokeStyle = C.red; ctx.lineCap = 'round';
+  for (let i = 0; i < POPS.length - 1; i++) {
+    const p = seg(u, .42 + i * .05, .62 + i * .05); if (p <= 0) continue;
+    const A = POPS[i], B = POPS[i + 1];
+    const a3 = sphPt(A.lat, A.lon, rot, tilt), b3 = sphPt(B.lat, B.lon, rot, tilt);
+    ctx.beginPath(); let started = false;
+    for (let s = 0; s <= 1.0001 * E.outC(p); s += .025) {
+      let q = [lerp(a3[0], b3[0], s), lerp(a3[1], b3[1], s), lerp(a3[2], b3[2], s)]; const m = Math.hypot(...q); const lift = 1 + .09 * Math.sin(Math.PI * s); q = q.map(x => x / m * lift);
+      if (q[2] > .05) { started = false; continue; }
+      const X = cx + q[0] * R, Y = cy + q[1] * R; started ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); started = true;
+    }
+    ctx.stroke();
+  }
+  for (const P of POPS) { const q = sphPt(P.lat, P.lon, rot, tilt); if (q[2] > -.1) continue; const X = cx + q[0] * R, Y = cy + q[1] * R; const ap = E.outB(seg(u, .35 + P.ph * .2, .5 + P.ph * .2)); if (ap <= 0) continue;
+    circle(X, Y, 9 * ap, C.red); const pr = ((u + P.ph) % .5) / .5; ctx.globalAlpha = 1 - pr; ctx.strokeStyle = C.red; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(X, Y, 10 + 40 * pr, 0, 6.283); ctx.stroke(); ctx.globalAlpha = 1; }
+  // comet
+  const cp = seg(u, 1.16, 1.5);
+  if (cp > 0) { const x = lerp(-300, 2300, E.inC(cp)); const y = 690; ctx.fillStyle = C.tint; roundRect(x - 220, y - 30, 220, 60, 30); ctx.fillStyle = C.red; roundRect(x - 120, y - 34, 150, 68, 34); }
+}
+function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); }
+
+/* ================= S6 FLOW (ribbons) ================= */
+function crSample(P, per = 40) { const out = []; for (let i = 0; i < P.length - 1; i++) { const p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(P.length - 1, i + 2)]; for (let j = 0; j < per; j++) { const t = j / per, t2 = t * t, t3 = t2 * t; out.push([0, 1].map(k => .5 * ((2 * p1[k]) + (-p0[k] + p2[k]) * t + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * t2 + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * t3))); } } out.push(P[P.length - 1]); const L = [0]; for (let i = 1; i < out.length; i++) L.push(L[i - 1] + Math.hypot(out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1])); return { pts: out, L, tot: L[L.length - 1] }; }
+const RIB = [
+  { P: [[-300, 760], [250, 700], [560, 420], [880, 250], [1080, 430], [900, 600], [700, 450], [1050, 180], [1550, 300], [2250, 120]], st: [[118, C.red], [44, C.tint]], d: 0 },
+  { P: [[420, 1350], [620, 930], [900, 720], [1320, 780], [1520, 520], [1330, 260], [1640, 90], [2000, -260]], st: [[118, C.blue], [86, C.cream], [62, C.blue], [34, C.cream], [12, C.blue]], d: .1 },
+  { P: [[2300, 720], [1720, 930], [1300, 620], [980, 880], [560, 930], [380, 600], [720, 300], [300, 90], [-300, 260]], st: [[118, C.yel], [86, C.navy], [62, C.yel], [34, C.navy], [12, C.yel]], d: .22 },
+  { P: [[-300, 330], [380, 160], [900, 520], [1420, 960], [2300, 780]], st: [[118, C.green], [40, C.cream]], d: .36 },
+].map(r => ({ ...r, S: crSample(r.P) }));
+function drawSub(S, a, b) { const A = a * S.tot, B = b * S.tot; ctx.beginPath(); let st = false; for (let i = 0; i < S.pts.length; i++) { const l = S.L[i]; if (l < A || l > B) continue; const [x, y] = S.pts[i]; st ? ctx.lineTo(x, y) : ctx.moveTo(x, y); st = true; } ctx.stroke(); }
+function drawS6(u) {
+  bg(C.navy);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const r of RIB) { const hd = E.ioC(seg(u, r.d, r.d + .95)); const tl = E.ioC(seg(u, r.d + .45, r.d + 1.6)); if (hd <= tl) continue; for (const [w, c] of r.st) { ctx.strokeStyle = c; ctx.lineWidth = w; drawSub(r.S, tl, hd); } }
+}
+
+/* ================= S7 SWITCH ON + DASHBOARD ================= */
+function cursor(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, 52); ctx.lineTo(13, 40); ctx.lineTo(23, 62); ctx.lineTo(32, 58); ctx.lineTo(22, 36); ctx.lineTo(39, 36); ctx.closePath(); ctx.fillStyle = C.navy; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = C.cream; ctx.stroke(); ctx.restore(); }
+function mixCol(a, b, s) { const pa = a.match(/\w\w/g).map(x => parseInt(x, 16)), pb = b.match(/\w\w/g).map(x => parseInt(x, 16)); return `rgb(${pa.map((v, i) => Math.round(lerp(v, pb[i], s))).join(',')})`; }
+let S7built = false;
+function buildS7() {
+  const strip = n => Array.from({ length: n }, (_, i) => `<span>${i % 10}</span>`).join('');
+  $('dt').innerHTML = strip(5); $('do').innerHTML = strip(41);
+  const hs = [.22, .3, .26, .4, .36, .5, .46, .62, .58, .74, .82, .97];
+  $('bars').innerHTML = hs.map(h => `<b style="height:${h * 100}%"></b>`).join('');
+}
+function drawS7(u) {
+  bg(C.cream);
+  const dash = u >= .78; $('s7').style.display = dash ? 'block' : 'none';
+  if (!dash) {
+    const cx = 960, cy = 545, w = 340, h = 170;
+    const pop = E.outB(seg(u, 0, .14));
+    const on = E.outB(seg(u, .34, .52));
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(pop, pop);
+    ctx.fillStyle = mixCol(C.navy, C.green, seg(u, .34, .46)); roundRect(-w / 2, -h / 2, w, h, h / 2);
+    const kx = lerp(-w / 2 + h / 2, w / 2 - h / 2, on);
+    circle(kx, 0, h / 2 - 14, C.cream);
+    ctx.restore();
+    monoText('fast.site', cx, cy - 130, C.navy, 15, 'center');
+    monoText(u < .4 ? 'off' : 'on', cx, cy + 150, C.navy, 15, 'center');
+    const bp = seg(u, .4, .66);
+    if (bp > 0 && bp < 1) { ctx.strokeStyle = C.navy; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.globalAlpha = 1 - bp; const kx2 = cx + w / 2 - h / 2; for (let i = 0; i < 12; i++) { const a = i / 12 * 6.283; const r0 = 105 + 70 * E.outC(bp), r1 = r0 + 30; ctx.beginPath(); ctx.moveTo(kx2 + Math.cos(a) * r0, cy + Math.sin(a) * r0); ctx.lineTo(kx2 + Math.cos(a) * r1, cy + Math.sin(a) * r1); ctx.stroke(); } ctx.globalAlpha = 1; }
+    // click ripple
+    const rp = seg(u, .33, .55); if (rp > 0 && rp < 1) { ctx.globalAlpha = (1 - rp) * .6; ctx.strokeStyle = C.navy; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx - w / 2 + h / 2, cy, 20 + 70 * E.outC(rp), 0, 6.283); ctx.stroke(); ctx.globalAlpha = 1; }
+    const mp = E.outC(seg(u, .02, .32)), lp = E.inC(seg(u, .52, .76));
+    const tx = cx - w / 2 + h / 2 + 8, ty = cy + 6;
+    const x = lerp(lerp(1500, tx, mp), 1700, lp), y = lerp(lerp(900, ty, mp), 1150, lp);
+    const s = u > .3 && u < .4 ? .82 : 1;
+    cursor(x + (on * (w - h)) * (1 - lp) * seg(u, .34, .52), y, s);
+    return;
+  }
+  const v = u - .78;
+  ['t1', 't2', 't3', 't4'].forEach((id, i) => { const p = E.outB(seg(v, i * .05, i * .05 + .24)); $(id).style.transform = `scale(${lerp(.5, 1, p)})`; $(id).style.opacity = v < i * .05 ? 0 : 1; });
+  // toggle tile
+  const tp = E.outB(seg(v, .12, .3)); $('tog').querySelector('i').style.left = lerp(12, 162, tp) + 'px'; $('tog').style.background = mixCol(C.cream.replace('#', '#'), C.green, seg(v, .12, .2)).replace('rgb', 'rgb');
+  // number roll
+  const val = 35 * E.outC(seg(v, .08, .62));
+  $('do').style.transform = `translateY(${-val * 270}px)`; $('dt').style.transform = `translateY(${-(Math.floor(val / 10) + E.ioC((val % 10) > 9 ? (val % 10) - 9 : 0)) * 270}px)`;
+  document.querySelector('#t2 .rule').style.transform = `scaleX(${E.outX(seg(v, .2, .6))})`;
+  // bars
+  document.querySelectorAll('#bars b').forEach((b, i) => { b.style.transform = `scaleY(${E.outB(seg(v, .1 + i * .025, .3 + i * .025))})`; });
+  const hs = [.22, .3, .26, .4, .36, .5, .46, .62, .58, .74, .82, .97];
+  const bw = (1150 - 120 - 22 * 11) / 12; const lp = E.ioC(seg(v, .25, .7)); const pts = []; const nPts = Math.max(1, lp * 12);
+  for (let i = 0; i < 12; i++) { if (i > nPts) break; pts.push([60 + bw / 2 + i * (bw + 22), 514 - 50 - 330 * hs[i] - 40]); }
+  $('t3line').setAttribute('points', pts.map(p => p.join(',')).join(' ')); const lastp = pts[pts.length - 1]; $('t3dot').setAttribute('cx', lastp[0]); $('t3dot').setAttribute('cy', lastp[1]);
+  const cv4 = $('t4curve'); const len = cv4.getTotalLength(); const cp = E.ioC(seg(v, .15, .62)); cv4.style.strokeDasharray = len; cv4.style.strokeDashoffset = len * (1 - cp); const pt = cv4.getPointAtLength(len * cp); $('t4dot').setAttribute('cx', pt.x); $('t4dot').setAttribute('cy', pt.y);
+}
+
+/* ================= S8 RHYTHM ================= */
+function shieldPath(s) { ctx.beginPath(); ctx.moveTo(0, -1.1 * s); ctx.bezierCurveTo(.45 * s, -.9 * s, .8 * s, -.88 * s, .95 * s, -.85 * s); ctx.bezierCurveTo(.98 * s, .1 * s, .7 * s, .8 * s, 0, 1.15 * s); ctx.bezierCurveTo(-.7 * s, .8 * s, -.98 * s, .1 * s, -.95 * s, -.85 * s); ctx.bezierCurveTo(-.8 * s, -.88 * s, -.45 * s, -.9 * s, 0, -1.1 * s); ctx.closePath(); }
+const R8 = rng(99); const SPL = Array.from({ length: 34 }, () => ({ y: 60 + R8() * 960, l: 200 + R8() * 700, x: R8() * 3000, c: [C.cream, C.cream, C.yel, C.tint][Math.floor(R8() * 4)], w: 6 + R8() * 10, sp: .7 + R8() * .6 }));
+function drawS8(u) {
+  const i = Math.min(5, Math.floor(u / .25)), v = u - i * .25; const pn = E.outB(seg(v, 0, .12)); const cx = 960, cy = 545;
+  ctx.save();
+  if (i === 0) { bg(C.cream); ctx.strokeStyle = C.navy; ctx.lineWidth = 26; for (let k = 0; k < 16; k++) { const r = 90 + k * 80 + (v / .25) * 80; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 6.283); ctx.stroke(); } circle(cx, cy, 58 * pn, C.red); }
+  if (i === 1) { bg(C.yel); ctx.translate(cx, cy); ctx.rotate(v * 2.4); ctx.fillStyle = C.navy; for (let k = 0; k < 28; k++) { const a = k / 28 * 6.283, L = (k % 2 ? 260 : 430) * pn; ctx.beginPath(); ctx.moveTo(Math.cos(a - .07) * 105, Math.sin(a - .07) * 105); ctx.lineTo(Math.cos(a) * L, Math.sin(a) * L); ctx.lineTo(Math.cos(a + .07) * 105, Math.sin(a + .07) * 105); ctx.fill(); } circle(0, 0, 112, C.navy); circle(0, 0, 98, C.yel); circle(0, 0, 80, C.red); }
+  if (i === 2) { bg(C.green); ctx.translate(cx, cy); ctx.scale(lerp(.7, 1, pn), lerp(.7, 1, pn)); shieldPath(250); ctx.fillStyle = C.cream; ctx.fill(); ctx.lineWidth = 14; ctx.strokeStyle = C.navy; ctx.stroke(); const cp = E.outC(seg(v, .04, .18)); ctx.lineWidth = 44; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = C.red; ctx.beginPath(); ctx.moveTo(-110, 0); const p1 = [-25, 90], p2 = [130, -90]; if (cp < .4) { const s = cp / .4; ctx.lineTo(lerp(-110, p1[0], s), lerp(0, p1[1], s)); } else { ctx.lineTo(...p1); const s = (cp - .4) / .6; ctx.lineTo(lerp(p1[0], p2[0], s), lerp(p1[1], p2[1], s)); } ctx.stroke(); }
+  if (i === 3) { bg(C.blue); ctx.translate(cx, cy); ctx.rotate(-.32); ctx.strokeStyle = C.cream; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(0, 0, 640, 215, 0, 0, 6.283); ctx.stroke(); ctx.beginPath(); ctx.ellipse(0, 0, 400, 125, 0, 0, 6.283); ctx.stroke(); const a1 = 2.3 + v * 26, a2 = -.4 - v * 34; circle(Math.cos(a2) * 400, Math.sin(a2) * 125, 20, C.red); ctx.rotate(.32); circle(0, 0, 92 * pn, C.cream); ctx.rotate(-.32); circle(Math.cos(a1) * 640, Math.sin(a1) * 215, 26, C.tint); }
+  if (i === 4) { bg(C.navy); ctx.translate(cx, cy + 120); const A0 = Math.PI * 1.08, A1 = Math.PI * 1.92; const np = E.outX(seg(v, .02, .2)); ctx.lineCap = 'butt'; ctx.lineWidth = 34; ctx.strokeStyle = 'rgba(239,233,222,.16)'; ctx.beginPath(); ctx.arc(0, 0, 400, A0, A1); ctx.stroke(); ctx.strokeStyle = C.green; ctx.beginPath(); ctx.arc(0, 0, 400, A0, lerp(A0, A1, np)); ctx.stroke(); ctx.strokeStyle = C.cream; ctx.lineWidth = 4; for (let k = 0; k <= 30; k++) { const a = lerp(A0, A1, k / 30), r0 = k % 5 ? 330 : 310; ctx.beginPath(); ctx.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); ctx.lineTo(Math.cos(a) * 360, Math.sin(a) * 360); ctx.stroke(); } const na = lerp(A0, A1 - .05, np); ctx.strokeStyle = C.red; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(na) * 300, Math.sin(na) * 300); ctx.stroke(); circle(0, 0, 34, C.red); }
+  if (i === 5) { bg(C.blue); ctx.lineCap = 'round'; for (const s of SPL) { const x = ((s.x - v * 9000 * s.sp) % 3000 + 3000) % 3000 - 500; ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(x, s.y); ctx.lineTo(x + s.l, s.y); ctx.stroke(); } const bx = lerp(760, 1180, v / .25); ctx.fillStyle = C.red; ctx.beginPath(); ctx.ellipse(bx, cy, 130, 82, 0, 0, 6.283); ctx.fill(); }
+  ctx.restore();
+}
+
+/* ================= S9 FIN ================= */
+let S9 = {};
+function layoutS9() {
+  const f1 = $('f1'), f2 = $('f2');
+  f1.innerHTML = 'MAKE IT'.split('').map(c => `<span class="ch">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+  f2.innerHTML = 'FAST'.split('').map(c => `<span class="ch">${c}</span>`).join('') + `<span class="dsp" style="display:inline-block"></span><span class="serif">site</span>`;
+  f1.style.fontSize = '100px'; const w = f1.getBoundingClientRect().width; const f = 100 * 1840 / w;
+  f1.style.fontSize = f2.style.fontSize = f + 'px';
+  const top = 132; f1.style.top = top + 'px'; f2.style.top = (top + .88 * f) + 'px';
+  const d = .2 * f; const dsp = f2.querySelector('.dsp'); dsp.style.width = (d * 1.5) + 'px'; dsp.style.height = '1px';
+  const serif = f2.querySelector('.serif'); serif.style.fontSize = (1.22 * f) + 'px'; serif.style.lineHeight = '0';
+  { const sr = serif.getBoundingClientRect(); const over = sr.right - 1880; if (over > 0) serif.style.fontSize = (1.22 * f * (sr.width - over) / sr.width) + 'px'; }
+  const r = dsp.getBoundingClientRect();
+  const base = top + .88 * f + .8 * f * .98;
+  S9 = { f, d, dot: [r.left + d * .2, base - d] };
+  const ball = $('fball'); ball.style.width = ball.style.height = d + 'px';
+  const fr = f2.getBoundingClientRect(); const ic = $('ficon'); const ih = .78 * f; ic.style.height = ih + 'px'; ic.style.left = (1880 - ih * 1.0) + 'px'; ic.style.top = (base - ih) + 'px';
+  S9.iconW = ih;
+}
+function drawS9(u) {
+  bg(C.cream);
+  const chars = document.querySelectorAll('#s9 .ch');
+  const R9 = rng(5);
+  chars.forEach((c, i) => { const dx = (R9() - .5) * 1400, dy = (R9() - .5) * 900, rr = (R9() - .5) * 200, a = .22 + i * .035; const p = E.outX(seg(u, a, a + .42)); c.style.transform = `translate(${(1 - p) * dx}px, ${(1 - p) * dy}px) rotate(${(1 - p) * rr}deg) scale(${lerp(.3, 1, p)})`; c.style.visibility = u < a ? 'hidden' : 'visible'; });
+  // ball: roll in, then hop to its dot
+  const ball = $('fball'); const d = S9.d; let x, y, s, sx = 1, sy = 1;
+  if (u < .5) { const p = E.outC(seg(u, 0, .32)); x = lerp(-200, 960, p); y = 545; s = 2.4; sx = 1 + .5 * (1 - p); sy = 1 - .25 * (1 - p); }
+  else { const p = seg(u, .5, .86); const e = E.ioC(p); x = lerp(960, S9.dot[0] + d / 2, e); y = lerp(545, S9.dot[1] + d / 2, e) - 380 * 4 * p * (1 - p); s = lerp(2.4, 1, E.ioC(p)); const land = u - .86; if (land > 0 && land < .14) { const k = Math.sin(land / .14 * Math.PI) * Math.exp(-land * 10); sx = 1 + .45 * k; sy = 1 - .4 * k; } }
+  ball.style.transform = `translate(${x - d / 2}px, ${y - d / 2 + (1 - sy) * d * s / 2}px) scale(${s * sx}, ${s * sy})`;
+  const serif = document.querySelector('#s9 .serif'); const sp = E.outX(seg(u, .9, 1.3));
+  serif.style.clipPath = `inset(-600px ${(1 - sp) * 100}% -600px 0)`; serif.style.transform = `translateX(${(1 - sp) * -60}px)`;
+  const ip = E.outB(seg(u, 1.12, 1.4)); $('ficon').style.transform = `translateY(${(1 - ip) * 160}px) scale(${ip})`; $('ficon').style.opacity = u < 1.12 ? 0 : 1;
+  $('frule').style.transform = `scaleX(${E.outX(seg(u, 1.2, 1.6))})`;
+  document.querySelectorAll('#frow .fr').forEach((e, i) => { const p = E.outC(seg(u, 1.38 + i * .08, 1.7 + i * .08)); e.style.opacity = p; e.style.transform = `translateY(${(1 - p) * 24}px)`; });
+}
+
+/* ================= TIMELINE ================= */
+const SC = [
+  { a: 0, b: 1.8, draw: drawS1, hud: 'light', lab: '01  Speed' },
+  { a: 1.8, b: 3.0, draw: drawS2, dom: 's2', hud: 'dark', lab: '02  Manifest' },
+  { a: 3.0, b: 4.55, draw: drawS3, hud: 'dark', lab: '03  Optimize' },
+  { a: 4.55, b: 6.05, draw: drawS4, hud: 'light', lab: '04  Edge Cache' },
+  { a: 6.05, b: 7.55, draw: drawS5, hud: 'light', lab: '05  Global CDN' },
+  { a: 7.55, b: 9.05, draw: drawS6, hud: 'light', lab: '06  Flow' },
+  { a: 9.05, b: 10.55, draw: drawS7, hud: 'dark', lab: '07  Switch On' },
+  { a: 10.55, b: 12.05, draw: drawS8, hud: 'x', lab: '08  Protect' },
+  { a: 12.05, b: 15.0001, draw: drawS9, dom: 's9', hud: 'dark', lab: '09  Fin' },
+];
+window.cuts = SC.map(s => s.a);
+function sceneAt(t) { for (const s of SC) if (t >= s.a && t < s.b) return s; return SC[SC.length - 1]; }
+function render(t) {
+  t = cl(t, 0, DUR - 1e-4);
+  const s = sceneAt(t);
+  for (const o of SC) if (o.dom) $(o.dom).style.display = o === s ? 'block' : 'none';
+  if (s !== SC[6]) $('s7').style.display = 'none';
+  ctx.save(); s.draw(t - s.a); ctx.restore();
+  const hud = $('hud'); let dark = s.hud === 'dark';
+  if (s.hud === 'x') { const i = Math.min(5, Math.floor((t - s.a) / .25)); dark = [true, true, false, false, false, false][i]; }
+  hud.className = dark ? 'dark' : '';
+  $('h-bl').textContent = s.lab;
+  const fr = Math.floor(t * FPS); $('h-tc').textContent = `00:${String(Math.floor(t)).padStart(2, '0')}:${String(fr % FPS).padStart(2, '0')}`;
+}
+// sub-frame render for motion-blur accumulation: subframes never cross a cut
+window.renderSub = (f, k, n) => { const t0 = f / FPS; const s = sceneAt(t0); let t = (f + k / n) / FPS; t = Math.min(t, s.b - 1e-4); render(t); };
+window.renderAt = render;
+
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+tl.to({}, { duration: DUR });
+window.__timelines['main'] = tl;
+
+Promise.all([
+  document.fonts.load('900 100px "Archivo X"'), document.fonts.load('italic 400 100px "Serif I"'),
+  document.fonts.load('500 14px JBM'), document.fonts.load('700 14px JBM'),
+  new Promise(r => { const im = $('ficon'); im.complete ? r() : im.onload = r; }),
+]).then(() => { $('s2').style.display = 'block'; $('s9').style.display = 'block'; layoutS2(); layoutS9(); buildS7(); render(0); window.__ready = true; });
+</script>
+</body>
+</html>
