@@ -56,6 +56,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
 #bars b:last-child { background:var(--yel); }
 #t3 svg, #t4 svg { position:absolute; inset:0; }
 
+#clogo { position:absolute; left:50%; top:50%; width:980px; margin-left:-490px; margin-top:-168px; will-change:transform, filter; }
 /* S9 */
 #s9 .f2 .serif { font-family:"Serif I"; font-style:italic; font-weight:400; font-stretch:100%; text-transform:none; letter-spacing:-0.01em; color:var(--red); display:inline-block; }
 #fball { position:absolute; border-radius:50%; background:var(--red); left:0; top:0; }
@@ -66,7 +67,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1920" data-height="1080" data-fps="60">
+<div id="root" data-composition-id="main" data-start="0" data-duration="31" data-width="1920" data-height="1080" data-fps="60">
   <canvas id="cv" width="1920" height="1080"></canvas>
 
   <div id="s2" class="scene">
@@ -74,6 +75,8 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
     <div class="big l2"><span class="ch">F</span><span class="ch">A</span><span class="ch">S</span><span class="ch">T</span></div>
     <div class="dot2"></div>
   </div>
+
+  <div id="sc" class="scene"><img id="clogo" src="assets/logo-light.svg" /></div>
 
   <div id="s7" class="scene">
     <div class="tile" id="t1"><div class="lab" style="left:30px;top:28px">CDN · Edge</div><div class="lab" style="right:30px;top:28px">On</div><div id="tog"><i></i></div><div class="lab" style="left:30px;bottom:28px">fast.site</div></div>
@@ -106,7 +109,7 @@ html, body { width:1920px; height:1080px; overflow:hidden; background:var(--navy
 </div>
 
 <script>
-const W = 1920, H = 1080, FPS = 60, DUR = 15;
+const W = 1920, H = 1080, FPS = 60, DUR = 31;
 const C = { navy:'#101827', red:'#df482b', blue:'#3e71b6', green:'#0c9958', dgreen:'#047844', yel:'#fbb419', cream:'#efe9de', tint:'#f3c2b3' };
 const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 const $ = id => document.getElementById(id);
@@ -207,88 +210,100 @@ function star(n, ro, ri, rot) { return Array.from({ length: 2 * n }, (_, i) => {
 const aw = .4, al = 1.08;
 const plusV = [[-aw, -al], [aw, -al], [aw, -aw], [al, -aw], [al, aw], [aw, aw], [aw, al], [-aw, al], [-aw, aw], [-al, aw], [-al, -aw], [-aw, -aw]];
 const SHAPES = [regPoly(4, 1.2, Math.PI / 4), regPoly(3, 1.3, Math.PI / 2), plusV, star(5, 1.22, .58, -Math.PI / 2), regPoly(6, 1.08, 0), null].map(V => Array.from({ length: NS }, (_, i) => V ? rayPoly(i / NS * 2 * Math.PI, V) : .98));
-const MK = [.36, .6, .84, 1.08, 1.3];
+let MK = [];
+function setMK(D) { MK = []; for (let t = .36; t < D - .35; t += .44) MK.push(t); }
 function morphAt(u) {
-  let k = 0, p = 0;
-  for (let i = 0; i < MK.length; i++) { if (u >= MK[i]) { k = i; p = E.ioC(seg(u, MK[i], MK[i] + .17)); } }
   if (u < MK[0]) return { r: SHAPES[0], rot: 0 };
-  const A = SHAPES[k], B = SHAPES[k + 1];
+  let k = 0, p = 0;
+  for (let i = 0; i < MK.length; i++) if (u >= MK[i]) { k = i; p = E.ioC(seg(u, MK[i], MK[i] + .17)); }
+  const A = SHAPES[k % 6], B = SHAPES[(k + 1) % 6];
   let rot = 0; for (let i = 0; i < MK.length; i++) rot += (Math.PI / 3) * E.outB(seg(u, MK[i], MK[i] + .24));
-  return { r: A.map((a, i) => lerp(a, B[i], p)), rot };
+  return { r: A.map((a, i) => lerp(a, B[i], p)), rot: rot + u * .25 };
 }
 function shapePath(m, cx, cy, s) { ctx.beginPath(); let mx = 0, my = 0; for (let i = 0; i < NS; i++) { const a = i / NS * 2 * Math.PI + m.rot; const x = cx + Math.cos(a) * m.r[i] * s, y = cy + Math.sin(a) * m.r[i] * s; mx = Math.max(mx, Math.abs(x - cx)); my = Math.max(my, Math.abs(y - cy)); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); return [mx, my]; }
-function drawS3(u) {
+function drawS3(u, D) {
   bg(C.cream); dotGrid('rgba(16,24,39,.16)');
-  const S = 215 * E.outB(seg(u, 0, .26)) * (1 - E.inX(seg(u, 1.4, 1.55)) * .0);
+  const S = 215 * E.outB(seg(u, 0, .26));
   const cx = 960, cy = 545;
   [[.1, 40, 34, C.yel], [.05, 22, 18, C.blue]].forEach(([lag, ox, oy, col]) => { const m = morphAt(u - lag); const s2 = 215 * E.outB(seg(u - lag, 0, .26)); shapePath(m, cx + ox, cy + oy, s2); ctx.fillStyle = col; ctx.fill(); });
   const m = morphAt(u); const [mx, my] = shapePath(m, cx, cy, S); ctx.fillStyle = C.red; ctx.fill();
-  // bounding box
   const bp = E.outC(seg(u, .12, .3));
   if (bp > 0) {
     const bx = mx + 26, by = my + 26; ctx.globalAlpha = bp; ctx.strokeStyle = C.navy; ctx.lineWidth = 1.5; ctx.strokeRect(cx - bx, cy - by, bx * 2, by * 2);
     for (const [hx, hy] of [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [0, 1], [-1, 0], [1, 0]]) { ctx.fillStyle = C.cream; ctx.fillRect(cx + hx * bx - 6, cy + hy * by - 6, 12, 12); ctx.strokeRect(cx + hx * bx - 6, cy + hy * by - 6, 12, 12); }
-    const names = ['hero.jpg', 'hero.webp', 'hero.webp', 'hero.webp', 'hero.webp', 'hero.webp'];
     const k = MK.filter(x => u >= x + .08).length;
-    monoText(`fig.0${k + 1} — ${names[k]}`, cx - bx, cy - by - 14, C.navy, 13);
-    const pct = Math.round(35 * E.ioC(seg(u, .36, 1.3)));
+    monoText(`fig.${String(k + 1).padStart(2, '0')} — ${k ? 'hero.webp' : 'hero.jpg'}`, cx - bx, cy - by - 14, C.navy, 13);
+    const pct = Math.round(35 * E.ioC(seg(u, .36, D - .5)));
     monoText(`webp  ·  −${pct} %`, cx + bx, cy + by + 26, C.navy, 13, 'right');
     ctx.globalAlpha = 1;
   }
 }
 
-/* ================= S4 EDGE CACHE (3D) ================= */
-const PAL = [C.cream, C.red, C.tint, C.yel, C.green, C.cream, C.red];
-const R4 = rng(42);
+/* ================= S4 EDGE CACHE (3D, FA|ST / SI|TE) ================= */
 const CUBES = [];
-for (const x of [-.5, .5]) for (const y of [-.5, .5]) for (const z of [-.5, .5]) CUBES.push({ c: [x, y, z], col: Array.from({ length: 6 }, () => PAL[Math.floor(R4() * PAL.length)]), spin: [R4() * 2 - 1, R4() * 2 - 1, R4() * 2 - 1], d: .8 + R4() * .6 });
-const DIRCOL = { '2-1': C.red, '1-1': C.cream, '01': C.tint, '0-1': C.tint, '11': C.yel, '21': C.green };
+for (const x of [-.5, .5]) for (const y of [-.5, .5]) for (const z of [-.5, .5]) CUBES.push({ c: [x, y, z] });
+CUBES.forEach((cb, i) => { const r = rng(11 + i); cb.spin = [r() * 2 - 1, r() * 2 - 1, r() * 2 - 1]; cb.d = .8 + r() * .5; });
+const DIRCOL = { '2-1': C.red, '1-1': C.cream, '01': C.tint, '0-1': C.yel, '11': C.yel, '21': C.green };
+const FRONT = { '-0.5,-0.5': ['FA', C.navy, C.cream, 0], '0.5,-0.5': ['ST', C.navy, C.cream, 1], '-0.5,0.5': ['SI', C.red, C.cream, 2], '0.5,0.5': ['TE', C.red, C.cream, 3] };
 function rY(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0] * c + p[2] * s, p[1], -p[0] * s + p[2] * c]; }
 function rX(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0], p[1] * c - p[2] * s, p[1] * s + p[2] * c]; }
 function rZ(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0] * c - p[1] * s, p[0] * s + p[1] * c, p[2]]; }
-function drawS4(u) {
+function drawS4(u, D) {
   bg(C.blue);
-  const sc = 235 * E.outB(seg(u, 0, .16)) / Math.max(.001, E.outB(seg(u, 0, .16))) * lerp(.72, 1, E.outB(seg(u, 0, .16)));
-  const ry = .8 * E.ioC(seg(u, .1, .5)) + .9 * Math.max(0, u - .5);
-  const rx = .58 * E.ioC(seg(u, .1, .5));
-  const gap = .09 * E.outC(seg(u, .46, .62));
-  const split = u >= .5;
-  const twist = (Math.PI / 2) * E.outB(seg(u, .7, .98));
-  const ex = E.inC(seg(u, 1.0, 1.5)) * 9 + E.outC(seg(u, 1.0, 1.5)) * 1.2;
-  const h = .5 - gap / 2;
+  const sc = 250;
+  const rI = E.ioC(seg(u, .9, 1.5));
+  const ry = -.1 + .72 * rI + .22 * Math.max(0, u - 1.5);
+  const rx = .04 + .42 * rI;
+  const tw = E.outB(seg(u, 1.6, 2.25));
+  const tw2 = E.outB(seg(u, 1.72, 2.37));
+  const ex = E.inC(seg(u, D - .75, D)) * 9 + E.outC(seg(u, D - .75, D)) * 1.1;
+  const spinE = E.inC(seg(u, D - .75, D)) * 7;
+  const h0 = .46;
   const faces = [];
   for (const cb of CUBES) {
+    const fr = cb.c[2] < 0 ? FRONT[`${cb.c[0]},${cb.c[1]}`] : null;
+    const pi = fr ? fr[3] : 4 + (cb.c[0] > 0) + 2 * (cb.c[1] > 0);
+    const pop = E.outB(seg(u, .05 + pi * .07, .3 + pi * .07));
+    if (pop <= 0) continue;
+    const h = h0 * pop;
+    const top = cb.c[1] < 0, twist = top ? tw * Math.PI / 2 : -tw2 * Math.PI / 2;
     for (let ax = 0; ax < 3; ax++) for (const sg of [-1, 1]) {
       const outward = Math.sign(cb.c[ax]) === sg;
       const verts = [];
-      const u1 = (ax + 1) % 3, u2 = (ax + 2) % 3;
+      const u1 = ax === 2 ? 0 : (ax + 1) % 3, u2 = ax === 2 ? 1 : (ax + 2) % 3;
       for (const [a, b] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { const v = [0, 0, 0]; v[ax] = sg * h; v[u1] = a * h; v[u2] = b * h; verts.push(v); }
-      let n = [0, 0, 0]; n[ax] = sg;
+      const n = [0, 0, 0]; n[ax] = sg;
       const tf = p => {
-        let q = p;
-        const e = E.inC(seg(u, 1.0, 1.5)) * 7;
-        q = rX(rY(rZ(q, cb.spin[2] * e), cb.spin[1] * e), cb.spin[0] * e);
+        let q = rX(rY(rZ(p, cb.spin[2] * spinE), cb.spin[1] * spinE), cb.spin[0] * spinE);
         q = [q[0] + cb.c[0], q[1] + cb.c[1], q[2] + cb.c[2]];
-        if (cb.c[1] < 0) q = rY(q, twist);
-        let dir = cb.c[1] < 0 ? rY(cb.c, twist) : cb.c;
-        q = [q[0] + dir[0] * ex * cb.d, q[1] + dir[1] * ex * cb.d, q[2] + dir[2] * ex * cb.d * .12];
+        q = rY(q, twist);
+        const dir = rY(cb.c, twist);
+        q = [q[0] + dir[0] * ex * cb.d, q[1] + dir[1] * ex * cb.d * 1.3, q[2] + dir[2] * ex * cb.d * .12];
         return rX(rY(q, ry), rx);
       };
       const tv = verts.map(tf);
       const c0 = tf([0, 0, 0]); const nn = tf(n.map(x => x * .5)); const nr = [nn[0] - c0[0], nn[1] - c0[1], nn[2] - c0[2]];
       const fc = tv.reduce((a, v) => [a[0] + v[0] / 4, a[1] + v[1] / 4, a[2] + v[2] / 4], [0, 0, 0]);
       const F = 6;
-      const view = [fc[0], fc[1], fc[2] + F];
-      if (nr[0] * view[0] + nr[1] * view[1] + nr[2] * view[2] >= 0) continue;
+      if (nr[0] * fc[0] + nr[1] * fc[1] + nr[2] * (fc[2] + F) >= 0) continue;
       if (tv.some(v => F + v[2] < 2)) continue;
-      let col = outward ? (split ? cb.col[ax * 2 + (sg > 0 ? 1 : 0)] : DIRCOL[`${ax}${sg}`]) : C.navy;
-      faces.push({ z: fc[2], pts: tv.map(v => { const k = F / (F + v[2]); return [960 + v[0] * sc * k, 545 + v[1] * sc * k]; }), col, outward });
+      const isFront = outward && ax === 2 && sg < 0 && fr;
+      const col = !outward ? C.navy : isFront ? fr[1] : DIRCOL[`${ax}${sg}`];
+      faces.push({ z: fc[2], pts: tv.map(v => { const k = F / (F + v[2]); return [960 + v[0] * sc * k, 545 + v[1] * sc * k]; }), col, lab: isFront ? fr : null });
     }
   }
   faces.sort((a, b) => b.z - a.z);
-  const lw = 7 * seg(u, .44, .56);
   ctx.lineJoin = 'round';
-  for (const f of faces) { ctx.beginPath(); f.pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = f.col; ctx.fill(); ctx.strokeStyle = lw > .5 ? C.navy : f.col; ctx.lineWidth = Math.max(lw, 1.5); ctx.stroke(); }
+  for (const f of faces) {
+    ctx.beginPath(); f.pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath();
+    ctx.fillStyle = f.col; ctx.fill(); ctx.strokeStyle = C.navy; ctx.lineWidth = 6; ctx.stroke();
+    if (f.lab) {
+      const [p0, p1, , p3] = f.pts;
+      ctx.save(); ctx.setTransform((p1[0] - p0[0]) / 100, (p1[1] - p0[1]) / 100, (p3[0] - p0[0]) / 100, (p3[1] - p0[1]) / 100, p0[0], p0[1]);
+      ctx.fillStyle = f.lab[2]; ctx.font = '900 54px "Archivo X"'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.letterSpacing = '-2px';
+      ctx.fillText(f.lab[0], 50, 53); ctx.restore();
+    }
+  }
 }
 
 /* ================= S5 GLOBAL CDN (halftone globe) ================= */
@@ -296,7 +311,7 @@ const R5 = rng(7);
 const POPS = Array.from({ length: 11 }, () => ({ lat: (R5() - .5) * 2.1, lon: R5() * 6.283, ph: R5() }));
 function land(lat, lon) { return Math.sin(2 * lon + 1) * Math.cos(1.6 * lat) + .7 * Math.sin(3.3 * lon - 2 * lat + .5) + .45 * Math.cos(5 * lon + 3 * lat) + .3 * Math.sin(7 * lat); }
 function sphPt(lat, lon, rot, tilt) { let p = [Math.cos(lat) * Math.sin(lon + rot), -Math.sin(lat), -Math.cos(lat) * Math.cos(lon + rot)]; return rX(p, tilt); }
-function drawS5(u) {
+function drawS5(u, D) {
   bg(C.navy);
   const cx = 960, cy = 545, R = 345 * lerp(.85, 1, E.outC(seg(u, 0, .4))), sp = 22, rot = u * 1.1 + 1.2, tilt = .38;
   const rev = E.outC(seg(u, 0, .42)) * 1250;
@@ -334,7 +349,7 @@ function drawS5(u) {
   for (const P of POPS) { const q = sphPt(P.lat, P.lon, rot, tilt); if (q[2] > -.1) continue; const X = cx + q[0] * R, Y = cy + q[1] * R; const ap = E.outB(seg(u, .35 + P.ph * .2, .5 + P.ph * .2)); if (ap <= 0) continue;
     circle(X, Y, 9 * ap, C.red); const pr = ((u + P.ph) % .5) / .5; ctx.globalAlpha = 1 - pr; ctx.strokeStyle = C.red; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(X, Y, 10 + 40 * pr, 0, 6.283); ctx.stroke(); ctx.globalAlpha = 1; }
   // comet
-  const cp = seg(u, 1.16, 1.5);
+  const cp = seg(u, D - .34, D);
   if (cp > 0) { const x = lerp(-300, 2300, E.inC(cp)); const y = 690; ctx.fillStyle = C.tint; roundRect(x - 220, y - 30, 220, 60, 30); ctx.fillStyle = C.red; roundRect(x - 120, y - 34, 150, 68, 34); }
 }
 function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); }
@@ -343,15 +358,15 @@ function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r
 function crSample(P, per = 40) { const out = []; for (let i = 0; i < P.length - 1; i++) { const p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(P.length - 1, i + 2)]; for (let j = 0; j < per; j++) { const t = j / per, t2 = t * t, t3 = t2 * t; out.push([0, 1].map(k => .5 * ((2 * p1[k]) + (-p0[k] + p2[k]) * t + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * t2 + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * t3))); } } out.push(P[P.length - 1]); const L = [0]; for (let i = 1; i < out.length; i++) L.push(L[i - 1] + Math.hypot(out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1])); return { pts: out, L, tot: L[L.length - 1] }; }
 const RIB = [
   { P: [[-300, 760], [250, 700], [560, 420], [880, 250], [1080, 430], [900, 600], [700, 450], [1050, 180], [1550, 300], [2250, 120]], st: [[118, C.red], [44, C.tint]], d: 0 },
-  { P: [[420, 1350], [620, 930], [900, 720], [1320, 780], [1520, 520], [1330, 260], [1640, 90], [2000, -260]], st: [[118, C.blue], [86, C.cream], [62, C.blue], [34, C.cream], [12, C.blue]], d: .1 },
-  { P: [[2300, 720], [1720, 930], [1300, 620], [980, 880], [560, 930], [380, 600], [720, 300], [300, 90], [-300, 260]], st: [[118, C.yel], [86, C.navy], [62, C.yel], [34, C.navy], [12, C.yel]], d: .22 },
-  { P: [[-300, 330], [380, 160], [900, 520], [1420, 960], [2300, 780]], st: [[118, C.green], [40, C.cream]], d: .36 },
+  { P: [[420, 1350], [620, 930], [900, 720], [1320, 780], [1520, 520], [1330, 260], [1640, 90], [2000, -260]], st: [[118, C.blue], [86, C.cream], [62, C.blue], [34, C.cream], [12, C.blue]], d: .3 },
+  { P: [[2300, 720], [1720, 930], [1300, 620], [980, 880], [560, 930], [380, 600], [720, 300], [300, 90], [-300, 260]], st: [[118, C.yel], [86, C.navy], [62, C.yel], [34, C.navy], [12, C.yel]], d: .6 },
+  { P: [[-300, 330], [380, 160], [900, 520], [1420, 960], [2300, 780]], st: [[118, C.green], [40, C.cream]], d: .9 },
 ].map(r => ({ ...r, S: crSample(r.P) }));
 function drawSub(S, a, b) { const A = a * S.tot, B = b * S.tot; ctx.beginPath(); let st = false; for (let i = 0; i < S.pts.length; i++) { const l = S.L[i]; if (l < A || l > B) continue; const [x, y] = S.pts[i]; st ? ctx.lineTo(x, y) : ctx.moveTo(x, y); st = true; } ctx.stroke(); }
 function drawS6(u) {
   bg(C.navy);
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  for (const r of RIB) { const hd = E.ioC(seg(u, r.d, r.d + .95)); const tl = E.ioC(seg(u, r.d + .45, r.d + 1.6)); if (hd <= tl) continue; for (const [w, c] of r.st) { ctx.strokeStyle = c; ctx.lineWidth = w; drawSub(r.S, tl, hd); } }
+  for (const r of RIB) { const hd = E.ioC(seg(u, r.d, r.d + 1.3)); const tl = E.ioC(seg(u, r.d + .7, r.d + 2.1)); if (hd <= tl) continue; for (const [w, c] of r.st) { ctx.strokeStyle = c; ctx.lineWidth = w; drawSub(r.S, tl, hd); } }
 }
 
 /* ================= S7 SWITCH ON + DASHBOARD ================= */
@@ -366,6 +381,7 @@ function buildS7() {
 }
 function drawS7(u) {
   bg(C.cream);
+  const fl = 1 - seg(u, 0, .2);
   const dash = u >= .78; $('s7').style.display = dash ? 'block' : 'none';
   if (!dash) {
     const cx = 960, cy = 545, w = 340, h = 170;
@@ -387,6 +403,7 @@ function drawS7(u) {
     const x = lerp(lerp(1500, tx, mp), 1700, lp), y = lerp(lerp(900, ty, mp), 1150, lp);
     const s = u > .3 && u < .4 ? .82 : 1;
     cursor(x + (on * (w - h)) * (1 - lp) * seg(u, .34, .52), y, s);
+    if (fl > 0) { ctx.globalAlpha = fl; bg('#fffaf0'); ctx.globalAlpha = 1; }
     return;
   }
   const v = u - .78;
@@ -409,8 +426,8 @@ function drawS7(u) {
 /* ================= S8 RHYTHM ================= */
 function shieldPath(s) { ctx.beginPath(); ctx.moveTo(0, -1.1 * s); ctx.bezierCurveTo(.45 * s, -.9 * s, .8 * s, -.88 * s, .95 * s, -.85 * s); ctx.bezierCurveTo(.98 * s, .1 * s, .7 * s, .8 * s, 0, 1.15 * s); ctx.bezierCurveTo(-.7 * s, .8 * s, -.98 * s, .1 * s, -.95 * s, -.85 * s); ctx.bezierCurveTo(-.8 * s, -.88 * s, -.45 * s, -.9 * s, 0, -1.1 * s); ctx.closePath(); }
 const R8 = rng(99); const SPL = Array.from({ length: 34 }, () => ({ y: 60 + R8() * 960, l: 200 + R8() * 700, x: R8() * 3000, c: [C.cream, C.cream, C.yel, C.tint][Math.floor(R8() * 4)], w: 6 + R8() * 10, sp: .7 + R8() * .6 }));
-function drawS8(u) {
-  const i = Math.min(5, Math.floor(u / .25)), v = u - i * .25; const pn = E.outB(seg(v, 0, .12)); const cx = 960, cy = 545;
+function drawS8(u, D) {
+  const cL = D / 6, i = Math.min(5, Math.floor(u / cL)), v = (u - i * cL) * (.25 / cL); const pn = E.outB(seg(v, 0, .12)); const cx = 960, cy = 545;
   ctx.save();
   if (i === 0) { bg(C.cream); ctx.strokeStyle = C.navy; ctx.lineWidth = 26; for (let k = 0; k < 16; k++) { const r = 90 + k * 80 + (v / .25) * 80; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 6.283); ctx.stroke(); } circle(cx, cy, 58 * pn, C.red); }
   if (i === 1) { bg(C.yel); ctx.translate(cx, cy); ctx.rotate(v * 2.4); ctx.fillStyle = C.navy; for (let k = 0; k < 28; k++) { const a = k / 28 * 6.283, L = (k % 2 ? 260 : 430) * pn; ctx.beginPath(); ctx.moveTo(Math.cos(a - .07) * 105, Math.sin(a - .07) * 105); ctx.lineTo(Math.cos(a) * L, Math.sin(a) * L); ctx.lineTo(Math.cos(a + .07) * 105, Math.sin(a + .07) * 105); ctx.fill(); } circle(0, 0, 112, C.navy); circle(0, 0, 98, C.yel); circle(0, 0, 80, C.red); }
@@ -419,6 +436,42 @@ function drawS8(u) {
   if (i === 4) { bg(C.navy); ctx.translate(cx, cy + 120); const A0 = Math.PI * 1.08, A1 = Math.PI * 1.92; const np = E.outX(seg(v, .02, .2)); ctx.lineCap = 'butt'; ctx.lineWidth = 34; ctx.strokeStyle = 'rgba(239,233,222,.16)'; ctx.beginPath(); ctx.arc(0, 0, 400, A0, A1); ctx.stroke(); ctx.strokeStyle = C.green; ctx.beginPath(); ctx.arc(0, 0, 400, A0, lerp(A0, A1, np)); ctx.stroke(); ctx.strokeStyle = C.cream; ctx.lineWidth = 4; for (let k = 0; k <= 30; k++) { const a = lerp(A0, A1, k / 30), r0 = k % 5 ? 330 : 310; ctx.beginPath(); ctx.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); ctx.lineTo(Math.cos(a) * 360, Math.sin(a) * 360); ctx.stroke(); } const na = lerp(A0, A1 - .05, np); ctx.strokeStyle = C.red; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(na) * 300, Math.sin(na) * 300); ctx.stroke(); circle(0, 0, 34, C.red); }
   if (i === 5) { bg(C.blue); ctx.lineCap = 'round'; for (const s of SPL) { const x = ((s.x - v * 9000 * s.sp) % 3000 + 3000) % 3000 - 500; ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(x, s.y); ctx.lineTo(x + s.l, s.y); ctx.stroke(); } const bx = lerp(760, 1180, v / .25); ctx.fillStyle = C.red; ctx.beginPath(); ctx.ellipse(bx, cy, 130, 82, 0, 0, 6.283); ctx.fill(); }
   ctx.restore();
+}
+
+/* ================= POWER UP (charge) ================= */
+const RC = rng(321); const PART = Array.from({ length: 160 }, () => ({ a: RC() * 6.283, r0: 900 + RC() * 500, t0: RC(), sp: .5 + RC() * .7, c: [C.cream, C.yel, C.yel, C.red, C.green, C.blue][Math.floor(RC() * 6)], w: 2 + RC() * 4 }));
+function drawCharge(u, D) {
+  bg(C.navy);
+  const p = seg(u, 0, D - .15), e = p * p, cx = 960, cy = 545;
+  // core glow
+  const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 300 + 700 * e);
+  g.addColorStop(0, `rgba(251,180,25,${.15 + .6 * e})`); g.addColorStop(.45, `rgba(223,72,43,${.25 * e})`); g.addColorStop(1, 'rgba(16,24,39,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // inward rings
+  ctx.lineWidth = 3;
+  for (let k = 0; k < 6; k++) { const ph = ((u * (1.2 + 2.5 * e) + k / 6) % 1); const r = lerp(1100, 260, ph); ctx.strokeStyle = `rgba(239,233,222,${(.08 + .35 * e) * ph})`; ctx.beginPath(); ctx.ellipse(cx, cy, r * 1.3, r * .8, 0, 0, 6.283); ctx.stroke(); }
+  // particles streaking inward, rate grows
+  ctx.lineCap = 'round';
+  for (const q of PART) { if (q.t0 > .25 + .9 * p) continue; const ph = ((u * q.sp * (1 + 3 * e) + q.t0) % 1); const r = lerp(q.r0, 120, E.inC(ph)); const r2 = r + 40 + 260 * e * ph; ctx.strokeStyle = q.c; ctx.globalAlpha = .35 + .65 * p; ctx.lineWidth = q.w; ctx.beginPath(); ctx.moveTo(cx + Math.cos(q.a) * r * 1.3, cy + Math.sin(q.a) * r * .8); ctx.lineTo(cx + Math.cos(q.a) * r2 * 1.3, cy + Math.sin(q.a) * r2 * .8); ctx.stroke(); }
+  ctx.globalAlpha = 1;
+  // charge bar
+  const bw = 760, bx = cx - bw / 2, by = 880;
+  ctx.strokeStyle = 'rgba(239,233,222,.5)'; ctx.lineWidth = 2; ctx.strokeRect(bx, by, bw, 22);
+  ctx.fillStyle = p > .85 ? C.yel : C.green; ctx.fillRect(bx + 4, by + 4, (bw - 8) * p, 14);
+  monoText('charging', bx, by - 14, C.cream, 14); monoText(`${Math.round(p * 100)} %`, bx + bw, by - 14, p > .85 ? C.yel : C.cream, 14, 'right');
+  // logo: shake + glow, slow -> strong
+  const t = u * 60, amp = 2 + 34 * e * e + 6 * e;
+  const sx = (Math.sin(t * 1.7) + Math.sin(t * 3.1 + 1) * .6 + Math.sin(t * 5.3 + 2) * .3) * amp * .6;
+  const sy = (Math.sin(t * 2.3 + .5) + Math.sin(t * 4.1 + 2) * .5) * amp * .45;
+  const rot = Math.sin(t * 2.9) * 3.2 * e;
+  const sc = 1 + .08 * e + .03 * Math.sin(u * (6 + 40 * e)) * e;
+  const L = $('clogo');
+  const gl = 6 + 70 * e, br = 1 + 1.1 * e * e;
+  L.style.transform = `translate(${sx}px, ${sy}px) rotate(${rot}deg) scale(${sc})`;
+  L.style.filter = `brightness(${br}) drop-shadow(0 0 ${gl * .4}px rgba(255,240,200,${.3 + .7 * e})) drop-shadow(0 0 ${gl}px rgba(251,180,25,${.2 + .8 * e})) drop-shadow(0 0 ${gl * 2}px rgba(223,72,43,${.6 * e}))`;
+  // white-out at the end
+  const wo = seg(u, D - .2, D);
+  if (wo > 0) { ctx.globalAlpha = E.inC(wo); bg('#fffaf0'); ctx.globalAlpha = 1; L.style.filter += ` brightness(${1 + 8 * wo})`; L.style.opacity = 1 - wo * .6; } else L.style.opacity = 1;
 }
 
 /* ================= S9 FIN ================= */
@@ -458,27 +511,30 @@ function drawS9(u) {
 }
 
 /* ================= TIMELINE ================= */
-const SC = [
-  { a: 0, b: 1.8, draw: drawS1, hud: 'light', lab: '01  Speed' },
-  { a: 1.8, b: 3.0, draw: drawS2, dom: 's2', hud: 'dark', lab: '02  Manifest' },
-  { a: 3.0, b: 4.55, draw: drawS3, hud: 'dark', lab: '03  Optimize' },
-  { a: 4.55, b: 6.05, draw: drawS4, hud: 'light', lab: '04  Edge Cache' },
-  { a: 6.05, b: 7.55, draw: drawS5, hud: 'light', lab: '05  Global CDN' },
-  { a: 7.55, b: 9.05, draw: drawS6, hud: 'light', lab: '06  Flow' },
-  { a: 9.05, b: 10.55, draw: drawS7, hud: 'dark', lab: '07  Switch On' },
-  { a: 10.55, b: 12.05, draw: drawS8, hud: 'x', lab: '08  Protect' },
-  { a: 12.05, b: 15.0001, draw: drawS9, dom: 's9', hud: 'dark', lab: '09  Fin' },
+const DURS = [1.8, 1.6, 5.2, 3.2, 3.4, 3.0, 3.0, 3.0, 2.6, 4.2];
+const SC0 = [
+  { draw: drawS1, hud: 'light', lab: '01  Speed' },
+  { draw: drawS2, dom: 's2', hud: 'dark', lab: '02  Manifest' },
+  { draw: drawS3, hud: 'dark', lab: '03  Optimize' },
+  { draw: drawS4, hud: 'light', lab: '04  Edge Cache' },
+  { draw: drawS5, hud: 'light', lab: '05  Global CDN' },
+  { draw: drawS6, hud: 'light', lab: '06  Flow' },
+  { draw: drawCharge, dom: 'sc', hud: 'light', lab: '07  Power Up' },
+  { draw: drawS7, hud: 'dark', lab: '08  Switch On' },
+  { draw: drawS8, hud: 'x', lab: '09  Protect' },
+  { draw: drawS9, dom: 's9', hud: 'dark', lab: '10  Fin' },
 ];
+let acc = 0; const SC = SC0.map((s, i) => { const o = { ...s, a: acc, b: acc + DURS[i] }; acc += DURS[i]; return o; }); SC[SC.length - 1].b += 1e-4;
 window.cuts = SC.map(s => s.a);
 function sceneAt(t) { for (const s of SC) if (t >= s.a && t < s.b) return s; return SC[SC.length - 1]; }
 function render(t) {
   t = cl(t, 0, DUR - 1e-4);
   const s = sceneAt(t);
   for (const o of SC) if (o.dom) $(o.dom).style.display = o === s ? 'block' : 'none';
-  if (s !== SC[6]) $('s7').style.display = 'none';
-  ctx.save(); s.draw(t - s.a); ctx.restore();
+  if (s.draw !== drawS7) $('s7').style.display = 'none';
+  ctx.save(); s.draw(t - s.a, s.b - s.a); ctx.restore();
   const hud = $('hud'); let dark = s.hud === 'dark';
-  if (s.hud === 'x') { const i = Math.min(5, Math.floor((t - s.a) / .25)); dark = [true, true, false, false, false, false][i]; }
+  if (s.hud === 'x') { const i = Math.min(5, Math.floor((t - s.a) / ((s.b - s.a) / 6))); dark = [true, true, false, false, false, false][i]; }
   hud.className = dark ? 'dark' : '';
   $('h-bl').textContent = s.lab;
   const fr = Math.floor(t * FPS); $('h-tc').textContent = `00:${String(Math.floor(t)).padStart(2, '0')}:${String(fr % FPS).padStart(2, '0')}`;
@@ -496,7 +552,7 @@ Promise.all([
   document.fonts.load('900 100px "Archivo X"'), document.fonts.load('italic 400 100px "Serif I"'),
   document.fonts.load('500 14px JBM'), document.fonts.load('700 14px JBM'),
   new Promise(r => { const im = $('ficon'); im.complete ? r() : im.onload = r; }),
-]).then(() => { $('s2').style.display = 'block'; $('s9').style.display = 'block'; layoutS2(); layoutS9(); buildS7(); render(0); window.__ready = true; });
+]).then(() => { $('s2').style.display = 'block'; $('s9').style.display = 'block'; layoutS2(); layoutS9(); buildS7(); setMK(DURS[2]); render(0); window.__ready = true; });
 </script>
 </body>
 </html>
