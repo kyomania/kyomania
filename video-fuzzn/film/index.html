@@ -113,7 +113,7 @@
       tl.to("#cam", { x: 0, y: 0, rotation: 0, duration: 60 - t, ease: "sine.inOut" }, t); // endet wie Frame 0 → nahtloser Loop
 
       // Punch-Zoom an harten Schnitten
-      [3.2, 5.0, 8.6, 12.2, 17.3, 22.3, 27.0, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
+      [2.6, 3.9, 6.3, 8.9, 11.0, 17.3, 22.3, 27.0, 30.5, 39.0, 42.5, 52.0, 53.8].forEach((c) => {
         tl.fromTo("#plate", { scale: 1.09, filter: "blur(6px)" }, { scale: 1.0, filter: "blur(0px)", duration: 0.28, ease: "power3.out", immediateRender: false }, c);
       });
       // Freeze-Frame-Punch beim Döner-Biss
@@ -130,6 +130,8 @@
       tl.set("#chatbox", { autoAlpha: 0.93 }, 42.5);
 
       // Kein Regen in der Glut-Szene (drinnen am Fenster)
+      tl.to("#rainin", { autoAlpha: 0, duration: 0.1 }, 11.0);   // Juwelier: Kamera im Laden
+      tl.to("#rainin", { autoAlpha: 1, duration: 0.1 }, 14.5);
       tl.to("#rainin", { autoAlpha: 0, duration: 0.1 }, 27.0);
       tl.to("#rainin", { autoAlpha: 1, duration: 0.1 }, 30.5);
 

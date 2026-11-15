@@ -25,11 +25,13 @@ still() { # clip time dur
   echo "file '$(basename "$o")'" >> "$S/list.txt"
 }
 # --- Kiez 0.0-14.5 (C01 startet bei 0.6 s, weil 0.0-0.6 schon unter dem Loop-Riss am Ende läuft)
-seg C01 0.6 3.2
-seg C03 0.6 1.8
-seg C02 0.0 3.6
-seg C11 0.2 3.6
-seg C12 0.3 2.3
+seg C01 0.6 2.6
+seg C03 0.6 1.3
+seg C02 0.0 2.4
+seg C11 0.2 2.6
+seg C12 0.3 2.1
+# Juwelier: leerer Geldbeutel vor den Luxusuhren (11.0-14.5)
+seg C13 0.3 3.5
 # --- Döner 14.5-23.5 (nur Essen, kein zweites Überreichen)
 seg C05 0.0 2.0
 still C05 2.0 0.8

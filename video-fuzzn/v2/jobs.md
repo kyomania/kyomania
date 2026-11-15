@@ -17,3 +17,5 @@ C08b K08c 601422d9-ecd3-472e-97b7-da4024cc69be (neues Zimmer, feste Kamera)
 ## Runde 3
 K08 neu: af53ab7d (v1), 98ba58a0 (v2), a2765bd4 (final, Poster + F-Logo korrigiert)
 Sprites: drop 7fdd7310, streak 2b236a00, rip-SFX 4d33a53f
+C13 K13b 2964764c / Clip db01a824-f302-4cb6-b22e-110820859f2b (Juwelier)
+K13b2 (Anhänger FUZZN) 475a6745-0e34-4368-8705-935b049a0737 – db01a824 war mit altem Anhänger, verworfen

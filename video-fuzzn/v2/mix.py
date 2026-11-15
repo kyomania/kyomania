@@ -5,7 +5,7 @@ import subprocess
 ev = []  # (datei, zeit, lautstärke)
 for t in [14.5, 23.5, 35.0, 47.0, 59.4]:
     ev.append(("rip", max(0.0, t - 0.03), 1.0))          # Papier reißt
-for t, d in [(12.2, 2.3), (52.0, 1.8)]:      # Uhr: Ping + Ticken
+for t, d in [(8.9, 2.1), (52.0, 1.8)]:      # Uhr: Ping + Ticken
     ev.append(("pingE5", t, 0.5))
     k = 0
     while k * 0.4 < d - 0.1:

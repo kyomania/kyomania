@@ -78,11 +78,12 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 **Schnitt (final, Stand Runde 5)**
 | Zeit | Shot |
 |---|---|
-| 0,0–3,2 | C01 Kiez weit (ab 0,6 s im Clip, 0,0–0,6 laufen schon unter dem Loop-Riss) |
-| 3,2–5,0 | C03 Kette |
-| 5,0–8,6 | C02 Kiez nah |
-| 8,6–12,2 | C11 Blick auf die Uhr |
-| 12,2–14,5 | C12 Uhr „NOCH AM SUCHEN…“ → Riss |
+| 0,0–2,6 | C01 Kiez weit (ab 0,6 s im Clip, 0,0–0,6 laufen schon unter dem Loop-Riss) |
+| 2,6–3,9 | C03 Kette |
+| 3,9–6,3 | C02 Kiez nah |
+| 6,3–8,9 | C11 Blick auf die Uhr |
+| 8,9–11,0 | C12 Uhr „NOCH AM SUCHEN…“ |
+| 11,0–14,5 | C13 Juwelier: leerer Geldbeutel vor den Luxusuhren (kein Regen-Overlay) → Riss |
 | 14,5–16,5 | C05 er isst |
 | 16,5–17,3 | Freeze-Punch beim Biss |
 | 17,3–22,3 | C05 weiter, Slow-Mo |
@@ -124,3 +125,7 @@ Musik: ElevenLabs Music v2.5, Lo-Fi-Trap 88 BPM, instrumental, per Crossfade auf
 - Upload `v2/gameplay/warzone.mp4` (4,65 s) ersetzt das KI-Spiel auf dem linken Monitor in beiden Zimmer-Szenen (35–39 s, 42,5–47 s).
 - `v2/screen_replace.py`: Homographie auf die gemessenen Monitorecken (1162,413 / 1501,419 / 1494,620 / 1157,614), Bildschirm-Look (leicht entsättigt, weich), Maske im unteren Randstreifen hält Hand, Controller und Jacke vor dem Gameplay. Läuft in `build_base.sh` nach dem Zusammensetzen.
 - C08 1,75–2,45 s ausgelassen, weil dort das KI-Mündungsfeuer über den Monitorrand auf die Hände strahlte.
+
+## Runde 8 – Juwelier-Szene
+- K13 Variante B (Blick durchs Schaufenster), danach Anhänger auf „FUZZN“ korrigiert (Job 475a6745), Kling-Clip C13 (5e2a73ab). Keine Markennamen oder Logos im Bild.
+- Kiez-Teil gekürzt, damit die Szene bei 11,0–14,5 s Platz hat. Uhr-SFX jetzt bei 8,9 s.
