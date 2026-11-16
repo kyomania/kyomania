@@ -150,3 +150,12 @@ Alle mit: `full body side view, facing right, plain solid chroma green (#00FF00)
 - **Krankenhaus:** Das Kuss-Bild (Z3) zeigt jetzt ein modernes Alu-Fenster in weißer Fassade, passend zum Gebäude H6.
 - **Häuser:** Späti und Altbau sind frontaler neu erzeugt. Beim Späti sind die Seitenwände noch leicht zu sehen, die schneide ich weg.
 - **Licht:** Die Greenscreen-Bilder bleiben im Studiolicht. Das Nachtlicht (dunkler, warmes Laternenlicht von links, blaues Randlicht) mache ich im Schnitt, weil Seedream beim Umleuchten den grünen Hintergrund zerstört hat.
+
+---
+
+## Stand Render 1 (Kling 3.0)
+- Ergebnis: `video-fuzzn/fuzzn-hidescreen-v3-endless-walk.mp4` (90 s, 1920x1080, Ton). Naht letztes/erstes Bild: mittlere Abweichung ~3/255.
+- Pipeline: `python3 tools/compose.py` → `work-render/base_v3.mp4` (Ebenen-Welt + Clips + Monitore), `python3 tools/mix.py` → Ton, dann `film/` mit HyperFrames rendern (HUD, Regen, Ton). Vorher `cp work-render/base_v3.mp4 film/assets/video/`.
+- Zimmer: Startbild/Clips mit hellgrauen Monitoren (Z1/Z2/Z4 „grau“), „LOOKING FOR MATCH“ links und leerer Stream-Chat rechts werden perspektivisch eingesetzt; alles, was nicht hellgrau ist (fuzzn), bleibt davor.
+- Welt-Elemente mit Higgsfield „Image Background Remover“ freigestellt (`cut/*_final.png`).
+- Freunde-Clip zweimal erzeugt (G4_freunde_v2 mit sichtbarer 360°-Drehung).
