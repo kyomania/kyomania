@@ -25,11 +25,11 @@ SPEED = 300.0            # Scroll-Geschwindigkeit der Häuser in px/s
 WALK = [(14.0, 28.0), (29.2, 51.0), (67.0, 83.0)]
 # Vollbild-Clips: (start, ende, datei, quell-start)
 FULL = [
-    (0.0, 4.0, "still:img/Z1_zimmer_socken.png", 0.0),
-    (4.0, 9.0, "clips/V1_zimmer_start.mp4", 0.0),
-    (9.0, 14.0, "clips/V2_schuhe_an.mp4", 0.0),
+    (0.0, 4.0, "still:img/Z1_zimmer_grau.png", 0.0),
+    (4.0, 9.0, "clips/V1g_zimmer_start.mp4", 0.0),
+    (9.0, 14.0, "clips/V2g_schuhe_an.mp4", 0.0),
     (57.0, 63.0, "clips/V3_oma.mp4", 0.0),
-    (84.0, 90.0, "clips/V4_schuhe_aus.mp4", 0.0),
+    (84.0, 90.0, "clips/V4g_schuhe_aus.mp4", 0.0),
 ]
 # fuzzn-Clips draußen: (start, ende, datei, quell-start, ein, aus)  ein/aus = Einblend-/Ausblendzeit
 CHAR = [
@@ -77,9 +77,10 @@ CRANE_DOWN = (63.8, 66.6)
 H6_WINDOW = (0.505, 0.435)   # Omas Fenster (Anteil an Breite/Höhe des Krankenhaus-Bilds)
 
 
-# ---------- Zimmer: Monitor „LOOKING FOR MATCH“ + Poster-Reparatur ----------
+# ---------- Zimmer: Monitore (hell-grau im Clip) -> „LOOKING FOR MATCH“ + leerer Chat ----------
 from PIL import ImageDraw, ImageFont
-MON_QUAD = [(1172, 413), (1520, 418), (1516, 622), (1170, 614)]   # TL TR BR BL (gemessen an Z1)
+MON_L = [(1191, 413), (1536, 419), (1533, 620), (1188, 613)]   # TL TR BR BL (gemessen an Z1 grau)
+MON_R = [(1560, 420), (1889, 426), (1880, 660), (1556, 625)]
 SW, SH = 720, 420
 F_BIG = ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-ExtraBold.otf", 56)
 F_SM = ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-Bold.otf", 26)
@@ -93,71 +94,65 @@ def homography(src, dst):
     return np.linalg.solve(np.array(A, float), np.array(bb, float))
 
 
-MON_COEF = tuple(homography(MON_QUAD, [(0, 0), (SW, 0), (SW, SH), (0, SH)]))
+COEF_L = tuple(homography(MON_L, [(0, 0), (SW, 0), (SW, SH), (0, SH)]))
+COEF_R = tuple(homography(MON_R, [(0, 0), (SW, 0), (SW, SH), (0, SH)]))
 _qm = Image.new("L", (W, H), 0)
-ImageDraw.Draw(_qm).polygon(MON_QUAD, fill=255)
-MON_MASK = np.asarray(_qm.filter(ImageFilter.GaussianBlur(0.8)), np.float32) / 255
-MON_IN = np.asarray(_qm.filter(ImageFilter.MinFilter(7)), np.uint8) > 128
-_st = np.zeros((630 - 405, 1530 - 1160), bool)
-_st[:, :16] = True                                  # linker Rand
-_st[-14:, : int(_st.shape[1] * 0.4)] = True         # unterer Rand links
-MON_STRIP = _st
-REF = np.asarray(Image.open("img/Z1_zimmer_socken.png").convert("RGB").resize((W, H), Image.LANCZOS)).astype(np.float32)
-REF_LUM = REF.mean(axis=2)
-# Monitor-Bereich als Ausschnitt (schneller)
-MX0, MY0, MX1, MY1 = 1160, 405, 1530, 630
+ImageDraw.Draw(_qm).polygon(MON_L, fill=255)
+ImageDraw.Draw(_qm).polygon(MON_R, fill=255)
+QMASK = np.asarray(_qm.filter(ImageFilter.MaxFilter(5)), np.float32) / 255
+RX0, RY0, RX1, RY1 = 1170, 400, 1905, 680
 
 
-def screen_image(t):
+def screen_left(t):
     im = Image.new("RGB", (SW, SH), (10, 14, 30))
     d = ImageDraw.Draw(im)
-    for y in range(SH):  # Verlauf
+    for y in range(SH):
         c = int(10 + 22 * y / SH)
         d.line([(0, y), (SW, y)], fill=(c, c + 4, c + 26))
     txt = "LOOKING FOR MATCH"
     tw = d.textlength(txt, font=F_BIG)
     d.text(((SW - tw) / 2, 140), txt, font=F_BIG, fill=(245, 245, 250))
-    # Ladebalken (läuft in Schleife)
-    bx0, bx1, by = 160, SW - 160, 260
+    bx0, bx1, by = 160, SW - 160, 250
     d.rounded_rectangle([bx0, by, bx1, by + 14], 7, fill=(40, 46, 80))
     u = (t * 0.35) % 1.0
-    seg = 0.28
-    a0 = bx0 + (bx1 - bx0) * max(0, u - seg)
+    a0 = bx0 + (bx1 - bx0) * max(0, u - 0.28)
     a1 = bx0 + (bx1 - bx0) * min(1, u)
     d.rounded_rectangle([a0, by, max(a0 + 14, a1), by + 14], 7, fill=(255, 150, 60))
     st = "WARZONE  ·  SUCHE NACH SPIELERN"
-    sw2 = d.textlength(st, font=F_SM)
-    d.text(((SW - sw2) / 2, 300), st, font=F_SM, fill=(150, 160, 200))
+    d.text(((SW - d.textlength(st, font=F_SM)) / 2, 290), st, font=F_SM, fill=(150, 160, 200))
     return im.filter(ImageFilter.GaussianBlur(0.6))
+
+
+def screen_right():
+    im = Image.new("RGB", (SW, SH), (24, 24, 28))
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, 0, SW, 54], fill=(100, 65, 165))
+    d.text((24, 12), "STREAM-CHAT", font=F_SM, fill=(240, 236, 250))
+    d.rounded_rectangle([20, SH - 62, SW - 20, SH - 18], 8, fill=(40, 40, 46))
+    return im.filter(ImageFilter.GaussianBlur(0.6))
+
+
+SCR_R = np.asarray(screen_right().transform((W, H), Image.PERSPECTIVE, COEF_R, Image.BICUBIC), np.float32)
 
 
 def room_fix(frame, t):
     fr = frame.astype(np.float32).copy()
-    # 1) Monitor ersetzen, Verdeckung (fuzzn davor) behalten
-    scr = screen_image(t).transform((W, H), Image.PERSPECTIVE, MON_COEF, Image.BICUBIC)
-    sa = np.asarray(scr, np.float32)[MY0:MY1, MX0:MX1]
-    sa = sa * 0.92 + 4
-    reg = fr[MY0:MY1, MX0:MX1]
+    reg = fr[RY0:RY1, RX0:RX1]
     lum = reg.mean(axis=2)
-    ref = REF_LUM[MY0:MY1, MX0:MX1]
-    r, g, b = reg[..., 0], reg[..., 1], reg[..., 2]
-    skin = (r > 150) & (r - b > 25) & (g > 110)
-    inside = MON_IN[MY0:MY1, MX0:MX1]
-    cand = (((lum < 60) | skin) & (inside | MON_STRIP)).astype(np.uint8) * 255
-    cm = Image.fromarray(cand).copy()
-    hh, ww = cand.shape
-    for y in range(0, hh, 3):                     # Saat: linker Rand
-        if cm.getpixel((2, y)) == 255:
-            ImageDraw.floodfill(cm, (2, y), 128)
-    for x in range(0, int(ww * 0.4), 3):          # Saat: unterer Rand, linkes Drittel
-        if cm.getpixel((x, hh - 3)) == 255:
-            ImageDraw.floodfill(cm, (x, hh - 3), 128)
-    occ = np.asarray(cm) == 128
-    occ_img = Image.fromarray((occ * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.2))
-    m = MON_MASK[MY0:MY1, MX0:MX1] * (1 - np.asarray(occ_img, np.float32) / 255)
-    fr[MY0:MY1, MX0:MX1] = reg * (1 - m[..., None]) + sa * m[..., None]
+    sat = reg.max(axis=2) - reg.min(axis=2)
+    # Monitor = helle, graue Pixel innerhalb der Monitorflächen; alles andere (fuzzn davor) bleibt
+    screen = ((lum > 135) & (sat < 50)).astype(np.uint8) * 255
+    sm = Image.fromarray(screen).filter(ImageFilter.MedianFilter(3)).filter(ImageFilter.GaussianBlur(0.8))
+    m = (np.asarray(sm, np.float32) / 255) * QMASK[RY0:RY1, RX0:RX1]
+    left = np.asarray(screen_left(t).transform((W, H), Image.PERSPECTIVE, COEF_L, Image.BICUBIC), np.float32)
+    ui = np.where(_qm_left[RY0:RY1, RX0:RX1, None], left[RY0:RY1, RX0:RX1], SCR_R[RY0:RY1, RX0:RX1])
+    fr[RY0:RY1, RX0:RX1] = reg * (1 - m[..., None]) + (ui * 0.95 + 3) * m[..., None]
     return np.clip(fr, 0, 255).astype(np.uint8)
 
+
+_ql = Image.new("L", (W, H), 0)
+ImageDraw.Draw(_ql).polygon(MON_L, fill=255)
+_qm_left = np.asarray(_ql.filter(ImageFilter.MaxFilter(5))) > 128
 
 def walk_x(t):
     """Welt-Position (px) zum Zeitpunkt t."""
@@ -328,7 +323,7 @@ def render(t0, t1, out):
                     open_full.clear()
                     open_full[full] = Clip(path, ss + (t - s), (W, H))
                 frame = open_full[full].next()
-            if "zimmer" in path or "schuhe" in path:
+            if "zimmer" in path or "schuhe" in path or "Z1_" in path:
                 frame = room_fix(frame, t)
             enc.stdin.write(np.ascontiguousarray(frame).tobytes())
             continue

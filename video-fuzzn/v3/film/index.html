@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="de" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "R3"; src: url(assets/fonts/archivo-black-latin-400-normal.woff2); }
+      @font-face { font-family: "R7"; src: url(assets/fonts/bebas-neue-latin-400-normal.woff2); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0c1c; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0b0c1c; color: #fff; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #base { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
+      .rain { position: absolute; top: -220px; }
+      #hud { position: absolute; left: 56px; bottom: 44px; display: flex; align-items: center; gap: 18px; font: 400 30px "R3", sans-serif; letter-spacing: 0.04em;
+        padding: 12px 22px; background: rgba(10,10,24,0.55); border-radius: 10px; }
+      #rec { width: 22px; height: 22px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 0 6px rgba(255,59,59,0.18); }
+      #hud .tw { font: 400 30px "R7", sans-serif; letter-spacing: 0.08em; color: #c9b8ff; margin-left: 16px; }
+      #hud .ig { display: inline-flex; align-items: center; gap: 10px; margin-left: 14px; font: 400 30px "R7", sans-serif; letter-spacing: 0.08em; color: #ffb3d1; }
+      #hud .ig svg { width: 30px; height: 30px; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="90" data-width="1920" data-height="1080" data-fps="30">
+
+      <!-- Grundfilm aus tools/compose.py (Ebenen-Welt, Clips, Monitore) -->
+      <video id="base" class="clip" data-start="0" data-duration="90" data-track-index="0" src="assets/video/base_v3.mp4" muted playsinline></video>
+
+      <!-- feiner Papier-Regen draußen (14-84 s) -->
+      <div id="rain" class="clip" data-start="14" data-duration="70" data-track-index="4"><div id="rainin" class="full"></div></div>
+
+      <!-- Musik + Schritte + Effekte -->
+      <audio id="mix" data-start="0" data-duration="90" data-track-index="30" src="assets/audio/mix.wav"></audio>
+
+      <div id="ovl" class="clip" data-start="0" data-duration="90" data-track-index="20">
+        <div id="hud"><div id="rec"></div><span>LOOKING FOR MATCH</span><span class="tw">twitch.tv/fuzzn</span><span class="ig"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="#ffffff" stroke-width="2.4"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="#ffffff" stroke-width="2.4"/><circle cx="17.6" cy="6.4" r="1.4" fill="#ffffff"/></svg>dfuzzn</span></div>
+      </div>
+    </div>
+
+    <script>
+      let seed = 23; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+      const rain = document.getElementById("rainin");
+      const RS = 34, RD = 6;
+      for (let i = 0; i < RS + RD; i++) {
+        const im = document.createElement("img"); im.className = "rain"; im.id = "r" + i;
+        const streak = i < RS; im.src = "assets/img/" + (streak ? "streak" : "drop") + ".png";
+        const sc = streak ? 0.35 + rnd() * 0.45 : 0.25 + rnd() * 0.25;
+        im.style.left = Math.round(rnd() * 2100 - 120) + "px";
+        im.style.width = Math.round((streak ? 16 : 56) * sc) + "px";
+        im.style.opacity = (streak ? 0.2 : 0.35) + rnd() * 0.22;
+        rain.appendChild(im);
+      }
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#rec", { opacity: 1 }, { opacity: 0.2, duration: 0.6, ease: "steps(1)", yoyo: true, repeat: 149 }, 0);
+      for (let i = 0; i < RS + RD; i++) {
+        const streak = i < RS; const d = streak ? 0.55 + rnd() * 0.35 : 1.1 + rnd() * 0.7;
+        tl.fromTo("#r" + i, { x: 0, y: 0, rotation: 9 }, { x: -200, y: 1400, rotation: 9, duration: d, ease: "none", repeat: Math.max(0, Math.floor(70 / d) - 1) }, 14 + rnd() * d);
+      }
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

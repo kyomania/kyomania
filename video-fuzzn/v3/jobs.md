@@ -48,3 +48,9 @@ V2_schuhe_an 0440d617-3bbd-43f5-8f8d-b6ad9343d554
 V4_schuhe_aus 474362fb-17fd-4834-9e01-25c8ac383059 (Z4 -> Z1s)
 G4_freunde_v2 23d33ea1-a2e0-47a0-9eab-20712ae2146e (Drehung)
 Z1g (Monitor hellgrau, Poster ohne Schrift) cdff32d0-2ce7-4d23-acfb-483802df7d81
+Z2g faf0d7af-81bc-4c6c-accf-693c1d0e175f
+Z4g d1211961-51d4-49c2-9ff7-e22e396d28da
+V1g 39c6abdc-84eb-48a8-9d28-7fcebf6b78b6
+V2g 380d384d-c6d1-4368-bf7e-db04a56097c9
+V4g 3b5e565b-8853-4232-b90a-5728a15c0a01
+Audio: music e4334a42 steps ee38edda pop 34b66cfc lighter baaaf599 swish 81261b80 clap 09f2c5fd
