@@ -28,3 +28,8 @@ W3_strasse_v2 ffb9c6fc-b96c-4782-82f4-14293cd48501 (vorher Perspektive)
 Z1: verworfen (helle Wände, 3 Monitore) -> Z1_zimmer_final = K08c aus v2 (a2765bd4)
 Z3_oma_v2 723de15c-fe36-4100-a86b-98c774f01f97 (Kuss auf die Stirn)
 Z4_schuhe_aus_v2 0e1a5400-cb55-45f2-89d2-1bc3843da5f7 (am Bett, keine Tür)
+## Logik-Prüfung (Runde 2)
+H2_spaeti_v2 405078ee (frontaler), H3_graffiti_v2 6cb85268 (frontal)
+Z3_oma_v3 b530f8e3 (modernes Alu-Fenster wie H6)
+Z2_schuhe_an_final 6aa4f17e, Z4_schuhe_aus_final 108cc38f (Nano Banana Pro, Edit von Z1 -> identischer Raum)
+Nachtlicht-Varianten der S-Bilder verworfen (Hintergrund nicht mehr grün) -> Nachtlicht wird im Schnitt gemacht
