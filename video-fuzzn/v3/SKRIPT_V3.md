@@ -43,7 +43,7 @@ Nur vier Momente sind Vollbild-Clips: das Zimmer am Anfang, die Schuhe, Oma im K
 | 41–47 | Die Kamera fährt außen an der Krankenhaus-Fassade hoch bis zu Omas Fenster. „SEARCHING“ dahinter ist dabei nur noch angeschnitten | Kamerafahrt über H6 |
 | 47–53 | Durchs Fenster: er gibt Oma einen Kuss auf die Stirn, sie lächelt, kleines Herz | Vollbild-Clip V3 |
 | 53–57 | Kamera fährt wieder runter, er kommt unten raus und läuft weiter | Kamerafahrt + G1 |
-| 57–75 | **Lauf 2 mit Aktionen:** wirft das Döner-Papier wie einen Basketball in den Mülleimer (Swish), tanzt ein paar Schritte zu einem Straßenmusiker, schaut auf die Uhr („NOCH AM SUCHEN…“) | Ebenen + G6, G7, G8 |
+| 57–75 | **Lauf 2 mit Aktionen:** wirft das Döner-Papier wie einen Basketball in den Mülleimer (Swish), schaut auf die Uhr („NOCH AM SUCHEN…“) | Ebenen + G6, G8 |
 | 75–80 | Zurück am Plattenbau, er geht durch die Haustür rein | Ebenen + H1 |
 | 80–85 | Zimmer: er kommt rein, zieht die Schuhe aus und stellt sie an die Tür | Vollbild-Clip V4 |
 | 85–90 | Er setzt sich an den PC, auf dem Monitor steht immer noch „LOOKING FOR MATCH“. Das letzte Bild ist identisch mit dem ersten → nahtloser Loop | Vollbild-Clip V5 (Endbild = Startbild) |
@@ -140,3 +140,13 @@ Alle mit: `full body side view, facing right, plain solid chroma green (#00FF00)
 | Musik + Geräusche | – | ca. 10 |
 
 „Unlimited“ funktioniert über Claude Code nicht. In der Higgsfield-Oberfläche oder in Claude Desktop geht es.
+
+---
+
+## Stand nach der Logik-Prüfung
+- **Kein Tanz:** Straßenmusiker (H7), Startbild S7 und Clip G7 sind gestrichen.
+- **Zimmer:** Alle Zimmer-Szenen spielen in exakt derselben Einstellung wie das Start-/Endbild Z1 (das Zimmer aus v2). Er dreht den Gaming-Stuhl zur Kamera und zieht dort die Schuhe an (Z2) bzw. aus (Z4). Es gibt kein Bett und keine Tür, damit die Einrichtung durchgehend gleich bleibt. Z2 und Z4 sind mit Nano Banana Pro als Bearbeitung von Z1 entstanden, weil Seedream den Raum nicht konstant hielt.
+- **Monitor:** In allen Zimmerbildern läuft links noch ein KI-Spiel. Das ersetze ich wie in v2 perspektivisch durch „LOOKING FOR MATCH“.
+- **Krankenhaus:** Das Kuss-Bild (Z3) zeigt jetzt ein modernes Alu-Fenster in weißer Fassade, passend zum Gebäude H6.
+- **Häuser:** Späti und Altbau sind frontaler neu erzeugt. Beim Späti sind die Seitenwände noch leicht zu sehen, die schneide ich weg.
+- **Licht:** Die Greenscreen-Bilder bleiben im Studiolicht. Das Nachtlicht (dunkler, warmes Laternenlicht von links, blaues Randlicht) mache ich im Schnitt, weil Seedream beim Umleuchten den grünen Hintergrund zerstört hat.
