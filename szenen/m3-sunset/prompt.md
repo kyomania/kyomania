@@ -1,6 +1,6 @@
 # Szene: M3 Sunset Cruise
 
-Startbilder: `1-drohne.png`, `2-seitlich.png`, `3-fahrerhaus.png`, `4-kennzeichen.png` (Charakter: `charaktere/dekii-hawaii-v2.png`, Auto: `style/referenzen/m3.webp`)
+Referenzen zum Mitgeben: Stadt-Stil `stadt/1-skyline.png` … `stadt/4-downtown-nacht.png` (nur Stil, keine Startbilder), Charakter `charaktere/dekii-hawaii-v2.png`, Auto `style/referenzen/m3.webp`
 
 ## Video-Prompt (EN, 16:9, ca. 15–20 s)
 

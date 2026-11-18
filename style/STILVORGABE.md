@@ -19,7 +19,8 @@ Hinweis: keine geschützten Namen, Logos oder echten Spielfiguren nachbauen – 
 
 ## Arbeitsweise
 - **Bilder:** darf Claude frei generieren.
-- **Videos:** Claude generiert KEINE Videos, sondern liefert pro Szene genau EINEN fertigen Prompt (plus passendes Startbild).
+- **Videos:** Claude generiert KEINE Videos und KEINE Startbilder, sondern liefert pro Szene genau EINEN fertigen Prompt. Startbilder erstellt das Videomodell selbst.
+- **Stadt-Referenzen:** `stadt/1-skyline.png`, `stadt/2-boulevard-sunset.png`, `stadt/3-kanal-highway.png`, `stadt/4-downtown-nacht.png` – reine Stil-Vorlagen, werden zusammen mit dem CITY BLOCK mitgegeben.
 
 ## Die Stadt (fester Baustein, wörtlich in JEDEN Video-Prompt)
 `CITY BLOCK (EN):`
