@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JB Motion, Studio für Bewegtbild</title>
+  <meta name="description" content="JB Motion ist ein fiktives Studio für Titelsequenzen, Markenfilme und Motion Design in Hamburg.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500&family=Funnel+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav container">
+    <a class="wordmark" href="#top">JB Motion</a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#arbeiten">Arbeiten</a>
+      <a href="#studio">Studio</a>
+      <a class="nav-mail" href="mailto:hallo@jbmotion.example">hallo@jbmotion.example</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-head">
+      <div class="hero-light" aria-hidden="true">
+        <canvas class="light" id="light"></canvas>
+      </div>
+      <div class="container hero-inner">
+        <h1 id="hero-head">Licht, das sich bewegt.</h1>
+        <div class="hero-foot">
+          <p class="lead">Ein kleines Studio in Hamburg für Titel, Markenfilme und Motion Design.</p>
+          <div class="actions">
+            <a class="btn" href="mailto:hallo@jbmotion.example">Projekt anfragen</a>
+            <a class="btn btn--clear" href="#arbeiten">Arbeiten ansehen</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case container" aria-labelledby="case-head">
+      <figure class="case-still clear" data-slot="case" data-alt="Standbild aus der Titelsequenz Tiefblau">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Swimming_Pool_in_a_hotel_in_Tamil_Nadu_03.jpg/1280px-Swimming_Pool_in_a_hotel_in_Tamil_Nadu_03.jpg" sizes="(min-width: 60rem) 60vw, 100vw" width="5472" height="3648" alt="Blaues Poolwasser mit Spiegelungen von Palmen" loading="lazy">
+      </figure>
+      <div class="case-text">
+        <p class="small muted">Ausgewählte Arbeit</p>
+        <h2 id="case-head">Tiefblau</h2>
+        <p>Die Titelsequenz einer Dokuserie über Schwimmbäder: Wasserlicht, langsam aufgezogen, bis der Titel aus den Reflexen auftaucht.</p>
+        <dl class="facts">
+          <div><dt>Auftrag</dt><dd>Titelsequenz</dd></div>
+          <div><dt>Länge</dt><dd>48 Sekunden</dd></div>
+          <div><dt>Jahr</dt><dd>2026</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="index container" id="arbeiten" aria-labelledby="index-head">
+      <h2 id="index-head">Arbeiten</h2>
+      <ol class="rows">
+        <li class="row">
+          <div class="row-pic" data-slot="glashaus" data-alt="Standbild Glashaus"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Fragment_of_160_Front_Street_West%2C_Toronto.jpg/960px-Fragment_of_160_Front_Street_West%2C_Toronto.jpg" width="9504" height="6336" alt="Gebogene blaue Glasfassade" loading="lazy"></div>
+          <h3>Glashaus</h3><p class="muted">Markenfilm für ein Architekturbüro</p><p class="year num">2026</p>
+        </li>
+        <li class="row">
+          <div class="row-pic" data-slot="nachtlinie" data-alt="Standbild Nachtlinie"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/T-Centralen_central_underground_metro_station_Stockholm_2016_01.jpg/960px-T-Centralen_central_underground_metro_station_Stockholm_2016_01.jpg" width="4096" height="2607" alt="U-Bahn rauscht an blau bemalten Höhlenwänden vorbei" loading="lazy"></div>
+          <h3>Nachtlinie</h3><p class="muted">Musikvideo</p><p class="year num">2025</p>
+        </li>
+        <li class="row">
+          <div class="row-pic" data-slot="drehscheibe" data-alt="Standbild Drehscheibe"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Pottery_workshop_at_Odisha_Crafts_Museum_02.jpg/960px-Pottery_workshop_at_Odisha_Crafts_Museum_02.jpg" width="3888" height="2592" alt="Hände formen Ton auf einer schnell drehenden Töpferscheibe" loading="lazy"></div>
+          <h3>Drehscheibe</h3><p class="muted">Social-Kampagne für eine Keramikwerkstatt</p><p class="year num">2025</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="services band" id="studio" aria-labelledby="services-head">
+      <div class="container services-inner">
+        <h2 id="services-head">Was wir machen</h2>
+        <ul class="lanes">
+          <li><span>Titelsequenzen</span><span class="muted">Serie, Film, Festival</span></li>
+          <li><span>Markenfilme</span><span class="muted">30 bis 90 Sekunden</span></li>
+          <li><span>Motion für Social</span><span class="muted">Hochkant, in Serie</span></li>
+          <li><span>Musikvideos</span><span class="muted">Animiert oder gemischt</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="close" aria-labelledby="close-head">
+      <div class="close-light" aria-hidden="true"><canvas class="light" id="light2"></canvas></div>
+      <div class="container close-inner">
+        <h2 id="close-head">Erzähl uns, was sich bewegen soll.</h2>
+        <address class="office">
+          <p>JB Motion<br>Hafenstraße 12<br>20359 Hamburg</p>
+          <p><a href="mailto:hallo@jbmotion.example">hallo@jbmotion.example</a></p>
+        </address>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot container">
+    <p class="small muted">JB Motion ist ein fiktives Studio. Alle Projekte sind erfunden, die Bilder sind Platzhalter.</p>
+    <p class="small muted">Fotos: <a href="https://commons.wikimedia.org/wiki/File:Swimming_Pool_in_a_hotel_in_Tamil_Nadu_03.jpg">Kritzolina</a> (CC BY-SA 4.0), <a href="https://commons.wikimedia.org/wiki/File:Fragment_of_160_Front_Street_West,_Toronto.jpg">Maksim Sokolov</a> (CC BY-SA 4.0), <a href="https://commons.wikimedia.org/wiki/File:T-Centralen_central_underground_metro_station_Stockholm_2016_01.jpg">Julian Herzog</a> (CC BY 4.0), <a href="https://commons.wikimedia.org/wiki/File:Pottery_workshop_at_Odisha_Crafts_Museum_02.jpg">Kritzolina</a> (CC BY-SA 4.0), alle Wikimedia Commons</p>
+  </footer>
+
+  <script src="light.js"></script>
+  <script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
+document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
+</body>
+</html>

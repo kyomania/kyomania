@@ -1,0 +1,34 @@
+[
+ {
+  "shape": "Marquee Hero",
+  "theme": "refract",
+  "axes": "light/grotesk-sans/cool",
+  "hero": "Poster",
+  "nav": "edge-aligned",
+  "footer": "statement",
+  "imagery": "photographs",
+  "photos": [
+   "Swimming_Pool_in_a_hotel_in_Tamil_Nadu_03",
+   "Fragment_of_160_Front_Street_West",
+   "T-Centralen_2016_01",
+   "Pottery_workshop_Odisha_02"
+  ],
+  "entry": "index.html",
+  "sections": [
+   "hero",
+   "case",
+   "index",
+   "services",
+   "close",
+   "footer"
+  ],
+  "signature": "live water caustics beside the headline",
+  "waived": [
+   "81",
+   "59"
+  ],
+  "prompt": "jbmotion webseite für videodesign",
+  "date": "2026-11-19",
+  "mode": "build"
+ }
+]
