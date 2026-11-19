@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JB Motion, Bilder in Umlauf</title>
+  <meta name="description" content="JB Motion ist ein fiktives Studio für Videodesign in Hamburg: Titel, Markenfilme und Social Clips.">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }</script>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a class="wordmark" href="#top">JB Motion</a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#titel">Leistungen</a>
+      <a href="#arbeiten">Arbeiten</a>
+      <a class="cta-small" href="mailto:hallo@jbmotion.example">Projekt anfragen</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="panel hero" data-shot="0">
+      <h1>Wir setzen Bilder in&nbsp;Umlauf.</h1>
+      <p class="lead">Ein Studio für Videodesign in Hamburg. Titel, Markenfilme und Social Clips, die man nicht wegscrollt.</p>
+      <div class="actions">
+        <a class="btn" href="mailto:hallo@jbmotion.example">Projekt anfragen</a>
+        <a class="ghost" href="#titel">Scrollen, die Kamera fährt los</a>
+      </div>
+    </section>
+
+    <section class="panel service" id="titel" data-shot="1">
+      <p class="index num">01</p>
+      <h2>Titelsequenzen</h2>
+      <p>Die ersten neunzig Sekunden einer Serie. Typografie, Licht und Musik, auf das Bild genau geschnitten.</p>
+    </section>
+
+    <section class="panel service right" data-shot="2">
+      <p class="index num">02</p>
+      <h2>Markenfilme</h2>
+      <p>Dreißig bis neunzig Sekunden, die zeigen, wofür eine Marke steht, statt es zu behaupten.</p>
+    </section>
+
+    <section class="panel service" data-shot="3">
+      <p class="index num">03</p>
+      <h2>Social Clips</h2>
+      <p>Hochkant, in Serie, mit einem Look, den man nach drei Sekunden wiedererkennt.</p>
+    </section>
+
+    <section class="panel work" id="arbeiten" data-shot="4">
+      <h2>Arbeiten</h2>
+      <ol class="list">
+        <li><span class="name">Tiefblau</span><span class="what">Titelsequenz, Dokuserie</span><span class="num">2026</span></li>
+        <li><span class="name">Glashaus</span><span class="what">Markenfilm, Architekturbüro</span><span class="num">2026</span></li>
+        <li><span class="name">Nachtlinie</span><span class="what">Musikvideo</span><span class="num">2025</span></li>
+        <li><span class="name">Drehscheibe</span><span class="what">Social Clips, Keramikwerkstatt</span><span class="num">2025</span></li>
+      </ol>
+    </section>
+
+    <section class="panel finale" data-shot="5">
+      <p class="lead">Ein Satz reicht für den Anfang.</p>
+      <a class="mail" href="mailto:hallo@jbmotion.example">hallo@jbmotion.example</a>
+      <p class="addr">Hafenstraße 12, 20359 Hamburg</p>
+      <p class="giant" aria-hidden="true">JB MOTION</p>
+    </section>
+  </main>
+
+  <footer class="foot">JB Motion ist ein fiktives Studio. Projekte, Adresse und E-Mail sind erfunden.</footer>
+
+  <script>
+    // Riesiger Schriftzug füllt exakt die Breite
+    const fit = () => { const g = document.querySelector('.giant'); g.style.fontSize = '100px'; g.style.fontSize = (100 * document.documentElement.clientWidth / g.scrollWidth * 0.98) + 'px'; };
+    document.fonts.ready.then(fit); addEventListener('resize', fit);
+  </script>
+  <script type="module" src="scene.js"></script>
+</body>
+</html>
