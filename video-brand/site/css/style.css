@@ -1,0 +1,277 @@
+/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
+
+/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html {
+  color: #222;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+/*
+ * Remove the gap between audio, canvas, iframes,
+ * images, videos and the bottom of their containers:
+ * https://github.com/h5bp/html5-boilerplate/issues/440
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+  resize: vertical;
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Hide visually and from screen readers
+ */
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+/*
+ * Hide only visually, but have it available for screen readers:
+ * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+ *
+ * 1. For long content, line feeds are not interpreted as spaces and small width
+ *    causes content to wrap 1 word per line:
+ *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+ */
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  /* 1 */
+}
+
+/*
+ * Extends the .visually-hidden class to allow the element
+ * to be focusable when navigated to via the keyboard:
+ * https://www.drupal.org/node/897638
+ */
+
+.visually-hidden.focusable:active,
+.visually-hidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  white-space: inherit;
+  width: auto;
+}
+
+/*
+ * Hide visually and from screen readers, but maintain layout
+ */
+
+.invisible {
+  visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * The use of `table` rather than `block` is only necessary if using
+ * `::before` to contain the top-margins of child elements.
+ */
+
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+  /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+  (-webkit-min-device-pixel-ratio: 1.25),
+  (min-resolution: 1.25dppx),
+  (min-resolution: 120dpi) {
+  /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid the additional HTTP request:
+   https://www.phpied.com/delay-loading-your-print-css/
+   ========================================================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: #fff !important;
+    color: #000 !important;
+    /* Black prints faster */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  /*
+   * Don't show links that are fragment identifiers,
+   * or use the `javascript:` pseudo protocol
+   */
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+
+/* ==========================================================================
+   fast.site Landingpage
+   ========================================================================== */
+@font-face{font-family:"Anton";src:url(../fonts/anton-latin-400-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Archivo";font-weight:500;src:url(../fonts/archivo-latin-500-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Archivo";font-weight:800;src:url(../fonts/archivo-latin-800-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"JB";font-weight:800;src:url(../fonts/jetbrains-mono-latin-800-normal.woff2) format("woff2");font-display:swap}
+:root{--bk:#07080c;--blue:#3e71b6;--green:#0c9958;--red:#df482b;--yellow:#fbb419;--white:#f5f3ee}
+body{margin:0;background:radial-gradient(90% 60% at 50% 20%,#151a2a 0%,var(--bk) 70%) no-repeat,var(--bk);color:var(--white);font:500 18px/1.5 "Archivo",sans-serif}
+.top{display:flex;justify-content:space-between;align-items:center;padding:20px clamp(16px,5vw,64px)}
+.brand{display:flex;gap:10px;align-items:center;background:var(--white);border-radius:14px;padding:8px 14px}
+.brand img{height:28px}
+main{max-width:1100px;margin:0 auto;padding:0 clamp(16px,5vw,64px)}
+.hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:18px}
+.mega{font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;line-height:.9;font-size:clamp(48px,11vw,140px);margin:0}
+h2.mega{font-size:clamp(40px,8vw,100px)}
+.label{font-family:"JB",monospace;font-weight:800;font-size:14px;letter-spacing:.2em;text-transform:uppercase;margin:0}
+.sub{font-size:clamp(22px,3vw,32px);margin:0;opacity:.85}
+.text{font-size:clamp(18px,2vw,22px);max-width:36em;opacity:.85}
+.chev{width:min(520px,80vw);align-self:center;color:var(--blue)}
+.glow{filter:drop-shadow(0 0 30px currentColor)}
+.c-yellow{color:var(--yellow)}.c-green{color:var(--green)}.c-red{color:var(--red)}.dim{color:rgba(245,243,238,.35)}
+.block{padding:14vh 0;border-top:1px solid rgba(245,243,238,.1)}
+.btn{display:inline-block;background:var(--yellow);color:var(--bk);font:800 18px "Archivo",sans-serif;text-decoration:none;padding:16px 30px;border-radius:99px;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-small{padding:10px 20px;font-size:15px}
+.reveal{opacity:0}.reveal.animate__animated{opacity:1}
+.foot{text-align:center;padding:40px 16px;opacity:.6}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1}}

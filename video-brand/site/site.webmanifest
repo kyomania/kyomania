@@ -1,0 +1,8 @@
+{
+  "short_name": "fast.site",
+  "name": "fast.site – Mach deine Website schneller",
+  "icons": [{ "src": "icon.svg", "type": "image/svg+xml", "sizes": "any" }],
+  "start_url": "./",
+  "background_color": "#07080c",
+  "theme_color": "#07080c"
+}
