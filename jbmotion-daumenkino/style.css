@@ -1,0 +1,91 @@
+/* Hallmark · theme: custom · idea: "the scroll is the timeline: the page plays the bouncing ball, the first exercise every animator learns, 24 frames for one second" · vibe: "playful, bold, frame by frame, Hamburg studio" · job: hire
+ * paper: peach oklch(95.5% 0.025 70) with vermilion bands oklch(64% 0.2 33), chosen as the colour of a cel-animation pencil test light, not the category · accent: aubergine ink · faces: League Spartan 800 / Figtree
+ * hero: the headline's full stop is the ball, squashing on its baseline · signature: the scroll-driven 24-frame bouncing ball with onion skin and a frame counter · imagery: photographs (library stand-ins)
+ * axes: mid/geometric-sans/warm · posture: committed (vermilion paper bands carry about 40% of the surface; aubergine is the ink and the one signal) · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E3 S5 R4 V4 · weakest: E (fictional studio, no real stills), every picture is a slot with credited stand-ins and the footer says so */
+/* Hallmark · waive 81 · slots hold hotlinked Wikimedia Commons stand-ins · this build machine cannot reach Wikimedia; they load in a normal browser */
+/* Hallmark · waive 80 · the bouncing-ball stage · it is the studio's craft performed (the classic animation exercise driven by scroll), not a drawing of a subject */
+/* Hallmark · waive 23 · the accent token is the aubergine ink · the loud colour is the vermilion paper band, declared as posture loud, not an accent */
+@import url("./tokens.css");
+@import url("./base.css");
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; }
+.muted { color: var(--color-muted); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Nav */
+.nav { background: var(--color-paper-2); }
+.nav-inner { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); padding-block: var(--space-md); }
+.wordmark { font-family: var(--font-display); font-weight: 800; font-size: var(--text-lg); text-decoration: none; }
+.nav nav { display: flex; gap: var(--space-lg); align-items: center; }
+.nav nav a { text-decoration: none; font-weight: 600; font-size: var(--text-sm); }
+.nav nav a:not(.pill):hover { text-decoration: underline; }
+.pill { padding: var(--space-xs) var(--space-md); border-radius: 999px; background: var(--color-accent); color: var(--color-accent-ink); }
+@media (max-width: 40rem) { .nav nav a:not(.pill) { display: none; } }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; min-height: 52px; padding: 0 var(--space-xl); border-radius: 999px; background: var(--color-accent); color: var(--color-accent-ink); font-weight: 600; text-decoration: none; transition: transform var(--dur-short) var(--ease-out); }
+.btn:hover { transform: translateY(-3px) scale(1.02); }
+.btn:active { transform: translateY(1px) scale(0.98); }
+.link { font-weight: 600; }
+
+/* Hero: vermilion, the full stop is the ball */
+.hero { background: var(--color-paper-2); }
+.hero-inner { display: grid; gap: var(--space-lg); padding-block: var(--space-2xl) var(--space-3xl); min-height: min(calc(100svh - 72px), 760px); align-content: end; }
+.hero h1 { font-size: clamp(3.5rem, 11vw, 10rem); max-width: 11ch; }
+.dot { display: inline-block; width: 0.22em; height: 0.22em; margin-left: 0.04em; fill: var(--color-ink); transform-origin: 50% 100%; animation: squash 1.2s var(--ease-in-out) infinite; }
+@keyframes squash { 0%, 100% { transform: translateY(0) scale(1.25, 0.75); } 12% { transform: translateY(-0.5em) scale(0.9, 1.12); } 50% { transform: translateY(-1.1em) scale(1, 1); } 88% { transform: translateY(-0.4em) scale(0.9, 1.12); } }
+.hero .lead { font-size: var(--text-lead); max-width: 34ch; color: var(--color-ink); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-lg); align-items: center; }
+
+/* Flipbook stage */
+.flip { background: var(--color-paper); }
+.flip-inner { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); padding-block: var(--space-2xl); }
+.flip-head { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: var(--space-md); }
+.flip h2 { font-size: var(--text-section); max-width: 14ch; }
+.counter { font-weight: 600; font-size: var(--text-lg); }
+.stage { width: 100%; height: auto; max-height: 52vh; }
+.ground { stroke: var(--color-ink); stroke-width: 3; }
+#ball ellipse { fill: var(--color-ink); }
+#onion ellipse { fill: none; stroke: var(--color-ink); stroke-width: 3; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-columns); }
+.steps li { border-top: 3px solid var(--color-ink); padding-top: var(--space-sm); transition: opacity var(--dur-short) var(--ease-out); }
+.steps h3 { font-size: var(--text-title); margin-bottom: var(--space-2xs); }
+.steps p { color: var(--color-ink-2); }
+.flip-on .flip { height: 360vh; }
+.flip-on .flip-sticky { position: sticky; top: 0; min-height: 100svh; display: grid; align-items: center; }
+.flip-on .steps li { opacity: 0.3; }
+.flip-on .steps li.active { opacity: 1; }
+@media (max-width: 60rem) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Work as held frames */
+.work { padding-block: var(--section-gap); }
+.work h2 { font-size: var(--text-section); max-width: 18ch; margin-bottom: var(--space-xl); }
+.frames { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); }
+.frame-pic { aspect-ratio: 4 / 5; border-radius: 6px; outline: 3px solid var(--color-ink); outline-offset: -3px; }
+.tc { margin-top: var(--space-sm); font-weight: 600; font-size: var(--text-sm); color: var(--color-muted); }
+.frame h3 { font-size: var(--text-title); margin-top: var(--space-2xs); }
+@media (max-width: 60rem) { .frames { grid-template-columns: minmax(0, 1fr); } .frame-pic { aspect-ratio: 16 / 10; } }
+
+/* Timeline with keyframes */
+.timeline { padding-block: var(--section-gap-s) var(--section-gap); }
+.timeline h2 { font-size: var(--text-section); max-width: 16ch; margin-bottom: var(--space-2xl); }
+.ruler { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); padding-top: var(--space-xl); background: repeating-linear-gradient(to right, var(--color-ink) 0 2px, transparent 2px 4.1667%) top / 100% 14px no-repeat; border-top: 3px solid var(--color-ink); }
+.key { position: relative; }
+.diamond { position: absolute; top: calc(-1 * var(--space-xl) - 13px); left: 0; width: 22px; height: 22px; background: var(--color-paper-2); border: 3px solid var(--color-ink); transform: rotate(45deg); }
+.key h3 { font-size: var(--text-title); margin-bottom: var(--space-2xs); }
+@media (max-width: 40rem) { .ruler { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); } }
+
+/* Close */
+.close { background: var(--color-paper-2); }
+.close-inner { display: grid; gap: var(--space-md); padding-block: var(--section-gap-l); }
+.close h2 { font-size: clamp(3rem, 8vw, 7rem); max-width: 12ch; }
+.close .lead { max-width: 34ch; color: var(--color-ink); }
+.mail { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.5rem, 4vw, 3rem); text-decoration-thickness: 3px; overflow-wrap: anywhere; }
+.mail:hover { text-decoration-thickness: 6px; }
+.close address { font-style: normal; color: var(--color-ink); }
+
+/* Footer */
+.foot { display: grid; gap: var(--space-xs); padding-block: var(--space-xl); font-size: var(--text-sm); color: var(--color-muted); }
+
+@media (prefers-reduced-motion: reduce) { .dot { animation: none; } }

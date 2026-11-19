@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JB Motion, Bild für Bild</title>
+  <meta name="description" content="JB Motion ist ein fiktives Animationsstudio in Hamburg: Titel, Markenfilme und Social Clips, Bild für Bild.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="wordmark" href="#top">JB Motion</a>
+      <nav aria-label="Hauptnavigation">
+        <a href="#bilder">Bild für Bild</a>
+        <a href="#arbeiten">Arbeiten</a>
+        <a class="pill" href="mailto:hallo@jbmotion.example">Projekt anfragen</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-head">
+      <div class="container hero-inner">
+        <h1 id="hero-head">Alles beginnt mit einem Ball<svg class="dot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50"/></svg></h1>
+        <p class="lead">Titel, Markenfilme und Social Clips aus Hamburg, Bild für Bild.</p>
+        <div class="actions">
+          <a class="btn" href="mailto:hallo@jbmotion.example">Projekt anfragen</a>
+          <a class="link" href="#bilder">Scroll, und der Ball springt</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="flip" id="bilder" aria-labelledby="flip-head">
+      <div class="flip-sticky">
+        <div class="container flip-inner">
+          <div class="flip-head">
+            <h2 id="flip-head">Eine Sekunde hat 24 Bilder.</h2>
+            <p class="counter num" aria-live="off">Bild <span id="frame">24</span> von 24</p>
+          </div>
+          <svg class="stage" id="stage" viewBox="0 0 1000 520" role="img" aria-label="Ein Ball springt in drei kleiner werdenden Bögen über den Boden, mit Zwiebelhaut der vorigen Bilder">
+            <line class="ground" x1="20" y1="480" x2="980" y2="480"/>
+            <g id="onion"></g>
+            <g id="ball"><ellipse cx="0" cy="-40" rx="40" ry="40"/></g>
+          </svg>
+          <ol class="steps">
+            <li data-step="0"><h3>Titelsequenzen</h3><p>Der erste Eindruck einer Serie, gesetzt auf Musik.</p></li>
+            <li data-step="1"><h3>Markenfilme</h3><p>Dreißig bis neunzig Sekunden, die eine Haltung zeigen.</p></li>
+            <li data-step="2"><h3>Social Clips</h3><p>Hochkant, in Serie, mit Wiedererkennung.</p></li>
+            <li data-step="3"><h3>Musikvideos</h3><p>Animiert oder gemischt mit Realfilm.</p></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="work container" id="arbeiten" aria-labelledby="work-head">
+      <h2 id="work-head">Arbeiten, angehalten auf ihrem besten Bild.</h2>
+      <div class="frames">
+        <article class="frame">
+          <div class="frame-pic" data-slot="tiefblau" data-alt="Standbild Tiefblau"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Swimming_Pool_in_a_hotel_in_Tamil_Nadu_03.jpg/960px-Swimming_Pool_in_a_hotel_in_Tamil_Nadu_03.jpg" width="5472" height="3648" alt="Blaues Poolwasser mit Spiegelungen" loading="lazy"></div>
+          <p class="tc num">Bild 0312</p>
+          <h3>Tiefblau</h3><p class="muted">Titelsequenz einer Dokuserie, 2026</p>
+        </article>
+        <article class="frame">
+          <div class="frame-pic" data-slot="drehscheibe" data-alt="Standbild Drehscheibe"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Pottery_workshop_at_Odisha_Crafts_Museum_02.jpg/960px-Pottery_workshop_at_Odisha_Crafts_Museum_02.jpg" width="3888" height="2592" alt="Hände formen Ton auf einer drehenden Töpferscheibe" loading="lazy"></div>
+          <p class="tc num">Bild 0047</p>
+          <h3>Drehscheibe</h3><p class="muted">Social Clips für eine Keramikwerkstatt, 2025</p>
+        </article>
+        <article class="frame">
+          <div class="frame-pic" data-slot="nachtlinie" data-alt="Standbild Nachtlinie"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/T-Centralen_central_underground_metro_station_Stockholm_2016_01.jpg/960px-T-Centralen_central_underground_metro_station_Stockholm_2016_01.jpg" width="4096" height="2607" alt="U-Bahn rauscht an bemalten Höhlenwänden vorbei" loading="lazy"></div>
+          <p class="tc num">Bild 1188</p>
+          <h3>Nachtlinie</h3><p class="muted">Musikvideo, 2025</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="timeline container" aria-labelledby="tl-head">
+      <h2 id="tl-head">Vier Wochen, drei Schlüsselbilder.</h2>
+      <div class="ruler" role="list">
+        <div class="key" role="listitem" style="--at: 0%"><span class="diamond" aria-hidden="true"></span><h3>Storyboard</h3><p class="muted">Woche 1: jedes Bild als Skizze.</p></div>
+        <div class="key" role="listitem" style="--at: 38%"><span class="diamond" aria-hidden="true"></span><h3>Animatic</h3><p class="muted">Woche 2 und 3: das Timing auf Musik.</p></div>
+        <div class="key" role="listitem" style="--at: 76%"><span class="diamond" aria-hidden="true"></span><h3>Feinschliff</h3><p class="muted">Woche 4: Licht, Farbe, Ton.</p></div>
+      </div>
+    </section>
+
+    <section class="close" aria-labelledby="close-head">
+      <div class="container close-inner">
+        <h2 id="close-head">Schick uns dein erstes Bild.</h2>
+        <p class="lead">Eine Skizze, ein Satz, ein Song reicht für den Anfang.</p>
+        <a class="mail" href="mailto:hallo@jbmotion.example">hallo@jbmotion.example</a>
+        <address>JB Motion, Hafenstraße 12, 20359 Hamburg</address>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot container">
+    <p>JB Motion ist ein fiktives Studio. Projekte, Adresse und E-Mail sind erfunden, die Bilder sind Platzhalter.</p>
+    <p>Fotos: <a href="https://commons.wikimedia.org/wiki/File:Swimming_Pool_in_a_hotel_in_Tamil_Nadu_03.jpg">Kritzolina</a> (CC BY-SA 4.0), <a href="https://commons.wikimedia.org/wiki/File:Pottery_workshop_at_Odisha_Crafts_Museum_02.jpg">Kritzolina</a> (CC BY-SA 4.0), <a href="https://commons.wikimedia.org/wiki/File:T-Centralen_central_underground_metro_station_Stockholm_2016_01.jpg">Julian Herzog</a> (CC BY 4.0), alle Wikimedia Commons</p>
+  </footer>
+
+  <script src="flip.js"></script>
+  <script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
+document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
+</body>
+</html>
