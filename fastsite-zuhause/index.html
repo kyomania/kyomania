@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>fast.site, dein Zuhause im Netz</title>
+  <meta name="description" content="Mach deine Website schneller. Behalte dein Hosting. Anwendung, Inhalte und Hosting bleiben unter deiner Kontrolle.">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }</script>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <video class="fallback" src="assets/video/hero-tempo.mp4" poster="assets/gen/haus2.png" muted loop playsinline autoplay aria-hidden="true"></video>
+
+  <header class="nav">
+    <a class="brand" href="#top" aria-label="fast.site"><img src="assets/icon.svg" alt=""><img src="assets/wordmark.svg" alt="fast.site" class="wm"></a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#behalte">Leitgedanke</a>
+      <a href="#haltung">Haltung</a>
+      <a class="pill" href="https://fast.site/de">7 Tage testen</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="panel hero" data-shot="0">
+      <h1>Mach deine Website <span class="hl">schneller.</span><br>Behalte dein Hosting.</h1>
+      <p class="lead">Anwendung, Inhalte und Hosting bleiben unter deiner Kontrolle.</p>
+      <div class="actions">
+        <a class="btn" href="https://fast.site/de">7 Tage testen</a>
+        <a class="ghost" href="#behalte">Scroll, das Haus bleibt stehen</a>
+      </div>
+    </section>
+
+    <section class="panel right" id="behalte" data-shot="1">
+      <p class="tag t-green">Unser Leitgedanke</p>
+      <h2>Behalte, was funktioniert.</h2>
+      <p>Weniger Aufwand. Mehr für deine Website. Darunter bleibt alles, wie es ist:</p>
+      <ul class="layers">
+        <li><span class="sw s-blue"></span>Anwendung</li>
+        <li><span class="sw s-green"></span>Inhalte</li>
+        <li><span class="sw s-yellow"></span>Hosting</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="haltung" data-shot="2">
+      <p class="tag t-red">Unsere Haltung</p>
+      <h2>Performance statt Versprechen.</h2>
+      <p>Miss den Unterschied auf deinen eigenen Seiten. Ein CDN garantiert kein Google-Ranking.</p>
+    </section>
+
+    <section class="panel right days" data-shot="3">
+      <p class="tag t-yellow">Dein Test</p>
+      <h2>Lass die Ergebnisse entscheiden.</h2>
+      <p>7 Tage, mit Klarheit darüber, was danach passiert.</p>
+      <p class="daycount num" aria-hidden="true">Tag <span id="day">1</span> von 7</p>
+      <figure class="clip"><video src="assets/video/sieben-tage.mp4" muted loop playsinline autoplay preload="metadata"></video></figure>
+    </section>
+
+    <section class="panel finale" data-shot="4">
+      <a class="btn big" href="https://fast.site/de">Jetzt 7 Tage testen</a>
+      <p class="giant" aria-hidden="true">fast.site</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Konzeptentwurf für fast.site. Texte aus fast.site/de und fast.site/de/about. 3D-Objekte und Clips mit Higgsfield erzeugt.</p>
+  </footer>
+
+  <script>
+    const fit = () => { const g = document.querySelector('.giant'); g.style.fontSize = '100px'; g.style.fontSize = (100 * document.documentElement.clientWidth / g.scrollWidth * 0.96) + 'px'; };
+    document.fonts.ready.then(fit); addEventListener('resize', fit);
+  </script>
+  <script type="module" src="scene.js"></script>
+</body>
+</html>
