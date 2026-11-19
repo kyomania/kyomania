@@ -1,4 +1,4 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><title>fast.site Chevrons Styleframes</title><style>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><title>fast.site Chevrons Styleframes</title><link rel="stylesheet" href="assets/animate.min.css"><style>
 @font-face{font-family:"Anton";src:url(assets/anton-latin-400-normal.woff2)}
 @font-face{font-family:"Archivo";font-weight:500;src:url(assets/archivo-latin-500-normal.woff2)}
 @font-face{font-family:"Archivo";font-weight:800;src:url(assets/archivo-latin-800-normal.woff2)}
@@ -83,5 +83,15 @@ body{width:1080px;height:1920px;overflow:hidden;background:var(--bk);font-family
  <div class="vig"></div><div class="noise"></div>
 </section>
 
-<script>const f=new URLSearchParams(location.search).get('f')||'1';document.getElementById('f'+f).classList.add('on')</script>
+<script>
+const q=new URLSearchParams(location.search),n=document.querySelectorAll('.f').length;let f=+(q.get('f')||1);
+// ?anim=1: Elemente per animate.css nacheinander einfliegen lassen; Pfeiltasten/Klick = nächster Frame
+const fx=['animate__fadeInDown','animate__backInUp','animate__zoomIn','animate__fadeInUp','animate__fadeInUp'];
+function show(i){document.querySelectorAll('.f').forEach(e=>e.classList.remove('on'));const s=document.getElementById('f'+i);s.classList.add('on');
+ if(!q.has('anim'))return;
+ [...s.children].filter(e=>!e.matches('.vig,.noise')).forEach((e,k)=>{e.classList.remove('animate__animated',...fx);void e.offsetWidth;
+  e.style.setProperty('--animate-delay',k*.25+'s');e.classList.add('animate__animated','animate__delay-1s',fx[Math.min(k,fx.length-1)])})}
+show(f);
+if(q.has('anim')){const go=d=>show(f=(f-1+d+n)%n+1);onclick=()=>go(1);onkeydown=e=>e.key=='ArrowLeft'?go(-1):e.key=='ArrowRight'&&go(1)}
+</script>
 </body></html>
