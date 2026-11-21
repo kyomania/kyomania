@@ -1,6 +1,6 @@
 # Storyboard: „Der Weg nach Hause“
 
-**Logline:** Als ein Virus die Menschen in Zombies verwandelt und die Welt untergeht, wird die Langhaar-Tigerdackelhündin Cookie bei der Flucht von ihrer Familie getrennt. Sie schlägt sich durch die Apokalypse bis zur letzten sicheren Zone, wo sie sie wiederfindet.
+**Logline:** Als ein Virus die Menschen in Zombies verwandelt und die Welt untergeht, wird die Langhaar-Tigerdackelhündin Cookie bei der Flucht von ihrer Familie getrennt. Sie schlägt sich durch die Apokalypse bis zur letzten sicheren Zone, wo sie ihre Familie wiederfindet.
 **Länge:** ca. 4:30 Min · **Format:** 16:9 · **Genre:** Endzeit, Abenteuer, Drama · **Dialog:** kaum, die Geschichte wird über Bilder, Musik und Geräusche erzählt · **Sprache:** Deutsch (Dialoge, Texte, Einblendungen)
 
 **Hauptfigur „Cookie“:** Langhaar-Tigerdackel-Hündin (Merle), silber-beige und graubraun marmoriertes Fell, lohfarbene Abzeichen an Gesicht, Brust und Beinen, lange gewellte Ohren mit hellen Spitzen, buschige Rute, bernsteinfarbene Augen, braune Nase. Sie trägt ein **rotes Halstuch**.
@@ -16,7 +16,7 @@
 | 1 | 0:00–0:15 | Totale, langsamer Dolly-in auf ein Reihenhaus, goldenes Abendlicht | Lena wirft Cookie im Garten einen roten Ball zu. Am Horizont steigen dünne Rauchsäulen auf. | Warmes Klavierthema, Sirenen in weiter Ferne |
 | 2 | 0:15–0:30 | Close-up auf Cookies Augen, dann ein Schwenk zum Fernseher im Wohnzimmer | Eilmeldung: „Unbekanntes Virus, Infizierte greifen Menschen an.“ Das Bild bricht ab, nur noch Rauschen. | Die Musik reißt ab, man hört das Rauschen |
 | 3 | 0:30–0:50 | Handkamera, unruhig, Nacht, Blaulicht | Die Familie flieht zum Auto. Auf der Straße herrscht Panik, Gestalten taumeln heran. Ein Schrei, Cookie erschrickt und rennt in eine Seitengasse. | Sirenen, Schreie, Herzschlag |
-| 4 | 0:50–1:05 | Weitwinkel aus Bodenhöhe (Dackelperspektive) | Das Auto rast davon, weil Zombies es umringen. Lena presst die Hände an die Heckscheibe und ruft: „BRUNO!“ | Ein einzelner Ruf, danach Stille |
+| 4 | 0:50–1:05 | Weitwinkel aus Bodenhöhe (Dackelperspektive) | Das Auto rast davon, weil Zombies es umringen. Lena presst die Hände an die Heckscheibe und ruft: „COOKIE!“ | Ein einzelner Ruf, danach Stille |
 
 ## Akt 2: Die tote Stadt (1:05–2:00)
 
