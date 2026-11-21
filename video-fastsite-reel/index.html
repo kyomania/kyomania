@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --blue: #3f71b5; --green: #0f9956; --red: #df4a2a; --yellow: #f9b41b;
+        --paper: #f3efe7; --ink: #0d0f14;
+        --font-display: "Inter Tight", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: var(--font-display); }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .bg { position: absolute; inset: -4%; width: 108%; height: 108%; object-fit: cover; }
+      .headline { position: absolute; left: 80px; right: 80px; bottom: 300px; color: #fff; font-weight: 900;
+        font-size: 132px; line-height: 0.92; letter-spacing: -0.045em; }
+      .headline.dark { color: var(--ink); }
+      .headline .w { display: inline-block; overflow: hidden; vertical-align: bottom; }
+      .headline .w span { display: inline-block; }
+      .meta { position: absolute; left: 80px; right: 80px; top: 150px; display: flex; justify-content: space-between;
+        font-family: var(--font-mono); font-size: 30px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; opacity: .85; }
+      .meta.dark { color: var(--ink); }
+      #anchor { position: absolute; left: 50%; top: 50%; width: 200px; height: 200px; margin: -100px 0 0 -100px; z-index: 50; }
+      #anchor img { width: 100%; height: 100%; object-fit: contain; }
+      /* scene 1 */
+      #s1 { background: var(--paper); }
+      #s1 .bar { position: absolute; left: 0; width: 100%; height: 25%; transform-origin: left center; }
+      /* scene 3 */
+      .chip { position: absolute; left: 80px; top: 360px; background: var(--ink); color: #fff; border-radius: 999px;
+        padding: 26px 44px; font-family: var(--font-mono); font-size: 44px; display: flex; gap: 24px; align-items: center; }
+      .chip b { color: var(--yellow); font-weight: 500; }
+      .pct { position: absolute; right: 80px; top: 470px; background: var(--green); color: #fff; border-radius: 999px;
+        padding: 18px 36px; font-weight: 900; font-size: 64px; letter-spacing: -0.03em; }
+      /* scene 4 */
+      .scan { position: absolute; left: 0; width: 100%; height: 6px; background: var(--red); box-shadow: 0 0 40px var(--red); top: 0; }
+      .blocked { position: absolute; font-family: var(--font-mono); font-size: 28px; color: var(--red); background: #fff;
+        padding: 10px 18px; border-radius: 10px; border: 2px solid var(--red); }
+      /* scene 5 */
+      .code { position: absolute; left: 50%; top: 520px; transform: translateX(-50%); font-family: var(--font-mono);
+        font-size: 150px; color: var(--ink); white-space: nowrap; }
+      .strike { position: absolute; left: -20px; right: -20px; top: 50%; height: 16px; background: var(--red);
+        border-radius: 8px; transform-origin: left center; }
+      /* scene 6 */
+      #s6 { background: var(--paper); }
+      .grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(11, 1fr); padding: 30px; }
+      .cell { display: flex; align-items: center; justify-content: center; }
+      .cell svg { width: 120px; height: 120px; overflow: visible; }
+      .word { position: absolute; left: 0; right: 0; top: 50%; text-align: center; font-weight: 900; font-size: 190px;
+        letter-spacing: -0.06em; color: var(--ink); margin-top: 140px; white-space: nowrap; font-size: 170px; }
+      .word .dot { color: #b83c22; }
+      #s7 .brand .dot { color: var(--yellow); }
+      /* scene 7 */
+      #s7 { background: var(--ink); }
+      .cta { position: absolute; left: 50%; top: 1240px; transform: translateX(-50%); background: #fff; color: var(--ink);
+        border-radius: 999px; padding: 36px 70px; font-weight: 900; font-size: 64px; letter-spacing: -0.03em; white-space: nowrap; }
+      .sub { position: absolute; left: 0; right: 0; top: 1420px; text-align: center; font-family: var(--font-mono);
+        font-size: 30px; color: #fff; opacity: .75; letter-spacing: 0.06em; text-transform: uppercase; }
+      .brand { position: absolute; left: 0; right: 0; top: 960px; text-align: center; font-weight: 900; font-size: 170px;
+        letter-spacing: -0.06em; color: #fff; }
+      .brand .dot { color: var(--yellow); }
+      .flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 90; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1080" data-height="1920">
+
+      <!-- S1: Your website -->
+      <div id="s1" class="clip" data-start="0" data-duration="1.25" data-track-index="0">
+        <div class="bar" style="top:0;background:var(--blue)"></div>
+        <div class="bar" style="top:25%;background:var(--green)"></div>
+        <div class="bar" style="top:50%;background:var(--red)"></div>
+        <div class="bar" style="top:75%;background:var(--yellow)"></div>
+        <div class="meta dark"><span>fast.site</span><span>2026®</span></div>
+        <div class="headline dark"><span class="w"><span>Your</span></span><br /><span class="w"><span>website.</span></span></div>
+      </div>
+
+      <!-- S2: Just faster -->
+      <div id="s2" class="clip" data-start="1.25" data-duration="1.25" data-track-index="0">
+        <img class="bg" src="assets/bg1.png" alt="" />
+        <div class="meta"><span>Edge cache</span><span>CDN</span></div>
+        <div class="headline"><span class="w"><span>Just</span></span><br /><span class="w"><span>faster.</span></span></div>
+      </div>
+
+      <!-- S3: Smarter images -->
+      <div id="s3" class="clip" data-start="2.5" data-duration="1.5" data-track-index="0">
+        <img class="bg" src="assets/bg2.png" alt="" />
+        <div class="chip">JPG <span id="kb">303.4</span> KB <b>→ WebP</b></div>
+        <div class="pct">−35%</div>
+        <div class="headline dark"><span class="w"><span>Smarter</span></span><br /><span class="w"><span>images.</span></span></div>
+      </div>
+
+      <!-- S4: Built-in protection -->
+      <div id="s4" class="clip" data-start="4" data-duration="1.45" data-track-index="0">
+        <img class="bg" src="assets/bg3.png" alt="" />
+        <div class="scan"></div>
+        <div class="blocked" style="left:90px;top:420px">DDoS · BLOCKED</div>
+        <div class="blocked" style="right:90px;top:540px">BOT · BLOCKED</div>
+        <div class="headline dark"><span class="w"><span>Built-in</span></span><br /><span class="w"><span>protection.</span></span></div>
+      </div>
+
+      <!-- S5: No code needed -->
+      <div id="s5" class="clip" data-start="5.45" data-duration="1.35" data-track-index="0">
+        <img class="bg" src="assets/bg4.png" alt="" />
+        <div class="code">&lt;/&gt;<div class="strike"></div></div>
+        <div class="meta dark"><span>WordPress</span><span>Shopify</span><span>Magento</span></div>
+        <div class="headline dark"><span class="w"><span>No code</span></span><br /><span class="w"><span>needed.</span></span></div>
+      </div>
+
+      <!-- S6: fast.site pattern -->
+      <div id="s6" class="clip" data-start="6.8" data-duration="1.7" data-track-index="0">
+        <div class="grid" id="grid"></div>
+        <div class="word">fast<span class="dot">.</span>site</div>
+      </div>
+
+      <!-- S7: CTA -->
+      <div id="s7" class="clip" data-start="8.5" data-duration="1.5" data-track-index="0">
+        <div class="brand">fast<span class="dot">.</span>site</div>
+        <div class="cta">Start free trial</div>
+        <div class="sub">7 days · No credit card required</div>
+      </div>
+
+      <!-- persistent logo anchor -->
+      <div id="anchor" class="clip" data-start="0" data-duration="10" data-track-index="1" style="inset:auto;left:50%;top:50%"><img src="assets/logo.png" alt="fast.site" /></div>
+      <div class="flash clip" id="flash" data-start="0" data-duration="10" data-track-index="2"></div>
+
+      <!-- audio -->
+      <audio id="a1" src="assets/music.mp3" data-start="0" data-duration="10" data-volume="0.45" data-fade-out="0.4" data-track-index="5"></audio>
+      <audio id="a2" src="assets/vo.mp3" data-start="0.1" data-duration="9.8" data-volume="1.25" data-track-index="6"></audio>
+      <audio id="a3" src="assets/whoosh.wav" data-start="1.1" data-duration="0.35" data-volume="0.25" data-track-index="7"></audio>
+      <audio id="a4" src="assets/tick.wav" data-start="2.5" data-duration="0.05" data-volume="0.3" data-track-index="7"></audio>
+      <audio id="a5" src="assets/whoosh.wav" data-start="3.85" data-duration="0.35" data-volume="0.25" data-track-index="7"></audio>
+      <audio id="a6" src="assets/tick.wav" data-start="5.45" data-duration="0.05" data-volume="0.3" data-track-index="7"></audio>
+      <audio id="a7" src="assets/whoosh.wav" data-start="6.65" data-duration="0.35" data-volume="0.3" data-track-index="7"></audio>
+      <audio id="a8" src="assets/tick.wav" data-start="8.5" data-duration="0.05" data-volume="0.35" data-track-index="7"></audio>
+    </div>
+
+    <script>
+      // build chevron pattern grid (deterministic)
+      const colors = [["#3f71b5", "#0f9956"], ["#df4a2a", "#f9b41b"], ["#df4a2a", "#0f9956"]];
+      const grid = document.getElementById("grid");
+      for (let i = 0; i < 66; i++) {
+        const r = Math.floor(i / 6), c = i % 6;
+        const skip = r >= 4 && r <= 7; // keep center row band clear for logo + word
+        const [a, b] = colors[(r * 7 + c * 3) % 3];
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.innerHTML = skip ? "" :
+          `<svg viewBox="0 0 100 100"><g class="chev" style="transform-origin:50px 50px">` +
+          `<line x1="18" y1="72" x2="50" y2="34" stroke="${b}" stroke-width="22" stroke-linecap="round"/>` +
+          `<line x1="50" y1="34" x2="82" y2="72" stroke="${b}" stroke-width="22" stroke-linecap="round"/>` +
+          `<line x1="18" y1="72" x2="49" y2="35" stroke="${a}" stroke-width="22" stroke-linecap="round"/></g></svg>`;
+        grid.appendChild(cell);
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      const words = (sel) => document.querySelectorAll(sel + " .headline .w span");
+      const inWords = (sel, t) => tl.fromTo(words(sel), { yPercent: 110 }, { yPercent: 0, duration: 0.35, ease: "power4.out", stagger: 0.08 }, t);
+      const drift = (sel, t, d) => tl.fromTo(sel + " .bg", { scale: 1.12 }, { scale: 1.0, duration: d, ease: "none" }, t);
+      const flash = (t) => tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, t);
+
+      // S1 — bars wipe, logo pops in big then settles to anchor size
+      tl.fromTo("#s1 .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "expo.out", stagger: 0.05 }, 0);
+      tl.to("#s1 .bar", { scaleX: 0, transformOrigin: "right center", duration: 0.35, ease: "expo.in", stagger: 0.04 }, 0.45);
+      tl.fromTo("#anchor", { scale: 0, rotation: -90 }, { scale: 2.4, rotation: 0, duration: 0.5, ease: "back.out(1.8)" }, 0.15);
+      tl.to("#anchor", { scale: 1, duration: 0.45, ease: "power3.inOut" }, 0.75);
+      inWords("#s1", 0.2);
+
+      // S2 — speed
+      flash(1.25); drift("#s2", 1.25, 1.25); inWords("#s2", 1.3);
+      tl.fromTo("#anchor", { y: 40 }, { y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, 1.25);
+      tl.fromTo("#s2 .bg", { filter: "blur(18px)" }, { filter: "blur(0px)", duration: 0.4, ease: "power2.out" }, 1.25);
+
+      // S3 — images
+      drift("#s3", 2.5, 1.5); inWords("#s3", 2.55);
+      tl.fromTo("#s3 .chip", { xPercent: -120 }, { xPercent: 0, duration: 0.4, ease: "expo.out" }, 2.6);
+      const kb = { v: 303.4 };
+      tl.to(kb, { v: 198.2, duration: 0.7, ease: "power2.inOut", onUpdate: () => (document.getElementById("kb").textContent = kb.v.toFixed(1)) }, 2.85);
+      tl.fromTo("#s3 .pct", { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(2.5)" }, 3.45);
+
+      // S4 — protection
+      flash(4.0); drift("#s4", 4.0, 1.45); inWords("#s4", 4.05);
+      tl.fromTo("#s4 .scan", { y: 0 }, { y: 1920, duration: 1.1, ease: "power1.inOut" }, 4.05);
+      tl.fromTo("#s4 .blocked", { scale: 0 }, { scale: 1, duration: 0.25, ease: "back.out(3)", stagger: 0.25 }, 4.4);
+      tl.fromTo("#anchor", { rotation: 0 }, { rotation: 360, duration: 0.6, ease: "power3.inOut", immediateRender: false }, 4.0);
+
+      // S5 — no code
+      drift("#s5", 5.45, 1.35); inWords("#s5", 5.5);
+      tl.fromTo("#s5 .code", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 5.5);
+      tl.fromTo("#s5 .strike", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, 5.9);
+
+      // S6 — chevron pattern
+      flash(6.8);
+      tl.fromTo("#s6 .chev", { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)", stagger: { each: 0.008, from: "center", grid: [11, 6] } }, 6.8);
+      tl.to("#s6 .chev", { y: -14, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 3, stagger: { each: 0.004, from: "center", grid: [11, 6] } }, 7.3);
+      tl.fromTo("#s6 .word", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 7.0);
+      tl.to("#anchor", { scale: 1.3, duration: 0.3, ease: "power3.out" }, 6.8);
+
+      // S7 — CTA
+      tl.to("#anchor", { scale: 1.6, y: -260, duration: 0.45, ease: "power3.inOut" }, 8.5);
+      tl.fromTo("#s7 .brand", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 8.6);
+      tl.fromTo("#s7 .cta", { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 8.75);
+      tl.fromTo("#s7 .sub", { opacity: 0 }, { opacity: 0.75, duration: 0.3 }, 9.0);
+      tl.to("#s7 .cta", { scale: 1.06, duration: 0.25, yoyo: true, repeat: 1, ease: "sine.inOut" }, 9.3);
+
+      window.__timelines = window.__timelines || {}; window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
