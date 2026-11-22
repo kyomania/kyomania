@@ -17,3 +17,9 @@ sind KEINE Freigabe für Kosten. Im Zweifel: Prompt schreiben und fragen.
 
 Ohne Rückfrage erlaubt: Prompts und Pläne schreiben, vom Nutzer gelieferte Dateien
 lokal schneiden und bearbeiten, Dateien im Repo ändern, Kosten schätzen.
+
+## Stimmen / Voiceover (IMMER)
+
+Sprachaufnahmen IMMER mit ElevenLabs v4 erzeugen (Higgsfield-Modell `elevenlabs_v4`),
+nie mit Seed Audio oder anderen Engines. Texte sind deutsch und müssen akzentfrei
+deutsch klingen. Die Kostenregel oben gilt trotzdem: vorher Kosten nennen und Ja abwarten.
