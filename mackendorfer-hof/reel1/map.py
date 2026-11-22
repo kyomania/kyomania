@@ -126,7 +126,7 @@ for i in range(n):
         d.text(((W - w) / 2, y), txt, font=f, fill=c)
     a1 = min(max((t - 0.3) / 0.6, 0), 1) * min(max((2.6 - t) / 0.4, 0), 1)
     center("Ein neuer Ort im Norden.", font(SERIF_I, 60), 90, IVORY, a1)
-    a2 = min(max((t - 2.9) / 0.5, 0), 1)
+    a2 = 0 if os.environ.get("NOTEXT") else min(max((t - 2.9) / 0.5, 0), 1)
     center("MACKENDORF", font(SERIF, 96), 790, GOLD, a2)
     center("bei Wolfsburg", font(SERIF_I, 52), 905, IVORY, a2)
     img.save(os.path.join(OUT, f"{i:04d}.png"))
