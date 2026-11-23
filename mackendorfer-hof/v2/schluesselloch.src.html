@@ -32,10 +32,12 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--brass);outline-off
 /* Schlüsselloch */
 .door{position:relative;height:220svh}
 .door .stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
-.door .room{position:absolute;inset:0;background:url(assets/gewoelbe.jpg) 50% 55%/cover;
+.door .room{position:absolute;inset:0;
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 160'%3E%3Cpath d='M50 0a34 34 0 0 1 17 63.4L80 160H20L33 63.4A34 34 0 0 1 50 0Z'/%3E%3C/svg%3E") 50% 46%/calc(var(--k,1)*min(22vw,150px)) no-repeat;
           mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 160'%3E%3Cpath d='M50 0a34 34 0 0 1 17 63.4L80 160H20L33 63.4A34 34 0 0 1 50 0Z'/%3E%3C/svg%3E") 50% 46%/calc(var(--k,1)*min(22vw,150px)) no-repeat;
-  filter:brightness(calc(.75 + var(--p,0)*.15))}
+}
+.door .room i{position:absolute;inset:-5%;background:url(assets/gewoelbe.jpg) 50% 55%/cover;filter:brightness(calc(.75 + var(--p,0)*.15));
+  transform:translate3d(calc(var(--mx,0)*-2.2%),calc(var(--my,0)*-1.6%),0) scale(calc(1.04 - var(--p,0)*.04));transition:transform .9s var(--ease);will-change:transform}
 .door .glow{position:absolute;left:50%;top:46%;width:min(40vw,280px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
   background:radial-gradient(closest-side,rgba(185,150,95,.16),transparent);opacity:calc(1 - var(--p,0)*2);pointer-events:none}
 .door .logo{position:absolute;top:calc(64px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:clamp(96px,10vw,132px);opacity:calc(1 - var(--p,0)*2.2)}
@@ -129,6 +131,21 @@ footer nav{display:flex;gap:22px}
 footer a{text-decoration:none}
 footer a:hover{color:var(--ink)}
 
+
+/* Wegweiser: kleine Peitsche am rechten Rand */
+.whip{position:fixed;z-index:15;right:max(18px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);height:min(62vh,520px);width:44px;opacity:calc(.35 + var(--wv,0)*.65);transition:opacity .5s var(--ease)}
+.whip svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.whip .base{fill:none;stroke:var(--ink-3);stroke-opacity:.45;stroke-width:1.4;stroke-linecap:round}
+.whip .fill{fill:none;stroke:var(--brass);stroke-width:1.8;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--wp,0))}
+.whip .grip{fill:#1E1714;stroke:var(--brass);stroke-width:1}
+.whip .wrap-line{stroke:var(--brass);stroke-opacity:.55;stroke-width:.8}
+.whip .cap{fill:var(--brass)}
+.whip a{position:absolute;right:0;transform:translate(50%,-50%);width:44px;height:44px;display:grid;place-items:center;text-decoration:none}
+.whip a::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--night);border:1px solid var(--ink-3);transition:all .35s var(--ease)}
+.whip a.on::before{background:var(--brass);border-color:var(--brass);transform:scale(1.35)}
+.whip a span{position:absolute;right:38px;white-space:nowrap;font-size:.75rem;letter-spacing:.06em;color:var(--ink-2);opacity:0;transform:translateX(6px);transition:all .35s var(--ease);pointer-events:none}
+.whip a:hover span,.whip a:focus-visible span,.whip a.on span{opacity:1;transform:none}
+@media (max-width:860px){.whip{display:none}}
 @media (max-width:860px){
   .vault figure,.vault .txt,.loft .head > div,.loft .head p,.place h2,.place ul,.faq h2,.faq .list{grid-column:1/-1}
   .loft .grid{grid-template-columns:1fr 1fr}
@@ -153,11 +170,29 @@ footer a:hover{color:var(--ink)}
   <a class="book" href="#buchen">Auf Airbnb buchen</a>
 </header>
 
+<nav class="whip" aria-label="Wo ihr gerade seid">
+  <svg viewBox="0 0 44 400" preserveAspectRatio="none" aria-hidden="true">
+    <rect class="grip" x="16" y="6" width="12" height="66" rx="5"/>
+    <path class="wrap-line" d="M16 18l12 6M16 30l12 6M16 42l12 6M16 54l12 6"/>
+    <circle class="cap" cx="22" cy="5" r="4.5"/>
+    <rect class="cap" x="14.5" y="70" width="15" height="5" rx="1.5"/>
+    <path class="base" id="lash" d="M22 76 C 31 140, 13 205, 24 268 S 17 352, 27 396"/>
+    <path class="fill" pathLength="1" d="M22 76 C 31 140, 13 205, 24 268 S 17 352, 27 396"/>
+    <path class="cap" d="M27 396 l5 4 -6 -1 z"/>
+  </svg>
+  <a href="#gewoelbe" data-t="gewoelbe"><span>Gewölbe</span></a>
+  <a href="#loft" data-t="loft"><span>Loft</span></a>
+  <a href="#buchen" data-t="buchen"><span>Ankommen</span></a>
+  <a href="#diskretion" data-t="diskretion"><span>Diskretion</span></a>
+  <a href="#lage-s" data-t="lage-s"><span>Lage</span></a>
+  <a href="#fragen-s" data-t="fragen-s"><span>Fragen</span></a>
+</nav>
+
 <main>
   <section class="door" id="tuer" aria-label="Der Blick durchs Schlüsselloch">
     <div class="stage">
       <div class="glow"></div>
-      <div class="room" role="img" aria-label="Das Gewölbe durch ein Schlüsselloch gesehen: Ziegelgewölbe, Lederbett, Kerzenlaternen"></div>
+      <div class="room" role="img" aria-label="Das Gewölbe durch ein Schlüsselloch gesehen: Ziegelgewölbe, Lederbett, Kerzenlaternen"><i></i></div>
       <img class="logo" src="assets/logo.svg" alt="Mackendorfer Hof">
       <div class="say">
         <h1>Den Schlüssel <em>habt ihr.</em></h1>
@@ -235,7 +270,7 @@ footer a:hover{color:var(--ink)}
     </div>
   </section>
 
-  <section class="place wrap" aria-labelledby="lage">
+  <section class="place wrap" id="lage-s" aria-labelledby="lage">
     <h2 id="lage">Mackendorf <em>bei Wolfsburg</em></h2>
     <ul>
       <li><span>Wolfsburg</span><b>ca. 15 Min.</b></li>
@@ -245,7 +280,7 @@ footer a:hover{color:var(--ink)}
     </ul>
   </section>
 
-  <section class="faq wrap" aria-labelledby="fragen">
+  <section class="faq wrap" id="fragen-s" aria-labelledby="fragen">
     <h2 id="fragen">Fragen</h2>
     <div class="list">
       <details><summary>Brauchen wir Erfahrung?</summary><p>Nein. Das Loft ist für Einsteiger gedacht, jedes Möbel ist erklärt. Das Gewölbe richtet sich eher an Erfahrene.</p></details>
@@ -281,5 +316,33 @@ footer a:hover{color:var(--ink)}
   window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});
   window.addEventListener('resize',update);
   update();
+})();
+</script>
+
+<script>
+(function(){
+  var stage=document.querySelector('.door .stage'),door=document.getElementById('tuer');
+  var fine=window.matchMedia('(pointer: fine)').matches,reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(stage&&fine&&!reduce){
+    stage.addEventListener('mousemove',function(e){var r=stage.getBoundingClientRect();
+      door.style.setProperty('--mx',(((e.clientX-r.left)/r.width)*2-1).toFixed(3));
+      door.style.setProperty('--my',(((e.clientY-r.top)/r.height)*2-1).toFixed(3));});
+    stage.addEventListener('mouseleave',function(){door.style.setProperty('--mx',0);door.style.setProperty('--my',0);});
+  }
+  var whip=document.querySelector('.whip');if(!whip)return;
+  var lash=whip.querySelector('#lash'),links=[].slice.call(whip.querySelectorAll('a')),len=lash.getTotalLength();
+  links.forEach(function(a,i){var f=.06+i*(.9/(links.length-1)),pt=lash.getPointAtLength(f*len);
+    a.style.top=(pt.y/400*100)+'%';a.style.right=(44-pt.x)+'px';a.dataset.f=f;});
+  var secs=links.map(function(a){return document.getElementById(a.dataset.t);});
+  function upd(){
+    var y=window.scrollY+innerHeight*.45,doc=document.documentElement.scrollHeight-innerHeight;
+    var on=-1;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)on=i;});
+    links.forEach(function(a,i){a.classList.toggle('on',i===on);});
+    var first=secs[0].offsetTop-innerHeight*.45,wp=on<0?0:Math.min(1,parseFloat(links[on].dataset.f)+.02);
+    whip.style.setProperty('--wp',(window.scrollY<first?0:wp).toFixed(3));
+    whip.style.setProperty('--wv',window.scrollY>first?1:0);
+  }
+  window.addEventListener('scroll',function(){requestAnimationFrame(upd);},{passive:true});
+  window.addEventListener('resize',upd);upd();
 })();
 </script>
