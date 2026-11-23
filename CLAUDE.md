@@ -22,7 +22,7 @@ lokal schneiden und bearbeiten, Dateien im Repo ändern, Kosten schätzen.
 
 Grüne Handy-Bildschirme werden IMMER mit `cardmarket-pro/tools-screen-tracking.py` ersetzt:
 - Kanten-Fit: Konturpunkte je Bildschirmseite (ohne runde Ecken) → Geraden → Schnittpunkte = echte 4 Ecken inkl. Perspektive. Nie einzelne Eckpunkte suchen, nie ein gerades Rechteck auflegen.
-- Glättung nur bei ruhigem Handy (3-Tap), bei schneller Bewegung keine.
+- Glättung pro Bild adaptiv: liegt das Handy ruhig (Mitte < 6 px/Bild) 7-Tap-Glättung, bei Bewegung keine – auch innerhalb derselben Szene.
 - Obere Kante (Notch/kleine Ecken) aus stabilen Seitenkanten + fester Bildschirmhöhe ableiten; Kanten per RANSAC auf der Außenkontur (Finger/Notch ignorieren).
 - Oberfläche mit Kamera-Aussparung (Dynamic Island) zeichnen, Logo mit Abstand zur Aussparung.
 - Grünen/türkisen Lichtschein um das Handy (60 px) und farbiges Bildschirmlicht auf Gesichtern zu neutralem Weiß umfärben.

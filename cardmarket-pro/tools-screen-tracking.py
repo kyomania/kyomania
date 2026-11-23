@@ -57,10 +57,15 @@ def track(frames,thr=(150,80,80)):
     for k in range(len(Q)):
         dl=(Q[k,0]-Q[k,3])/Lh[k];dr=(Q[k,1]-Q[k,2])/Rh[k]
         Q[k,0]=Q[k,3]+dl*lh;Q[k,1]=Q[k,2]+dr*rh
-    fast=np.abs(np.diff(Q.mean(1),axis=0)).max()>6 if len(Q)>1 else True
-    S=Q.copy()
-    if not fast and len(Q)>2:
-        P=np.pad(Q,((1,1),(0,0),(0,0)),mode='edge');S=0.25*P[:-2]+0.5*P[1:-1]+0.25*P[2:]
+    # adaptive Glaettung pro Bild: ruhig (Mitte bewegt sich < 6 px/Bild) -> 7-Tap, Bewegung -> keine
+    c=Q.mean(1);sp=np.r_[0,np.linalg.norm(np.diff(c,axis=0),axis=1)]
+    spd=np.maximum(sp,np.r_[sp[1:],0])
+    fast=bool(spd.max()>6)
+    S=Q.copy();w=np.array([1,2,3,4,3,2,1],float)
+    for k in range(len(Q)):
+        if spd[k]>6: continue
+        idx=[k+d for d in range(-3,4) if 0<=k+d<len(Q) and spd[k+d]<=6]
+        ww=np.array([w[(i_-k)+3] for i_ in idx]);S[k]=(Q[idx]*ww[:,None,None]).sum(0)/ww.sum()
     jump=np.abs(np.diff(S,axis=0)).max() if len(S)>1 else 0
     return S.astype(np.float32),M,{'fit_err_px':round(float(E),1),'max_offset_px':round(float(np.abs(S-Q).max()),1),'max_jump_per_frame_px':round(float(jump),1),'fast':bool(fast)}
 def composite(frame,quad,mask,ui_bgr):
