@@ -15,20 +15,26 @@ img.logo{border-radius:18%}
 <div class="s" id="s1" style="background:#2a2d33">
  <div class="lab" style="left:200px;top:260px;writing-mode:vertical-rl;transform:rotate(180deg)">cardmarket.pro brand</div>
  <div class="lab" style="left:200px;top:1450px;writing-mode:vertical-rl;transform:rotate(180deg)">logo construction</div>
+ <img class="logo" src="a/logo.png" id="l1" style="position:absolute;width:480px;left:300px;top:720px;opacity:0">
  <svg id="cons" width="1080" height="1920" style="position:absolute;inset:0"><g fill="none" stroke="#ffffffaa" stroke-width="2" id="cg"></g></svg>
 </div>
 <!-- 2 kinetic type -->
-<div class="s" id="s2" style="background:var(--t)"><div class="big" id="bt" style="top:520px"></div></div>
+<div class="s" id="s2" style="background:var(--t)"><div id="bt" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:30px;font-weight:900;font-size:170px;letter-spacing:-5px;color:var(--m);line-height:1"><div id="w0">COLLECT.</div><div id="w1">TRACK.</div><div id="w2">TRADE.</div></div></div>
 <!-- 3 phone -->
 <div class="s" id="s3" style="background:#d9dde0">
  <div id="ph" style="position:absolute;left:170px;top:260px;width:740px;height:1500px;border-radius:90px;background:#000;padding:22px;box-shadow:0 60px 120px #0006">
- <div style="width:100%;height:100%;border-radius:70px;overflow:hidden;background:#0b0f14"><img id="pimg" src="a/profile.jpg" style="width:100%;display:block"></div></div>
+ <div style="width:100%;height:100%;border-radius:70px;overflow:hidden;background:#0b0f14"><div style="padding:110px 50px 0;color:#fff">
+ <div style="font-size:44px;font-weight:800;margin-bottom:50px">←&nbsp;&nbsp;cardmarket.pro</div>
+ <div style="display:flex;align-items:center;gap:40px"><img src="a/logo.png" style="width:190px;border-radius:50%;border:6px solid #6fd8c0"><div><div style="font-size:42px;font-weight:800">cardmarket.pro</div><div style="font-size:28px;color:#6fd8c0;margin-top:8px">Trading Card Marketplace</div></div></div>
+ <div style="font-size:31px;line-height:1.5;margin-top:40px">🌍 TCG & Sports Cards Worldwide<br>🃏 Buy. Sell. Collect.<br>📊 Free Collector & Price Index<br><span style="color:#8ab4ff">🔗 cardmarket.pro</span></div>
+ <div style="display:flex;gap:16px;margin-top:40px"><div style="flex:1;background:#6fd8c0;color:#0b0f14;border-radius:18px;text-align:center;padding:22px;font-size:32px;font-weight:800">Folgen</div><div style="flex:1;background:#2a2f36;border-radius:18px;text-align:center;padding:22px;font-size:32px;font-weight:700">Nachricht</div></div>
+ <div style="display:flex;gap:6px;margin:50px -50px 0"><img src="a/t0.jpg" style="width:33.3%"><img src="a/t1.jpg" style="width:33.3%"><img src="a/t2.jpg" style="width:33.3%"></div></div></div></div>
 </div>
 <!-- 4 tiles -->
-<div class="s" id="s4" style="background:#0b0f14">
- <img src="a/t0.jpg" id="ta" style="position:absolute;width:640px;left:-40px;top:200px;border-radius:24px">
- <img src="a/t1.jpg" id="tb" style="position:absolute;width:640px;left:220px;top:700px;border-radius:24px">
- <img src="a/t2.jpg" id="tc" style="position:absolute;width:640px;left:480px;top:1200px;border-radius:24px">
+<div class="s" id="s4" style="background:#0b0f14;perspective:1600px">
+ <img src="a/t0.jpg" id="ta" style="position:absolute;width:480px;left:300px;top:600px;border-radius:30px;box-shadow:0 0 80px #6fd8c055;border:4px solid #6fd8c0">
+ <img src="a/t1.jpg" id="tb" style="position:absolute;width:480px;left:300px;top:600px;border-radius:30px;box-shadow:0 0 80px #6fd8c055;border:4px solid #6fd8c0">
+ <img src="a/t2.jpg" id="tc" style="position:absolute;width:480px;left:300px;top:600px;border-radius:30px;box-shadow:0 0 80px #6fd8c055;border:4px solid #6fd8c0">
 </div>
 <!-- 5 banner invert -->
 <div class="s" id="s5" style="background:#000"><img src="a/banner.jpg" id="bn" style="position:absolute;height:1920px;left:50%;top:0;transform:translateX(-50%)"></div>
@@ -47,7 +53,7 @@ img.logo{border-radius:18%}
 </div>
 <!-- 9 outro -->
 <div class="s" id="s9" style="background:#0b0f14">
- <img src="a/banner.jpg" style="position:absolute;height:1920px;left:50%;transform:translateX(-50%);opacity:.22;filter:grayscale(1)">
+ <img src="a/t1.jpg" style="position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;opacity:.25;filter:grayscale(1)">
  <svg id="ig" width="170" height="170" viewBox="0 0 24 24" style="position:absolute;left:455px;top:700px"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".6" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs>
  <g fill="none" stroke="url(#g)" stroke-width="2" id="igg"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.5"/></g><circle cx="17.6" cy="6.4" r="1.3" fill="#fff" id="igd"/></svg>
  <div id="hd" style="position:absolute;width:100%;top:910px;text-align:center;color:#fff;font-size:56px;font-weight:800;letter-spacing:2px">@CARDMARKET.PRO</div>
@@ -67,18 +73,21 @@ const P=[['Buy Cards','#6fd8c0','#0b0f14'],['Track Prices','transparent','#6fd8c
 let ph='';P.forEach((p,i)=>{for(let k=0;k<4;k++)ph+=`<div class="pill" style="top:${i*190}px;left:${k*620}px;background:${p[1]};color:${p[2]};border:4px solid ${p[2]==='#0b0f14'?p[1]:p[2]}">${p[0]} ▸</div>`});$('pl').innerHTML=ph;
 // chart
 const pts=[];for(let i=0;i<=30;i++){pts.push([80+i*30.6,1450-i*14-Math.sin(i*1.3)*60-(i>20?(i-20)*25:0)])}
-const S=[[0,1.4],[1.4,2.6],[2.6,4.0],[4.0,5.0],[5.0,5.6],[5.6,6.9],[6.9,8.3],[8.3,9.6],[9.6,12.1]];
+const S=[[0,1.5],[1.5,2.7],[2.6,4.0],[4.0,5.0],[5.0,5.6],[5.6,6.9],[6.9,8.3],[8.3,9.6],[9.6,12.1]];
 function seek(t){
  S.forEach((r,i)=>$('s'+(i+1)).style.display=(t>=r[0]&&t<r[1])?'block':'none');
  $('tag').style.display=(t>1.4&&t<9.6)?'block':'none';
  // 1
- let p=(t-0)/1.2;[...cg.children].forEach((e,i)=>e.style.strokeDashoffset=e.dataset.l*(1-E(p*1.3-i*0.02)));
+ let p=t/0.8;[...cg.children].forEach((e,i)=>e.style.strokeDashoffset=e.dataset.l*(1-E(p*1.3-i*0.02)));
+ const lo=E((t-0.7)/0.3);$('l1').style.opacity=lo;$('cg').style.opacity=1-lo;
+ const z=E((t-0.95)/0.45);$('l1').style.transform=`scale(${0.85+z*0.35}) rotate(${z*360}deg)`;
  // 2
- const w=['COLL<br>ECT.','TRACK.','TRADE.'];$('bt').innerHTML=w[Math.min(2,Math.floor((t-1.4)/0.4))]||'';$('bt').style.transform=`translateY(${(1-E(((t-1.4)%0.4)/0.25))*80}px)`;
+ [0,1,2].forEach(i=>{const q=(t-1.5-i*0.22)/0.12;const el=$('w'+i);el.style.opacity=q>0?1:0;el.style.transform=`scale(${1+(1-E(q))*1.2})`;});
+ const fl=t-2.1;$('w1').style.color=(fl>0&&Math.floor(fl*14)%2==0)?'#fff':'#6fd8c0';$('w1').style.textShadow=(fl>0&&Math.floor(fl*14)%2==0)?'0 0 60px #6fd8c0':'none';
  // 3
- p=(t-2.6)/1.4;$('ph').style.transform=`translateY(${(1-E(p*2))*400}px) rotate(${(1-E(p*2))*-6}deg)`;$('pimg').style.transform=`translateY(${-E((p-0.4)*1.6)*320}px)`;
+ p=(t-2.6)/1.4;$('ph').style.transform=`translateY(${(1-E(p*2))*400}px) rotate(${(1-E(p*2))*-6}deg)`;
  // 4
- p=(t-4.0);['ta','tb','tc'].forEach((id,i)=>{$(id).style.transform=`translateX(${(1-E(p*3-i*0.35))*(i%2?-1200:1200)}px) rotate(${(i-1)*4}deg)`});
+ p=(t-4.0);['ta','tb','tc'].forEach((id,i)=>{const f=E(p*2.2-0.3);const a=(i-1)*f;$(id).style.transform=`translateX(${a*300}px) translateY(${Math.abs(a)*60+(1-E(p*4))*900}px) rotate(${a*14}deg) rotateY(${(1-E(p*3))*180}deg)`;$(id).style.zIndex=i==1?3:1});
  // 5
  p=(t-5.0)/0.6;$('bn').style.filter=(Math.floor(t*10)%2)?'invert(1) grayscale(1)':'none';$('bn').style.transform=`translateX(${-50-p*20}%) scale(${1+p*0.1})`;
  // 6
