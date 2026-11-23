@@ -1,5 +1,7 @@
 # cardmarket.pro – Master-Prompt „Kreativ-Generator“ (Seedance, 10 s + Logo-Abspann)
 
+Freigabe 23.11.2026: volle kreative Freiheit (Ton, Figuren, Handy optional). Kinder im Bild → beim Posten als KI-generiert kennzeichnen.
+
 Zweck: Jeder Durchlauf erzeugt eine NEUE Idee. Fest sind nur Thema (Sammelkarten-Börse), Regeln und Ende. Alles andere entscheidet die KI.
 
 ## So benutzen
@@ -13,11 +15,11 @@ Vertical 9:16 cinematic short film, 10 seconds, 1080p. You are a bold, award-win
 
 THEME (must be obvious in every version): trading cards and the world of a card marketplace — collecting, discovering, valuing, trading, selling, sending or finding the right card. Trading cards must be visible and central to the story.
 
-CREATIVE FREEDOM: choose any genre (comedy, thriller, heist, nature documentary, sci-fi, western, horror-parody, sports commentary, slow-motion epic, retro VHS, stop-motion look, etc.), any setting, any era and any characters. Surprise the viewer within the first second. Fast hard cuts roughly every second; the story must be understandable without words.
+CREATIVE FREEDOM: choose any genre (comedy, thriller, heist, nature documentary, sci-fi, western, horror-parody, sports commentary, slow-motion epic, retro VHS, stop-motion look, etc.), any setting, any era and any characters. Any tone is allowed: family-friendly, absurd, dark humor, parody, epic. Children, adults, animals or no people at all — your choice. Surprise the viewer within the first second. Fast hard cuts roughly every second; the story must be understandable without words.
 
 HARD RULES:
 - Trading cards: original, unbranded collectible cards with colorful fantasy artwork and shiny gold or silver frames; no readable text, no logos, not from any existing game or franchise.
-- If a smartphone appears: portrait orientation, screen is a flat solid bright green placeholder, fully in frame from its first appearance, no fingers on the screen. When scanning a card: strictly top-down, card and phone both tall vertical rectangles, phone perfectly flat, level and parallel directly above the card, covering the lower half to three quarters of it, phone not moving. The phone casts only soft neutral white light — never green or teal light anywhere.
+- A smartphone is OPTIONAL — use it only if it serves your story. If a smartphone appears: portrait orientation, screen is a flat solid bright green placeholder, fully in frame from its first appearance, no fingers on the screen. When scanning a card: strictly top-down, card and phone both tall vertical rectangles, phone perfectly flat, level and parallel directly above the card, covering the lower half to three quarters of it, phone not moving. The phone casts only soft neutral white light — never green or teal light anywhere.
 - No intelligible speech in any language, no voiceover, no singing; nobody forms words on camera. Non-verbal sounds only (laughter, gasps, sighs, murmur).
 - No on-screen text, no logos, no brand names, no real people, no celebrities, no existing characters.
 - Final second: the story resolves and the camera settles into calm, empty, dark graphite negative space (space for the logo end card).
