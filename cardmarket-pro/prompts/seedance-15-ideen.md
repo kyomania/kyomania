@@ -1,5 +1,7 @@
 # cardmarket.pro – 15 Seedance-Prompts à 15 s (9:16)
 
+> ⚠️ Ideen 2–15 veraltet – aktuelle Fassung: `seedance-v2-ideen-02-15.md`
+
 **Für alle gilt (an den Anfang JEDES Prompts setzen):**
 `Vertical 9:16 cinematic short film, 15 seconds, 1080p. Dark low-key lighting, cool graphite shadows, thin red rim light on edges, subtle teal glow only from phone screens. Realistic interiors, shallow depth of field, 35mm grain. No warm amber tones. No on-screen text, no logos, no subtitles. Trading cards only from the back, in sleeves or out of focus, no readable card artwork. LANGUAGE-NEUTRAL: no intelligible speech in any language, no voiceover, no narration, no singing with lyrics. Nobody speaks on camera; when people react, their mouths stay closed or are out of frame (backs of heads, hands, profiles in shadow). Human sounds only non-verbal: laughter, giggles, gasps, sighs, unintelligible distant murmur.`
 
