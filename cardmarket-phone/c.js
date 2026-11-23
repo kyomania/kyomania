@@ -1,0 +1,2 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1080,height:1920}});await pg.goto('file://'+process.cwd()+'/cmp.html');await pg.waitForTimeout(2500);
+for(let k=1;k<=6;k++){await pg.evaluate(k=>show(k),k);await pg.waitForTimeout(200);await pg.screenshot({path:`/tmp/claude-0/-home-user-kyomania/357b51f2-a8e5-56ec-b866-2ea56bd2497c/scratchpad/v${k}.jpg`,type:'jpeg',quality:85});}await b.close()})();
