@@ -81,7 +81,7 @@ function seek(t){
   $('ph').style.transform=([21,22,23].includes(s.src)?'translate(330px,420px) rotate(38deg) scale(2.7) ':'')+`scale(${s.hero?1.05+lt*0.02:1.1-lt*0.3})`;
   $('ph').style.filter=s.end?`grayscale(1) brightness(${0.45-0.05*C(lt)})`:'none';}
  const inv=!!s.inv;$('stage').style.filter=inv?'invert(1) grayscale(1)':'none';
- const dk=inv||s.bg==COL.mint||(s.type=='ui'&&s.sch==1)||s.bg==COL.grey;$('FL').style.filter=dk?'grayscale(1) brightness(0)':'drop-shadow(0 8px 30px #000a)';$('WM').style.filter=dk?'brightness(0)':'drop-shadow(0 4px 20px #000a)';
+ const dk=inv||s.bg==COL.mint||(s.type=='ui'&&s.sch==1)||s.bg==COL.grey;$('FL').style.filter=dk?'grayscale(1) invert(1) contrast(1.8)':'drop-shadow(0 8px 30px #000a)';$('WM').style.filter=dk?'grayscale(1) invert(1) contrast(1.8)':'drop-shadow(0 4px 20px #000a)';
  let pu=0;HITS.forEach(h=>{const q=t-h;if(q>=0&&q<0.35)pu=Math.max(pu,1-q/0.35)});$('tag').style.color=inv?'#000':'#fff';$('tgi').setAttribute('stroke',inv?'#000':'#fff');
  // logo build-in at fixed spot
  $('FL').style.opacity=1;$('FL').style.transform=`scale(${1+0.22*E(pu)*pu})`;$('WM').style.opacity=1;$('WM').style.transform=`scale(${1+0.08*pu})`;
