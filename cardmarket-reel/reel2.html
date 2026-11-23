@@ -27,7 +27,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0f14;font-fam
 <script>
 const $=id=>document.getElementById(id);const C=x=>Math.min(Math.max(x,0),1);const E=x=>1-Math.pow(1-C(x),3);
 const COL={mint:'#5ee0d2',pet:'#0e3a3a',grey:'#8a9399',dark:'#0b0f14',slate:'#6f8a99',light:'#e8eef0'};
-const PH=['g/g3.png','g/g16.png','g/g6.png','g/g3.png','g/g3.png','g/g16.png','g/g6.png','g/g16.png'];
+const PH=['st/c1_1.jpg','st/c1_2.jpg','st/c1_3.jpg','st/c2_1.jpg','st/c2_2.jpg','st/c2_3.jpg','st/c3_1.jpg','st/c3_2.jpg','st/c3_3.jpg','st/c4_1.jpg','st/c4_2.jpg','st/c4_3.jpg','st/c5_1.jpg','st/c5_2.jpg','st/c5_3.jpg','st/c6_1.jpg','st/c6_2.jpg','st/c6_3.jpg','st/c7_1.jpg','st/c7_2.jpg','st/c7_3.jpg','st/c8_1.jpg','st/c8_2.jpg','st/c8_3.jpg','st/c9_1.jpg','st/c9_2.jpg','st/c9_3.jpg'];
 $('pre').innerHTML=PH.map(s=>`<img src="${s}">`).join('');
 // panel lines
 let P='';for(let i=0;i<14;i++)P+=`<line x1="${i*80}" y1="0" x2="${i*80+500}" y2="1920" stroke-opacity=".18"/>`;$('pg').innerHTML=P;
@@ -45,15 +45,16 @@ const S=[];const add=(t,type,o)=>S.push(Object.assign({t,type},o));
 // intro: construction on petrol w/ panel flicker
 add(0,'cons',{bg:COL.pet,ln:COL.mint});add(0.5,'panel',{bg:COL.grey,ln:'#fff'});add(0.6,'cons',{bg:COL.pet,ln:COL.mint,t0:0});add(1.2,'panel',{bg:COL.mint,ln:COL.dark});add(1.3,'cons',{bg:COL.dark,ln:COL.mint,t0:0});
 // rapid montage from drop
-const seq=[['photo',{src:0}],['panel',{bg:COL.mint,ln:COL.dark}],['photo',{src:1}],['ui',{sch:0}],['photo',{src:3,pos:'85% 50%'}],['cons',{bg:COL.slate,ln:COL.mint}],['photo',{src:4,pos:'50% 80%'}],['panel',{bg:COL.pet,ln:COL.mint}],['photo',{src:5,pos:'30% 30%'}],['photo',{src:2}],['ui',{sch:1}],['photo',{src:6,pos:'80% 20%'}],['cons',{bg:COL.grey,ln:'#fff'}],['photo',{src:7,pos:'95% 70%'}]];
+const ord=[3,7,10,13,16,1,22,25,5,14,19,8,23,2,17,11,26,4];const gfx=[['panel',{bg:COL.mint,ln:COL.dark}],['ui',{sch:0}],['cons',{bg:COL.slate,ln:COL.mint}],['panel',{bg:COL.pet,ln:COL.mint}],['ui',{sch:1}],['cons',{bg:COL.grey,ln:'#fff'}]];
+const seq=[];ord.forEach((o,i)=>{seq.push(['photo',{src:o}]);if(i%3==2)seq.push(gfx[(i/3|0)%gfx.length])});
 let t=1.92,k=0,d=0.1;while(t<4.4){const it=seq[Math.floor(k/2)%seq.length];add(t,it[0],Object.assign({inv:k%2==1},it[1]));k++;t+=d;if(t>3.2)d=Math.min(0.3,d+0.03)}
 // UI scramble
 add(4.4,'ui',{sch:0,slow:1});add(5.1,'ui',{sch:1,slow:1});
 // construction diagram
 add(5.71,'cons',{bg:COL.slate,ln:COL.mint,t0:5.71});add(6.32,'cons',{bg:COL.grey,ln:'#fff',t0:5.71,inv:false});
 // hero person
-add(7.13,'photo',{src:1,hero:1});add(7.92,'photo',{src:1,hero:1,inv:true});
-add(9.0,'photo',{src:1,hero:1,end:1});
+add(7.13,'photo',{src:11,hero:1});add(7.92,'photo',{src:11,hero:1,inv:true});
+add(9.0,'photo',{src:11,hero:1,end:1});
 function seek(t){
  let s=S[0];for(const x of S)if(t>=x.t)s=x;const lt=t-s.t;
  ['Lpanel','Lcons','Lui','Lphoto'].forEach(id=>$(id).style.display='none');
