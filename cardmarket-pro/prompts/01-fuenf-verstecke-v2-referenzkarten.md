@@ -3,9 +3,9 @@ Referenzen: @image1 = Lugia (gold, holo, deutsch), @image2 = Glurak (rot-orange,
 Nur interner Test – vor Veröffentlichung rechtlich prüfen (Kartenmotive urheber-/markenrechtlich geschützt).
 
 ## Prompt
-Vertical 9:16 cinematic short film, 15 seconds, 1080p. Dark low-key lighting, cool graphite shadows, thin red rim light on edges, subtle teal glow only from the phone screen. Realistic home interiors, shallow depth of field, 35mm grain. No warm amber tones. No on-screen text, no logos, no subtitles, no voiceover.
+Vertical 9:16 cinematic short film, 15 seconds, 1080p. Dark low-key lighting, cool graphite shadows, thin red rim light on edges, subtle teal glow only from the phone screen. Realistic home interiors, shallow depth of field, 35mm grain. No warm amber tones. No on-screen text, no logos, no subtitles. LANGUAGE-NEUTRAL: no intelligible speech in any language, no voiceover, nobody speaks on camera; human sounds only non-verbal.
 
-Trading cards: the two hero cards must look exactly like @image1 (gold-bordered holographic Lugia card, white Lugia over stormy blue sea, German text) and @image2 (gold-bordered Glurak card, orange Charizard breathing fire on red background, German text) — keep their artwork, gold borders, holo shimmer, colors, layout and proportions unchanged, standard trading-card size 63x88 mm, each in a clear penny sleeve. All other cards are shown only from the back or out of focus.
+Trading cards: the two hero cards must look exactly like @image1 (gold-bordered holographic Lugia card, white Lugia over stormy blue sea) and @image2 (gold-bordered Glurak card, orange Charizard breathing fire on red background) — keep their artwork, gold borders, holo shimmer, colors, layout and proportions unchanged, standard trading-card size 63x88 mm, each in a clear penny sleeve. All other cards are shown only from the back or out of focus.
 
 [0-2s] Under a bed, a hand pulls out a black zip trading card binder, dust floats in a thin light beam; the binder falls open showing 9-pocket clear sleeve pages, @image2 visible in one pocket.
 [2-4s] Basement, flashlight beam, hands lift the lid of a cardboard box revealing rows of sleeved cards (backs visible).
@@ -15,7 +15,7 @@ Trading cards: the two hero cards must look exactly like @image1 (gold-bordered 
 [10-13s] Top-down on a dark wooden table: all finds land together; @image1 and @image2 lie side by side in the center, perfectly sharp; an adult hand holds a smartphone in portrait orientation above @image2, the screen glowing plain solid green.
 [13-15s] Slow push-in, the phone is lowered, the cards stay sharp, then the camera drifts upward into calm, empty, dark graphite negative space for the final 2 seconds — no objects, no text.
 
-Audio: room tone, drawer slide, cardboard lid, sleeve rustle, glovebox click, faint indistinct German children chattering and giggling from another room, one soft shutter click at 11s. No speech in the foreground, no music.
+Audio: room tone, drawer slide, cardboard lid, sleeve rustle, glovebox click, faint unintelligible children giggling and laughing from another room, no words, one soft shutter click at 11s. No speech in the foreground, no music.
 
 ## Negativ
 text overlay, subtitles, watermark, logo, distorted card artwork, extra limbs, warped card text, invented card designs, books instead of binders, landscape phone, warm orange grading, talking to camera
