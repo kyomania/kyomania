@@ -1,6 +1,6 @@
 # Idee 1 – Fünf Verstecke · v5 schnelle Schnitte · Seedance 15 s · 9:16
 
-Vertical 9:16 cinematic short film, 15 seconds, 1080p, fast-paced editing with hard cuts on every beat, roughly one cut per second, energetic rhythm. Dark low-key lighting, cool graphite shadows, thin red rim light on edges. Realistic home interiors, The phone screen is a flat solid green placeholder that emits NO light: no green or teal glow, spill or reflection on faces, hands, cards or surroundings; everything is lit only by the room's own dark light and red rim light.  shallow depth of field, 35mm grain. No warm amber tones. No on-screen text, no logos, no subtitles. No intelligible speech, no voiceover, nobody speaks on camera; human sounds only non-verbal.
+Vertical 9:16 cinematic short film, 15 seconds, 1080p, fast-paced editing with hard cuts on every beat, roughly one cut per second, energetic rhythm. Dark low-key lighting, cool graphite shadows, thin red rim light on edges. Realistic home interiors, The phone screen is a flat solid green placeholder, but the light it casts is like a real phone: soft neutral white light, no color tint — never green or teal light on faces, hands, cards or surroundings.  shallow depth of field, 35mm grain. No warm amber tones. No on-screen text, no logos, no subtitles. No intelligible speech, no voiceover, nobody speaks on camera; human sounds only non-verbal.
 
 Cards appear only as plain dark blue card backs inside clear plastic sleeves.
 
@@ -16,7 +16,7 @@ Cards appear only as plain dark blue card backs inside clear plastic sleeves.
 [9-10s] Whip pan to the dark wooden table.
 [10-11s] Top-down: binder, box, holders slam down one after another, hard cut on each landing.
 [11-12s] Smartphone in portrait orientation swings in above the cards, screen flat solid green.
-[12-13s] Macro: the phone hovering flat over the card, screen flat green, no glow.
+[12-13s] Macro: the phone hovering flat over the card, screen flat green, soft neutral white phone light on the card.
 [13-15s] Sudden calm: slow drift upward into empty dark graphite negative space, stillness.
 
 Audio: punchy sound on every cut — zipper, dust whoosh, flashlight click, lid thud, drawer slam, glovebox pop, box thump, three table slams, phone whoosh, shutter click at 11s; faint children giggling in the background; everything drops to near silence at 13s. No music.
