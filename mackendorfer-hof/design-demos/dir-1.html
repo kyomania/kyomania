@@ -41,11 +41,11 @@ a{color:inherit}
 .half h2{font:400 clamp(3rem,7vw,7.5rem)/.9 var(--serif);letter-spacing:-.02em}
 .half p{margin-top:14px;max-width:30ch;color:var(--ivory-2)}
 .half .go{display:inline-block;margin-top:22px;font-size:.875rem;letter-spacing:.06em;border-bottom:1px solid var(--brass);padding-bottom:4px;color:var(--ivory)}
-.seal{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:3;width:clamp(150px,17vw,230px);text-align:center;pointer-events:none}
+.seal{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);z-index:3;width:clamp(150px,17vw,230px);text-align:center;pointer-events:none}
 .seal::before{content:"";position:absolute;left:50%;top:-50vh;bottom:-60vh;width:1px;background:var(--brass);opacity:.45;transform:translateX(-50%);z-index:-1}
 .seal img{filter:drop-shadow(0 0 40px rgba(14,12,11,.9))}
 .seal::after{content:"";position:absolute;inset:-60% -40%;background:radial-gradient(closest-side,rgba(14,12,11,.85),transparent);z-index:-1}
-.claim{position:absolute;z-index:3;left:50%;top:calc(42% + clamp(90px,10vw,140px));transform:translateX(-50%);font:italic 400 clamp(1.1rem,1.4vw,1.4rem)/1.2 var(--serif);color:var(--brass);white-space:nowrap;padding:6px 16px;text-shadow:0 0 18px #0E0C0B}
+.claim{margin-top:14px;font:italic 400 clamp(1rem,1.2vw,1.3rem)/1.2 var(--serif);color:var(--brass);white-space:nowrap;text-shadow:0 0 18px #0E0C0B}
 
 /* Einleitung */
 .intro{padding:clamp(96px,14vw,200px) 0 clamp(64px,8vw,120px)}
@@ -153,8 +153,7 @@ footer a:hover{color:var(--ivory)}
         <span class="go">Das Loft ansehen</span>
       </div>
     </a>
-    <div class="seal"><img src="../logo/mackendorfer-hof-logo-gold-transparent.svg" alt="Mackendorfer Hof"></div>
-    <p class="claim">Was hier geschieht, bleibt hier.</p>
+    <div class="seal"><img src="../logo/mackendorfer-hof-logo-gold-transparent.svg" alt="Mackendorfer Hof"><p class="claim">Was hier geschieht, bleibt hier.</p></div>
   </section>
 
   <section class="intro wrap" id="raeume">
