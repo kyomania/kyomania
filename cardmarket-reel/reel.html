@@ -3,101 +3,81 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0f14;font-family:Inter,Arial,sans-serif}
 .s{position:absolute;inset:0;display:none;overflow:hidden}
-:root{--m:#6fd8c0;--d:#0b0f14;--t:#0f2a2a}
-.lab{position:absolute;font-size:18px;letter-spacing:4px;color:#ffffff66;font-weight:600;text-transform:uppercase}
-.tag{position:absolute;right:60px;top:120px;text-align:right;color:#fff;font-size:22px;font-weight:800;letter-spacing:1px}
-.tag small{display:block;font-weight:400;color:#ffffff88;font-size:16px;margin-top:4px}
-.big{position:absolute;left:70px;font-weight:900;color:var(--m);font-size:230px;line-height:.88;letter-spacing:-8px}
-.pill{position:absolute;height:150px;border-radius:75px;font-size:62px;font-weight:700;display:flex;align-items:center;padding:0 60px;white-space:nowrap;gap:24px}
-img.logo{border-radius:18%}
+.bg{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}
+.lab{position:absolute;font-size:18px;letter-spacing:5px;color:#ffffff66;font-weight:600;text-transform:uppercase}
+.tag{position:absolute;right:60px;top:110px;text-align:right;color:#fff;font-size:22px;font-weight:800;letter-spacing:2px;z-index:9}
+.tag small{display:block;font-weight:400;color:#ffffff99;font-size:16px;margin-top:4px;letter-spacing:1px}
+.cap{position:absolute;left:0;right:0;text-align:center;color:#fff;font-weight:900;letter-spacing:-2px}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:8;pointer-events:none}
 </style></head><body>
-<!-- 1 construction -->
-<div class="s" id="s1" style="background:#2a2d33">
- <div class="lab" style="left:200px;top:260px;writing-mode:vertical-rl;transform:rotate(180deg)">cardmarket.pro brand</div>
- <div class="lab" style="left:200px;top:1450px;writing-mode:vertical-rl;transform:rotate(180deg)">logo construction</div>
- <img class="logo" src="a/logo.png" id="l1" style="position:absolute;width:480px;left:300px;top:720px;opacity:0">
- <svg id="cons" width="1080" height="1920" style="position:absolute;inset:0"><g fill="none" stroke="#ffffffaa" stroke-width="2" id="cg"></g></svg>
+<div class="s" id="s1" style="background:#0b0f14">
+ <div class="lab" style="left:120px;top:240px;writing-mode:vertical-rl;transform:rotate(180deg)">cardmarket.pro · brand identity</div>
+ <div class="lab" style="right:120px;bottom:240px;writing-mode:vertical-rl">logo construction</div>
+ <div id="l1w" style="position:absolute;inset:0"><img src="g/g1.png" id="l1" class="bg" style="opacity:0"></div>
+ <svg width="1080" height="1920" style="position:absolute;inset:0"><g fill="none" stroke="#6fd8c0" stroke-opacity=".55" stroke-width="2" id="cg"></g></svg>
 </div>
-<!-- 2 kinetic type -->
-<div class="s" id="s2" style="background:var(--t)"><div id="bt" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:30px;font-weight:900;font-size:170px;letter-spacing:-5px;color:var(--m);line-height:1"><div id="w0">COLLECT.</div><div id="w1">TRACK.</div><div id="w2">TRADE.</div></div></div>
-<!-- 3 phone -->
-<div class="s" id="s3" style="background:#d9dde0">
- <div id="ph" style="position:absolute;left:170px;top:260px;width:740px;height:1500px;border-radius:90px;background:#000;padding:22px;box-shadow:0 60px 120px #0006">
- <div style="width:100%;height:100%;border-radius:70px;overflow:hidden;background:#0b0f14"><div style="padding:110px 50px 0;color:#fff">
- <div style="font-size:44px;font-weight:800;margin-bottom:50px">←&nbsp;&nbsp;cardmarket.pro</div>
- <div style="display:flex;align-items:center;gap:40px"><img src="a/logo.png" style="width:190px;border-radius:50%;border:6px solid #6fd8c0"><div><div style="font-size:42px;font-weight:800">cardmarket.pro</div><div style="font-size:28px;color:#6fd8c0;margin-top:8px">Trading Card Marketplace</div></div></div>
- <div style="font-size:31px;line-height:1.5;margin-top:40px">🌍 TCG & Sports Cards Worldwide<br>🃏 Buy. Sell. Collect.<br>📊 Free Collector & Price Index<br><span style="color:#8ab4ff">🔗 cardmarket.pro</span></div>
- <div style="display:flex;gap:16px;margin-top:40px"><div style="flex:1;background:#6fd8c0;color:#0b0f14;border-radius:18px;text-align:center;padding:22px;font-size:32px;font-weight:800">Folgen</div><div style="flex:1;background:#2a2f36;border-radius:18px;text-align:center;padding:22px;font-size:32px;font-weight:700">Nachricht</div></div>
- <div style="display:flex;gap:6px;margin:50px -50px 0"><img src="a/t0.jpg" style="width:33.3%"><img src="a/t1.jpg" style="width:33.3%"><img src="a/t2.jpg" style="width:33.3%"></div></div></div></div>
-</div>
-<!-- 4 tiles -->
-<div class="s" id="s4" style="background:#0b0f14;perspective:1600px">
- <img src="a/t0.jpg" id="ta" style="position:absolute;width:480px;left:300px;top:600px;border-radius:30px;box-shadow:0 0 80px #6fd8c055;border:4px solid #6fd8c0">
- <img src="a/t1.jpg" id="tb" style="position:absolute;width:480px;left:300px;top:600px;border-radius:30px;box-shadow:0 0 80px #6fd8c055;border:4px solid #6fd8c0">
- <img src="a/t2.jpg" id="tc" style="position:absolute;width:480px;left:300px;top:600px;border-radius:30px;box-shadow:0 0 80px #6fd8c055;border:4px solid #6fd8c0">
-</div>
-<!-- 5 banner invert -->
-<div class="s" id="s5" style="background:#000"><img src="a/banner.jpg" id="bn" style="position:absolute;height:1920px;left:50%;top:0;transform:translateX(-50%)"></div>
-<!-- 6 buttons -->
-<div class="s" id="s6" style="background:var(--t)"><div id="pl" style="position:absolute;left:0;top:240px;width:3000px"></div></div>
-<!-- 7 chart -->
-<div class="s" id="s7" style="background:#0b0f14">
- <div class="lab" style="left:80px;top:300px;color:var(--m);font-size:26px">Price Index · live</div>
- <div id="pv" style="position:absolute;left:80px;top:350px;color:#fff;font-size:150px;font-weight:900;letter-spacing:-4px"></div>
- <svg width="1080" height="1920" style="position:absolute;inset:0"><path id="cp" fill="none" stroke="#6fd8c0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path id="ca" fill="#6fd8c022"/></svg>
-</div>
-<!-- 8 logo hero -->
-<div class="s" id="s8" style="background:#0b0f14">
- <img class="logo" src="a/logo.png" id="lh" style="position:absolute;width:300px;left:390px;top:640px">
- <div style="position:absolute;left:540px;top:1320px;transform:translate(-50%,-50%) rotate(-90deg);color:#fff;font-size:72px;font-weight:900;letter-spacing:-2px">cardmarket<span style="color:var(--m)">.pro</span></div>
-</div>
-<!-- 9 outro -->
-<div class="s" id="s9" style="background:#0b0f14">
- <img src="a/t1.jpg" style="position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;opacity:.25;filter:grayscale(1)">
- <svg id="ig" width="170" height="170" viewBox="0 0 24 24" style="position:absolute;left:455px;top:700px"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".6" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs>
- <g fill="none" stroke="url(#g)" stroke-width="2" id="igg"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.5"/></g><circle cx="17.6" cy="6.4" r="1.3" fill="#fff" id="igd"/></svg>
- <div id="hd" style="position:absolute;width:100%;top:910px;text-align:center;color:#fff;font-size:56px;font-weight:800;letter-spacing:2px">@CARDMARKET.PRO</div>
- <div style="position:absolute;width:100%;top:1010px;text-align:center;color:var(--m);font-size:34px;font-weight:600;letter-spacing:8px">COLLECT · TRACK · TRADE</div>
-</div>
-<div class="tag" id="tag">◎ @CARDMARKET.PRO<small>TCG & Sports Cards Worldwide</small></div>
+<div class="s" id="s2"><img src="g/g6.png" class="bg" id="b2">
+ <div id="bt" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;font-weight:900;font-size:180px;letter-spacing:-6px;color:#fff;line-height:1"><div id="w0">COLLECT.</div><div id="w1">TRACK.</div><div id="w2">TRADE.</div></div></div>
+<div class="s" id="s3"><div id="pw" style="position:absolute;inset:0">
+ <img src="g/g4.png" class="bg">
+ <div style="position:absolute;left:204px;top:164px;width:663px;height:1432px;border-radius:70px;overflow:hidden;background:#0b0f14;color:#fff">
+  <div id="pin" style="padding:80px 38px 0">
+  <div style="font-size:34px;font-weight:800;margin-bottom:40px">cardmarket.pro</div>
+  <div style="display:flex;align-items:center;gap:30px"><div style="width:170px;height:170px;border-radius:50%;padding:6px;background:conic-gradient(#6fd8c0,#1b6e60,#6fd8c0);overflow:hidden"><img src="g/g1.png" style="width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 50%;transform:scale(1.6);clip-path:circle(31%)"></div>
+  <div><div style="font-size:34px;font-weight:800">cardmarket.pro</div><div style="font-size:24px;color:#6fd8c0;margin-top:8px">Trading Card Marketplace</div></div></div>
+  <div style="font-size:26px;line-height:1.55;margin-top:34px">🌍 TCG & Sports Cards Worldwide<br>🃏 Buy. Sell. Collect.<br>📊 Free Collector & Price Index<br><span style="color:#8ab4ff">🔗 cardmarket.pro</span></div>
+  <div style="display:flex;gap:12px;margin-top:32px"><div id="fb" style="flex:1;background:#6fd8c0;color:#0b0f14;border-radius:14px;text-align:center;padding:18px;font-size:27px;font-weight:800">Folgen</div><div style="flex:1;background:#262b33;border-radius:14px;text-align:center;padding:18px;font-size:27px;font-weight:700">Nachricht</div></div>
+  <div style="display:flex;gap:4px;margin:40px -38px 0"><img src="a/t0.jpg" style="width:33.3%"><img src="a/t1.jpg" style="width:33.3%"><img src="a/t2.jpg" style="width:33.3%"></div></div></div>
+ <div id="tap" style="position:absolute;width:90px;height:90px;border-radius:50%;border:5px solid #fff;left:330px;top:870px;opacity:0"></div>
+</div></div>
+<div class="s" id="s4"><img src="g/g2.png" class="bg" id="c4"><div class="cap" style="bottom:240px;font-size:120px" id="t4">COLLECT.</div></div>
+<div class="s" id="s5"><img src="g/g3.png" class="bg" id="c5">
+ <svg width="1080" height="1920" style="position:absolute;inset:0"><path id="cp" fill="none" stroke="#6fd8c0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 14px #6fd8c0)"/></svg>
+ <div class="cap" style="bottom:200px;font-size:120px">TRACK.</div><div class="cap" style="bottom:150px;font-size:30px;letter-spacing:8px;color:#6fd8c0;font-weight:700">FREE PRICE INDEX</div></div>
+<div class="s" id="s6"><img src="g/g5.png" class="bg" id="c6"><div class="cap" style="bottom:240px;font-size:120px">TRADE.</div></div>
+<div class="s" id="s7"><img src="g/g1.png" class="bg" id="c7">
+ <div style="position:absolute;left:540px;top:1480px;transform:translate(-50%,-50%);color:#fff;font-size:84px;font-weight:900;letter-spacing:-3px" id="t7">cardmarket<span style="color:#6fd8c0">.pro</span></div></div>
+<div class="s" id="s8"><img src="g/g6.png" class="bg" style="transform:scaleX(-1)">
+ <img src="g/g1.png" id="ol" style="position:absolute;width:520px;height:930px;object-fit:cover;left:280px;top:330px;-webkit-mask-image:radial-gradient(circle,#000 45%,transparent 70%)">
+ <svg id="ig" width="130" height="130" viewBox="0 0 24 24" style="position:absolute;left:475px;top:1180px"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".6" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs>
+ <g fill="none" stroke="url(#g)" stroke-width="2" id="igg"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.5"/></g><circle cx="17.6" cy="6.4" r="1.3" fill="#fff"/></svg>
+ <div id="hd" class="cap" style="top:1340px;font-size:60px;letter-spacing:2px;font-weight:800">@cardmarket.pro</div>
+ <div class="cap" style="top:1430px;color:#6fd8c0;font-size:30px;font-weight:700;letter-spacing:10px" id="hs">COLLECT · TRACK · TRADE</div></div>
+<div class="flash" id="fl"></div>
+<div class="tag" id="tag">@CARDMARKET.PRO<small>TCG & Sports Cards Worldwide</small></div>
 <script>
-const $=id=>document.getElementById(id);
-const E=x=>1-Math.pow(1-Math.min(Math.max(x,0),1),3);
-// construction lines
-const cg=$('cg');let L='';
-for(let i=0;i<7;i++){L+=`<line x1="${300+i*80}" y1="560" x2="${300+i*80}" y2="1360"/>`;L+=`<line x1="300" y1="${560+i*133}" x2="780" y2="${560+i*133}"/>`}
-L+=`<circle cx="540" cy="960" r="300"/><circle cx="540" cy="960" r="170"/><path d="M380 700 L760 700 L700 1220 L320 1220 Z"/><path d="M600 760 L700 760 L660 860 L560 860 Z"/>`;
-cg.innerHTML=L;[...cg.children].forEach(e=>{const l=e.getTotalLength?e.getTotalLength():2000;e.style.strokeDasharray=l;e.dataset.l=l});
-// pills
-const P=[['Buy Cards','#6fd8c0','#0b0f14'],['Track Prices','transparent','#6fd8c0'],['Sell Now','#fff','#0b0f14'],['Free Index','#6fd8c0','#0b0f14'],['Collect ↗','transparent','#fff']];
-let ph='';P.forEach((p,i)=>{for(let k=0;k<4;k++)ph+=`<div class="pill" style="top:${i*190}px;left:${k*620}px;background:${p[1]};color:${p[2]};border:4px solid ${p[2]==='#0b0f14'?p[1]:p[2]}">${p[0]} ▸</div>`});$('pl').innerHTML=ph;
-// chart
-const pts=[];for(let i=0;i<=30;i++){pts.push([80+i*30.6,1450-i*14-Math.sin(i*1.3)*60-(i>20?(i-20)*25:0)])}
-const S=[[0,1.5],[1.5,2.7],[2.6,4.0],[4.0,5.0],[5.0,5.6],[5.6,6.9],[6.9,8.3],[8.3,9.6],[9.6,12.1]];
+const $=id=>document.getElementById(id);const C=x=>Math.min(Math.max(x,0),1);const E=x=>1-Math.pow(1-C(x),3);const EI=x=>{x=C(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const cg=$('cg');let L='';for(let i=0;i<9;i++){L+=`<line x1="${220+i*80}" y1="560" x2="${220+i*80}" y2="1360"/><line x1="160" y1="${600+i*90}" x2="920" y2="${600+i*90}"/>`}
+L+=`<circle cx="540" cy="960" r="380"/><circle cx="540" cy="960" r="240"/><path d="M300 760 Q300 690 370 690 L800 690 Q850 690 840 740 L790 1180 Q780 1240 720 1240 L290 1240 Q240 1240 250 1180 Z"/><path d="M640 790 L780 790 L740 900 L600 900 Z"/>`;cg.innerHTML=L;
+[...cg.children].forEach(e=>{const l=e.getTotalLength();e.style.strokeDasharray=l;e.dataset.l=l});
+const pts=[];for(let i=0;i<=24;i++)pts.push([140+i*33,1250-i*12-Math.sin(i*1.4)*45-(i>16?(i-16)*22:0)]);
+const S=[[0,1.9],[1.9,3.3],[3.3,4.9],[4.9,6.0],[6.0,7.2],[7.2,8.2],[8.2,9.5],[9.5,12.1]];
+const cuts=S.map(s=>s[0]).slice(1);
 function seek(t){
  S.forEach((r,i)=>$('s'+(i+1)).style.display=(t>=r[0]&&t<r[1])?'block':'none');
- $('tag').style.display=(t>1.4&&t<9.6)?'block':'none';
- // 1
- let p=t/0.8;[...cg.children].forEach((e,i)=>e.style.strokeDashoffset=e.dataset.l*(1-E(p*1.3-i*0.02)));
- const lo=E((t-0.7)/0.3);$('l1').style.opacity=lo;$('cg').style.opacity=1-lo;
- const z=E((t-0.95)/0.45);$('l1').style.transform=`scale(${0.85+z*0.35}) rotate(${z*360}deg)`;
- // 2
- [0,1,2].forEach(i=>{const q=(t-1.5-i*0.22)/0.12;const el=$('w'+i);el.style.opacity=q>0?1:0;el.style.transform=`scale(${1+(1-E(q))*1.2})`;});
- const fl=t-2.1;$('w1').style.color=(fl>0&&Math.floor(fl*14)%2==0)?'#fff':'#6fd8c0';$('w1').style.textShadow=(fl>0&&Math.floor(fl*14)%2==0)?'0 0 60px #6fd8c0':'none';
- // 3
- p=(t-2.6)/1.4;$('ph').style.transform=`translateY(${(1-E(p*2))*400}px) rotate(${(1-E(p*2))*-6}deg)`;
- // 4
- p=(t-4.0);['ta','tb','tc'].forEach((id,i)=>{const f=E(p*2.2-0.3);const a=(i-1)*f;$(id).style.transform=`translateX(${a*300}px) translateY(${Math.abs(a)*60+(1-E(p*4))*900}px) rotate(${a*14}deg) rotateY(${(1-E(p*3))*180}deg)`;$(id).style.zIndex=i==1?3:1});
- // 5
- p=(t-5.0)/0.6;$('bn').style.filter=(Math.floor(t*10)%2)?'invert(1) grayscale(1)':'none';$('bn').style.transform=`translateX(${-50-p*20}%) scale(${1+p*0.1})`;
- // 6
- p=(t-5.6);$('pl').style.transform=`translateX(${-p*700}px)`;$('s6').style.filter=(t>6.3)?'invert(1) grayscale(1)':'none';
- // 7
- p=E((t-6.9)/1.1);const n=Math.max(1,Math.round(p*30));let d='M'+pts.slice(0,n+1).map(q=>q.join(' ')).join(' L');$('cp').setAttribute('d',d);$('ca').setAttribute('d',d+` L${pts[n][0]} 1700 L80 1700 Z`);$('pv').textContent='+'+(p*248).toFixed(1)+'%';
- // 8
- p=(t-8.3);$('lh').style.transform=`scale(${0.6+E(p*3)*0.4})`;$('s8').style.filter=(p>0.55&&p<0.75)||(p>0.95&&p<1.05)?'invert(1)':'none';
- // 9
- p=(t-9.6);$('ig').style.transform=`scale(${E(p*3)})`;$('hd').style.opacity=E((p-0.25)*3);$('igg').setAttribute('stroke',Math.floor(p*3)%2?'#fff':'url(#g)');
+ $('tag').style.display=(t>1.9&&t<9.5)?'block':'none';
+ let f=0;cuts.forEach(c=>{const d=t-c;if(d>=0&&d<0.12)f=Math.max(f,0.55*(1-d/0.12))});$('fl').style.opacity=f;
+ // 1 lines draw, then logo emerges, zoom+spin
+ let p=t/0.9;[...cg.children].forEach((e,i)=>e.style.strokeDashoffset=e.dataset.l*(1-E(p*1.2-i*0.03)));
+ const lo=E((t-0.8)/0.35);$('l1').style.opacity=lo;cg.style.opacity=1-lo;
+ const z=EI((t-1.05)/0.7);$('l1w').style.transform=`scale(${0.9+z*0.25+Math.max(0,t-1.75)*0.6}) rotate(${z*360}deg)`;$('l1w').style.filter=`blur(${Math.sin(z*Math.PI)*3}px)`;
+ // 2 words
+ [0,1,2].forEach(i=>{const q=(t-1.95-i*0.18)/0.14;const el=$('w'+i);el.style.opacity=q>0?1:0;el.style.transform=`scale(${1+(1-E(q))*1.6})`;el.style.filter=`blur(${(1-E(q))*12}px)`});
+ const b=t-2.55;const on=b>0&&b<0.6&&Math.floor(b*12)%2==0;$('w1').style.color=on?'#6fd8c0':'#fff';$('w1').style.textShadow=on?'0 0 70px #6fd8c0':'none';$('w0').style.opacity*= (b>0? .35:1);$('w2').style.opacity*=(b>0?.35:1);
+ $('b2').style.transform=`scale(${1.05+(t-1.9)*0.05})`;
+ // 3 phone push-in + tap Folgen
+ p=t-3.3;$('pw').style.transform=`scale(${1.12-E(p/0.5)*0.12+p*0.02})`;const tp=(p-0.9)/0.35;$('tap').style.opacity=tp>0&&tp<1?1-tp:0;$('tap').style.transform=`scale(${0.6+C(tp)*0.8})`;
+ $('fb').textContent=p>1.0?'Gefolgt ✓':'Folgen';$('fb').style.background=p>1.0?'#262b33':'#6fd8c0';$('fb').style.color=p>1.0?'#fff':'#0b0f14';
+ // 4 card
+ p=t-4.9;$('c4').style.transform=`scale(${1.25-E(p/0.6)*0.2}) rotate(${(1-E(p/0.6))*-4}deg)`;$('t4').style.transform=`translateY(${(1-E(p/0.3))*80}px)`;$('t4').style.opacity=E(p/0.3);
+ // 5 slab + chart
+ p=t-6.0;$('c5').style.transform=`scale(${1.0+p*0.06})`;const n=Math.max(1,Math.round(E(p/0.9)*24));$('cp').setAttribute('d','M'+pts.slice(0,n+1).map(q=>q.join(' ')).join(' L'));
+ // 6 cap, invert flicker
+ p=t-7.2;$('c6').style.transform=`scale(${1.15-p*0.1})`;$('c6').style.filter=(p>0.35&&p<0.5)||(p>0.6&&p<0.68)?'invert(1) grayscale(1)':'none';
+ // 7 logo hero
+ p=t-8.2;$('c7').style.transform=`scale(${0.85+E(p/0.5)*0.2+p*0.03})`;$('t7').style.opacity=E((p-0.25)/0.3);$('t7').style.letterSpacing=`${-3+(1-E((p-0.25)/0.5))*30}px`;
+ // 8 outro
+ p=t-9.5;$('ol').style.transform=`scale(${0.9+E(p/0.6)*0.1})`;$('ig').style.transform=`scale(${E((p-0.3)/0.3)})`;$('hd').style.opacity=E((p-0.5)/0.3);$('hs').style.opacity=E((p-0.7)/0.3);$('igg').setAttribute('stroke',Math.floor(p*3)%2?'#fff':'url(#g)');
 }
 seek(0);
 </script></body></html>
