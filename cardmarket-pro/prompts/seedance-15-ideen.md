@@ -3,6 +3,13 @@
 **Für alle gilt (an den Anfang JEDES Prompts setzen):**
 `Vertical 9:16 cinematic short film, 15 seconds, 1080p. Dark low-key lighting, cool graphite shadows, thin red rim light on edges, subtle teal glow only from phone screens. Realistic interiors, shallow depth of field, 35mm grain. No warm amber tones. No on-screen text, no logos, no subtitles. Trading cards only from the back, in sleeves or out of focus, no readable card artwork. LANGUAGE-NEUTRAL: no intelligible speech in any language, no voiceover, no narration, no singing with lyrics. Nobody speaks on camera; when people react, their mouths stay closed or are out of frame (backs of heads, hands, profiles in shadow). Human sounds only non-verbal: laughter, giggles, gasps, sighs, unintelligible distant murmur.`
 
+**Stand 23.11.2026 – Learnings aus Test Idee 1:**
+- Keine Referenzbilder echter Karten und keine Hero-Karten-Beschreibungen → Seedance lehnt wegen Copyright ab. Karten nur als Rückseiten/Hüllen.
+- Handy-Screens immer `portrait orientation, screen glowing plain solid green` → in der Post wird die echte cardmarket.pro-UI (Logo + Scanner) eingesetzt.
+- Ordner explizit als `black zip binder with pages of clear plastic sleeves` beschreiben (sonst Bücher/Aktenordner).
+- Schnelle Schnitte gewünscht: ca. 1 Schnitt pro Sekunde, letzte 2 s ruhig für die Logo-Endcard.
+- Voiceover: ElevenLabs v4, Stimme **Arthur** (gesetzt). Video wird auf die VO-Länge verlängert (~20 s).
+
 **Mehrsprachigkeits-Regel:** Jedes Video wird nachträglich in DE/EN/FR/… vertont (ElevenLabs v4). Deshalb: keine verständlichen Wörter im generierten Ton, keine sichtbaren sprechenden Münder (keine Lippensynchronität nötig). Kindergeräusche = Kichern/Lachen/unverständliches Gemurmel. Dialoge entstehen ausschließlich in der Post.
 
 **Logo-Ende (Pflicht):** Jeder Prompt endet zusätzlich mit: `Final 2 seconds: camera settles on a calm, dark, empty graphite negative space — no objects, no text.` Danach wird `assets/endcard-9x16.mp4` angeschnitten. Das Logo NIE von Seedance generieren lassen.

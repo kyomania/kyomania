@@ -34,7 +34,7 @@ Direkt · Neugierig · Schlagfertig · Verständlich. Immer „du“, Situation 
 Dunkel, cinematisch, Low-Key-Licht, rote Akzent-Kanten (Briefing) + Türkis/Mint als UI-/Logo-Farbe. Hände, Ordner, Sleeves, Toploader, Handy mit echtem UI. Echte Menschen statt Hochglanz.
 
 ## Audio-Regeln
-Keine erklärende Stimme im generierten Material – Voiceover baut Julian nachträglich ein (ElevenLabs v4, akzentfrei deutsch). Kindergequatsche/Atmo im Hintergrund erlaubt.
+Keine erklärende Stimme im generierten Material – Voiceover baut Julian nachträglich ein (ElevenLabs v4, Stimme Arthur, akzentfrei deutsch). Kindergequatsche/Atmo im Hintergrund erlaubt.
 
 ## Guardrails (rechtlich)
 - cardmarket.com / Sammelkartenmarkt GmbH nicht nennen, nicht anspielen, kein Logo/Design. Keine Verwechslungsspiele.
