@@ -1,0 +1,94 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0f14;font-family:Inter,Arial,sans-serif}
+.s{position:absolute;inset:0;display:none;overflow:hidden}
+:root{--m:#6fd8c0;--d:#0b0f14;--t:#0f2a2a}
+.lab{position:absolute;font-size:18px;letter-spacing:4px;color:#ffffff66;font-weight:600;text-transform:uppercase}
+.tag{position:absolute;right:60px;top:120px;text-align:right;color:#fff;font-size:22px;font-weight:800;letter-spacing:1px}
+.tag small{display:block;font-weight:400;color:#ffffff88;font-size:16px;margin-top:4px}
+.big{position:absolute;left:70px;font-weight:900;color:var(--m);font-size:230px;line-height:.88;letter-spacing:-8px}
+.pill{position:absolute;height:150px;border-radius:75px;font-size:62px;font-weight:700;display:flex;align-items:center;padding:0 60px;white-space:nowrap;gap:24px}
+img.logo{border-radius:18%}
+</style></head><body>
+<!-- 1 construction -->
+<div class="s" id="s1" style="background:#2a2d33">
+ <div class="lab" style="left:200px;top:260px;writing-mode:vertical-rl;transform:rotate(180deg)">cardmarket.pro brand</div>
+ <div class="lab" style="left:200px;top:1450px;writing-mode:vertical-rl;transform:rotate(180deg)">logo construction</div>
+ <svg id="cons" width="1080" height="1920" style="position:absolute;inset:0"><g fill="none" stroke="#ffffffaa" stroke-width="2" id="cg"></g></svg>
+</div>
+<!-- 2 kinetic type -->
+<div class="s" id="s2" style="background:var(--t)"><div class="big" id="bt" style="top:520px"></div></div>
+<!-- 3 phone -->
+<div class="s" id="s3" style="background:#d9dde0">
+ <div id="ph" style="position:absolute;left:170px;top:260px;width:740px;height:1500px;border-radius:90px;background:#000;padding:22px;box-shadow:0 60px 120px #0006">
+ <div style="width:100%;height:100%;border-radius:70px;overflow:hidden;background:#0b0f14"><img id="pimg" src="a/profile.jpg" style="width:100%;display:block"></div></div>
+</div>
+<!-- 4 tiles -->
+<div class="s" id="s4" style="background:#0b0f14">
+ <img src="a/t0.jpg" id="ta" style="position:absolute;width:640px;left:-40px;top:200px;border-radius:24px">
+ <img src="a/t1.jpg" id="tb" style="position:absolute;width:640px;left:220px;top:700px;border-radius:24px">
+ <img src="a/t2.jpg" id="tc" style="position:absolute;width:640px;left:480px;top:1200px;border-radius:24px">
+</div>
+<!-- 5 banner invert -->
+<div class="s" id="s5" style="background:#000"><img src="a/banner.jpg" id="bn" style="position:absolute;height:1920px;left:50%;top:0;transform:translateX(-50%)"></div>
+<!-- 6 buttons -->
+<div class="s" id="s6" style="background:var(--t)"><div id="pl" style="position:absolute;left:0;top:240px;width:3000px"></div></div>
+<!-- 7 chart -->
+<div class="s" id="s7" style="background:#0b0f14">
+ <div class="lab" style="left:80px;top:300px;color:var(--m);font-size:26px">Price Index · live</div>
+ <div id="pv" style="position:absolute;left:80px;top:350px;color:#fff;font-size:150px;font-weight:900;letter-spacing:-4px"></div>
+ <svg width="1080" height="1920" style="position:absolute;inset:0"><path id="cp" fill="none" stroke="#6fd8c0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path id="ca" fill="#6fd8c022"/></svg>
+</div>
+<!-- 8 logo hero -->
+<div class="s" id="s8" style="background:#0b0f14">
+ <img class="logo" src="a/logo.png" id="lh" style="position:absolute;width:300px;left:390px;top:640px">
+ <div style="position:absolute;left:540px;top:1320px;transform:translate(-50%,-50%) rotate(-90deg);color:#fff;font-size:72px;font-weight:900;letter-spacing:-2px">cardmarket<span style="color:var(--m)">.pro</span></div>
+</div>
+<!-- 9 outro -->
+<div class="s" id="s9" style="background:#0b0f14">
+ <img src="a/banner.jpg" style="position:absolute;height:1920px;left:50%;transform:translateX(-50%);opacity:.22;filter:grayscale(1)">
+ <svg id="ig" width="170" height="170" viewBox="0 0 24 24" style="position:absolute;left:455px;top:700px"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".6" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs>
+ <g fill="none" stroke="url(#g)" stroke-width="2" id="igg"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.5"/></g><circle cx="17.6" cy="6.4" r="1.3" fill="#fff" id="igd"/></svg>
+ <div id="hd" style="position:absolute;width:100%;top:910px;text-align:center;color:#fff;font-size:56px;font-weight:800;letter-spacing:2px">@CARDMARKET.PRO</div>
+ <div style="position:absolute;width:100%;top:1010px;text-align:center;color:var(--m);font-size:34px;font-weight:600;letter-spacing:8px">COLLECT · TRACK · TRADE</div>
+</div>
+<div class="tag" id="tag">◎ @CARDMARKET.PRO<small>TCG & Sports Cards Worldwide</small></div>
+<script>
+const $=id=>document.getElementById(id);
+const E=x=>1-Math.pow(1-Math.min(Math.max(x,0),1),3);
+// construction lines
+const cg=$('cg');let L='';
+for(let i=0;i<7;i++){L+=`<line x1="${300+i*80}" y1="560" x2="${300+i*80}" y2="1360"/>`;L+=`<line x1="300" y1="${560+i*133}" x2="780" y2="${560+i*133}"/>`}
+L+=`<circle cx="540" cy="960" r="300"/><circle cx="540" cy="960" r="170"/><path d="M380 700 L760 700 L700 1220 L320 1220 Z"/><path d="M600 760 L700 760 L660 860 L560 860 Z"/>`;
+cg.innerHTML=L;[...cg.children].forEach(e=>{const l=e.getTotalLength?e.getTotalLength():2000;e.style.strokeDasharray=l;e.dataset.l=l});
+// pills
+const P=[['Buy Cards','#6fd8c0','#0b0f14'],['Track Prices','transparent','#6fd8c0'],['Sell Now','#fff','#0b0f14'],['Free Index','#6fd8c0','#0b0f14'],['Collect ↗','transparent','#fff']];
+let ph='';P.forEach((p,i)=>{for(let k=0;k<4;k++)ph+=`<div class="pill" style="top:${i*190}px;left:${k*620}px;background:${p[1]};color:${p[2]};border:4px solid ${p[2]==='#0b0f14'?p[1]:p[2]}">${p[0]} ▸</div>`});$('pl').innerHTML=ph;
+// chart
+const pts=[];for(let i=0;i<=30;i++){pts.push([80+i*30.6,1450-i*14-Math.sin(i*1.3)*60-(i>20?(i-20)*25:0)])}
+const S=[[0,1.4],[1.4,2.6],[2.6,4.0],[4.0,5.0],[5.0,5.6],[5.6,6.9],[6.9,8.3],[8.3,9.6],[9.6,12.1]];
+function seek(t){
+ S.forEach((r,i)=>$('s'+(i+1)).style.display=(t>=r[0]&&t<r[1])?'block':'none');
+ $('tag').style.display=(t>1.4&&t<9.6)?'block':'none';
+ // 1
+ let p=(t-0)/1.2;[...cg.children].forEach((e,i)=>e.style.strokeDashoffset=e.dataset.l*(1-E(p*1.3-i*0.02)));
+ // 2
+ const w=['COLL<br>ECT.','TRACK.','TRADE.'];$('bt').innerHTML=w[Math.min(2,Math.floor((t-1.4)/0.4))]||'';$('bt').style.transform=`translateY(${(1-E(((t-1.4)%0.4)/0.25))*80}px)`;
+ // 3
+ p=(t-2.6)/1.4;$('ph').style.transform=`translateY(${(1-E(p*2))*400}px) rotate(${(1-E(p*2))*-6}deg)`;$('pimg').style.transform=`translateY(${-E((p-0.4)*1.6)*320}px)`;
+ // 4
+ p=(t-4.0);['ta','tb','tc'].forEach((id,i)=>{$(id).style.transform=`translateX(${(1-E(p*3-i*0.35))*(i%2?-1200:1200)}px) rotate(${(i-1)*4}deg)`});
+ // 5
+ p=(t-5.0)/0.6;$('bn').style.filter=(Math.floor(t*10)%2)?'invert(1) grayscale(1)':'none';$('bn').style.transform=`translateX(${-50-p*20}%) scale(${1+p*0.1})`;
+ // 6
+ p=(t-5.6);$('pl').style.transform=`translateX(${-p*700}px)`;$('s6').style.filter=(t>6.3)?'invert(1) grayscale(1)':'none';
+ // 7
+ p=E((t-6.9)/1.1);const n=Math.max(1,Math.round(p*30));let d='M'+pts.slice(0,n+1).map(q=>q.join(' ')).join(' L');$('cp').setAttribute('d',d);$('ca').setAttribute('d',d+` L${pts[n][0]} 1700 L80 1700 Z`);$('pv').textContent='+'+(p*248).toFixed(1)+'%';
+ // 8
+ p=(t-8.3);$('lh').style.transform=`scale(${0.6+E(p*3)*0.4})`;$('s8').style.filter=(p>0.55&&p<0.75)||(p>0.95&&p<1.05)?'invert(1)':'none';
+ // 9
+ p=(t-9.6);$('ig').style.transform=`scale(${E(p*3)})`;$('hd').style.opacity=E((p-0.25)*3);$('igg').setAttribute('stroke',Math.floor(p*3)%2?'#fff':'url(#g)');
+}
+seek(0);
+</script></body></html>
