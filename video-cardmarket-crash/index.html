@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/three.min.js"></script>
+    <script src="assets/RoundedBoxGeometry.js"></script>
+    <script src="assets/cmlib.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05090d; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden;
+        background: radial-gradient(90% 55% at 50% 45%, #18303a 0%, #0b151c 50%, #05090d 100%); }
+      .clip { position: absolute; inset: 0; }
+      #out { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #ticker { font-family: "JetBrains Mono", monospace; color: #fff; }
+      #ticker small { display: block; font-size: 28px; letter-spacing: .2em; color: #5ee0d4; }
+      #price { font-size: 120px; font-weight: 700; letter-spacing: -0.04em; }
+      #pct { display: inline-block; margin-top: 10px; font-size: 40px; font-weight: 700; padding: 6px 18px; border-radius: 999px; background: #5ee0d4; color: #0a1118; }
+      #tag { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: .2em; text-transform: uppercase; color: #fff; text-align: center; }
+      #flash { background: #e9fffc; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="8" data-track-index="0"><canvas id="out" width="1080" height="1920"></canvas></div>
+      <div id="ticker" class="clip" data-start="0" data-duration="8" data-track-index="1" style="inset:auto;left:80px;top:150px;opacity:0">
+        <small>CARD INDEX · LIVE</small><div id="price">€ 12.40</div><div id="pct">+0%</div>
+      </div>
+      <img id="word" class="clip" src="assets/wordmark-dark.png" alt="cardmarket.pro" data-start="0" data-duration="8" data-track-index="3"
+        style="inset:auto;left:90px;top:1530px;width:900px;height:auto;mix-blend-mode:lighten;opacity:0" />
+      <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="4" style="inset:auto;left:0;right:0;top:1730px;opacity:0">The market for every card</div>
+      <div id="flash" class="clip" data-start="0" data-duration="8" data-track-index="9"></div>
+
+      <audio id="music" src="assets/music.mp3" data-start="0" data-duration="8" data-volume="0.7" data-fade-out="0.8" data-track-index="5"></audio>
+      <audio id="crash" src="assets/crash.wav" data-start="2.9" data-duration="1.4" data-volume="0.9" data-track-index="6"></audio>
+      <audio id="boom" src="assets/boom.wav" data-start="2.9" data-duration="0.9" data-volume="0.9" data-track-index="7"></audio>
+      <audio id="whs" src="assets/whoosh.wav" data-start="4.6" data-duration="0.35" data-volume="0.6" data-track-index="8"></audio>
+      <audio id="shm" src="assets/shimmer.wav" data-start="5.6" data-duration="1.2" data-volume="0.6" data-track-index="8"></audio>
+      <audio id="tk1" src="assets/tick.wav" data-start="0.3" data-duration="0.04" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="tk2" src="assets/tick.wav" data-start="0.72" data-duration="0.04" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="tk3" src="assets/tick.wav" data-start="1.14" data-duration="0.04" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="tk4" src="assets/tick.wav" data-start="1.56" data-duration="0.04" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="tk5" src="assets/tick.wav" data-start="1.98" data-duration="0.04" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="tk6" src="assets/tick.wav" data-start="2.4" data-duration="0.04" data-volume="0.35" data-track-index="10"></audio>
+    </div>
+
+    <script>
+      const { MINT, TEAL, GR, W, mono, mk, minis, cl, E, lerp } = CM;
+      const ctx = CM.setup(); const { scene, camera, tex, edge } = ctx;
+
+      // ---------- logo target grid (cards as pixels) ----------
+      const probe = mk(10, 10).getContext("2d");
+      function sample(step) {
+        const pts = [];
+        for (let py = 60; py <= 780; py += step * 1.38) for (let px = 100; px <= 700; px += step) {
+          const cx = px + step / 2, cy = py + step * 0.69;
+          if (!probe.isPointInPath(CM.CARD, cx, cy)) continue;
+          const reg = probe.isPointInPath(CM.ACC, cx, cy) ? 2 : probe.isPointInPath(CM.CC, cx, cy) ? 1 : 0;
+          pts.push({ px: cx, py: cy, reg });
+        }
+        return pts;
+      }
+      let step = 40, T = sample(step);
+      while (T.length < 62 && step > 20) { step -= 1; T = sample(step); }
+      const N = T.length, K = 3.0 / 720, LY = 0.75;
+      T.forEach((p) => { p.x = (p.px - 400) * K; p.y = -(p.py - 420) * K + LY; });
+
+      // ---------- card faces ----------
+      function face(bg, fg, price) {
+        const cv = mk(256, 352), g = cv.getContext("2d");
+        g.fillStyle = bg; g.fillRect(0, 0, 256, 352); minis(g, 256, 352, fg, 0.1);
+        g.strokeStyle = fg; g.globalAlpha = .5; g.lineWidth = 4; g.strokeRect(12, 12, 232, 328); g.globalAlpha = 1;
+        g.fillStyle = fg; g.font = mono(22, 700); g.textAlign = "center"; g.fillText(price, 128, 300);
+        CM.mark(g, 128, 150, 0.17, fg, bg, fg); return cv;
+      }
+      const FACES = [face(MINT, GR, "€ 24.90"), face(GR, MINT, "€ 89.00"), face(TEAL, W, "€ 312.50")];
+      const backCv = mk(256, 352); { const g = backCv.getContext("2d"); g.fillStyle = MINT; g.fillRect(0, 0, 256, 352); minis(g, 256, 352, TEAL, .3); CM.mark(g, 128, 176, 0.2, GR, MINT, TEAL); }
+      const backM = new THREE.MeshStandardMaterial({ map: tex(backCv), roughness: .4 });
+      const faceM = FACES.map((cv) => new THREE.MeshStandardMaterial({ map: tex(cv), roughness: .38 }));
+      const tile = step * K * 0.92;
+      const geo = new THREE.RoundedBoxGeometry(tile, tile * 1.38, 0.02, 2, 0.006);
+
+      // ---------- chart ----------
+      const NC = 16, r0 = CM.rng(5);
+      const chart = [];
+      for (let i = 0; i < NC; i++) {
+        const u = i / (NC - 1), wig = (i % 3 === 1 ? -0.22 : i % 4 === 2 ? 0.12 : 0) * (1 - u * 0.5);
+        chart.push(new THREE.Vector3(lerp(-1.35, 1.35, u), lerp(-1.9, 1.95, Math.pow(u, 1.35)) + wig, 0));
+      }
+      const cards = [];
+      for (let i = 0; i < N; i++) {
+        const reg = T[i].reg, m = new THREE.Mesh(geo, [edge, edge, edge, edge, faceM[reg], backM]); scene.add(m);
+        const r = CM.rng(100 + i);
+        cards.push({ m, tgt: T[i], v: new THREE.Vector3((r() - 0.5) * 4, 1 + r() * 3.5, (r() - 0.3) * 2.5),
+          spin: [(r() - .5) * 14, (r() - .5) * 14, (r() - .5) * 10], rain: [lerp(-1.6, 1.6, r()), 4.2 + r() * 2, lerp(-1.2, 0.6, r()), 3.0 + r() * 1.0],
+          ord: Math.hypot(T[i].x, T[i].y - LY) });
+      }
+      // assign chart slots to cards whose targets are spread
+      const chartIdx = [...Array(N).keys()].filter((i) => i % Math.floor(N / NC) === 0).slice(0, NC);
+      chartIdx.forEach((ci, k) => (cards[ci].chart = k));
+      const segMat = new THREE.MeshBasicMaterial({ color: 0x5ee0d4 });
+      const segs = [];
+      for (let i = 0; i < NC - 1; i++) { const s = new THREE.Mesh(new THREE.BoxGeometry(1, 0.035, 0.02), segMat); scene.add(s); segs.push(s); }
+      const glow = new THREE.PointLight(0x5ee0d4, 0, 6); scene.add(glow);
+      const sp = CM.sparks(scene, 320, 9, 0xffffff, 0.07), rg = CM.ring(scene), sp2 = CM.sparks(scene, 200, 31, 0x5ee0d4, 0.06), rg2 = CM.ring(scene, 0xffffff);
+      const TC = 2.9, TR = 4.6, appear = (k) => 0.25 + k * 0.14;
+
+      function ballistic(c, t) {
+        if (c.chart !== undefined) {
+          const dt = Math.max(0, t - TC), p0 = chart[c.chart];
+          return [new THREE.Vector3(p0.x + c.v.x * dt, p0.y + c.v.y * dt - 4.5 * dt * dt, p0.z + c.v.z * dt), c.spin.map((s) => s * dt)];
+        }
+        const [x, y, z, ts] = c.rain, dt = Math.max(0, t - ts);
+        return [new THREE.Vector3(x + c.v.x * 0.15 * dt, y - 1.5 * dt - 3 * dt * dt, z), c.spin.map((s) => s * 0.6 * dt)];
+      }
+
+      let peakProg = 0;
+      function pose(t) {
+        const prog = cl((t - 0.25) / (appear(NC - 1) - 0.25 + 0.2)); peakProg = prog;
+        // camera
+        const [sx, sy] = CM.shake(t, [TC, TR + 1.0], 0.16);
+        const follow = t < TC ? lerp(-0.9, 1.1, E.io(prog)) : lerp(1.1, 0.55, E.io(cl((t - TC) / 2.2)));
+        const zc = t < TC ? lerp(10.5, 11.2, prog) : t < TR ? lerp(11.2, 13, E.out(cl((t - TC) / 1.2))) : lerp(13, 11.6, E.io(cl((t - TR) / 1.4)));
+        camera.position.set(sx + (t < TC ? 0.25 * Math.sin(t) : 0), follow + sy, zc); camera.lookAt(0, follow, 0);
+        // cards
+        cards.forEach((c, i) => {
+          const m = c.m; let pos, rot, vis = true, sc = 1;
+          const tr = TR + c.ord * 0.12, u = E.io(cl((t - tr) / 1.1));
+          if (c.chart !== undefined && t < TC) {
+            const a = cl((t - appear(c.chart)) / 0.35); sc = E.back(a, 2.2); vis = a > 0;
+            pos = chart[c.chart].clone(); pos.y += 0.04 * Math.sin(t * 3 + c.chart); rot = [0.1, 0.25 * Math.sin(t * 1.5 + c.chart), -0.12];
+          } else {
+            [pos, rot] = ballistic(c, Math.min(t, TR + 0.2));
+            if (c.chart === undefined) vis = t >= c.rain[3];
+            if (t > tr) vis = true;
+            const tg = new THREE.Vector3(c.tgt.x, c.tgt.y, 0);
+            pos = pos.lerp(tg, u); rot = rot.map((v) => v * (1 - u));
+            if (c.chart === undefined && t > tr && t < c.rain[3]) { pos = new THREE.Vector3(c.rain[0], 6, c.rain[2]).lerp(tg, u); }
+          }
+          m.visible = vis; m.position.copy(pos); m.rotation.set(rot[0], rot[1], rot[2]); m.scale.setScalar(Math.max(0.001, sc));
+          // settle breathing
+          if (t > TR + 1.4) m.position.z = 0.04 * Math.sin(t * 3 - c.ord * 4);
+        });
+        // segments
+        segs.forEach((s, k) => {
+          const a = chart[k], b = chart[k + 1], g = E.out(cl((t - appear(k + 1)) / 0.3));
+          s.visible = t < TC && g > 0;
+          const d = b.clone().sub(a), len = d.length() * g;
+          s.scale.set(Math.max(0.001, len), 1, 1); s.rotation.z = Math.atan2(d.y, d.x);
+          s.position.copy(a).add(d.clone().multiplyScalar(g / 2)); s.position.z = -0.02;
+        });
+        // fx
+        const peak = chart[NC - 1];
+        glow.position.set(peak.x, peak.y, 1);
+        glow.intensity = (t < TC ? 6 * prog : 0) + 18 * (t >= TC ? Math.exp(-(t - TC) * 5) : 0) + 14 * (t >= TR + 1.1 ? Math.exp(-(t - TR - 1.1) * 3) : 0);
+        sp.set(TC, t, peak, 1.3); rg.set(TC, t, peak, 6, 0.8);
+        const lc = new THREE.Vector3(0, LY, 0.2); sp2.set(TR + 1.1, t, lc, 1.2); rg2.set(TR + 1.1, t, lc, 5, 0.8);
+      }
+
+      // ticker values (deterministic)
+      const price = document.getElementById("price"), pct = document.getElementById("pct");
+      function ticker(t) {
+        let v;
+        if (t < TC) v = lerp(12.4, 486.2, Math.pow(peakProg, 1.6));
+        else v = lerp(486.2, 41.3, E.out(cl((t - TC) / 0.8)));
+        price.textContent = "€ " + v.toFixed(2);
+        const p = (v / 12.4 - 1) * 100;
+        pct.textContent = (t < TC ? "+" : "") + (t < TC ? p : ((v / 486.2 - 1) * 100)).toFixed(0) + "%";
+        pct.style.background = t < TC ? "#5ee0d4" : "#ffffff";
+      }
+      const out = document.getElementById("out"), og = out.getContext("2d");
+      function draw(t) { CM.blurDraw(og, ctx, pose, t, 5); ticker(t); }
+      const state = { t: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.to(state, { t: 8, duration: 8, ease: "none", onUpdate: () => draw(state.t) }, 0);
+      tl.fromTo("#ticker", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.2);
+      tl.to("#ticker", { opacity: 0, duration: 0.3 }, 4.3);
+      tl.fromTo("#flash", { opacity: 0.9 }, { opacity: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, TC);
+      tl.fromTo("#flash", { opacity: 0.6 }, { opacity: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, TR + 1.1);
+      tl.fromTo("#word", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 6.0);
+      tl.fromTo("#tag", { opacity: 0, y: 20 }, { opacity: 0.85, y: 0, duration: 0.5, ease: "power3.out" }, 6.3);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0); draw(0);
+    </script>
+  </body>
+</html>
