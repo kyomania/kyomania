@@ -30,7 +30,10 @@ a{color:inherit}
 .half{position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:clamp(24px,4vw,64px);text-decoration:none}
 .half .bg{position:absolute;inset:0;transition:transform 1.2s var(--ease)}
 .half:hover .bg{transform:scale(1.03)}
-.half.g{background:radial-gradient(120% 80% at 30% 20%,#23272B 0%,var(--cold) 45%,#0B0C0D 100%)}
+.half.g{background:#0B0C0D}
+.half.g .bg{background:url(assets/gewoelbe.jpg) 40% center/cover;filter:brightness(.78) contrast(1.08) saturate(.9)}
+.half.g::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,11,.05),rgba(14,12,11,.85))}
+.vis{font-size:.75rem;color:var(--ivory-3);margin-top:8px}
 .half.g svg{position:absolute;inset:0;width:100%;height:100%}
 .half.l .bg{background:url(assets/07_loft.png) 60% center/cover;filter:brightness(.62) contrast(1.12) saturate(.8) sepia(.22)}
 .half.l::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(90,26,31,.15),rgba(14,12,11,.85))}
@@ -135,21 +138,10 @@ footer a:hover{color:var(--ivory)}
 <main>
   <section class="dip" aria-label="Die zwei Apartments">
     <a class="half g" href="#gewoelbe">
-      <div class="bg">
-        <svg viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <g fill="none" stroke="#B08D57" stroke-opacity=".28" stroke-width="1">
-            <path d="M40 900 V430 Q40 170 300 150 Q560 170 560 430 V900"/>
-            <path d="M100 900 V450 Q100 230 300 215 Q500 230 500 450 V900"/>
-            <path d="M160 900 V470 Q160 290 300 280 Q440 290 440 470 V900"/>
-            <path d="M0 640 H600 M0 720 H600 M0 800 H600" stroke-opacity=".12"/>
-          </g>
-          <circle cx="300" cy="520" r="160" fill="url(#glow)"/>
-          <defs><radialGradient id="glow"><stop offset="0" stop-color="#B08D57" stop-opacity=".22"/><stop offset="1" stop-color="#B08D57" stop-opacity="0"/></radialGradient></defs>
-        </svg>
-      </div>
+      <div class="bg"></div>
       <div class="cap">
         <h2>Gewölbe</h2>
-        <p>Stein, Stahl, Leder. Kühles Licht und warme Kerzeninseln.</p>
+        <p>Ziegelgewölbe, Leder, Kerzenlicht. Dunkel und ursprünglich.</p>
         <span class="go">Das Gewölbe ansehen</span>
       </div>
     </a>
@@ -183,10 +175,7 @@ footer a:hover{color:var(--ivory)}
         </ul>
         <a class="btn" href="#airbnb-gewoelbe">Gewölbe auf Airbnb ansehen</a>
       </div>
-      <div class="vault">
-        <svg viewBox="0 0 700 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#B08D57" stroke-opacity=".3"><path d="M60 500 V260 Q60 80 350 70 Q640 80 640 260 V500"/><path d="M150 500 V280 Q150 150 350 140 Q550 150 550 280 V500"/></g></svg>
-        <span>Fotos folgen, sobald die Einrichtung steht.</span>
-      </div>
+      <figure class="pics" style="display:block"><img src="assets/gewoelbe.jpg" alt="Visualisierung des Gewölbes mit Ziegelgewölbe, Lederbett und Kerzenlaternen" loading="lazy" style="aspect-ratio:4/3"><figcaption class="vis">Visualisierung. Fotos folgen, sobald die Einrichtung steht.</figcaption></figure>
     </article>
 
     <article class="room rev" id="loft">
