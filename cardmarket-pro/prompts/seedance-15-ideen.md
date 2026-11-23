@@ -69,5 +69,5 @@ Audio: deep cinematic drone, heartbeat-like pulse, card whooshes, one final bass
 Audio: living room ambience, smug exhale, confused silence, short laugh. (Overlay: „Pokémon-Ordner.“ – kein Anlageversprechen.)
 
 ## 15 · Mama, das ist ein Portfolio (Collector, Humor)
-[0-4s] A mother cleaning a teen's room, holds a binder over a donation box. [4-7s] The teen (14) bursts in, freezes, dramatic slow motion "nooo". [7-11s] Teen shows her his phone with the dashboard. [11-15s] She slowly, very carefully places the binder back on the shelf and dusts it off.
+[0-4s] A mother cleaning a teen's room, holds a binder over a donation box. [4-7s] The teen (14) bursts in, freezes, dramatic slow-motion reaction, hands raised, mouth out of frame. [7-11s] Teen shows her his phone with the dashboard. [11-15s] She slowly, very carefully places the binder back on the shelf and dusts it off.
 Audio: vacuum cleaner stops abruptly, door bang, exaggerated slow-motion gasp, comedic silence, gentle laugh.
