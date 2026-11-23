@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mackendorfer Hof · Gewölbe und Loft</title>
+<meta name="description" content="Zwei private Fetisch-Apartments in Mackendorf bei Wolfsburg. Gewölbe und Loft, buchbar über Airbnb.">
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+:root{
+  --black:#0A0908; --ink:#E8DFD0; --ink-2:#ADA395; --ink-3:#7C7469; --brass:#B08D57; --blood:#6B2027;
+  --rule:rgba(232,223,208,.1);
+  --serif:"Cormorant Garamond",Georgia,serif; --sans:"Figtree",system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--black);color:var(--ink);-webkit-font-smoothing:antialiased}
+body{font:300 1.0625rem/1.65 var(--sans)}
+img{display:block;max-width:100%}
+a{color:inherit}
+.col{width:min(980px,100% - clamp(32px,8vw,96px));margin-inline:auto}
+
+header{position:fixed;inset:0 0 auto;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:18px clamp(16px,4vw,40px);background:linear-gradient(var(--black),transparent)}
+header img{width:120px}
+header a.t{font-size:.875rem;color:var(--ink-2);text-decoration:none}
+header a.t:hover{color:var(--ink)}
+header .r{justify-self:end}
+
+.hero{height:100svh;min-height:600px;position:relative;display:grid;align-items:end}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% center;filter:brightness(.45) contrast(1.2) saturate(.6) sepia(.3)}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 30% 60%,transparent 30%,rgba(10,9,8,.85) 100%)}
+.hero .in{position:relative;z-index:2;padding:0 clamp(16px,4vw,40px) clamp(28px,5vw,56px);display:flex;justify-content:space-between;align-items:end;gap:24px;width:100%}
+.hero h1{font:400 clamp(2.5rem,5.2vw,5rem)/1 var(--serif);max-width:14ch}
+.meta{font-size:.8125rem;color:var(--ink-2);text-align:right;line-height:1.6}
+
+.say{padding:clamp(100px,14vw,200px) 0;text-align:center}
+.say p{font:italic 400 clamp(1.6rem,2.8vw,2.5rem)/1.3 var(--serif);max-width:28ch;margin-inline:auto;color:var(--ink)}
+
+.room{padding-bottom:clamp(96px,12vw,180px)}
+.room .head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:28px}
+.room h2{font:400 clamp(2.5rem,5vw,4.5rem)/1 var(--serif)}
+.room .head span{font-size:.875rem;color:var(--ink-3)}
+.shot img{width:100%;aspect-ratio:3/2;object-fit:cover;filter:brightness(.62) contrast(1.15) saturate(.7) sepia(.25)}
+.shot figcaption,.cap{display:flex;justify-content:space-between;gap:16px;margin-top:10px;font-size:.8125rem;color:var(--ink-3)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,24px);margin-top:clamp(12px,2vw,24px)}
+.pair img{aspect-ratio:4/5}
+.room .text{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);margin-top:clamp(40px,5vw,64px)}
+.room .text p{color:var(--ink-2)}
+.room .text .act{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;background:var(--ink);color:var(--black);text-decoration:none;font-size:.9375rem;font-weight:400;transition:background .35s var(--ease)}
+.btn:hover{background:var(--brass)}
+.dark{aspect-ratio:3/2;background:radial-gradient(70% 60% at 50% 45%,#1C1B1A,#0B0A09);display:grid;place-items:center;position:relative;overflow:hidden}
+.dark .flame{width:6px;height:16px;border-radius:50% 50% 45% 45%;background:radial-gradient(circle at 50% 70%,#F4D9A3,#B08D57 60%,transparent 70%);box-shadow:0 0 40px 18px rgba(176,141,87,.18);animation:flick 3s ease-in-out infinite}
+@keyframes flick{50%{transform:scaleY(1.12) translateY(-1px);opacity:.9}}
+
+.notes{border-top:1px solid var(--rule);padding:clamp(80px,10vw,150px) 0}
+.notes h2{font:400 clamp(2rem,3.6vw,3.25rem)/1.05 var(--serif);max-width:18ch}
+.notes .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,4vw,56px);margin-top:48px}
+.notes h3{font:500 1rem/1.3 var(--sans);color:var(--brass);margin-bottom:10px}
+.notes p{color:var(--ink-2)}
+
+.arrive{background:var(--blood);padding:clamp(72px,9vw,130px) 0}
+.arrive p{font:400 clamp(1.75rem,3.2vw,3rem)/1.2 var(--serif);max-width:28ch}
+.arrive p span{color:#E7C9C2;font-style:italic}
+
+.faq{padding:clamp(80px,10vw,140px) 0}
+.faq .grid{display:grid;grid-template-columns:1fr 2fr;gap:clamp(24px,5vw,72px)}
+.faq h2{font:400 clamp(2rem,3.4vw,3rem)/1 var(--serif)}
+.faq ul{list-style:none;margin-top:28px}
+.faq li{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule);font-size:.9375rem;color:var(--ink-2)}
+details{border-top:1px solid var(--rule)}
+details:last-of-type{border-bottom:1px solid var(--rule)}
+summary{list-style:none;cursor:pointer;min-height:48px;padding:16px 0;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--brass);font-size:1.4rem;line-height:1}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:18px;color:var(--ink-2)}
+
+footer{border-top:1px solid var(--rule);padding:32px clamp(16px,4vw,40px) 48px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.8125rem;color:var(--ink-3)}
+footer nav{display:flex;gap:20px}
+footer a{text-decoration:none}
+
+@media (max-width:760px){
+  header{grid-template-columns:auto 1fr;gap:12px}
+  header a.t:first-child{display:none}
+  header img{width:88px}
+  .hero .in{flex-direction:column;align-items:flex-start}
+  .meta{text-align:left}
+  .pair,.room .text,.notes .grid,.faq .grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <a class="t" href="#gewoelbe">Gewölbe · Loft</a>
+  <img src="../logo/mackendorfer-hof-logo-ivory-transparent.svg" alt="Mackendorfer Hof">
+  <a class="t r" href="#loft">Auf Airbnb buchen</a>
+</header>
+
+<main>
+  <section class="hero">
+    <img src="assets/05_bad.png" alt="Bad im Loft mit freistehender Wanne im Halbdunkel">
+    <div class="in">
+      <h1>Zwei Räume, kein Publikum.</h1>
+      <p class="meta">Mackendorfer Hof<br>Private Fetisch-Apartments<br>Mackendorf bei Wolfsburg</p>
+    </div>
+  </section>
+
+  <section class="say col">
+    <p>Ein Hof auf dem Land, zwei Apartments, ein Schlüssel. Was hier geschieht, bleibt hier.</p>
+  </section>
+
+  <section class="room col" id="gewoelbe">
+    <div class="head"><h2>Gewölbe</h2><span>Für Erfahrene</span></div>
+    <figure class="shot"><div class="dark" role="img" aria-label="Platzhalter, Fotos folgen"><span class="flame"></span></div>
+      <figcaption><span>Das Gewölbe, noch im Aufbau</span><span>Fotos folgen</span></figcaption></figure>
+    <div class="text">
+      <p>Dunkler Stein, schwarzes Leder, Stahl. Kühles Licht, dazwischen Kerzen. Ein strenger Raum für alle, die wissen, wonach sie suchen.</p>
+      <div class="act"><a class="btn" href="#airbnb-gewoelbe">Gewölbe auf Airbnb ansehen</a></div>
+    </div>
+  </section>
+
+  <section class="room col" id="loft">
+    <div class="head"><h2>Loft</h2><span>Für Paare und Neugierige</span></div>
+    <figure class="shot"><img src="assets/07_loft.png" alt="Loft mit Fachwerk, Holztreppe und Essplatz" loading="lazy">
+      <figcaption><span>Wohnbereich unter dem Fachwerk</span><span>Essplatz, Treppe</span></figcaption></figure>
+    <div class="pair">
+      <figure class="shot"><img src="assets/06_kueche.png" alt="Küche mit Holzinsel" loading="lazy" style="object-position:35% center"><figcaption><span>Küche</span></figcaption></figure>
+      <figure class="shot"><img src="assets/05_bad.png" alt="Bad mit Glasdusche" loading="lazy" style="object-position:80% center"><figcaption><span>Bad</span></figcaption></figure>
+    </div>
+    <div class="text">
+      <p>Offenes Fachwerk, eine Holztreppe nach oben, eine Küche für den Morgen danach. Im Bad eine freistehende Wanne. Warm und großzügig, auch für den ersten Versuch.</p>
+      <div class="act"><a class="btn" href="#airbnb-loft">Loft auf Airbnb ansehen</a></div>
+    </div>
+  </section>
+
+  <section class="arrive">
+    <div class="col"><p>Über Airbnb buchen, am Anreisetag den Code bekommen, vorfahren. <span>Niemand empfängt euch, niemand sieht euch.</span></p></div>
+  </section>
+
+  <section class="notes col" id="diskretion">
+    <h2>Worauf ihr euch verlassen könnt</h2>
+    <div class="grid">
+      <div><h3>Diskretion</h3><p>Self-Check-in, keine Kameras in den Räumen, kein Gästebuch mit Namen, keine Nachbarn im Haus.</p></div>
+      <div><h3>Sauberkeit</h3><p>Desinfektion nach jedem Aufenthalt, frische Wäsche, ein Reinigungsprotokoll, das sichtbar ausliegt.</p></div>
+      <div><h3>Sicherheit</h3><p>Hausregeln für alle, Notfallschere und Erste-Hilfe-Set, eine kurze Einweisung zu jedem Möbel.</p></div>
+    </div>
+  </section>
+
+  <section class="faq col">
+    <div class="grid">
+      <div>
+        <h2>Lage und Fragen</h2>
+        <ul>
+          <li><span>Wolfsburg</span><span>ca. 15 Min.</span></li>
+          <li><span>Braunschweig</span><span>ca. 40 Min.</span></li>
+          <li><span>Hannover, Magdeburg</span><span>ca. 1 Std.</span></li>
+          <li><span>Berlin, Hamburg</span><span>ca. 2 Std.</span></li>
+        </ul>
+      </div>
+      <div>
+        <details><summary>Brauchen wir Erfahrung?</summary><p>Nein. Das Loft ist für Einsteiger gedacht, jedes Möbel ist erklärt. Das Gewölbe richtet sich eher an Erfahrene.</p></details>
+        <details><summary>Wie buchen wir?</summary><p>Ausschließlich über Airbnb. Dort seht ihr freie Termine, Preise und die Hausordnung.</p></details>
+        <details><summary>Wer erfährt von unserem Aufenthalt?</summary><p>Nur Airbnb und wir als Gastgeber. Es gibt keinen Empfang und keine anderen Gäste im selben Apartment.</p></details>
+        <details><summary>Ab welchem Alter?</summary><p>Beide Apartments sind nur für Volljährige.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Mackendorfer Hof · Mackendorf bei Wolfsburg · nur für Volljährige</span>
+  <nav><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a><a href="#hausordnung">Hausordnung</a></nav>
+</footer>
+</body>
+</html>
