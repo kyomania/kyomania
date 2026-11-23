@@ -18,6 +18,16 @@ sind KEINE Freigabe für Kosten. Im Zweifel: Prompt schreiben und fragen.
 Ohne Rückfrage erlaubt: Prompts und Pläne schreiben, vom Nutzer gelieferte Dateien
 lokal schneiden und bearbeiten, Dateien im Repo ändern, Kosten schätzen.
 
+## Handy-Screens in Videos (IMMER dieses Verfahren)
+
+Grüne Handy-Bildschirme werden IMMER mit `cardmarket-pro/tools-screen-tracking.py` ersetzt:
+- Kanten-Fit: Konturpunkte je Bildschirmseite (ohne runde Ecken) → Geraden → Schnittpunkte = echte 4 Ecken inkl. Perspektive. Nie einzelne Eckpunkte suchen, nie ein gerades Rechteck auflegen.
+- Glättung nur bei ruhigem Handy (3-Tap), bei schneller Bewegung keine.
+- Oberfläche mit Kamera-Aussparung (Dynamic Island) zeichnen.
+- Vor dem Senden messen und nennen: Fit-Fehler und Versatz Oberfläche↔Bildschirm (Ziel ≤ 1,5 px), plus Standbilder in voller Größe prüfen.
+- Bilder, in denen das Handy noch grün am Bildrand hereinschwenkt, herausschneiden; danach auf 0 grüne Pixel prüfen.
+- Export immer H.264 yuv420p, AAC Stereo 48 kHz.
+
 ## Stimmen / Voiceover (IMMER)
 
 Sprachaufnahmen IMMER mit ElevenLabs v4 erzeugen (Higgsfield-Modell `elevenlabs_v4`),
