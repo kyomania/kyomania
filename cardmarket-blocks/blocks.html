@@ -2,10 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap');
 *{margin:0;padding:0}html,body{width:1080px;height:1920px;overflow:hidden;background:#d9dee1;font-family:Inter,Arial}
 #fl{position:absolute;inset:0;background:#fff;opacity:0}
-#wm{position:absolute;width:640px;left:220px;top:1330px;opacity:0;filter:brightness(0) }
+#wm{position:absolute;width:880px;left:100px;top:900px;opacity:0}
 </style>
 <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head><body>
-<img id="wm" src="wordmark.png"><div id="fl"></div>
+<img id="wm" src="logo_original.png"><div id="fl"></div>
 <script type="module">
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -18,59 +18,59 @@ scene.add(new THREE.HemisphereLight('#ffffff','#9aa4aa',1.6));
 const dl=new THREE.DirectionalLight('#ffffff',2.4);dl.position.set(6,10,12);dl.castShadow=true;dl.shadow.mapSize.set(2048,2048);Object.assign(dl.shadow.camera,{left:-10,right:10,top:12,bottom:-12,near:1,far:60});dl.shadow.bias=-0.0005;scene.add(dl);
 const fill=new THREE.DirectionalLight('#bff7f0',0.8);fill.position.set(-8,-2,6);scene.add(fill);
 let sd=11;const R=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
-const COLS=['#5ee0d2','#0e3a3a','#0b0f14','#8a9399','#f2f5f6','#2aa79b'];
+const COLS=['#5ee0d2','#5ee0d2','#9fece3','#0e3a3a','#f2f5f6','#f2f5f6','#b9c2c7','#0b0f14'];
 const icon=new Image();icon.src='icon.png';await icon.decode();
 function tex(kind,w,h,bg,fg){const S=256,c=document.createElement('canvas');c.width=Math.round(S*w);c.height=Math.round(S*h);const x=c.getContext('2d');
  x.fillStyle=fg;x.textBaseline='middle';
- if(kind=='word'){const words=['TRACK','TRADE','COLLECT'];const wd=words[Math.floor(R()*3)];let fs=c.height*0.55;x.font=`900 ${fs}px Inter`;while(x.measureText(wd).width>c.width*0.8){fs*=0.92;x.font=`900 ${fs}px Inter`}x.fillText(wd,c.height*0.35,c.height*0.53);}
+ if(kind=='word'){const words=['TRACK','TRADE','COLLECT'];const wd=words[Math.floor(R()*3)];let fs=c.height*0.38;x.font=`900 ${fs}px Inter`;while(x.measureText(wd).width>c.width*0.8){fs*=0.92;x.font=`900 ${fs}px Inter`}x.font=`700 ${fs}px Inter`;x.fillText(wd,c.height*0.38,c.height*0.53);}
  if(kind=='dots'){for(let i=0;i<6;i++)for(let j=0;j<3;j++){x.beginPath();x.arc(c.width*0.15+i*c.width*0.13,c.height*0.25+j*c.height*0.25,c.height*0.07,0,7);x.fill()}}
  if(kind=='spark'){x.strokeStyle=fg;x.lineWidth=c.height*0.07;x.lineJoin='round';x.beginPath();for(let i=0;i<=10;i++){const px=c.width*(0.1+i*0.08),py=c.height*(0.75-i*0.04-Math.sin(i*1.7)*0.12);i?x.lineTo(px,py):x.moveTo(px,py)}x.stroke();}
  if(kind=='logo'){const s=c.height*0.8;x.drawImage(icon,(c.width-s*0.84)/2,c.height*0.1,s*0.84,s);}
  if(kind=='small'){x.font=`700 ${c.height*0.3}px Inter`;x.fillText(['▲ TRACK','● TRADE','◆ COLLECT'][Math.floor(R()*3)],c.height*0.3,c.height*0.5)}
  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t;}
-const root=new THREE.Group();scene.add(root);const tiles=[];
-const ROWS=11;
-for(let layer=0;layer<3;layer++){for(let row=0;row<ROWS;row++){let x=-3.6+R()*0.6;while(x<3.4){
- const w=[1.2,1.8,2.4,1.0,3.0][Math.floor(R()*5)];if(x+w>4.2)break;if(R()<0.18&&layer>0){x+=w+0.1;continue}
- const h=0.78,d=0.32;const ci=Math.floor(R()*COLS.length);const col=COLS[ci];const glass=R()<0.12;
+const wordTiles=[];const root=new THREE.Group();scene.add(root);const tiles=[];
+const ROWS=9;
+for(let layer=0;layer<3;layer++){for(let row=0;row<ROWS;row++){let x=-2.9+R()*0.5;while(x<2.6){
+ const w=[1.0,1.4,1.8,2.2,0.8][Math.floor(R()*5)];if(x+w>3.2)break;if(R()<0.18&&layer>0){x+=w+0.1;continue}
+ const h=0.78,d=0.32;const ci=Math.floor(R()*COLS.length);const col=COLS[ci];const glass=R()<0.16;
  const g=new RoundedBoxGeometry(w,h,d,4,h*0.48);
  const m=glass?new THREE.MeshPhysicalMaterial({color:'#ffffff',roughness:0.35,metalness:0,transparent:true,opacity:0.55,clearcoat:1}):new THREE.MeshStandardMaterial({color:col,roughness:0.45,metalness:0.05});
  const me=new THREE.Mesh(g,m);me.castShadow=true;me.receiveShadow=true;
  const y=(row-(ROWS-1)/2)*0.86;const z=-layer*0.42;me.position.set(x+w/2,y,z);
  const light=['#5ee0d2','#f2f5f6','#8a9399'].includes(col);const fg=light?'#0b0f14':(col=='#0b0f14'?'#5ee0d2':'#f2f5f6');
- const rk=R();const kind=layer==0?(w>=1.8&&rk<0.55?'word':rk<0.7?'dots':rk<0.85?'spark':'small'):(rk<0.3?'dots':null);
+ const rk=R();const kind=layer==0?(w>=1.8&&rk<0.45?'word':rk<0.6?'dots':rk<0.68?'spark':null):null;
  if(kind&&!glass){const p=new THREE.Mesh(new THREE.PlaneGeometry(w-0.1,h-0.06),new THREE.MeshStandardMaterial({map:tex(kind,w-0.1,h-0.06,col,fg),transparent:true,roughness:0.5}));p.position.z=d/2+0.003;me.add(p);}
- root.add(me);tiles.push({me,bx:x+w/2,by:y,bz:z,w,row,layer,s:R(),s2:R()});x+=w+0.08;}}}
+ root.add(me);if(kind=='word')wordTiles.push(me);tiles.push({me,bx:x+w/2,by:y,bz:z,w,row,layer,s:R(),s2:R()});x+=w+0.08;}}}
 // logo tile
 const lg=new THREE.Mesh(new RoundedBoxGeometry(2.0,2.0,0.4,6,0.35),new THREE.MeshStandardMaterial({color:'#0b0f14',roughness:0.4}));lg.castShadow=true;
 const lp=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.8),new THREE.MeshStandardMaterial({map:tex('logo',1.8,1.8,'#0b0f14','#fff'),transparent:true}));lp.position.z=0.205;lg.add(lp);scene.add(lg);
 const C=x=>Math.min(Math.max(x,0),1),E=x=>1-Math.pow(1-C(x),3),EIO=x=>{x=C(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
-const SHOTS=[[0,'wide'],[1.92,'close',0],[2.72,'wide'],[3.53,'close',1],[4.32,'wide'],[5.71,'close',2],[6.53,'wide'],[7.13,'close',3],[7.92,'wide'],[8.22,'end']];
-const CL=[[ -1.5,2.5,4.2,-0.4,1.6],[2.0,-1.5,4.0,1.2,-1.2],[-0.5,0,3.2,0.2,0.3],[1.2,3.0,4.5,0.5,2.5]];
-const HITS=[1.92,4.32,7.13,8.22];
+const SHOTS=[[0,'wide'],[3.53,'close',0],[5.5,'wide'],[7.13,'close',1],[8.22,'close',2],[9.52,'end']];
+const CL=[[-0.8,1.2,3.6,0.4,0.8],[1.4,-1.0,3.4,0.8,-0.9],[-1.2,-0.4,3.0,-0.3,-0.2],[ -1.5,2.5,4.2,-0.4,1.6],[2.0,-1.5,4.0,1.2,-1.2],[-0.5,0,3.2,0.2,0.3],[1.2,3.0,4.5,0.5,2.5]];
+const HITS=[];
 window.seek=function(t){
  // shuffle: rows slide on beats
  const beat=Math.floor(Math.max(0,t-1.92)/0.4);
- tiles.forEach(o=>{const ph=(t-1.92)/0.8;let dx=0,dz=0;
-  if(t>1.92&&t<8.22){const k=Math.floor(ph+o.row*0.13);const f=EIO((ph+o.row*0.13)%1*2.2);dx=Math.sin(k*1.7+o.row)*0.9*(o.row%2?1:-1)*(f)+Math.sin((k-1)*1.7+o.row)*0.9*(o.row%2?1:-1)*(1-f);dz=(o.s>0.8?Math.max(0,Math.sin(t*3+o.s2*6))*0.5:0);}
-  let endk=0;if(t>8.22){endk=EIO((t-8.22)/1.1);}
+ tiles.forEach(o=>{const ph=(t-1.92)/1.6;let dx=0,dz=0;
+  if(t>1.92&&t<9.52){const k=Math.floor(ph+o.row*0.13);const f=EIO((ph+o.row*0.13)%1*2.2);dx=Math.sin(k*1.7+o.row)*0.9*(o.row%2?1:-1)*(f)+Math.sin((k-1)*1.7+o.row)*0.9*(o.row%2?1:-1)*(1-f);dz=(o.s>0.8?Math.max(0,Math.sin(t*3+o.s2*6))*0.5:0);}
+  let endk=0;if(t>9.52){endk=EIO((t-9.52)/0.9);}
   const intro=EIO((t-o.s*0.9)/0.9);
   o.me.position.set(o.bx+dx+(o.layer-1)*0*(1-intro),o.by,o.bz+dz-(1-intro)*6-endk*(2+o.s*6));
   o.me.rotation.x=(1-intro)*1.2*(o.s-0.5);o.me.scale.setScalar(Math.max(0.001,intro*(1-endk*0.3)));
-  o.me.visible=!(t>8.22&&endk>0.98);});
+  o.me.visible=!(endk>0.98);});
  // whole block rotation
- root.rotation.y=-0.55+Math.sin(t*0.45)*0.35;root.rotation.x=0.18+Math.sin(t*0.3)*0.08;root.rotation.z=-0.06;
- root.position.y=t>8.22?-EIO((t-8.22)/1.2)*1.0:0;
+ root.rotation.y=-0.5+Math.sin(t*0.35)*0.3;root.rotation.x=0.18+Math.sin(t*0.3)*0.08;root.rotation.z=-0.06;root.position.x=-0.25;
+ root.position.y=0;
  // camera
  let sh=SHOTS[0];SHOTS.forEach(s=>{if(t>=s[0])sh=s});const lt=t-sh[0];
- if(sh[1]=='wide'){const zz=27-Math.min(lt,3)*0.5;cam.position.set(0.6*Math.sin(t*0.2),0.3,zz);cam.lookAt(0,0,0);cam.fov=30;}
- if(sh[1]=='close'){const c=CL[sh[2]];cam.position.set(c[0]+lt*0.35,c[1]-lt*0.1,c[2]+0.4);cam.lookAt(c[3]+lt*0.3,c[4],-0.5);cam.fov=34;}
- if(sh[1]=='end'){const zz=20-EIO(lt/1.2)*4;cam.position.set(0,0,zz);cam.lookAt(0,0,0);cam.fov=30;}
+ if(sh[1]=='wide'){const zz=25-Math.min(lt,4)*0.4;cam.position.set(0.6*Math.sin(t*0.2),0.3,zz);cam.lookAt(0,0,0);cam.fov=30;}
+ if(sh[1]=='close'){root.updateMatrixWorld(true);const wt=wordTiles[[2,5,9][sh[2]]%wordTiles.length];const p=new THREE.Vector3();wt.getWorldPosition(p);const o=[[-0.9,0.5],[0.9,-0.4],[-0.4,-0.6]][sh[2]];cam.position.set(p.x+o[0]+lt*0.2,p.y+o[1],p.z+3.0-lt*0.15);cam.lookAt(p.x+lt*0.1,p.y,p.z);cam.fov=34;}
+ if(sh[1]=='end'){const zz=25;cam.position.set(0,0,zz);cam.lookAt(0,0,0);cam.fov=30;}
  cam.updateProjectionMatrix();
  // logo tile
- const lt2=t-8.5;lg.visible=lt2>0;if(lt2>0){const k=E(lt2/0.7);lg.position.set(0,0.6,8*(1-k)-0.2+Math.sin(lt2*1.4)*0.08);lg.rotation.set(0.15*(1-k)+Math.sin(lt2*0.9)*0.05,(1-EIO(lt2/0.9))*Math.PI*2+Math.sin(lt2*0.8)*0.18,0);lg.scale.setScalar(1.25);}
+ lg.visible=false;const lt2=-1;if(lt2>0){const k=E(lt2/0.7);lg.position.set(0,0.6,8*(1-k)-0.2+Math.sin(lt2*1.4)*0.08);lg.rotation.set(0.15*(1-k)+Math.sin(lt2*0.9)*0.05,(1-EIO(lt2/0.9))*Math.PI*2+Math.sin(lt2*0.8)*0.18,0);lg.scale.setScalar(1.25);}
  r.render(scene,cam);
- const wm=document.getElementById('wm');wm.style.opacity=E((t-9.6)/0.4);wm.style.transform=`translateY(${(1-E((t-9.6)/0.4))*30}px)`;
+ const wm=document.getElementById('wm');wm.style.opacity=E((t-10.0)/0.5);wm.style.transform=`scale(${0.94+0.06*E((t-10.0)/0.9)})`;
  let fo=0;HITS.forEach(h=>{const q=t-h;if(q>=0&&q<0.1)fo=Math.max(fo,0.6*(1-q/0.1))});document.getElementById('fl').style.opacity=fo;
 };
 window.ready=true;seek(0);
