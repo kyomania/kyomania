@@ -85,7 +85,7 @@ function seek(t){
  let pu=0;HITS.forEach(h=>{const q=t-h;if(q>=0&&q<0.35)pu=Math.max(pu,1-q/0.35)});$('tag').style.color=inv?'#000':'#fff';$('tgi').setAttribute('stroke',inv?'#000':'#fff');
  // logo build-in at fixed spot
  $('FL').style.opacity=1;$('FL').style.transform=`scale(${1+0.22*E(pu)*pu})`;$('WM').style.opacity=1;$('WM').style.transform=`rotate(-90deg) scale(${1+0.08*pu})`;
- $('tag').style.display='none';let fo=0;HITS.slice(1).forEach(h=>{const q=t-h;if(q>=0&&q<0.1)fo=0.7*(1-q/0.1)});$('fl').style.opacity=fo;
+ $('tag').style.display='none';let fo=0;HITS.slice(1).forEach(h=>{const q=t-h;if(q>=0&&q<0.1)fo=0.7*(1-q/0.1)});{const q=t-10.30;if(q>=0&&q<0.4)fo=Math.max(fo,q<0.1?q/0.1:1-(q-0.1)/0.3);}$('fl').style.opacity=fo;
  // end: IG icon replaces nothing, sits above logo
  const pe=-1;$('end').style.display='none';$('ig').style.opacity=E(pe/0.3);
  $('igg').setAttribute('stroke',(Math.floor(pe*2.5)%3==1)?'url(#g)':'#fff');
