@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/three.min.js"></script>
+    <script src="assets/RoundedBoxGeometry.js"></script>
+    <style>
+      :root { --graphite: #0a1118; --mint: #5ee0d4; --font-mono: "JetBrains Mono", monospace; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #e6e9eb; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden;
+        background: radial-gradient(120% 70% at 50% 42%, #f3f5f6 0%, #e4e8ea 55%, #d3d8db 100%); }
+      .clip { position: absolute; inset: 0; }
+      #shadow { position: absolute; left: 50%; top: 1290px; width: 620px; height: 120px; margin-left: -310px; border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(10,17,24,.35), rgba(10,17,24,0)); }
+      #out { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #word { position: absolute; left: 90px; width: 900px; top: 1520px; mix-blend-mode: multiply; opacity: 0; }
+      #tag { position: absolute; left: 0; right: 0; top: 1720px; text-align: center; font-family: var(--font-mono); font-size: 30px;
+        letter-spacing: .2em; text-transform: uppercase; color: var(--graphite); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="8" data-track-index="0">
+        <div id="shadow"></div>
+        <canvas id="out" width="1080" height="1920"></canvas>
+      </div>
+      <img id="word" class="clip" src="assets/wordmark-light.png" alt="cardmarket.pro" data-start="0" data-duration="8" data-track-index="1" style="inset:auto;left:90px;top:1500px;width:900px;height:auto" />
+      <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="2" style="inset:auto;left:0;right:0;top:1700px">Buy · Sell · Trade · Collect</div>
+
+      <audio id="music" src="assets/music.mp3" data-start="0" data-duration="8" data-volume="0.8" data-fade-out="0.8" data-track-index="5"></audio>
+      <audio id="k1" src="assets/klack.wav" data-start="1.5" data-duration="0.09" data-volume="0.7" data-track-index="6"></audio>
+      <audio id="k2" src="assets/klack.wav" data-start="2.3" data-duration="0.09" data-volume="0.7" data-track-index="6"></audio>
+      <audio id="k3" src="assets/klack.wav" data-start="3.1" data-duration="0.09" data-volume="0.7" data-track-index="6"></audio>
+      <audio id="k4" src="assets/klack.wav" data-start="4.0" data-duration="0.09" data-volume="0.7" data-track-index="6"></audio>
+      <audio id="k5" src="assets/klack.wav" data-start="4.8" data-duration="0.09" data-volume="0.7" data-track-index="6"></audio>
+      <audio id="k6" src="assets/klack.wav" data-start="5.6" data-duration="0.09" data-volume="0.8" data-track-index="6"></audio>
+    </div>
+
+    <script>
+      const MINT = "#5ee0d4", TEAL = "#00877a", GR = "#0a1118", W = "#ffffff", PAPER = "#f0f3f4";
+      const CARD = new Path2D("M210,170 L640,70 L690,130 L605,690 Q600,725 560,730 L180,770 Q110,775 110,700 L150,230 Q155,180 210,170 Z");
+      const CC = new Path2D("M435,258 L370,385 L345,410 Q330,440 340,490 Q350,525 380,525 L580,525 L565,640 Q562,648 550,648 L320,648 Q240,640 210,560 Q195,520 205,420 Q220,350 280,320 Z");
+      const ACC = new Path2D("M495,238 L610,238 Q620,240 612,252 L548,375 Q540,385 528,385 L420,385 Q410,383 415,372 Z");
+
+      // ---------- tile painters (512x512 each) ----------
+      function logoTile(g, bg, card, c, acc) {
+        g.fillStyle = bg; g.fillRect(0, 0, 512, 512);
+        g.save(); g.translate(256 - 0.42 * 400, 256 - 0.42 * 420); g.scale(0.42, 0.42);
+        g.fillStyle = card; g.fill(CARD); g.fillStyle = c; g.fill(CC); g.fillStyle = acc; g.fill(ACC); g.restore();
+      }
+      function wordTile(g, bg, fg, txt) {
+        g.fillStyle = bg; g.fillRect(0, 0, 512, 512);
+        let size = 210; g.font = `900 ${size}px "Inter Tight", sans-serif`;
+        while (g.measureText(txt).width > 430 && size > 40) { size -= 6; g.font = `900 ${size}px "Inter Tight", sans-serif`; }
+        g.fillStyle = fg; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(txt, 256, 270);
+        g.font = `500 22px "JetBrains Mono", monospace`; g.textAlign = "left"; g.fillText("CARDMARKET.PRO", 34, 48);
+      }
+      function patternTile(g, bg, fg) {
+        g.fillStyle = bg; g.fillRect(0, 0, 512, 512); g.fillStyle = fg;
+        for (let r = 0; r < 5; r++) for (let c = 0; c < 5; c++) {
+          if ((r * 3 + c * 2) % 5 === 0) continue;
+          g.save(); g.translate(56 + c * 100, 56 + r * 100); g.rotate(((r + c) % 3 - 1) * 0.35); g.transform(1, 0, -0.14, 1, 0, 0);
+          g.beginPath(); g.roundRect(-22, -30, 44, 60, 7); g.fill(); g.restore();
+        }
+      }
+      function monoTile(g, bg, fg, lines) {
+        g.fillStyle = bg; g.fillRect(0, 0, 512, 512); g.fillStyle = fg;
+        g.font = `500 26px "JetBrains Mono", monospace`; g.textBaseline = "top";
+        lines.forEach((l, i) => g.fillText(l, 40, 44 + i * 40));
+        g.beginPath(); g.arc(256, 300, 9, 0, Math.PI * 2); g.fill();
+        g.strokeStyle = fg; g.globalAlpha = 0.35; g.lineWidth = 2;
+        [80, 140].forEach((r) => { g.beginPath(); g.arc(256, 300, r, 0, Math.PI * 2); g.stroke(); }); g.globalAlpha = 1;
+      }
+      const T = {
+        logoMint: (g) => logoTile(g, GR, MINT, GR, TEAL),
+        logoWhite: (g) => logoTile(g, W, MINT, GR, TEAL),
+        logoMono: (g) => logoTile(g, MINT, GR, MINT, MINT),
+        buy: (g) => wordTile(g, GR, MINT, "BUY"),
+        sell: (g) => wordTile(g, W, GR, "SELL"),
+        trade: (g) => wordTile(g, MINT, GR, "TRADE"),
+        collect: (g) => wordTile(g, TEAL, W, "COLLECT"),
+        pro: (g) => wordTile(g, PAPER, GR, ".PRO"),
+        patTeal: (g) => patternTile(g, TEAL, MINT),
+        patGr: (g) => patternTile(g, GR, MINT),
+        patMint: (g) => patternTile(g, MINT, GR),
+        mono1: (g) => monoTile(g, PAPER, GR, ["UNIT OF", "TRADE", "2026©"]),
+        mono2: (g) => monoTile(g, GR, MINT, ["EVERY CARD", "ONE MARKET"]),
+      };
+      // per face: 2x2 tiles [top-left, top-right, bottom-left, bottom-right] as seen on the face
+      const FACES = {
+        pz: ["logoMint", "buy", "patTeal", "sell"],
+        px: ["trade", "patGr", "mono1", "logoMono"],
+        py: ["collect", "logoWhite", "patMint", "pro"],
+        nx: ["sell", "patMint", "logoMint", "mono2"],
+        ny: ["patGr", "trade", "buy", "patTeal"],
+        nz: ["mono2", "collect", "logoMono", "patGr"],
+      };
+      const canvases = {}, textures = [];
+      function paintAll() {
+        for (const f in FACES) {
+          const cv = canvases[f] || (canvases[f] = Object.assign(document.createElement("canvas"), { width: 1024, height: 1024 }));
+          const g = cv.getContext("2d");
+          FACES[f].forEach((k, i) => { g.save(); g.translate((i % 2) * 512, Math.floor(i / 2) * 512);
+            g.beginPath(); g.rect(0, 0, 512, 512); g.clip(); T[k](g); g.restore(); });
+        }
+        textures.forEach((t) => (t.needsUpdate = true));
+      }
+      paintAll();
+      let fontsPainted = false;
+
+      // ---------- three.js scene ----------
+      const W3 = 1080, H3 = 1920;
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1); renderer.setSize(W3, H3, false);
+      renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(28, W3 / H3, 0.1, 100); camera.position.set(0, 0, 12); camera.lookAt(0, 0, 0);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0xb8c2c8, 0.75));
+      const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-4, 6, 8); scene.add(key);
+      const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(6, -2, -4); scene.add(rim);
+
+      const root = new THREE.Group(); scene.add(root);
+      const inner = new THREE.MeshStandardMaterial({ color: 0x05080c, roughness: 0.6 });
+      // face dir -> [canvas key, u axis, v axis]
+      const DIRS = [
+        ["px", [1, 0, 0], [0, 0, -1], [0, 1, 0]], ["nx", [-1, 0, 0], [0, 0, 1], [0, 1, 0]],
+        ["py", [0, 1, 0], [1, 0, 0], [0, 0, -1]], ["ny", [0, -1, 0], [1, 0, 0], [0, 0, 1]],
+        ["pz", [0, 0, 1], [1, 0, 0], [0, 1, 0]], ["nz", [0, 0, -1], [-1, 0, 0], [0, 1, 0]],
+      ];
+      const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+      const cubies = [];
+      const geo = new THREE.RoundedBoxGeometry(0.985, 0.985, 0.985, 6, 0.09);
+      for (const x of [-0.5, 0.5]) for (const y of [-0.5, 0.5]) for (const z of [-0.5, 0.5]) {
+        const p = [x, y, z];
+        const mats = DIRS.map(([key, n, u, v]) => {
+          if (dot(p, n) <= 0) return inner;
+          const tex = new THREE.CanvasTexture(canvases[key]); tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 8;
+          tex.repeat.set(0.5, 0.5); tex.offset.set(dot(p, u) > 0 ? 0.5 : 0, dot(p, v) > 0 ? 0.5 : 0);
+          textures.push(tex);
+          return new THREE.MeshStandardMaterial({ map: tex, roughness: 0.38, metalness: 0.0 });
+        });
+        const m = new THREE.Mesh(geo, mats); root.add(m);
+        cubies.push({ mesh: m, home: new THREE.Vector3(x, y, z) });
+      }
+
+      // ---------- deterministic state at time t ----------
+      const MOVES = [
+        { ax: "x", l: 0.5, a: 1, t0: 1.05, t1: 1.5 },
+        { ax: "y", l: 0.5, a: 1, t0: 1.85, t1: 2.3 },
+        { ax: "z", l: 0.5, a: -1, t0: 2.65, t1: 3.1 },
+        { ax: "z", l: 0.5, a: 1, t0: 3.55, t1: 4.0 },
+        { ax: "y", l: 0.5, a: -1, t0: 4.35, t1: 4.8 },
+        { ax: "x", l: 0.5, a: -1, t0: 5.15, t1: 5.6 },
+      ];
+      const AX = { x: new THREE.Vector3(1, 0, 0), y: new THREE.Vector3(0, 1, 0), z: new THREE.Vector3(0, 0, 1) };
+      const clamp = (v) => Math.min(1, Math.max(0, v));
+      const easeIO = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+      const easeOut = (p) => 1 - Math.pow(1 - p, 3);
+      const easeBack = (p) => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+      const q = new THREE.Quaternion(), qm = new THREE.Quaternion();
+
+      function pose(t) {
+        cubies.forEach((c) => { c.q = new THREE.Quaternion(); c.p = c.home.clone(); });
+        for (const mv of MOVES) {
+          const pr = easeBack(clamp((t - mv.t0) / (mv.t1 - mv.t0)));
+          if (t < mv.t0) break;
+          const full = (Math.PI / 2) * mv.a;
+          qm.setFromAxisAngle(AX[mv.ax], full * pr);
+          for (const c of cubies) {
+            if (Math.sign(c.p[mv.ax]) !== Math.sign(mv.l)) continue;
+            c.p.applyQuaternion(qm); c.q.premultiply(qm);
+          }
+          // snap after completion to remove float drift
+          if (pr >= 1) cubies.forEach((c) => { c.p.set(Math.round(c.p.x * 2) / 2, Math.round(c.p.y * 2) / 2, Math.round(c.p.z * 2) / 2); });
+        }
+        cubies.forEach((c) => { c.mesh.position.copy(c.p); c.mesh.quaternion.copy(c.q); });
+        // whole-cube motion
+        const enter = easeOut(clamp(t / 1.1));
+        const settle = easeIO(clamp((t - 5.6) / 1.0));
+        const yaw = -2.6 * (1 - easeOut(clamp(t / 6.4))) - 0.55 + 0.25 * Math.sin(t * 1.3) * (1 - settle);
+        const pitch = 0.95 * (1 - settle) + 0.38 * settle + 0.12 * Math.sin(t * 0.9) * (1 - settle);
+        const roll = 0.35 * (1 - settle) * Math.sin(t * 0.7 + 0.5);
+        root.rotation.set(pitch, yaw, roll, "YXZ");
+        const s = 0.55 + 0.45 * enter;
+        root.scale.setScalar(s);
+        root.position.set(0, -5 * (1 - enter) + 0.55 + 0.07 * Math.sin(t * 2.1), 0);
+        return { s, y: root.position.y };
+      }
+
+      const out = document.getElementById("out"), og = out.getContext("2d");
+      const shadow = document.getElementById("shadow");
+      const SUB = 5, SHUT = 1 / 30 * 0.7;
+      function draw(t) {
+        if (!fontsPainted && document.fonts && document.fonts.status === "loaded") { paintAll(); fontsPainted = true; }
+        og.clearRect(0, 0, W3, H3);
+        let info;
+        for (let i = 0; i < SUB; i++) {
+          const ts = Math.max(0, t - SHUT * (i / (SUB - 1)));
+          info = pose(ts); renderer.render(scene, camera);
+          og.globalAlpha = 1 / (i + 1);
+          if (i === 0) { og.globalAlpha = 1; og.drawImage(renderer.domElement, 0, 0); }
+          else { og.globalCompositeOperation = "source-over"; og.drawImage(renderer.domElement, 0, 0); }
+        }
+        og.globalAlpha = 1;
+        info = pose(t);
+        const lift = info.y - 0.55;
+        shadow.style.transform = `scale(${(info.s * (1 - Math.min(0.5, Math.abs(lift) * 0.12))).toFixed(3)})`;
+        shadow.style.opacity = (Math.min(1, info.s) * (1 - Math.min(1, Math.abs(lift) * 0.25))).toFixed(3);
+      }
+      if (document.fonts) document.fonts.ready.then(() => { paintAll(); fontsPainted = true; draw(state.t); });
+
+      const state = { t: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.to(state, { t: 8, duration: 8, ease: "none", onUpdate: () => draw(state.t) }, 0);
+      tl.fromTo("#word", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 6.2);
+      tl.fromTo("#tag", { opacity: 0, y: 20 }, { opacity: 0.85, y: 0, duration: 0.5, ease: "power3.out" }, 6.5);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0); draw(0);
+    </script>
+  </body>
+</html>
