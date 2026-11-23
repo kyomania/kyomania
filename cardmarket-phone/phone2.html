@@ -3,7 +3,7 @@
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#e9eeee;font-family:Inter}
 #wrap{position:absolute;inset:0}#v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .wd{position:absolute;left:0;right:0;top:1330px;text-align:center;font-weight:900;letter-spacing:-10px;white-space:nowrap;line-height:1}
-#w{color:#0b0f14}#wr,#wb{mix-blend-mode:multiply}#wr{color:#ff2bd6}#wb{color:#2bfff1}
+#w{color:#0e6e66;font-weight:600;letter-spacing:-4px}#wr,#wb{mix-blend-mode:multiply}#wr{color:#ff2bd6}#wb{color:#2bfff1}
 #we{color:transparent;-webkit-text-stroke:3px #0b0f14}
 #lbl{position:absolute;left:0;right:0;top:1270px;text-align:center;font-weight:700;font-size:26px;letter-spacing:12px;color:#0e6e66}
 #fl{position:absolute;inset:0;background:#fff;opacity:0}#end{position:absolute;inset:0;background:#eef2f2;opacity:0}#lg{position:absolute;width:880px;left:100px;top:880px;opacity:0}
@@ -32,11 +32,11 @@ function seek(t){
  $('wrap').style.transform=`translate(${sx+wx}px,${sy}px) scale(${1+0.16*pz})`;$('wrap').style.filter=`blur(${wb}px)`;
  // words
  const wd=W.find(w=>t>=w[0]-0.01&&t<w[1]);['w','wr','wb','we'].forEach(id=>$(id).style.opacity=0);$('lbl').style.opacity=0;
- if(wd){const q=t-wd[0];const fs=wd[2].length>5?205:250;['w','wr','wb','we'].forEach(id=>{$(id).textContent=wd[2];$(id).style.fontSize=fs+'px'});
-  const k=E(q/0.12);const sc=2.6-1.6*k+0.04*Math.max(0,q-0.12);const out=C((t-(wd[1]-0.15))/0.15);
-  $('w').style.opacity=C(q/0.05)*(1-out);$('w').style.transform=`translate(${wx}px,0) scale(${sc*(1+out*0.4)})`;
-  const g=Math.max(0,1-q/0.3);$('wr').style.opacity=$('wb').style.opacity=g*(1-out);$('wr').style.transform=`translate(${-26*g+wx}px,0) scale(${sc})`;$('wb').style.transform=`translate(${26*g+wx}px,0) scale(${sc})`;
-  const eq=C(q/0.6);$('we').style.opacity=(1-eq)*0.7;$('we').style.transform=`scale(${1+eq*0.9})`;
+ if(wd){const q=t-wd[0];const fs=wd[2].length>5?185:210;const lw=wd[2].toLowerCase();$('w').innerHTML=lw+'<span style="color:#5ee0d2">.</span>';$('w').style.fontSize=fs+'px';
+  const k=E(q/0.45);const sc=1.12-0.12*k+0.02*Math.max(0,q-0.45);const out=C((t-(wd[1]-0.15))/0.15);
+  $('w').style.opacity=E(q/0.3)*(1-out);$('w').style.transform=`translate(${wx}px,${(1-k)*40-out*20}px) scale(${sc})`;$('w').style.filter=`blur(${(1-k)*8+out*6}px)`;
+  const g=Math.max(0,1-q/0.3);$('wr').style.opacity=$('wb').style.opacity=0;$('wr').style.transform=`translate(${-26*g+wx}px,0) scale(${sc})`;$('wb').style.transform=`translate(${26*g+wx}px,0) scale(${sc})`;
+  const eq=C(q/0.6);$('we').style.opacity=0;$('we').style.transform=`scale(${1+eq*0.9})`;
   $('lbl').textContent=wd[3];$('lbl').style.opacity=E((q-0.15)/0.2)*(1-out);}
  let fo=0;[1.92,4.32,7.13,9.3].forEach(h=>{const q=t-h;if(q>=0&&q<0.12)fo=Math.max(fo,0.85*(1-q/0.12))});$('fl').style.opacity=fo;
  $('tl').style.opacity=t<9.3?E((t-0.6)/0.4):0;const e=t-9.3;$('end').style.opacity=e>=0?1:0;$('lg').style.opacity=e>=0?1:0;$('lg').style.transform=`scale(${e<0?1:(1.25-0.25*E(e/0.3))+0.03*E((e-0.3)/1.5)})`;
