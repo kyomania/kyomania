@@ -8,7 +8,7 @@
 #lbl{position:absolute;left:0;right:0;top:1270px;text-align:center;font-weight:700;font-size:26px;letter-spacing:12px;color:#0e6e66}
 #fl{position:absolute;inset:0;background:#fff;opacity:0}#end{position:absolute;inset:0;background:#eef2f2;opacity:0}#lg{position:absolute;width:880px;left:100px;top:880px;opacity:0}
 </style></head><body>
-<div id="wrap"><img id="v"></div><div id="lbl"></div><div class="wd" id="we"></div><div class="wd" id="wr"></div><div class="wd" id="wb"></div><div class="wd" id="w"></div><div id="fl"></div><div id="end"></div><img id="lg" src="logo_original.png">
+<div id="wrap"><img id="v"></div><div id="lbl"></div><div class="wd" id="we"></div><div class="wd" id="wr"></div><div class="wd" id="wb"></div><div class="wd" id="w"></div><img id="tl" src="logo_original.png" style="position:absolute;width:460px;left:310px;top:150px;opacity:0"><div id="fl"></div><div id="end"></div><img id="lg" src="logo_original.png">
 <script>
 const $=id=>document.getElementById(id);const C=x=>Math.min(Math.max(x,0),1);const E=x=>1-Math.pow(1-C(x),3);
 // piecewise map: [vt0, vt1, clip, ct0, ct1]
@@ -17,9 +17,9 @@ const SEG=[
  [0.60,1.92,'a',0.2,1.8],[1.92,2.60,'a',1.8,2.14],[2.60,3.40,'a',2.14,3.8],[3.40,4.00,'a',3.8,1.3],
  [4.00,4.32,'c',1.55,2.2],[4.32,4.90,'c',2.2,2.48],[4.90,5.60,'c',2.48,3.9],[5.60,6.30,'c',3.9,1.3],
  [6.30,7.13,'b',1.0,1.9],[7.13,7.60,'b',1.9,2.14],[7.60,8.50,'b',2.14,3.9],[8.50,9.30,'b',3.9,0.9]];
-const INV=new Set([1,3,5]);
+const INV=new Set();
 const W=[[1.92,3.4,'TRADE','01 / 03'],[4.32,5.6,'TRACK','02 / 03'],[7.13,8.5,'COLLECT','03 / 03']];
-const PUNCH=[1.92,2.72,3.30,3.81,4.32,5.13,5.71,7.13,7.92,8.22];
+const PUNCH=[];
 const WHIP=[4.0,6.3];
 function seek(t){
  let si=SEG.findIndex(s=>t>=s[0]&&t<s[1]);
@@ -28,7 +28,7 @@ function seek(t){
  // punch zoom + shake
  let pz=0,sh=0;PUNCH.forEach(p=>{const q=t-p;if(q>=0&&q<0.35){pz=Math.max(pz,1-E(q/0.35));if(q<0.25)sh=Math.max(sh,1-q/0.25)}});
  let wx=0,wb=0;WHIP.forEach(p=>{const q=t-p;if(q>-0.12&&q<0){const k=(q+0.12)/0.12;wx=-k*k*700;wb=k*30}if(q>=0&&q<0.12){const k=1-q/0.12;wx=k*k*700;wb=k*30}});
- const sx=Math.sin(t*90)*14*sh,sy=Math.cos(t*77)*14*sh;
+ const sx=0,sy=0;
  $('wrap').style.transform=`translate(${sx+wx}px,${sy}px) scale(${1+0.16*pz})`;$('wrap').style.filter=`blur(${wb}px)`;
  // words
  const wd=W.find(w=>t>=w[0]-0.01&&t<w[1]);['w','wr','wb','we'].forEach(id=>$(id).style.opacity=0);$('lbl').style.opacity=0;
@@ -38,8 +38,8 @@ function seek(t){
   const g=Math.max(0,1-q/0.3);$('wr').style.opacity=$('wb').style.opacity=g*(1-out);$('wr').style.transform=`translate(${-26*g+wx}px,0) scale(${sc})`;$('wb').style.transform=`translate(${26*g+wx}px,0) scale(${sc})`;
   const eq=C(q/0.6);$('we').style.opacity=(1-eq)*0.7;$('we').style.transform=`scale(${1+eq*0.9})`;
   $('lbl').textContent=wd[3];$('lbl').style.opacity=E((q-0.15)/0.2)*(1-out);}
- let fo=0;[1.92,4.32,7.13,9.3].forEach(h=>{const q=t-h;if(q>=0&&q<0.12)fo=Math.max(fo,0.85*(1-q/0.12))});[0.1,0.2,0.3,0.4,0.5].forEach(h=>{const q=t-h;if(q>=0&&q<0.04)fo=Math.max(fo,0.5)});$('fl').style.opacity=fo;
- const e=t-9.3;$('end').style.opacity=e>=0?1:0;$('lg').style.opacity=e>=0?1:0;$('lg').style.transform=`scale(${e<0?1:(1.25-0.25*E(e/0.3))+0.03*E((e-0.3)/1.5)})`;
+ let fo=0;[1.92,4.32,7.13,9.3].forEach(h=>{const q=t-h;if(q>=0&&q<0.12)fo=Math.max(fo,0.85*(1-q/0.12))});$('fl').style.opacity=fo;
+ $('tl').style.opacity=t<9.3?E((t-0.6)/0.4):0;const e=t-9.3;$('end').style.opacity=e>=0?1:0;$('lg').style.opacity=e>=0?1:0;$('lg').style.transform=`scale(${e<0?1:(1.25-0.25*E(e/0.3))+0.03*E((e-0.3)/1.5)})`;
 }
 seek(0);
 </script></body></html>
