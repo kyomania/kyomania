@@ -1,0 +1,74 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0f14;font-family:Inter,Arial,sans-serif}
+canvas{position:absolute;inset:0}
+.sl{position:absolute;font-size:15px;letter-spacing:4px;font-weight:500;text-transform:uppercase;color:#5ee0d2}
+#hero{position:absolute;left:540px;top:860px;width:0;height:0;perspective:1400px}
+#card{position:absolute;width:460px;height:640px;left:-230px;top:-320px;transform-style:preserve-3d}
+.face{position:absolute;inset:0;border-radius:34px;backface-visibility:hidden;overflow:hidden}
+#front{background:linear-gradient(150deg,#0e3a3a,#0b0f14 70%);border:5px solid #5ee0d2;box-shadow:0 0 90px #5ee0d266;display:flex;align-items:center;justify-content:center}
+#back{background:repeating-linear-gradient(135deg,#5ee0d2 0 18px,#4bc4b7 18px 36px);transform:rotateY(180deg);border:5px solid #0b0f14}
+#sheen{position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.55) 50%,transparent 58%)}
+#fl{position:absolute;inset:0;background:#fff;opacity:0}
+</style></head><body>
+<canvas id="cv" width="1080" height="1920"></canvas>
+<div class="sl" style="left:70px;top:120px" id="l1">infinite deck</div><div class="sl" style="right:70px;top:120px" id="l2"></div>
+<div class="sl" style="left:70px;bottom:120px" id="l3">cardmarket.pro</div><div class="sl" style="right:70px;bottom:120px" id="l4">tcg · sports cards · worldwide</div>
+<div id="hero"><div id="card"><div class="face" id="front"><img src="icon.png" style="width:250px"><div id="sheen"></div></div><div class="face" id="back"></div></div></div>
+<img id="wm" src="wordmark.png" style="position:absolute;width:700px;left:190px;top:1260px;opacity:0">
+<div id="tag" style="position:absolute;left:0;right:0;top:1400px;text-align:center;color:#5ee0d2;font-weight:700;font-size:30px;letter-spacing:14px;opacity:0">BUY · SELL · COLLECT</div>
+<div id="fl"></div>
+<script>
+const $=id=>document.getElementById(id);const C=x=>Math.min(Math.max(x,0),1);const E=x=>1-Math.pow(1-C(x),3);const EIO=x=>{x=C(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const cv=$('cv'),g=cv.getContext('2d');const F=950,CX=540,CY=860;
+let sd=7;const R=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
+const N=300;const cards=[];for(let i=0;i<N;i++)cards.push({s:R(),s2:R(),s3:R(),a:i*2.39996,dx:R()*2-1,dy:R()*2-1,dz:R()*2-1});
+cards.forEach(c=>{const l=Math.hypot(c.dx,c.dy,c.dz)||1;c.dx/=l;c.dy/=l;c.dz/=l});
+const BEATS=[1.92,2.28,2.44,2.72,2.97,3.11,3.30,3.53,3.65,3.81,3.92,4.32,4.71,5.13,5.32,5.50,5.71,5.92,6.11,6.32,6.53,6.71,6.92,7.13,7.31,7.52,7.71,7.92];
+const HITS=[1.92,4.32,5.71,7.13,8.22];
+function pose(mode,c,i,t){ // returns [x,y,z,rz,ry]
+ if(mode=='intro'){const z=((c.s*40-t*(4+t*6))%40+40)%40+3;const a=c.a+t*0.4;const r=2.6+c.s2*2;return [r*Math.cos(a),r*Math.sin(a),z,a+1.57,t*1.5+c.s3*6]}
+ if(mode=='tunnel'){const z=((c.s*60-t*26)%60+60)%60+0.8;const a=c.a+t*0.5;const r=3.0;return [r*Math.cos(a),r*Math.sin(a),z,a+1.57,t*3+c.s3*6]}
+ if(mode=='spiral'){const z=((c.s*60-t*20)%60+60)%60+0.8;const a=z*0.32+t*2.2+(i%3)*2.094;const r=1.6+z*0.02;return [r*Math.cos(a),r*Math.sin(a),z,a,t*4+c.s3*6]}
+ if(mode=='grid'){const col=i%15,row=Math.floor(i/15)%20;const lt=t-5.71;const z=16-lt*7+((i/300)|0)*0;const w=Math.sin(col*0.5+row*0.4-lt*7);return [(col-7)*1.15,(row-9.5)*1.55,Math.max(1.2,z+row*0.0),0,Math.PI*C(w*1.5)]}
+ if(mode=='burst'){const lt=t-7.13;const d=E(lt/0.9)*28;return [c.dx*d,c.dy*d,13+c.dz*d*0.6,lt*6*c.s2,lt*8*c.s3]}
+}
+function modeAt(t){if(t<1.92)return'intro';if(t<4.32)return'tunnel';if(t<5.71)return'spiral';if(t<7.13)return'grid';return'burst'}
+const MS=[[0,'intro'],[1.92,'tunnel'],[4.32,'spiral'],[5.71,'grid'],[7.13,'burst']];
+function proj(x,y,z){return [CX+F*x/z,CY+F*y/z]}
+let c_hi=false;function drawCard(p,inv,big){const [x,y,z,rz,ry]=p;if(z<1.1)return;const cz=Math.cos(rz),sz=Math.sin(rz),cy=Math.cos(ry),sy=Math.sin(ry);
+ const W=0.5,H=0.7;const pts=[[-W,-H],[W,-H],[W,H],[-W,H]].map(([u,v])=>{let lx=u*cy,lz=u*sy,ly=v;const X=lx*cz-ly*sz,Y=lx*sz+ly*cz;return proj(x+X,y+Y,z+lz)});
+ const front=cy>0;const fog=C(1-(z-2)/45);if(fog<=0)return;
+ g.globalAlpha=fog;g.beginPath();pts.forEach((q,k)=>k?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.closePath();
+ const ink=inv?'#0b0f14':'#5ee0d2',bg=inv?'#e8eef0':'#0b0f14';
+ g.fillStyle=front?(inv?'#0b0f14':'#0c2b2c'):(inv?'#8a9399':(c_hi?'#5ee0d2':'#17504e'));g.fill();g.lineWidth=Math.max(1,3*F/z/300);g.strokeStyle=ink;g.stroke();
+ if(front&&z<30){// inner frame
+  const ip=[[-W*.7,-H*.75],[W*.7,-H*.75],[W*.7,H*.35],[-W*.7,H*.35]].map(([u,v])=>{let lx=u*cy,lz=u*sy,ly=v;const X=lx*cz-ly*sz,Y=lx*sz+ly*cz;return proj(x+X,y+Y,z+lz)});
+  g.beginPath();ip.forEach((q,k)=>k?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.closePath();g.globalAlpha=fog*0.5;g.stroke();}
+ g.globalAlpha=1;}
+function seek(t){
+ let inv=false;BEATS.forEach(b=>{const q=t-b;if(q>0.1&&q<0.167)inv=true});if(t>=8.0)inv=false;
+ const bgc=inv?'#e8eef0':'#0b0f14';g.globalAlpha=1;g.fillStyle=bgc;g.fillRect(0,0,1080,1920);
+ // radial glow
+ const gr=g.createRadialGradient(CX,CY,0,CX,CY,900);gr.addColorStop(0,inv?'#ffffff':'#0e3a3a');gr.addColorStop(1,bgc);g.fillStyle=gr;g.fillRect(0,0,1080,1920);
+ let mi=0;MS.forEach((m,k)=>{if(t>=m[0])mi=k});const m=MS[mi][1];const prev=mi>0?MS[mi-1][1]:m;const blend=EIO((t-MS[mi][0])/0.35);
+ // camera roll
+ const roll=Math.sin(t*0.7)*0.15+(t>4.32&&t<5.71?(t-4.32)*0.6:0);
+ g.save();g.translate(CX,CY);g.rotate(roll);let sh=0;HITS.forEach(h=>{const q=t-h;if(q>=0&&q<0.3)sh=Math.max(sh,1-q/0.3)});g.scale(1+0.08*sh,1+0.08*sh);g.translate(-CX,-CY);
+ if(t<8.7){const ps=cards.map((c,i)=>{let p=pose(m,c,i,t);if(blend<1&&mi>0){const q=pose(prev,c,i,t);p=p.map((v,k)=>q[k]+(v-q[k])*blend)}return p});
+  const order=ps.map((p,i)=>i).sort((a,b)=>ps[b][2]-ps[a][2]);const fade=t>8.22?1-C((t-8.22)/0.45):1;g.globalAlpha=fade;
+  const vis=t<1.92?Math.floor(8+E(t/1.9)*N):N;for(const i of order){if(fade<=0)break;if(i>=vis)continue;c_hi=cards[i].s2>0.82;drawCard(ps[i],inv);}}
+ g.restore();
+ // labels
+ const lc=inv?'#0b0f14':'#5ee0d2';['l1','l2','l3','l4'].forEach(id=>$(id).style.color=lc);$('l2').textContent=(m.toUpperCase())+' · '+String(Math.floor(t*30)).padStart(4,'0');
+ // hero
+ const ht=t-8.0;const hc=$('hero');hc.style.display=ht>0?'block':'none';
+ if(ht>0){const k=E(ht/0.6);const z=-2600*(1-k);const ry=180*(1-EIO((ht-0.22)/0.7))+Math.sin(ht*1.3)*8*(ht>1);
+  $('card').style.transform=`translateZ(${z}px) rotateY(${ry+ (1-k)*540}deg) rotateZ(${(1-k)*-25+Math.sin(ht)*2}deg) translateY(${Math.sin(ht*1.6)*10}px)`;
+  $('sheen').style.transform=`translateX(${-60+((ht*0.6)%1.5)*120}%)`;}
+ $('wm').style.opacity=E((t-9.0)/0.4);$('wm').style.transform=`translateY(${(1-E((t-9.0)/0.4))*40}px)`;
+ $('tag').style.opacity=E((t-9.4)/0.4);$('tag').style.letterSpacing=`${14+(1-E((t-9.4)/0.8))*30}px`;
+ let fo=0;HITS.forEach(h=>{const q=t-h;if(q>=0&&q<0.12)fo=Math.max(fo,0.75*(1-q/0.12))});$('fl').style.opacity=fo;
+}
+seek(0);
+</script></body></html>
