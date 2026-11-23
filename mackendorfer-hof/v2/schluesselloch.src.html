@@ -133,14 +133,18 @@ footer a:hover{color:var(--ink)}
 
 
 /* Wegweiser: kleine Peitsche am rechten Rand */
-.whip{position:fixed;z-index:15;right:max(18px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);height:min(62vh,520px);width:44px;opacity:calc(.35 + var(--wv,0)*.65);transition:opacity .5s var(--ease)}
+.whip{position:fixed;z-index:15;right:max(22px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);height:min(64vh,540px);aspect-ratio:44/400;width:auto;opacity:calc(.35 + var(--wv,0)*.65);transition:opacity .5s var(--ease)}
 .whip svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.whip .base{fill:none;stroke:var(--ink-3);stroke-opacity:.45;stroke-width:1.4;stroke-linecap:round}
-.whip .fill{fill:none;stroke:var(--brass);stroke-width:1.8;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--wp,0))}
-.whip .grip{fill:#1E1714;stroke:var(--brass);stroke-width:1}
+.whip .fill{fill:none;stroke:var(--brass);stroke-opacity:.9;stroke-width:1.3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--wp,0))}
+.whip .lash{stroke:#120D0A;stroke-width:.5}
+.whip .braid{fill:none;stroke:#8C705A;stroke-opacity:.55;stroke-width:1.1;stroke-dasharray:1.6 2.4}
+.whip .mid{fill:none;stroke:none}
+.whip .loop{fill:none;stroke:#3A2C24;stroke-width:1.6}
+.whip .falls path{fill:none;stroke:#4E3D31;stroke-width:1.5;stroke-linecap:round}
+.whip .falls path:nth-child(odd){stroke:#6A5242}
 .whip .wrap-line{stroke:var(--brass);stroke-opacity:.55;stroke-width:.8}
 .whip .cap{fill:var(--brass)}
-.whip a{position:absolute;right:0;transform:translate(50%,-50%);width:44px;height:44px;display:grid;place-items:center;text-decoration:none}
+.whip a{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;display:grid;place-items:center;text-decoration:none}
 .whip a::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--night);border:1px solid var(--ink-3);transition:all .35s var(--ease)}
 .whip a.on::before{background:var(--brass);border-color:var(--brass);transform:scale(1.35)}
 .whip a span{position:absolute;right:38px;white-space:nowrap;font-size:.75rem;letter-spacing:.06em;color:var(--ink-2);opacity:0;transform:translateX(6px);transition:all .35s var(--ease);pointer-events:none}
@@ -171,14 +175,21 @@ footer a:hover{color:var(--ink)}
 </header>
 
 <nav class="whip" aria-label="Wo ihr gerade seid">
-  <svg viewBox="0 0 44 400" preserveAspectRatio="none" aria-hidden="true">
-    <rect class="grip" x="16" y="6" width="12" height="66" rx="5"/>
-    <path class="wrap-line" d="M16 18l12 6M16 30l12 6M16 42l12 6M16 54l12 6"/>
-    <circle class="cap" cx="22" cy="5" r="4.5"/>
-    <rect class="cap" x="14.5" y="70" width="15" height="5" rx="1.5"/>
-    <path class="base" id="lash" d="M22 76 C 31 140, 13 205, 24 268 S 17 352, 27 396"/>
-    <path class="fill" pathLength="1" d="M22 76 C 31 140, 13 205, 24 268 S 17 352, 27 396"/>
-    <path class="cap" d="M27 396 l5 4 -6 -1 z"/>
+  <svg viewBox="0 0 44 400" aria-hidden="true">
+    <defs>
+      <linearGradient id="leder" x1="0" x2="1"><stop offset="0" stop-color="#2B201A"/><stop offset=".45" stop-color="#6A5242"/><stop offset="1" stop-color="#241A15"/></linearGradient>
+      <linearGradient id="griff" x1="0" x2="1"><stop offset="0" stop-color="#17110E"/><stop offset=".5" stop-color="#3A2C24"/><stop offset="1" stop-color="#130E0B"/></linearGradient>
+    </defs>
+    <path class="loop" d="M19 6 C 9 -14, 35 -14, 25 6"/>
+    <circle class="cap" cx="22" cy="7" r="4.2"/>
+    <rect x="16" y="9" width="12" height="62" rx="4.5" fill="url(#griff)" stroke="#B9965F" stroke-width=".9"/>
+    <path class="wrap-line" d="M16 15l12 7M16 23l12 7M16 31l12 7M16 39l12 7M16 47l12 7M16 55l12 7M16 63l12 6"/>
+    <rect class="cap" x="15" y="69" width="14" height="5" rx="1.5"/>
+    <path class="lash" fill="url(#leder)"/>
+    <path class="braid"/>
+    <path id="lash" class="mid"/>
+    <path class="fill" pathLength="1"/>
+    <g class="falls"></g>
   </svg>
   <a href="#gewoelbe" data-t="gewoelbe"><span>Gewölbe</span></a>
   <a href="#loft" data-t="loft"><span>Loft</span></a>
@@ -330,18 +341,36 @@ footer a:hover{color:var(--ink)}
     stage.addEventListener('mouseleave',function(){door.style.setProperty('--mx',0);door.style.setProperty('--my',0);});
   }
   var whip=document.querySelector('.whip');if(!whip)return;
-  var lash=whip.querySelector('#lash'),links=[].slice.call(whip.querySelectorAll('a')),len=lash.getTotalLength();
-  links.forEach(function(a,i){var f=.06+i*(.9/(links.length-1)),pt=lash.getPointAtLength(f*len);
-    a.style.top=(pt.y/400*100)+'%';a.style.right=(44-pt.x)+'px';a.dataset.f=f;});
-  var secs=links.map(function(a){return document.getElementById(a.dataset.t);});
+  var NS='http://www.w3.org/2000/svg',lashEl=whip.querySelector('.lash'),braid=whip.querySelector('.braid'),
+      mid=whip.querySelector('#lash'),fill=whip.querySelector('.fill'),falls=whip.querySelector('.falls');
+  var Y0=74,Y1=344,N=40,F=9,fallEls=[];
+  for(var k=0;k<F;k++){var fp=document.createElementNS(NS,'path');falls.appendChild(fp);fallEls.push(fp);}
+  var links=[].slice.call(whip.querySelectorAll('a')),secs=links.map(function(a){return document.getElementById(a.dataset.t);});
+  links.forEach(function(a,i){a.dataset.f=.06+i*(.9/(links.length-1));});
+  function sway(s,t){return 7.5*Math.pow(s,1.5)*Math.sin(t*1.15-s*3.4)+2.2*Math.pow(s,2)*Math.sin(t*2.3-s*6+1.3);}
+  function draw(t){
+    var c=[],L=[],R=[];
+    for(var i=0;i<=N;i++){var s=i/N,y=Y0+s*(Y1-Y0),x=22+sway(s,t),w=3.1*(1-s)+.7;c.push([x,y]);L.push([x-w,y]);R.push([x+w,y]);}
+    var d='M'+c.map(function(p){return p[0].toFixed(2)+' '+p[1].toFixed(1);}).join('L');
+    mid.setAttribute('d',d);fill.setAttribute('d',d);braid.setAttribute('d','M'+c.slice(0,Math.round(N*.8)).map(function(p){return p[0].toFixed(2)+' '+p[1].toFixed(1);}).join('L'));
+    lashEl.setAttribute('d','M'+L.map(function(p){return p[0].toFixed(2)+' '+p[1].toFixed(1);}).join('L')+'L'+R.reverse().map(function(p){return p[0].toFixed(2)+' '+p[1].toFixed(1);}).join('L')+'Z');
+    var tip=c[N],dir=c[N][0]-c[N-2][0];
+    fallEls.forEach(function(fp,k){var a=(k-(F-1)/2)*.11,len=40+((k*7)%5)*2.6,ph=t*1.6+k*.7;
+      var ex=tip[0]+Math.sin(a)*len*.9+dir*2.2+Math.sin(ph)*3.2,ey=tip[1]+Math.cos(a)*len;
+      var cx=tip[0]+Math.sin(a)*len*.45+dir*1.6+Math.sin(ph-.8)*1.8,cy=tip[1]+len*.5;
+      fp.setAttribute('d','M'+tip[0].toFixed(2)+' '+tip[1].toFixed(1)+'Q'+cx.toFixed(2)+' '+cy.toFixed(1)+' '+ex.toFixed(2)+' '+ey.toFixed(1));});
+    var len=mid.getTotalLength();
+    links.forEach(function(a){var pt=mid.getPointAtLength(parseFloat(a.dataset.f)*len);a.style.top=(pt.y/400*100)+'%';a.style.left=(pt.x/44*100)+'%';});
+  }
   function upd(){
-    var y=window.scrollY+innerHeight*.45,doc=document.documentElement.scrollHeight-innerHeight;
-    var on=-1;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)on=i;});
+    var y=window.scrollY+innerHeight*.45,on=-1;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)on=i;});
     links.forEach(function(a,i){a.classList.toggle('on',i===on);});
-    var first=secs[0].offsetTop-innerHeight*.45,wp=on<0?0:Math.min(1,parseFloat(links[on].dataset.f)+.02);
-    whip.style.setProperty('--wp',(window.scrollY<first?0:wp).toFixed(3));
+    var first=secs[0].offsetTop-innerHeight*.45;
+    whip.style.setProperty('--wp',(on<0||window.scrollY<first?0:Math.min(1,parseFloat(links[on].dataset.f)+.02)).toFixed(3));
     whip.style.setProperty('--wv',window.scrollY>first?1:0);
   }
+  draw(0);
+  if(!reduce){var t0=performance.now();(function loop(now){if(!document.hidden)draw((now-t0)/1000);requestAnimationFrame(loop);})(t0);}
   window.addEventListener('scroll',function(){requestAnimationFrame(upd);},{passive:true});
   window.addEventListener('resize',upd);upd();
 })();
