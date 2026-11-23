@@ -3,7 +3,9 @@
 **Für alle gilt (an jeden Prompt anhängen):**
 `Style: vertical 9:16, cinematic, dark low-key lighting, thin red rim light, subtle teal screen glow, shallow depth of field, 35mm grain, realistic. No on-screen text, no logos, no subtitles, no voiceover, no narration. Trading cards only from the back, in sleeves or out of focus, no readable card artwork.`
 
-Overlays, Logo, echte UI-Screens und dein ElevenLabs-Voiceover kommen in der Post. KI-Personen/Kinder → als KI kennzeichnen.
+**Logo-Ende (Pflicht):** Jeder Prompt endet zusätzlich mit: `Final 2 seconds: camera settles on a calm, dark, empty negative space (black-graphite background) — clean area reserved for a logo, no objects, no text.` Danach wird `assets/endcard-9x16.mp4` (2,5 s, Original-Logo weiß auf Graphite) angeschnitten. Das Logo NIE von Seedance generieren lassen – KI verfälscht Schriftzüge.
+
+Overlays, echte UI-Screens und dein ElevenLabs-Voiceover kommen in der Post. KI-Personen/Kinder → als KI kennzeichnen.
 
 ---
 
