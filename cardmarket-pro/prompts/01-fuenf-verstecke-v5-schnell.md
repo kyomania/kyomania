@@ -1,3 +1,5 @@
+> ⚠️ VERALTET – aktuelle Prompts: `seedance-v3-10s.md`
+
 # Idee 1 – Fünf Verstecke · v5 schnelle Schnitte · Seedance 15 s · 9:16
 
 Vertical 9:16 cinematic short film, 15 seconds, 1080p, fast-paced editing with hard cuts on every beat, roughly one cut per second, energetic rhythm. Dark low-key lighting, cool graphite shadows, thin red rim light on edges. Realistic home interiors, The phone screen is a flat solid green placeholder, but the light it casts is like a real phone: soft neutral white light, no color tint — never green or teal light on faces, hands, cards or surroundings.  shallow depth of field, 35mm grain. No warm amber tones. No on-screen text, no logos, no subtitles. No intelligible speech, no voiceover, nobody speaks on camera; human sounds only non-verbal.

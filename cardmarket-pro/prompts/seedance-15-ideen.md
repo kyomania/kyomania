@@ -1,3 +1,5 @@
+> ⚠️ VERALTET – aktuelle Prompts: `seedance-v3-10s.md`
+
 # cardmarket.pro – 15 Seedance-Prompts à 15 s (9:16)
 
 > ⚠️ Ideen 2–15 veraltet – aktuelle Fassung: `seedance-v2-ideen-02-15.md`

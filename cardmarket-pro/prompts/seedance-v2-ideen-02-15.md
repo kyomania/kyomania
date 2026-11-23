@@ -1,3 +1,5 @@
+> ⚠️ VERALTET – aktuelle Prompts: `seedance-v3-10s.md`
+
 # cardmarket.pro – Seedance-Prompts v2.1 · Ideen 2–15 · inkl. Arthur-Voiceover
 Stand 23.11.2026 (v2.1: Kartenvorderseiten sichtbar, wo die Handlung sie braucht) · gültig ab jetzt (ersetzt 2–15 in `seedance-15-ideen.md`). Idee 1 = `01-fuenf-verstecke-v5-schnell.md`.
 
