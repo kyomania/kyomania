@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Inter:wght@500;700&display=swap');
+*{margin:0;padding:0}html,body{width:1080px;height:1920px;overflow:hidden;background:#7d8589;font-family:Inter}
+#lg{position:absolute;width:880px;left:100px;top:880px;opacity:0}#wb{position:absolute;inset:0;background:#d9dee1;opacity:0}
+</style><script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script></head><body>
+<div id="wb"></div><img id="lg" src="logo_original.png">
+<script type="module">
+import * as THREE from 'three';
+await document.fonts.load('400 100px "Rubik Mono One"');await document.fonts.load('700 20px Inter');
+// poster texture
+const PW=1200,PH=1800;const pc=document.createElement('canvas');pc.width=PW;pc.height=PH;const x=pc.getContext('2d');
+x.fillStyle='#0b0f14';x.fillRect(0,0,PW,PH);
+const ink='#eef3f2',mint='#5ee0d2';x.textBaseline='alphabetic';
+function line(txt,y,col,max){let fs=400;x.font=`400 ${fs}px "Rubik Mono One"`;while(x.measureText(txt).width>max){fs-=4;x.font=`400 ${fs}px "Rubik Mono One"`}x.fillStyle=col;x.fillText(txt,80,y);return fs}
+line('TRACK',520,ink,1040);line('TRADE',960,ink,1040);line('COLLECT.',1360,mint,1040);
+x.fillStyle=ink;x.font='700 26px Inter';x.fillText('CARDMARKET.PRO',80,1520);x.fillText('TCG & SPORTS CARDS — WORLDWIDE',80,1560);x.fillText('FREE COLLECTOR & PRICE INDEX',80,1600);
+x.font='700 22px Inter';x.fillStyle=mint;x.fillText('→ BUY  → SELL  → COLLECT',760,1560);
+x.strokeStyle=mint;x.lineWidth=8;x.beginPath();x.moveTo(80,120);x.lineTo(1120,120);x.stroke();x.fillStyle=ink;x.font='700 24px Inter';x.fillText('NO. 01 / 2026',80,90);x.fillText('↗',1090,90);
+const tex=new THREE.CanvasTexture(pc);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=8;
+const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});r.setSize(1080,1920);r.toneMapping=THREE.ACESFilmicToneMapping;r.outputColorSpace=THREE.SRGBColorSpace;r.shadowMap.enabled=true;document.body.prepend(r.domElement);r.domElement.style.position='absolute';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#7d8589');
+const cam=new THREE.PerspectiveCamera(32,1080/1920,0.1,200);
+scene.add(new THREE.HemisphereLight('#ffffff','#5b6366',1.5));const dl=new THREE.DirectionalLight('#ffffff',2.2);dl.position.set(-5,8,10);dl.castShadow=true;dl.shadow.mapSize.set(2048,2048);Object.assign(dl.shadow.camera,{left:-8,right:8,top:10,bottom:-10});scene.add(dl);
+const rim=new THREE.DirectionalLight('#9ff5ea',1.2);rim.position.set(6,-2,-4);scene.add(rim);
+const W=6,H=9,NC=24,NR=36;const cw=W/NC,ch=H/NR;
+const side=new THREE.MeshStandardMaterial({color:'#11161b',roughness:0.6});const face=new THREE.MeshStandardMaterial({map:tex,roughness:0.55});
+let sd=5;const R=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
+const cells=[];const grp=new THREE.Group();scene.add(grp);
+// column groups: merge vertical runs into bars of random length
+for(let c=0;c<NC;c++){let rr=0;while(rr<NR){const len=1+Math.floor(R()*5);const n=Math.min(len,NR-rr);
+ const g=new THREE.BoxGeometry(cw,ch*n,1);const uv=g.attributes.uv;// face index 4 = +z
+ const u0=c/NC,u1=(c+1)/NC,v1=1-rr/NR,v0=1-(rr+n)/NR;
+ for(let i=0;i<uv.count;i++){}
+ // set +z face uvs (vertices 16..19)
+ uv.setXY(16,u0,v1);uv.setXY(17,u1,v1);uv.setXY(18,u0,v0);uv.setXY(19,u1,v0);uv.needsUpdate=true;
+ const m=new THREE.Mesh(g,[side,side,side,side,face,side]);m.castShadow=m.receiveShadow=true;
+ m.position.set(-W/2+cw*(c+0.5),H/2-ch*(rr+n/2),0);grp.add(m);cells.push({m,d:R(),p:R(),c,rr});rr+=n;}}
+// glass slabs
+const gm=new THREE.MeshPhysicalMaterial({color:'#5ee0d2',transparent:true,opacity:0.55,roughness:0.15,metalness:0,clearcoat:1,emissive:'#1a8f84',emissiveIntensity:0.35});
+const gm2=gm.clone();gm2.color.set('#9ff5ea');gm2.opacity=0.4;
+const slabs=[];for(let i=0;i<7;i++){const w=0.18+R()*0.45,h=2+R()*4;const s=new THREE.Mesh(new THREE.BoxGeometry(w,h,0.5+R()*1.2),i%3?gm:gm2);grp.add(s);slabs.push({s,x:-W/2+R()*W,h,sp:0.6+R()*1.6,ph:R()*10,z:0.4+R()*1.4})}
+const C=v=>Math.min(Math.max(v,0),1),E=v=>1-Math.pow(1-C(v),3),EIO=v=>{v=C(v);return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2};
+// shots: [start, type, params]
+const SH=[[0,'orbitL'],[1.92,'flat'],[2.4,'orbitR'],[4.32,'close'],[5.71,'orbitL2'],[7.13,'flat'],[7.6,'top'],[9.0,'out']];
+window.seek=function(t){
+ let si=0;SH.forEach((s,k)=>{if(t>=s[0])si=k});const sh=SH[si][1],lt=t-SH[si][0];
+ // extrusion amount
+ let ex=1;if(sh=='flat')ex=0;else ex=E(lt/0.35);if(sh=='out')ex=1-EIO(lt/0.8);
+ cells.forEach(o=>{const wave=Math.sin(t*2.2+o.c*0.35+o.rr*0.1)*0.5+0.5;const d=(0.08+o.d*0.55*(0.5+0.5*wave))*ex;o.m.scale.z=0.02+d;o.m.position.z=(0.02+d)/2+ (o.p>0.85?Math.sin(t*3+o.d*9)*0.15*ex:0);});
+ slabs.forEach(o=>{const y=((t*o.sp+o.ph)%3)/3*(H+o.h)-(H+o.h)/2;o.s.position.set(o.x,y,o.z*ex+0.1);o.s.visible=ex>0.05;});
+ // camera
+ const T=new THREE.Vector3(0,0,0.3);
+ if(sh=='flat'){cam.position.set(0,0,19.5);cam.fov=32;}
+ if(sh=='orbitL'){const a=-0.42+lt*0.1;cam.position.set(Math.sin(a)*18,0.8,Math.cos(a)*18);cam.fov=36;}
+ if(sh=='orbitR'){const a=0.48-lt*0.1;cam.position.set(Math.sin(a)*17,-1.0+lt*0.3,Math.cos(a)*17);cam.fov=34;}
+ if(sh=='close'){cam.position.set(3.0-lt*0.5,2.2,8.5);T.set(0.2-lt*0.3,2.0,0.3);cam.fov=40;}
+ if(sh=='orbitL2'){const a=-0.55+lt*0.2;cam.position.set(Math.sin(a)*16,2.0-lt*0.5,Math.cos(a)*16);cam.fov=36;}
+ if(sh=='top'){cam.position.set(1.2,7-lt*1.2,14);T.set(0,0.5,0);cam.fov=38;}
+ if(sh=='out'){const k=EIO(lt/0.9);cam.position.set(0,0,19.5+k*6);cam.fov=32;}
+ cam.lookAt(T);cam.updateProjectionMatrix();
+ grp.rotation.z=sh=='orbitR'?0.04:0;
+ r.render(scene,cam);
+ const w=document.getElementById('wb'),l=document.getElementById('lg');const q=t-9.9;w.style.opacity=E(q/0.35);l.style.opacity=E((q-0.25)/0.4);l.style.transform=`scale(${0.94+0.06*E((q-0.25)/0.9)})`;
+};
+window.ready=true;seek(0);
+</script></body></html>
