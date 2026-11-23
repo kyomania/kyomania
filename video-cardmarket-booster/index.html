@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/three.min.js"></script>
+    <script src="assets/RoundedBoxGeometry.js"></script>
+    <style>
+      :root { --graphite: #0a1118; --font-mono: "JetBrains Mono", monospace; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #e6e9eb; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden;
+        background: radial-gradient(120% 70% at 50% 42%, #f3f5f6 0%, #e4e8ea 55%, #d3d8db 100%); }
+      .clip { position: absolute; inset: 0; }
+      #shadow { position: absolute; left: 50%; top: 1330px; width: 560px; height: 110px; margin-left: -280px; border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(10,17,24,.32), rgba(10,17,24,0)); }
+      #out { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #tag { font-family: var(--font-mono); font-size: 30px; letter-spacing: .2em; text-transform: uppercase; color: var(--graphite); text-align: center; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="8" data-track-index="0">
+        <div id="shadow"></div>
+        <canvas id="out" width="1080" height="1920"></canvas>
+      </div>
+      <img id="word" class="clip" src="assets/wordmark-light.png" alt="cardmarket.pro" data-start="0" data-duration="8" data-track-index="1"
+        style="inset:auto;left:90px;top:1500px;width:900px;height:auto;mix-blend-mode:multiply;opacity:0" />
+      <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="2" style="inset:auto;left:0;right:0;top:1700px;opacity:0">Open. Trade. Collect.</div>
+
+      <audio id="music" src="assets/music.mp3" data-start="0" data-duration="8" data-volume="0.75" data-fade-out="0.8" data-track-index="5"></audio>
+      <audio id="tear" src="assets/tear.wav" data-start="1.8" data-duration="0.45" data-volume="0.9" data-track-index="6"></audio>
+      <audio id="w1" src="assets/whoosh.wav" data-start="2.2" data-duration="0.35" data-volume="0.45" data-track-index="7"></audio>
+      <audio id="w2" src="assets/whoosh.wav" data-start="2.5" data-duration="0.35" data-volume="0.45" data-track-index="7"></audio>
+      <audio id="w3" src="assets/whoosh.wav" data-start="2.8" data-duration="0.35" data-volume="0.45" data-track-index="7"></audio>
+      <audio id="w4" src="assets/whoosh.wav" data-start="3.1" data-duration="0.35" data-volume="0.45" data-track-index="7"></audio>
+      <audio id="shim" src="assets/shimmer.wav" data-start="4.0" data-duration="1.2" data-volume="0.7" data-track-index="8"></audio>
+    </div>
+
+    <script>
+      const MINT = "#5ee0d4", TEAL = "#00877a", GR = "#0a1118", W = "#ffffff", PAPER = "#f0f3f4";
+      const CARD = new Path2D("M210,170 L640,70 L690,130 L605,690 Q600,725 560,730 L180,770 Q110,775 110,700 L150,230 Q155,180 210,170 Z");
+      const CC = new Path2D("M435,258 L370,385 L345,410 Q330,440 340,490 Q350,525 380,525 L580,525 L565,640 Q562,648 550,648 L320,648 Q240,640 210,560 Q195,520 205,420 Q220,350 280,320 Z");
+      const ACC = new Path2D("M495,238 L610,238 Q620,240 612,252 L548,375 Q540,385 528,385 L420,385 Q410,383 415,372 Z");
+      const mono = (px, w = 500) => `${w} ${px}px "JetBrains Mono", monospace`;
+      const disp = (px) => `900 ${px}px "Inter Tight", sans-serif`;
+      function mark(g, cx, cy, s, card, c, acc) {
+        g.save(); g.translate(cx - 400 * s, cy - 420 * s); g.scale(s, s);
+        g.fillStyle = card; g.fill(CARD); g.fillStyle = c; g.fill(CC); g.fillStyle = acc; g.fill(ACC); g.restore();
+      }
+      function minis(g, w, h, col, alpha) {
+        g.save(); g.globalAlpha = alpha; g.fillStyle = col;
+        for (let r = 0; r < 14; r++) for (let c = 0; c < 9; c++) {
+          if ((r * 5 + c * 3) % 4 === 0) continue;
+          g.save(); g.translate(30 + c * 62 + (r % 2) * 20, 30 + r * 62); g.rotate(((r + c) % 3 - 1) * 0.3);
+          g.beginPath(); g.roundRect(-11, -15, 22, 30, 4); g.fill(); g.restore();
+        }
+        g.restore();
+      }
+      const mk = (w, h) => Object.assign(document.createElement("canvas"), { width: w, height: h });
+
+      // ---------- textures ----------
+      const C = {};
+      function paintPack() {
+        const f = C.packF || (C.packF = mk(600, 960)), g = f.getContext("2d");
+        g.fillStyle = GR; g.fillRect(0, 0, 600, 960);
+        minis(g, 600, 960, MINT, 0.12);
+        const grd = g.createLinearGradient(0, 0, 600, 960); grd.addColorStop(0, "rgba(94,224,212,.25)"); grd.addColorStop(.5, "rgba(0,0,0,0)"); grd.addColorStop(1, "rgba(0,135,122,.35)");
+        g.fillStyle = grd; g.fillRect(0, 0, 600, 960);
+        mark(g, 300, 430, 0.46, MINT, GR, TEAL);
+        g.fillStyle = W; g.font = disp(58); g.textAlign = "center"; g.fillText("BOOSTER", 300, 720);
+        g.fillStyle = MINT; g.font = mono(24, 700); g.fillText("CARDMARKET.PRO · 5 CARDS", 300, 770);
+        g.fillStyle = MINT; g.fillRect(0, 860, 600, 8);
+        g.fillStyle = W; g.font = mono(20); g.textAlign = "left"; g.fillText("SERIES 01", 40, 910); g.textAlign = "right"; g.fillText("2026©", 560, 910);
+        const b = C.packB || (C.packB = mk(600, 960)), h = b.getContext("2d");
+        h.fillStyle = TEAL; h.fillRect(0, 0, 600, 960); minis(h, 600, 960, MINT, 0.35);
+        h.fillStyle = W; h.font = mono(22); h.textAlign = "center"; h.fillText("BUY · SELL · TRADE · COLLECT", 300, 900);
+        const s = C.strip || (C.strip = mk(600, 100)), k = s.getContext("2d");
+        k.fillStyle = MINT; k.fillRect(0, 0, 600, 100); k.fillStyle = TEAL;
+        for (let x = 0; x < 600; x += 16) k.fillRect(x, 0, 8, 100);
+        k.fillStyle = GR; k.font = mono(20, 700); k.textAlign = "center"; k.fillText("TEAR HERE", 300, 60);
+      }
+      function cardFront(key, bg, fg, word, n) {
+        const cv = C[key] || (C[key] = mk(512, 716)), g = cv.getContext("2d");
+        g.fillStyle = bg; g.fillRect(0, 0, 512, 716);
+        g.strokeStyle = fg; g.globalAlpha = .35; g.lineWidth = 3; g.strokeRect(22, 22, 468, 672); g.globalAlpha = 1;
+        g.fillStyle = fg; g.font = mono(20, 700); g.textAlign = "left"; g.fillText("CARDMARKET.PRO", 44, 66);
+        g.textAlign = "right"; g.fillText(`${n}/05`, 468, 66);
+        let size = 130; g.font = disp(size); while (g.measureText(word).width > 420) { size -= 6; g.font = disp(size); }
+        g.textAlign = "center"; g.fillText(word, 256, 400);
+        mark(g, 256, 580, 0.14, fg, bg, fg);
+      }
+      function cardBack() {
+        const cv = C.back || (C.back = mk(512, 716)), g = cv.getContext("2d");
+        g.fillStyle = MINT; g.fillRect(0, 0, 512, 716); minis(g, 512, 716, TEAL, 0.25);
+        g.strokeStyle = GR; g.lineWidth = 6; g.strokeRect(20, 20, 472, 676);
+        mark(g, 256, 358, 0.36, GR, MINT, TEAL);
+      }
+      function rareFront(t) {
+        const cv = C.rare || (C.rare = mk(512, 716)), g = cv.getContext("2d");
+        g.fillStyle = GR; g.fillRect(0, 0, 512, 716);
+        const a = t * 1.6;
+        const grd = g.createLinearGradient(256 + Math.cos(a) * 500, 358 + Math.sin(a) * 700, 256 - Math.cos(a) * 500, 358 - Math.sin(a) * 700);
+        ["#5ee0d4", "#9b8cff", "#ff8fd0", "#ffd36b", "#7cf0a8", "#5ec8ff", "#5ee0d4"].forEach((c, i) => grd.addColorStop(i / 6, c));
+        g.globalAlpha = 0.55; g.fillStyle = grd; g.fillRect(0, 0, 512, 716); g.globalAlpha = 1;
+        minis(g, 512, 716, W, 0.12);
+        g.fillStyle = "rgba(10,17,24,.55)"; g.fillRect(36, 36, 440, 644);
+        g.strokeStyle = W; g.lineWidth = 3; g.strokeRect(36, 36, 440, 644);
+        mark(g, 256, 340, 0.4, MINT, GR, TEAL);
+        g.fillStyle = W; g.font = mono(22, 700); g.textAlign = "center"; g.fillText("★ ULTRA RARE ★", 256, 600);
+        g.font = mono(18); g.fillText("CARDMARKET.PRO · 05/05", 256, 640);
+      }
+      function paintAll() {
+        paintPack(); cardBack();
+        cardFront("buy", W, GR, "BUY", "01"); cardFront("sell", TEAL, W, "SELL", "02");
+        cardFront("trade", MINT, GR, "TRADE", "03"); cardFront("collect", GR, MINT, "COLLECT", "04");
+        rareFront(0);
+        texs.forEach((t) => (t.needsUpdate = true));
+      }
+
+      // ---------- three ----------
+      const W3 = 1080, H3 = 1920, texs = [];
+      paintPack(); cardBack(); cardFront("buy", W, GR, "BUY", "01"); cardFront("sell", TEAL, W, "SELL", "02");
+      cardFront("trade", MINT, GR, "TRADE", "03"); cardFront("collect", GR, MINT, "COLLECT", "04"); rareFront(0);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1); renderer.setSize(W3, H3, false);
+      renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(28, W3 / H3, 0.1, 100); camera.position.set(0, 0, 12);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0xb8c2c8, 0.8));
+      const key = new THREE.DirectionalLight(0xffffff, 1.5); key.position.set(-4, 6, 8); scene.add(key);
+      const rim = new THREE.DirectionalLight(0xffffff, 0.7); rim.position.set(5, -1, -5); scene.add(rim);
+      const tex = (cv) => { const t = new THREE.CanvasTexture(cv); t.encoding = THREE.sRGBEncoding; t.anisotropy = 8; texs.push(t); return t; };
+      const edge = new THREE.MeshStandardMaterial({ color: 0xdfe5e7, roughness: 0.5 });
+      const face = (cv, rough = 0.42, metal = 0) => new THREE.MeshStandardMaterial({ map: tex(cv), roughness: rough, metalness: metal });
+
+      // pack (foil pillow approximated with rounded box)
+      const pack = new THREE.Group(); scene.add(pack);
+      const packMats = [edge, edge, edge, edge, face(C.packF, 0.28, 0.25), face(C.packB, 0.3, 0.2)];
+      const body = new THREE.Mesh(new THREE.RoundedBoxGeometry(1.6, 2.5, 0.16, 4, 0.06), packMats); pack.add(body);
+      const stripMats = [edge, edge, edge, edge, face(C.strip, 0.3, 0.2), face(C.strip, 0.3, 0.2)];
+      const strip = new THREE.Mesh(new THREE.RoundedBoxGeometry(1.6, 0.22, 0.1, 3, 0.03), stripMats); scene.add(strip);
+
+      // cards
+      const cardGeo = new THREE.RoundedBoxGeometry(0.9, 1.26, 0.022, 3, 0.008);
+      const backMat = face(C.back, 0.4);
+      const mkCard = (cv, rough, metal) => new THREE.Mesh(cardGeo, [edge, edge, edge, edge, face(cv, rough, metal), backMat]);
+      const cards = ["buy", "sell", "trade", "collect"].map((k) => mkCard(C[k], 0.4, 0));
+      const rare = mkCard(C.rare, 0.18, 0.45); const rareTex = rare.material[4].map;
+      [...cards, rare].forEach((c) => scene.add(c));
+
+      // ---------- motion helpers ----------
+      const cl = (v) => Math.min(1, Math.max(0, v));
+      const eOut = (p) => 1 - Math.pow(1 - p, 3), eIn = (p) => p * p * p;
+      const eIO = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+      const eBack = (p) => { const c1 = 1.5, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+      const lerp = (a, b, p) => a + (b - a) * p;
+      const FAN = [[-1.15, 1.35, -0.15], [-0.4, 1.6, 0.06], [0.4, 1.6, -0.06], [1.15, 1.35, 0.15]];
+
+      function pose(t) {
+        // pack
+        const enter = eOut(cl(t / 1.1)), drop = eIn(cl((t - 4.5) / 0.7));
+        const shake = t > 1.15 && t < 1.8 ? Math.sin(t * 70) * 0.05 * Math.sin(((t - 1.15) / 0.65) * Math.PI) : 0;
+        const px = 0, py = lerp(-6, -0.55, enter) - 6 * drop + 0.05 * Math.sin(t * 2);
+        pack.position.set(px, py, 0);
+        pack.rotation.set(0.12 + 0.1 * Math.sin(t * 1.1), (1 - enter) * 1.6 + 0.22 * Math.sin(t * 0.9), shake + drop * 0.5);
+        // strip: attached until tear at 1.8
+        const tear = cl((t - 1.8) / 0.75);
+        const sp = new THREE.Vector3(0, 1.36, 0).applyEuler(pack.rotation).add(pack.position);
+        strip.position.set(sp.x + 1.4 * eOut(tear), sp.y + 3.2 * eOut(tear), sp.z + 0.8 * tear);
+        strip.rotation.set(pack.rotation.x + 1.2 * tear, pack.rotation.y + 0.6 * tear, pack.rotation.z - 1.9 * eOut(tear));
+        strip.visible = tear < 1;
+        const inside = new THREE.Vector3(0, -0.25, 0).applyEuler(pack.rotation).add(pack.position);
+        // fan cards
+        cards.forEach((c, i) => {
+          const t0 = 2.2 + i * 0.3, p = eBack(cl((t - t0) / 0.75)), out = eIn(cl((t - 5.35 - i * 0.05) / 0.7));
+          const [fx, fy, rz] = FAN[i];
+          const tx = fx * (1 + 1.8 * out), ty = fy + 4.5 * out, tz = -0.7 - 0.5 * out;
+          c.position.set(lerp(inside.x, tx, p), lerp(inside.y, ty, p), lerp(inside.z - 0.01 * i, tz, p));
+          c.rotation.set(pack.rotation.x * (1 - p) - 0.1 * p, (1 - cl((t - t0) / 0.75)) * Math.PI * 2 + (t < t0 ? pack.rotation.y : 0), lerp(pack.rotation.z, -rz * 1.4, p));
+          c.visible = t >= t0 - 0.02 && out < 1;
+        });
+        // rare card
+        const r0 = 3.9, rise = eOut(cl((t - r0) / 0.9)), spin = eOut(cl((t - r0) / 1.9)), settle = eIO(cl((t - 5.4) / 0.8));
+        rare.position.set(lerp(inside.x, 0, rise), lerp(inside.y, 0.75, rise) + 0.06 * Math.sin(t * 2.3) * (1 - settle), lerp(inside.z, 1.6, rise));
+        rare.rotation.set(lerp(pack.rotation.x, -0.08 + 0.1 * Math.sin(t * 1.4) * (1 - settle), rise),
+          (1 - spin) * Math.PI * 6 + (t < r0 ? pack.rotation.y : 0) + 0.18 * Math.sin(t * 1.2) * (1 - settle) - 0.12 * settle,
+          lerp(pack.rotation.z, 0.04 * Math.sin(t) * (1 - settle), rise));
+        rare.scale.setScalar(lerp(1, 1.75, rise));
+        rare.visible = t >= r0 - 0.02;
+        return { packY: py, drop, rise };
+      }
+
+      const out = document.getElementById("out"), og = out.getContext("2d"), shadow = document.getElementById("shadow");
+      const SUB = 5, SHUT = (1 / 30) * 0.7;
+      let fontsOk = false;
+      function draw(t) {
+        if (!fontsOk && document.fonts && document.fonts.status === "loaded") { paintAll(); fontsOk = true; }
+        rareFront(t); rareTex.needsUpdate = true;
+        og.clearRect(0, 0, W3, H3);
+        for (let i = 0; i < SUB; i++) {
+          pose(Math.max(0, t - SHUT * (i / (SUB - 1)))); renderer.render(scene, camera);
+          og.globalAlpha = i === 0 ? 1 : 1 / (i + 1); og.drawImage(renderer.domElement, 0, 0);
+        }
+        og.globalAlpha = 1;
+        const info = pose(t);
+        const s = Math.max(0, 1 - info.drop) * Math.min(1, (info.packY + 6) / 5.45);
+        shadow.style.transform = `scale(${(0.6 + 0.4 * s + 0.15 * info.rise).toFixed(3)})`;
+        shadow.style.opacity = Math.max(s, 0.7 * info.rise).toFixed(3);
+      }
+      const state = { t: 0 };
+      if (document.fonts) document.fonts.ready.then(() => { paintAll(); fontsOk = true; draw(state.t); });
+      const tl = gsap.timeline({ paused: true });
+      tl.to(state, { t: 8, duration: 8, ease: "none", onUpdate: () => draw(state.t) }, 0);
+      tl.fromTo("#word", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 6.0);
+      tl.fromTo("#tag", { opacity: 0, y: 20 }, { opacity: 0.85, y: 0, duration: 0.5, ease: "power3.out" }, 6.3);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0); draw(0);
+    </script>
+  </body>
+</html>
