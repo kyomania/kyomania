@@ -30,6 +30,15 @@ Grüne Handy-Bildschirme werden IMMER mit `cardmarket-pro/tools-screen-tracking.
 - Bilder, in denen das Handy noch grün am Bildrand hereinschwenkt, herausschneiden; danach auf 0 grüne Pixel prüfen.
 - Export immer H.264 yuv420p, AAC Stereo 48 kHz.
 
+## Prüfpflicht vor JEDEM Senden (IMMER)
+
+Bevor ein Ergebnis an den Nutzer geht, wird es auf Zielerreichung geprüft:
+- Ziel des Auftrags in einem Satz festhalten und am fertigen Ergebnis abhaken.
+- Bewegte Einblendungen (Texte, Logos, Oberflächen): Ruhe MESSEN (Zittern = 2. Ableitung der Position, Ziel < 0,5 px/Bild) und ALLE betroffenen Bilder ansehen, nicht nur Stichproben.
+- Standbilder aus dem fertigen Export in voller Größe prüfen (nicht aus Zwischendateien).
+- Ton: alle Sätze hörbar, Format: H.264 yuv420p, Stereo.
+- Erst senden, wenn alles erfüllt ist; offene Mängel ehrlich nennen.
+
 ## Stimmen / Voiceover (IMMER)
 
 Sprachaufnahmen IMMER mit ElevenLabs v4 erzeugen (Higgsfield-Modell `elevenlabs_v4`),
