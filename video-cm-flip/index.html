@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Inter Tight", sans-serif; }
+      .clip { position: absolute; inset: 0; }
+      .slot { position: absolute; width: 440px; height: 600px; perspective: 1800px; }
+      .card { position: absolute; inset: 0; transform-style: preserve-3d; }
+      .face { position: absolute; inset: 0; border-radius: 26px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+      .face::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18)); pointer-events: none; }
+      .w { position: absolute; font-weight: 900; letter-spacing: -.05em; line-height: .8; white-space: nowrap; }
+      .rot { left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); font-size: 250px; }
+      .cor { right: 40px; top: 40px; font-size: 150px; }
+      .corb { left: 40px; bottom: 40px; font-size: 150px; }
+      .mk { position: absolute; left: 50%; top: 50%; width: 300px; height: 360px; margin: -180px 0 0 -150px; }
+      .mono { position: absolute; left: 34px; bottom: 30px; font-family: "JetBrains Mono", monospace; font-size: 22px; letter-spacing: .16em; text-transform: uppercase; opacity: .8; }
+      #tag { position: absolute; left: 0; right: 0; top: 1600px; text-align: center; color: #fff; font-weight: 900; font-size: 76px; letter-spacing: -.03em; }
+      #tag span { color: #5ee0d4; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute">
+      <symbol id="mkC" viewBox="100 60 600 720"><path d="M210,170 L640,70 L690,130 L605,690 Q600,725 560,730 L180,770 Q110,775 110,700 L150,230 Q155,180 210,170 Z" fill="#5ee0d4" />
+        <path d="M435,258 L370,385 L345,410 Q330,440 340,490 Q350,525 380,525 L580,525 L565,640 Q562,648 550,648 L320,648 Q240,640 210,560 Q195,520 205,420 Q220,350 280,320 Z" fill="#0a1118" />
+        <path d="M495,238 L610,238 Q620,240 612,252 L548,375 Q540,385 528,385 L420,385 Q410,383 415,372 Z" fill="#00877a" /></symbol>
+    </svg>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <div id="grid" class="clip" data-start="0" data-duration="8" data-track-index="0">
+        <div class="slot" style="left:88px;top:340px"><div class="card" id="c0"><div class="face" data-layout-ignore id="c0a"></div><div class="face" data-layout-ignore id="c0b"></div></div></div>
+        <div class="slot" style="left:552px;top:340px"><div class="card" id="c1"><div class="face" data-layout-ignore id="c1a"></div><div class="face" data-layout-ignore id="c1b"></div></div></div>
+        <div class="slot" style="left:88px;top:964px"><div class="card" id="c2"><div class="face" data-layout-ignore id="c2a"></div><div class="face" data-layout-ignore id="c2b"></div></div></div>
+        <div class="slot" style="left:552px;top:964px"><div class="card" id="c3"><div class="face" data-layout-ignore id="c3a"></div><div class="face" data-layout-ignore id="c3b"></div></div></div>
+      </div>
+      <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="1" style="inset:auto;left:0;right:0;top:1660px;opacity:0">Flip it on <span>cardmarket.pro</span></div>
+
+      <audio id="music" src="assets/synth.mp3" data-start="0" data-duration="8" data-volume="1" data-fade-out="0.5" data-track-index="5"></audio>
+      <audio id="f0" src="assets/flick.wav" data-start="0.540" data-duration="0.12" data-volume="0.55" data-track-index="6"></audio>
+      <audio id="f1" src="assets/flick.wav" data-start="0.665" data-duration="0.12" data-volume="0.55" data-track-index="7"></audio>
+      <audio id="f2" src="assets/flick.wav" data-start="0.790" data-duration="0.12" data-volume="0.55" data-track-index="8"></audio>
+      <audio id="f3" src="assets/flick.wav" data-start="0.915" data-duration="0.12" data-volume="0.55" data-track-index="9"></audio>
+      <audio id="f4" src="assets/flick.wav" data-start="2.040" data-duration="0.12" data-volume="0.55" data-track-index="6"></audio>
+      <audio id="f5" src="assets/flick.wav" data-start="2.165" data-duration="0.12" data-volume="0.55" data-track-index="7"></audio>
+      <audio id="f6" src="assets/flick.wav" data-start="2.290" data-duration="0.12" data-volume="0.55" data-track-index="8"></audio>
+      <audio id="f7" src="assets/flick.wav" data-start="2.415" data-duration="0.12" data-volume="0.55" data-track-index="9"></audio>
+      <audio id="f8" src="assets/flick.wav" data-start="3.540" data-duration="0.12" data-volume="0.55" data-track-index="6"></audio>
+      <audio id="f9" src="assets/flick.wav" data-start="3.665" data-duration="0.12" data-volume="0.55" data-track-index="7"></audio>
+      <audio id="f10" src="assets/flick.wav" data-start="3.790" data-duration="0.12" data-volume="0.55" data-track-index="8"></audio>
+      <audio id="f11" src="assets/flick.wav" data-start="3.915" data-duration="0.12" data-volume="0.55" data-track-index="9"></audio>
+      <audio id="f12" src="assets/flick.wav" data-start="6.040" data-duration="0.12" data-volume="0.55" data-track-index="6"></audio>
+      <audio id="f13" src="assets/flick.wav" data-start="6.100" data-duration="0.12" data-volume="0.55" data-track-index="7"></audio>
+      <audio id="f14" src="assets/flick.wav" data-start="6.160" data-duration="0.12" data-volume="0.55" data-track-index="8"></audio>
+      <audio id="f15" src="assets/flick.wav" data-start="6.220" data-duration="0.12" data-volume="0.55" data-track-index="9"></audio>
+    </div>
+
+    <script>
+      const GR = "#0a1118", MINT = "#5ee0d4", TEAL = "#00877a", DEEP = "#0c2b29", W = "#f2f5f5", PALE = "#b9f3ec";
+      // content per state per card: [html, bg, fg]
+      const rot = (t) => `<div class="w rot" style="font-size:${Math.min(250, Math.round(880 / t.length))}px">${t}</div>`, cor = (t) => `<div class="w cor">${t}</div>`, corb = (t) => `<div class="w corb">${t}</div>`;
+      const STATES = [
+        [[rot("Flip"), DEEP, MINT], [cor("It"), MINT, GR], [rot("Buy"), GR, PALE], [corb("Low"), TEAL, W]],
+        [[rot("Flip"), GR, MINT], [corb("It"), W, TEAL], [rot("Buy"), DEEP, W], [cor("Low"), MINT, GR]],
+        [[rot("Sell"), MINT, GR], [cor("High"), GR, MINT], [rot("Flip"), TEAL, W], [corb("It"), DEEP, PALE]],
+        [[rot("Trade"), W, GR], [corb("Up"), TEAL, W], [rot("Swap"), GR, MINT], [cor("It"), MINT, GR]],
+        [[`<svg class="mk"><use href="#mkC" /></svg><div class="mono">cardmarket</div>`, GR, MINT], [rot("Buy"), MINT, GR], [rot("Sell"), TEAL, W], [rot("Trade"), W, GR]],
+      ];
+      // flip schedule on the 120 bpm beat grid: state k starts at beat time, cards staggered by a 16th
+      const B = (k) => 0.04 + 0.5 * k;
+      const STATE_T = [null, B(1), B(4), B(7), B(10) + 0.2 - 0.2 + 0, B(12)];
+      // per-card flip times (index = state reached). extra mid-flips create the restless rhythm of the reference
+      const FLIPS = [0, 1, 2, 3].map((c) => [
+        [B(1) + c * 0.125, 1], [B(4) + ((c * 3) % 4) * 0.125, 2], [B(7) + ((c * 5) % 4) * 0.125, 3], [B(12) + c * 0.06, 4],
+      ]);
+      const AXIS = ["y", "x", "x", "y"];
+      const DUR = 0.42;
+
+      function fill(el, s) { const [h, bg, fg] = s; if (el.dataset.k === h + bg) return; el.dataset.k = h + bg; el.innerHTML = h; el.style.background = bg; el.style.color = fg; }
+      const ease = (p) => { const c1 = 1.2, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+
+      // set back-face base orientation
+      [0, 1, 2, 3].forEach((c) => { document.getElementById(`c${c}b`).style.transform = AXIS[c] === "y" ? "rotateY(180deg)" : "rotateX(180deg)"; });
+
+      function render(t) {
+        [0, 1, 2, 3].forEach((c) => {
+          const fl = FLIPS[c]; let done = 0, part = 0, cur = 0;
+          fl.forEach(([ft, st], i) => { if (t >= ft + DUR) { done = i + 1; cur = st; } else if (t >= ft) { part = ease((t - ft) / DUR); } });
+          const inFlip = done < fl.length && t >= fl[done][0];
+          const target = inFlip ? fl[done][1] : cur;
+          const angle = 180 * (done + (inFlip ? part : 0)) * (c % 2 ? -1 : 1);
+          const card = document.getElementById(`c${c}`);
+          const lift = inFlip ? Math.sin(Math.min(1, (t - fl[done][0]) / DUR) * Math.PI) : 0;
+          card.style.transform = (AXIS[c] === "y" ? `rotateY(${angle}deg)` : `rotateX(${angle}deg)`) + ` translateZ(${(lift * 60).toFixed(1)}px) scale(${(1 - lift * 0.04).toFixed(3)})`;
+          // which physical face is front after `done` flips: a if even. Front shows current state; back shows the incoming state.
+          const frontA = done % 2 === 0;
+          fill(document.getElementById(`c${c}${frontA ? "a" : "b"}`), STATES[cur][c]);
+          fill(document.getElementById(`c${c}${frontA ? "b" : "a"}`), STATES[target][c]);
+        });
+      }
+
+      const st = { t: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.to(st, { t: 8, duration: 8, ease: "none", onUpdate: () => render(st.t) }, 0);
+      tl.fromTo("#grid", { scale: 0.92, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 0);
+      tl.to("#grid", { y: -40, duration: 0.6, ease: "power3.inOut" }, B(12) + 0.4);
+      tl.fromTo("#tag", { opacity: 0, y: 30 }, { opacity: 1, y: -40, duration: 0.5, ease: "power3.out" }, B(12) + 0.5);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0); render(0);
+    </script>
+  </body>
+</html>
