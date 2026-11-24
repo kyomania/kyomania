@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0a1118; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #0a1118; }
+      .clip { position: absolute; inset: 0; }
+      #px { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+      #scan { background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 3px, transparent 3px 6px); pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="8" data-track-index="0"><canvas id="px" width="180" height="320"></canvas></div>
+      <div id="scan" class="clip" data-start="0" data-duration="8" data-track-index="1"></div>
+      <audio id="music" src="assets/chiptune.wav" data-start="0" data-duration="8" data-volume="0.8" data-track-index="5"></audio>
+      <audio id="snd-start" src="assets/start.wav" data-start="1.0" data-duration="0.35" data-volume="0.7" data-track-index="6"></audio>
+      <audio id="c1" src="assets/coin.wav" data-start="1.9" data-duration="0.22" data-volume="0.6" data-track-index="7"></audio>
+      <audio id="c2" src="assets/coin.wav" data-start="2.6" data-duration="0.22" data-volume="0.6" data-track-index="7"></audio>
+      <audio id="c3" src="assets/coin.wav" data-start="3.3" data-duration="0.22" data-volume="0.6" data-track-index="7"></audio>
+      <audio id="c4" src="assets/coin.wav" data-start="3.9" data-duration="0.22" data-volume="0.6" data-track-index="7"></audio>
+      <audio id="sel" src="assets/select.wav" data-start="5.0" data-duration="0.13" data-volume="0.7" data-track-index="8"></audio>
+      <audio id="lvl" src="assets/levelup.wav" data-start="5.6" data-duration="0.63" data-volume="0.7" data-track-index="8"></audio>
+      <audio id="sel2" src="assets/select.wav" data-start="7.0" data-duration="0.13" data-volume="0.5" data-track-index="8"></audio>
+    </div>
+
+    <script>
+      const cv = document.getElementById("px"), g = cv.getContext("2d");
+      g.imageSmoothingEnabled = false;
+      const C = { bg: "#0a1118", mint: "#5ee0d4", teal: "#00877a", w: "#f0f3f4", k: "#05080b", sky2: "#12303a", sky3: "#1c4a52", skin: "#f2c9a0", grey: "#7d8b91" };
+      const CARD = new Path2D("M210,170 L640,70 L690,130 L605,690 Q600,725 560,730 L180,770 Q110,775 110,700 L150,230 Q155,180 210,170 Z");
+      const CC = new Path2D("M435,258 L370,385 L345,410 Q330,440 340,490 Q350,525 380,525 L580,525 L565,640 Q562,648 550,648 L320,648 Q240,640 210,560 Q195,520 205,420 Q220,350 280,320 Z");
+      const ACC = new Path2D("M495,238 L610,238 Q620,240 612,252 L548,375 Q540,385 528,385 L420,385 Q410,383 415,372 Z");
+      // rasterize the mark once at a given pixel height into an offscreen canvas (hard pixels, no AA)
+      function pixMark(h) {
+        const s = h / 720, w = Math.ceil(600 * s), o = document.createElement("canvas"); o.width = w; o.height = h;
+        const p = document.createElement("canvas").getContext("2d");
+        const og = o.getContext("2d"), img = og.createImageData(w, h);
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+          const X = 100 + (x + .5) / s, Y = 60 + (y + .5) / s; let c = null;
+          if (p.isPointInPath(CARD, X, Y)) c = p.isPointInPath(ACC, X, Y) ? [0, 135, 122] : p.isPointInPath(CC, X, Y) ? [10, 17, 24] : [94, 224, 212];
+          if (c) { const i = (y * w + x) * 4; img.data.set([...c, 255], i); }
+        }
+        og.putImageData(img, 0, 0); return o;
+      }
+      const M24 = pixMark(24), M64 = pixMark(64), M8 = pixMark(10);
+      const font = (n) => `${n}px "Press Start 2P"`;
+      function text(s, x, y, col, size = 8, align = "center") { g.font = font(size); g.textAlign = align; g.textBaseline = "top"; g.fillStyle = C.k; g.fillText(s, x + 1, y + 1); g.fillStyle = col; g.fillText(s, x, y); }
+      const R = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
+      const hash = (a, b = 0) => { const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return s - Math.floor(s); };
+      function sprite(rows, x, y, pal) { rows.forEach((r, j) => [...r].forEach((ch, i) => { if (ch !== ".") R(x + i, y + j, 1, 1, pal[ch]); })); }
+      const HERO = [
+        ["....kkkk....", "...kmmmmk...", "..kmmmmmmk..", "..kkssskk...", "..ksksksk...", "..kssssk....", "...kkkk.....", "..kwwwwwk...", ".kwwmmwwwk..", ".kswwwwwsk..", "..kwwwwwk...", "..kkkkkkk...", "..kk...kk...", "..kk...kk...", ".kkk...kkk..", "............"],
+        ["....kkkk....", "...kmmmmk...", "..kmmmmmmk..", "..kkssskk...", "..ksksksk...", "..kssssk....", "...kkkk.....", "..kwwwwwk...", ".kwwmmwwwk..", ".kswwwwwsk..", "..kwwwwwk...", "..kkkkkkk...", "...kk.kk....", "..kk...kk...", ".kk.....kk..", "............"],
+      ];
+      const NPC = ["...kkkkk....", "..kgggggk...", "..kssssk....", "..ksksk.....", "..kssssk....", "...kkkk.....", "..kttttk....", ".kttttttk...", ".kstttttsk..", "..kttttk....", "..kk..kk...."];
+      const PAL = { k: C.k, m: C.mint, s: C.skin, w: C.w, g: C.grey, t: C.teal };
+      function cardSpr(x, y, holo, t) {
+        R(x, y, 9, 13, C.k); R(x + 1, y + 1, 7, 11, holo ? ["#5ee0d4", "#9b8cff", "#ff8fd0", "#ffd36b"][Math.floor(t * 8) % 4] : C.mint);
+        R(x + 2, y + 2, 5, 5, C.w); g.drawImage(M8, x + 2, y + 6, 5, 6);
+      }
+      function stars(t, n = 40) { for (let i = 0; i < n; i++) { const on = hash(i, Math.floor(t * 4)) > 0.3; if (on) R(Math.floor(hash(i, 1) * 180), Math.floor(hash(i, 2) * 320), 1, 1, hash(i, 3) > .7 ? C.mint : C.grey); } }
+
+      // ---------------- scenes ----------------
+      function title(t) {
+        R(0, 0, 180, 320, C.bg); stars(t);
+        const b = Math.min(1, t / 0.5), y = 70 - Math.round(Math.abs(Math.sin(b * Math.PI * 2.5)) * 30 * (1 - b));
+        g.drawImage(M64, 90 - 27, y);
+        text("CARDMARKET", 84, 150, C.w, 8); text(".PRO", 84 + 44, 150, C.mint, 8, "left");
+        text("TRADING CARD QUEST", 90, 168, C.grey, 8);
+        if (Math.floor(t * 4) % 2 === 0 || t > 1.0) text("PRESS START", 90, 230, t > 1.0 ? C.mint : C.w, 8);
+        text("© 2026", 90, 296, C.grey, 8);
+        if (t > 1.0 && t < 1.3 && Math.floor(t * 20) % 2) R(0, 0, 180, 320, C.w);
+      }
+      const COLLECT = [1.9, 2.6, 3.3, 3.9], SPEED = 60, HX = 40, GY = 262;
+      function scroller(t) {
+        const lt = t - 1.3, wx = lt * SPEED;
+        R(0, 0, 180, 320, C.bg); stars(t, 30);
+        g.save(); g.translate(-20, -250); g.scale(2, 2);
+        // sky bands
+        R(0, 0, 180, 320, C.bg); R(0, 120, 180, 60, "#0e2028"); R(0, 180, 180, 40, C.sky2); stars(t, 25);
+        // skyline (slow)
+        for (let i = -1; i < 12; i++) { const bx = i * 22 - ((wx * 0.25) % 22), h = 30 + Math.floor(hash(i + Math.floor(wx * 0.25 / 22), 5) * 40); R(bx, 220 - h, 18, h, "#13363d");
+          for (let wy = 220 - h + 4; wy < 214; wy += 6) if (hash(i, wy) > 0.5) R(bx + 4, wy, 2, 2, C.teal); }
+        // stalls (mid)
+        for (let i = -1; i < 5; i++) { const sx = i * 60 - ((wx * 0.6) % 60) + 10; R(sx, 226, 44, 36, "#1d3640");
+          for (let k = 0; k < 6; k++) R(sx - 2 + k * 8, 216, 8, 10, k % 2 ? C.w : C.mint); R(sx + 6, 236, 8, 11, C.mint); R(sx + 18, 238, 8, 11, C.w); R(sx + 30, 236, 8, 11, C.teal); }
+        // ground
+        for (let i = -1; i < 20; i++) { const gx = i * 10 - (wx % 10); R(gx, GY, 10, 58, "#24414a"); R(gx, GY, 10, 2, C.mint); R(gx + ((i % 2) ? 5 : 0), GY + 10, 1, 8, C.bg); R(gx, GY + 18, 10, 1, C.bg); }
+        // cards to collect
+        let got = 0;
+        COLLECT.forEach((tc, k) => {
+          const cxw = HX + 3 + SPEED * (tc - 1.3), sx = cxw - wx, bob = Math.round(Math.sin(t * 6 + k) * 2);
+          if (t < tc) cardSpr(sx, 196 + bob, k === 3, t);
+          else { got++; const d = t - tc; if (d < 0.6) text("+1", HX + 6, 180 - Math.round(d * 40), C.mint, 8); }
+        });
+        // hero (jumps for each card)
+        let jy = 0; COLLECT.forEach((tc) => { const d = t - (tc - 0.25); if (d > 0 && d < 0.5) jy = -Math.round(40 * Math.sin(Math.PI * d / 0.5)); });
+        sprite(HERO[jy ? 1 : Math.floor(t * 8) % 2], HX, GY - 16 + jy, PAL);
+        g.restore();
+        // HUD
+        R(0, 0, 180, 22, C.k); text("CARDS x0" + got, 6, 8, C.w, 8, "left"); text(String(got * 105).padStart(6, "0"), 174, 8, C.mint, 8, "right");
+        if (t < 1.5) R(0, 0, 180, 320, `rgba(240,243,244,${(1.5 - t) / 0.2})`);
+      }
+      function box(x, y, w, h) { R(x, y, w, h, C.w); R(x + 1, y + 1, w - 2, h - 2, C.k); R(x + 3, y + 3, w - 6, h - 6, C.w); R(x + 4, y + 4, w - 8, h - 8, C.bg); }
+      function trade(t) {
+        const lt = t - 4.2; R(0, 0, 180, 320, C.k);
+        text("- TRADE -", 90, 22, C.mint, 8);
+        box(8, 44, 78, 120); box(94, 44, 78, 120);
+        text("YOU", 47, 54, C.w, 8); text("NPC", 133, 54, C.w, 8);
+        g.save(); g.translate(35, 66); g.scale(2, 2); sprite(HERO[0], 0, 0, PAL); g.restore(); g.save(); g.translate(121, 70); g.scale(2, 2); sprite(NPC, 0, 0, PAL); g.restore();
+        // cards swap after YES
+        const sw = Math.min(1, Math.max(0, (t - 5.05) / 0.35)), e = sw < .5 ? 2 * sw * sw : 1 - Math.pow(-2 * sw + 2, 2) / 2;
+        const ax = 43 + (86 * e), bx = 129 - (86 * e), arc = Math.round(-Math.sin(Math.PI * e) * 24);
+        g.save(); g.translate(ax, 112 + arc); g.scale(2, 2); cardSpr(0, 0, true, t); g.restore();
+        g.save(); g.translate(bx - 9, 112 + arc); g.scale(2, 2); cardSpr(0, 0, false, t); g.restore();
+        box(6, 190, 168, 90);
+        const msg = "SWAP YOUR HOLO", msg2 = "FOR MY MINT C?", n = Math.floor(Math.max(0, lt - 0.1) * 30);
+        text(msg.slice(0, n), 18, 204, C.w, 8, "left"); text(msg2.slice(0, Math.max(0, n - msg.length)), 18, 218, C.w, 8, "left");
+        if (lt > 0.6) { text("YES", 40, 248, C.w, 8, "left"); text("NO", 110, 248, C.grey, 8, "left"); if (Math.floor(t * 6) % 2 || t > 5.0) text(">", 28, 248, C.mint, 8, "left"); }
+        if (t > 5.4) text("TRADE COMPLETE!", 90, 290, C.mint, 8);
+      }
+      function levelup(t) {
+        const lt = t - 5.6; R(0, 0, 180, 320, C.bg);
+        for (let i = 0; i < 60; i++) { const x = Math.floor(hash(i, 7) * 180), y = Math.floor((hash(i, 8) * 320 + lt * (60 + hash(i, 9) * 80)) % 320); R(x, y, 2, 2, [C.mint, C.w, C.teal, "#ffd36b"][i % 4]); }
+        const col = [C.mint, C.w, "#ffd36b", C.teal][Math.floor(t * 10) % 4];
+        g.save(); g.translate(90, 120); const s = 2 + (lt < 0.15 ? (0.15 - lt) * 10 : 0); g.scale(s, s); text("LEVEL UP!", 0, -4, col, 8); g.restore();
+        text("COLLECTION +1", 90, 160, C.w, 8); text("TRADER LV 02", 90, 180, C.mint, 8);
+        g.drawImage(M24, 90 - 10, 210);
+      }
+      function ending(t) {
+        const lt = t - 6.6; R(0, 0, 180, 320, C.bg); stars(t);
+        const b = Math.min(1, lt / 0.4); g.drawImage(M64, 90 - 27, 60 + Math.round((1 - b) * -120));
+        text("CARDMARKET", 84, 150, C.w, 8); text(".PRO", 84 + 44, 150, C.mint, 8, "left");
+        text("BUY SELL TRADE", 90, 172, C.grey, 8);
+        text("HI-SCORE", 90, 205, C.mint, 8); text("YOU ..... 000420", 90, 220, C.w, 8);
+        if (Math.floor(t * 3) % 2 === 0) text("INSERT COIN", 90, 262, C.mint, 8);
+      }
+      function draw(t) {
+        g.clearRect(0, 0, 180, 320);
+        if (t < 1.3) title(t); else if (t < 4.2) scroller(t); else if (t < 5.6) trade(t); else if (t < 6.6) levelup(t); else ending(t);
+        // hard scene-cut flash
+        [4.2, 5.6, 6.6].forEach((c) => { if (t >= c && t < c + 0.07) R(0, 0, 180, 320, C.w); });
+      }
+      const st = { t: 0 };
+      if (document.fonts) document.fonts.ready.then(() => draw(st.t));
+      const tl = gsap.timeline({ paused: true });
+      tl.to(st, { t: 8, duration: 8, ease: "none", onUpdate: () => draw(st.t) }, 0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0); draw(0);
+    </script>
+  </body>
+</html>
