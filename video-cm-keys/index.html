@@ -128,7 +128,7 @@
 
       // render with depth of field (aperture jitter) + motion blur
       const out = document.getElementById("out"), og = out.getContext("2d");
-      const SUB = 14, AP = 0.075, SH = (1 / 30) * 0.6, glowEl = document.getElementById("glow");
+      const SUB = 10, AP = 0.07, SH = (1 / 30) * 0.6, glowEl = document.getElementById("glow");
       function draw(t) {
         og.clearRect(0, 0, 1080, 1920);
         for (let s = 0; s < SUB; s++) {
