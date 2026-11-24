@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@700;900&family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/three.min.js"></script>
+    <script src="assets/RoundedBoxGeometry.js"></script>
+    <script src="assets/cmlib.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #030506; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden;
+        background: radial-gradient(90% 60% at 50% 30%, #1a2226 0%, #07090b 55%, #020304 100%); }
+      .clip { position: absolute; inset: 0; }
+      #out { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #glow { position: absolute; width: 1400px; height: 1400px; margin: -700px 0 0 -700px; border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(94,224,212,.55), rgba(94,224,212,.12) 45%, rgba(94,224,212,0)); mix-blend-mode: screen; opacity: 0; }
+      #grain { position: absolute; inset: -60px; opacity: .12; mix-blend-mode: overlay; }
+      #vig { background: radial-gradient(110% 75% at 50% 45%, transparent 45%, rgba(0,0,0,.8) 100%); }
+      #flash { background: #eafffc; opacity: 0; }
+      #tag { font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: .4em; color: #cfe; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute"><filter id="nz"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="5" /><feColorMatrix type="saturate" values="0" /></filter></svg>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="8" data-track-index="0"><canvas id="out" width="1080" height="1920"></canvas><div id="glow"></div></div>
+      <img id="word" class="clip" src="assets/wordmark-alpha.png" alt="cardmarket.pro" data-start="0" data-duration="8" data-track-index="1"
+        style="inset:auto;left:140px;top:1560px;width:800px;height:auto;opacity:0;z-index:20" />
+      <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="2" style="inset:auto;left:0;right:0;top:1740px;opacity:0;z-index:20">BUY · SELL · TRADE</div>
+      <div id="endfade" class="clip" data-layout-ignore data-start="0" data-duration="8" data-track-index="5" style="background:linear-gradient(180deg, rgba(2,3,4,0) 55%, rgba(2,3,4,.92) 78%);opacity:0"></div>
+      <div id="vig" class="clip" data-layout-ignore data-start="0" data-duration="8" data-track-index="3"></div>
+      <svg id="grain" class="clip" data-layout-ignore data-start="0" data-duration="8" data-track-index="4" width="1200" height="2040"><rect width="1200" height="2040" filter="url(#nz)" /></svg>
+      <div id="flash" class="clip" data-layout-ignore data-start="0" data-duration="8" data-track-index="9"></div>
+
+      <audio id="music" src="assets/synth.mp3" data-start="0" data-duration="8" data-volume="1" data-fade-out="0.5" data-track-index="10"></audio>
+      <audio id="k1" src="assets/click.wav" data-start="1.54" data-duration="0.07" data-volume="0.8" data-track-index="11"></audio>
+      <audio id="k2" src="assets/click.wav" data-start="2.04" data-duration="0.07" data-volume="0.8" data-track-index="11"></audio>
+      <audio id="k3" src="assets/click.wav" data-start="2.54" data-duration="0.07" data-volume="0.8" data-track-index="11"></audio>
+      <audio id="k4" src="assets/click.wav" data-start="3.04" data-duration="0.07" data-volume="0.8" data-track-index="11"></audio>
+      <audio id="k5" src="assets/click.wav" data-start="3.29" data-duration="0.07" data-volume="0.7" data-track-index="12"></audio>
+      <audio id="k6" src="assets/click.wav" data-start="3.54" data-duration="0.07" data-volume="0.7" data-track-index="12"></audio>
+      <audio id="k7" src="assets/click.wav" data-start="3.79" data-duration="0.07" data-volume="0.7" data-track-index="12"></audio>
+      <audio id="k8" src="assets/click.wav" data-start="4.04" data-duration="0.07" data-volume="0.7" data-track-index="12"></audio>
+      <audio id="kh" src="assets/click.wav" data-start="6.04" data-duration="0.07" data-volume="1" data-track-index="13"></audio>
+      <audio id="bm" src="assets/boom.wav" data-start="6.04" data-duration="0.9" data-volume="0.6" data-track-index="13"></audio>
+    </div>
+
+    <script>
+      const { MINT, TEAL, GR, W, mk, mark, cl, E, lerp } = CM;
+      const ctx = CM.setup(); const { scene, camera, tex } = ctx;
+      ctx.renderer.toneMappingExposure = 0.92; camera.setViewOffset(1080, 1920, 0, 260, 1080, 1920);
+      scene.children.filter((o) => o.isLight).forEach((l) => scene.remove(l));
+      scene.add(new THREE.HemisphereLight(0xc8ccce, 0x050505, 0.28));
+      const spot = new THREE.SpotLight(0xffffff, 2.6, 30, 0.42, 0.7); spot.position.set(-2, 9, 4); scene.add(spot); scene.add(spot.target);
+      const rim = new THREE.DirectionalLight(0xffffff, 0.25); rim.position.set(6, 2, -6); scene.add(rim);
+      const heroLight = new THREE.PointLight(0x5ee0d4, 0, 6, 1.6); scene.add(heroLight);
+
+      // ---------- textures ----------
+      function topTex(word, dark, hero) {
+        const cv = mk(512, 512), g = cv.getContext("2d");
+        g.fillStyle = hero ? "#38d2c4" : dark ? "#0b0d0e" : "#e9ebec"; g.fillRect(0, 0, 512, 512);
+        if (hero) { mark(g, 256, 250, 0.5, GR, MINT, MINT); return cv; }
+        g.save(); g.translate(256, 262); g.rotate(-0.08);
+        g.font = `900 ${word.length > 5 ? 96 : 118}px "Doto", monospace`; g.textAlign = "center"; g.textBaseline = "middle";
+        g.fillStyle = dark ? "#cfe7e3" : "#1b2124"; g.fillText(word, 0, 0); g.restore();
+        return cv;
+      }
+      function sideTex(hero, dark) {
+        const cv = mk(512, 320), g = cv.getContext("2d");
+        g.fillStyle = hero ? "#3fc7bb" : dark ? "#070809" : "#c4c8ca"; g.fillRect(0, 0, 512, 320);
+        if (hero) { g.fillStyle = GR; g.font = `900 84px "Inter Tight", sans-serif`; g.textAlign = "left"; g.textBaseline = "top"; g.fillText("Start", 40, 70); g.fillText("Trading", 40, 160); }
+        return cv;
+      }
+      const LAB = ["buy", "sell", "trade", "collect", "cards", "your", "rare", "mint", "swap", "deal"];
+      const keys = [], paints = [];
+      const baseGeo = new THREE.RoundedBoxGeometry(0.92, 0.6, 0.92, 5, 0.1);
+      { const p = baseGeo.attributes.position; for (let i = 0; i < p.count; i++) { const y = p.getY(i), f = lerp(1, 0.8, cl((y + 0.1) / 0.4)); p.setX(i, p.getX(i) * f); p.setZ(i, p.getZ(i) * f); } p.needsUpdate = true; baseGeo.computeVertexNormals(); }
+      let n = 0;
+      for (let i = -3; i <= 3; i++) for (let j = -4; j <= 3; j++) {
+        const hero = i === 0 && j === 0, dark = (i * 3 + j * 5 + 20) % 3 !== 0;
+        const word = hero ? "" : LAB[(n++) % LAB.length];
+        const top = topTex(word, dark, hero), side = sideTex(hero, dark);
+        const mTop = new THREE.MeshStandardMaterial({ map: tex(top), roughness: hero ? .35 : .55, emissive: hero ? 0x5ee0d4 : 0x000000, emissiveIntensity: 0 });
+        const mSide = new THREE.MeshStandardMaterial({ map: tex(side), roughness: .5, emissive: hero ? 0x5ee0d4 : 0x000000, emissiveIntensity: 0 });
+        const mPlain = new THREE.MeshStandardMaterial({ color: hero ? 0x3fc7bb : dark ? 0x070809 : 0xc4c8ca, roughness: .5, emissive: hero ? 0x5ee0d4 : 0, emissiveIntensity: 0 });
+        const m = new THREE.Mesh(baseGeo, [mPlain, mPlain, mTop, mPlain, mSide, mPlain]);
+        const gp = new THREE.Vector3(i * 1.04 + (j % 2) * 0.0, 0, j * 1.04); m.position.copy(gp); scene.add(m);
+        keys.push({ m, i, j, hero, word, dark, gp, mats: [mTop, mSide, mPlain], d: Math.hypot(i, j) });
+        paints.push(() => { const a = topTex(word, dark, hero), b = sideTex(hero, dark); mTop.map.image = a; mSide.map.image = b; mTop.map.needsUpdate = mSide.map.needsUpdate = true; });
+      }
+      const K = (i, j) => keys.find((k) => k.i === i && k.j === j);
+      // press schedule: [key, time, strength]
+      const PRESS = [[K(-1, 0), 1.54, 1], [K(0, -1), 2.04, 1], [K(1, 0), 2.54, 1], [K(0, 1), 3.04, 1], [K(-1, -1), 3.29, .7], [K(1, 1), 3.54, .7], [K(1, -1), 3.79, .7], [K(-1, 1), 4.04, .7]];
+      const hero = K(0, 0);
+
+      function pose(t) {
+        keys.forEach((k) => {
+          // wave rise
+          const rise = E.back(cl((t - 0.05 - k.d * 0.07) / 0.6), 1.4);
+          let y = lerp(-3, 0, rise);
+          let emi = 0;
+          PRESS.forEach(([pk, tp, s]) => { if (pk !== k) return; const d = t - tp; if (d >= -0.06 && d < 0.4) { y -= 0.17 * s * (d < 0 ? (d + 0.06) / 0.06 : Math.exp(-d * 14) * Math.cos(d * 30)); emi = Math.max(emi, 0.9 * Math.exp(-Math.max(0, d) * 5)); } });
+          // everything sinks as hero rises
+          const sink = E.io(cl((t - 4.3) / 0.9));
+          if (!k.hero) { y -= 0.12 * sink; }
+          else {
+            y += 0.55 * sink;
+            const hp = t - 6.04; if (hp >= -0.08) y -= 0.32 * (hp < 0 ? (hp + 0.08) / 0.08 : Math.exp(-hp * 7) * Math.cos(hp * 22));
+            emi = 0.15 + 1.1 * sink + (hp > 0 ? 1.4 * Math.exp(-hp * 3) : 0);
+          }
+          k.m.position.y = y;
+          k.mats[0].emissiveIntensity = k.mats[1].emissiveIntensity = k.mats[2].emissiveIntensity = k.hero ? Math.min(0.22, emi * 0.12) : 0;
+          if (!k.hero) k.mats[0].emissive.setHex(emi > 0.01 ? 0x5ee0d4 : 0), (k.mats[0].emissiveIntensity = emi * 0.5);
+        });
+        heroLight.position.set(0, hero.m.position.y + 1.0, 0.4);
+        heroLight.intensity = Math.min(2.2, 0.6 + 1.6 * E.io(cl((t - 4.3) / 0.9))) + (t > 6.04 ? 4 * Math.exp(-(t - 6.04) * 3) : 0);
+        // camera: push-out then slow orbit
+        const o = E.out(cl(t / 2.2)), orb = lerp(0.55, 0.25, E.io(cl(t / 8)));
+        const r = lerp(3.4, 4.6, o), h = lerp(2.6, 4.4, o);
+        const [sx, sy] = CM.shake(t, [6.04], 0.06);
+        camera.position.set(Math.sin(orb) * r + sx, h + sy, Math.cos(orb) * r);
+        camera.userData.focus = new THREE.Vector3(0, hero.m.position.y + 0.25, 0);
+        camera.lookAt(camera.userData.focus);
+      }
+
+      // render with depth of field (aperture jitter) + motion blur
+      const out = document.getElementById("out"), og = out.getContext("2d");
+      const SUB = 14, AP = 0.075, SH = (1 / 30) * 0.6, glowEl = document.getElementById("glow");
+      function draw(t) {
+        og.clearRect(0, 0, 1080, 1920);
+        for (let s = 0; s < SUB; s++) {
+          pose(Math.max(0, t - SH * (s / (SUB - 1))));
+          const a = s * 2.399963, rr = AP * Math.sqrt((s + 0.5) / SUB);
+          const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0), up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+          camera.position.addScaledVector(right, Math.cos(a) * rr).addScaledVector(up, Math.sin(a) * rr);
+          camera.lookAt(camera.userData.focus); camera.updateMatrixWorld();
+          ctx.renderer.render(scene, camera);
+          og.globalAlpha = s === 0 ? 1 : 1 / (s + 1); og.drawImage(ctx.renderer.domElement, 0, 0);
+        }
+        og.globalAlpha = 1;
+        pose(t); camera.updateMatrixWorld();
+        const v = hero.m.position.clone(); v.y += 0.3; v.project(camera);
+        glowEl.style.left = ((v.x + 1) / 2 * 1080).toFixed(0) + "px"; glowEl.style.top = ((1 - v.y) / 2 * 1920).toFixed(0) + "px";
+        glowEl.style.opacity = Math.min(0.9, 0.25 + 0.5 * E.io(cl((st.t - 4.3) / 0.9)) + (st.t > 6.04 ? 0.6 * Math.exp(-(st.t - 6.04) * 3) : 0)).toFixed(3);
+      }
+      let fontsOk = false;
+      const st = { t: 0 };
+      if (document.fonts) document.fonts.ready.then(() => { paints.forEach((p) => p()); fontsOk = true; draw(st.t); });
+      const hash = (a, b) => { const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return s - Math.floor(s); };
+      const tl = gsap.timeline({ paused: true });
+      tl.to(st, { t: 8, duration: 8, ease: "none", onUpdate: () => {
+        if (!fontsOk && document.fonts && document.fonts.status === "loaded") { paints.forEach((p) => p()); fontsOk = true; }
+        draw(st.t); const f = Math.floor(st.t * 30);
+        document.getElementById("grain").style.transform = `translate(${(hash(f, 1) - .5) * 60}px, ${(hash(2, f) - .5) * 60}px)`;
+      } }, 0);
+      tl.fromTo("#flash", { opacity: 0.85 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 6.04);
+      tl.fromTo("#endfade", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 6.2);
+      tl.fromTo("#word", { opacity: 0, y: 30, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, 6.35);
+      tl.fromTo("#tag", { opacity: 0, y: 20 }, { opacity: 0.9, y: 0, duration: 0.5, ease: "power3.out" }, 6.6);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0); draw(0);
+    </script>
+  </body>
+</html>
