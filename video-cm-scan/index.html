@@ -3,197 +3,258 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
     <style>
-      :root { --mint: #5ee0d4; --teal: #00877a; --gr: #0a1118; --mono: "JetBrains Mono", monospace; }
+      :root { --mint: #5ee0d4; --teal: #00877a; --gr: #0a1118; --mono: "JetBrains Mono", monospace; --disp: "Inter Tight", sans-serif; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #060b10; }
-      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: var(--mono); color: #fff;
-        background: radial-gradient(80% 50% at 50% 42%, #10222b 0%, #070d12 60%, #04080b 100%); }
-      .clip { position: absolute; inset: 0; }
-      .grid { background-image: linear-gradient(rgba(94,224,212,.06) 2px, transparent 2px), linear-gradient(90deg, rgba(94,224,212,.06) 2px, transparent 2px);
-        background-size: 60px 60px; }
-      .hud { position: absolute; font-size: 28px; letter-spacing: .14em; text-transform: uppercase; }
-      .rec { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: #ff4d4d; margin-right: 12px; vertical-align: middle; }
-      #bar { position: absolute; left: 80px; top: 230px; width: 920px; height: 8px; background: rgba(94,224,212,.15); }
-      #barFill { position: absolute; inset: 0; background: var(--mint); transform-origin: left center; transform: scaleX(0); }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #020507; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #020507; font-family: var(--mono); color: #fff; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .full { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .hud { position: absolute; text-shadow: 0 0 6px #000, 0 0 14px #000, 0 2px 2px #000; font-size: 26px; letter-spacing: .18em; text-transform: uppercase; }
+      .mint { color: var(--mint); }
       /* card */
-      #cardWrap { position: absolute; left: 290px; top: 420px; width: 500px; height: 700px; }
-      #card { position: absolute; inset: 0; border-radius: 26px; overflow: hidden; background: #0d1a22; border: 10px solid #e9eef0;
-        box-shadow: 0 40px 80px rgba(0,0,0,.5); transform: rotate(-4deg); }
-      #art { position: absolute; left: 24px; right: 24px; top: 90px; height: 330px; border-radius: 10px; overflow: hidden;
-        background: linear-gradient(160deg, #1b5f6b, #0a1118 70%); }
-      .nm { position: absolute; left: 30px; top: 26px; font-family: "Inter Tight", sans-serif; font-weight: 900; font-size: 40px; color: #e9eef0; letter-spacing: -.02em; }
-      .hp { position: absolute; right: 30px; top: 34px; font-size: 24px; color: var(--mint); font-weight: 700; }
-      .txt { position: absolute; left: 30px; right: 30px; top: 450px; font-size: 20px; line-height: 1.6; color: #9fb4ba; }
-      .foot { position: absolute; left: 30px; right: 30px; bottom: 24px; display: flex; justify-content: space-between; font-size: 18px; color: #9fb4ba; }
-      #holo { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(94,224,212,.35) 45%, rgba(255,143,208,.25) 52%, transparent 65%); mix-blend-mode: screen; }
-      #cgrid { position: absolute; inset: 0; opacity: 0; background-image: linear-gradient(rgba(94,224,212,.35) 2px, transparent 2px), linear-gradient(90deg, rgba(94,224,212,.35) 2px, transparent 2px); background-size: 50px 50px; }
-      #scan { position: absolute; left: -40px; right: -40px; top: 0; height: 8px; background: var(--mint); box-shadow: 0 0 40px 12px rgba(94,224,212,.55); opacity: 0; }
-      .br { position: absolute; width: 90px; height: 90px; border: 0 solid var(--mint); }
-      .xh { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border: 3px solid var(--mint); border-radius: 50%; }
-      .xh::before, .xh::after { content: ""; position: absolute; background: var(--mint); }
-      .xh::before { left: 50%; top: -14px; bottom: -14px; width: 3px; margin-left: -1.5px; }
-      .xh::after { top: 50%; left: -14px; right: -14px; height: 3px; margin-top: -1.5px; }
-      .panel { position: absolute; width: 360px; padding: 20px 24px; background: rgba(6,14,19,.85); border: 2px solid var(--mint); font-size: 22px; letter-spacing: .08em; }
-      .panel b { display: block; font-size: 44px; letter-spacing: -.01em; margin-top: 6px; color: var(--mint); }
-      .lead { position: absolute; height: 2px; background: var(--mint); transform-origin: left center; }
-      /* map */
-      .dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: rgba(94,224,212,.28); }
-      .ping { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--mint); }
-      .pring { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; border: 3px solid var(--mint); }
-      .city { position: absolute; font-size: 22px; letter-spacing: .12em; color: #cfe; }
-      .route { position: absolute; height: 3px; background: linear-gradient(90deg, rgba(94,224,212,.1), var(--mint)); transform-origin: left center; }
-      #match { position: absolute; left: 90px; right: 90px; top: 1380px; padding: 34px; border: 3px solid var(--mint); background: rgba(6,14,19,.92); text-align: center; }
-      #match small { font-size: 26px; letter-spacing: .2em; color: var(--mint); }
-      #match div { font-family: "Inter Tight", sans-serif; font-weight: 900; font-size: 80px; letter-spacing: -.03em; margin-top: 8px; }
-      #sold { position: absolute; left: 0; right: 0; top: 700px; text-align: center; font-family: "Inter Tight", sans-serif; font-weight: 900; font-size: 300px;
-        letter-spacing: -.06em; color: var(--mint); }
-      #flash { background: #e9fffc; opacity: 0; }
-      #end { background: #070d12; }
-      #tagline { position: absolute; left: 0; right: 0; top: 1240px; text-align: center; font-size: 32px; letter-spacing: .3em; color: #fff; }
+      #cam { position: absolute; inset: 0; }
+      #cardWrap { position: absolute; left: 270px; top: 420px; width: 540px; height: 756px; perspective: 1400px; }
+      #card { position: absolute; inset: 0; transform-style: preserve-3d; }
+      .face { position: absolute; inset: 0; border-radius: 30px; overflow: hidden; background: linear-gradient(160deg, #cfd8db, #8fa3a9);
+        box-shadow: 0 60px 120px rgba(0,0,0,.7), 0 0 80px rgba(94,224,212,.18); }
+      .inner { position: absolute; inset: 14px; border-radius: 20px; overflow: hidden; background: #071318; }
+      .cname { position: absolute; left: 26px; top: 18px; font-family: var(--disp); font-weight: 900; font-size: 42px; letter-spacing: -.02em; }
+      .chp { position: absolute; right: 26px; top: 28px; font-weight: 700; font-size: 24px; color: var(--mint); }
+      .cart { position: absolute; left: 18px; right: 18px; top: 82px; height: 400px; border-radius: 10px; overflow: hidden; border: 3px solid rgba(207,216,219,.6); }
+      .cart img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; }
+      .ctxt { position: absolute; left: 26px; right: 26px; top: 506px; font-size: 21px; line-height: 1.55; color: #a9c0c5; }
+      .ctxt b { color: #fff; font-family: var(--disp); font-size: 28px; }
+      .cfoot { position: absolute; left: 26px; right: 26px; bottom: 18px; display: flex; justify-content: space-between; font-size: 19px; color: #a9c0c5; }
+      #foilOv { position: absolute; inset: -30%; width: 160%; height: 160%; object-fit: cover; mix-blend-mode: color-dodge; opacity: .2; }
+      #sheen { position: absolute; inset: -20%; background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,.55) 48%, rgba(94,224,212,.35) 52%, transparent 62%); mix-blend-mode: overlay; }
+      #cgrid { position: absolute; inset: 0; opacity: 0; background-image: linear-gradient(rgba(94,224,212,.45) 2px, transparent 2px), linear-gradient(90deg, rgba(94,224,212,.45) 2px, transparent 2px); background-size: 54px 54px; mix-blend-mode: screen; }
+      #beam { position: absolute; left: -60px; right: -60px; top: 0; height: 10px; background: #dffffb; box-shadow: 0 0 30px 10px rgba(94,224,212,.9), 0 0 140px 50px rgba(94,224,212,.35); opacity: 0; }
+      .br { position: absolute; width: 110px; height: 110px; border: 0 solid var(--mint); filter: drop-shadow(0 0 12px rgba(94,224,212,.8)); }
+      .lock { position: absolute; width: 60px; height: 60px; margin: -30px 0 0 -30px; border: 3px solid var(--mint); }
+      .lock::after { content: ""; position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; background: var(--mint); }
+      /* chroma copies */
+      .chroma { position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0; }
+      /* panels */
+      .panel { position: absolute; padding: 22px 28px; background: rgba(3,10,14,.72); border: 2px solid rgba(94,224,212,.8); backdrop-filter: blur(8px);
+        font-size: 22px; letter-spacing: .14em; text-transform: uppercase; color: #9fd8d1; }
+      .panel b { display: block; font-family: var(--disp); font-size: 64px; letter-spacing: -.02em; color: #fff; margin-top: 6px; text-transform: none; }
+      .panel .tick { position: absolute; width: 14px; height: 14px; border: 0 solid var(--mint); }
+      #idbar { position: absolute; left: 0; right: 0; top: 1290px; text-align: center; }
+      #idbar .t1 { font-size: 26px; letter-spacing: .3em; color: var(--mint); }
+      #idbar .t2 { font-family: var(--disp); font-weight: 900; font-size: 96px; letter-spacing: -.03em; margin-top: 10px; }
+      /* city */
+      .ping { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 30px 8px rgba(94,224,212,.8); }
+      .pring { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; border: 3px solid var(--mint); }
+      .plab { position: absolute; font-size: 22px; letter-spacing: .16em; color: #dffffb; text-shadow: 0 0 10px #000; }
+      .route { position: absolute; height: 3px; transform-origin: left center; background: linear-gradient(90deg, rgba(94,224,212,0), var(--mint)); box-shadow: 0 0 12px rgba(94,224,212,.9); }
+      #target { position: absolute; left: 760px; top: 760px; width: 300px; height: 300px; margin: -150px 0 0 -150px; border: 3px solid var(--mint); border-radius: 50%; }
+      #target::before, #target::after { content: ""; position: absolute; background: var(--mint); }
+      #target::before { left: 50%; top: -40px; bottom: -40px; width: 3px; margin-left: -1.5px; }
+      #target::after { top: 50%; left: -40px; right: -40px; height: 3px; margin-top: -1.5px; }
+      #match { position: absolute; left: 80px; right: 80px; top: 1330px; padding: 36px 40px; background: rgba(3,10,14,.85); border: 3px solid var(--mint); }
+      #match small { font-size: 26px; letter-spacing: .28em; color: var(--mint); }
+      #match .row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; }
+      #match .row b { font-family: var(--disp); font-weight: 900; font-size: 110px; letter-spacing: -.04em; }
+      #match .row span { font-size: 26px; letter-spacing: .16em; color: #9fd8d1; }
+      #sold { position: absolute; left: 0; right: 0; top: 760px; text-align: center; font-family: var(--disp); font-weight: 900; font-size: 330px; letter-spacing: -.07em; color: #fff;
+        text-shadow: 0 0 80px rgba(94,224,212,.9); }
+      /* fx */
+      #grain { position: absolute; inset: -60px; opacity: .14; mix-blend-mode: overlay; pointer-events: none; }
+      #vig { background: radial-gradient(120% 80% at 50% 45%, transparent 50%, rgba(0,0,0,.75) 100%); pointer-events: none; }
+      #flash { background: #effffd; opacity: 0; }
+      #glitch { pointer-events: none; opacity: 0; }
+      .gl { position: absolute; left: 0; right: 0; height: 18px; background: rgba(94,224,212,.55); mix-blend-mode: screen; }
+      /* end */
+      #end { background: radial-gradient(70% 45% at 50% 42%, #0d2a30 0%, #04090c 70%); }
+      #tagline { position: absolute; left: 0; right: 0; top: 1270px; text-align: center; font-size: 30px; letter-spacing: .5em; color: #fff; }
     </style>
   </head>
   <body>
+    <svg width="0" height="0" style="position:absolute"><filter id="nz"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" /><feColorMatrix type="saturate" values="0" /></filter></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
-      <!-- base HUD + card scene -->
-      <div id="scene" class="clip grid" data-start="0" data-duration="6.2" data-track-index="0">
-        <div class="hud" style="left:80px;top:150px"><span class="rec" id="recdot"></span>Scan mode</div>
-        <div class="hud" id="tc" style="right:80px;top:150px">00:00:00</div>
-        <div id="bar"><div id="barFill"></div></div>
-        <div class="hud" id="status" style="left:80px;top:262px;color:var(--mint)">Analyzing card…</div>
 
-        <div id="map" style="position:absolute;inset:0;opacity:0"></div>
+      <!-- 0: cold open on foil -->
+      <div id="open" class="clip" data-start="0" data-duration="0.54" data-track-index="0">
+        <img id="openFoil" class="full" src="assets/foil.png" alt="" />
+        <div class="hud" style="left:0;right:0;top:900px;text-align:center;font-size:34px;letter-spacing:.6em" id="boot">INITIALIZING</div>
+      </div>
 
-        <div id="cardWrap">
-          <div id="card">
-            <div class="nm" data-layout-ignore>Azure Drake</div><div class="hp">HP 120</div>
-            <div id="art">
-              <svg viewBox="0 0 452 330" width="452" height="330">
-                <circle cx="330" cy="90" r="56" fill="#5ee0d4" opacity=".9" />
-                <path d="M0 260 L110 150 L190 220 L280 120 L452 270 L452 330 L0 330 Z" fill="#00877a" />
-                <path d="M0 300 L140 210 L240 280 L360 200 L452 260 L452 330 L0 330 Z" fill="#0a1118" opacity=".8" />
-                <path d="M150 120 q40 -60 90 -20 q-30 0 -40 30 q50 -10 60 40 q-40 -20 -70 0 z" fill="#e9eef0" />
-              </svg>
-              <div id="holo"></div>
+      <!-- 1: scan on desk -->
+      <div id="scan" class="clip" data-start="0.54" data-duration="3.5" data-track-index="0">
+        <div id="cam">
+          <img id="desk" class="full" src="assets/desk.png" alt="" />
+          <div id="cardWrap">
+            <div id="card">
+              <div class="face"><div class="inner">
+                <div class="cname">Azure Drake</div><div class="chp">HP 120</div>
+                <div class="cart"><img src="assets/art.png" alt="" /></div>
+                <div class="ctxt"><b>Tide Surge</b> &nbsp;60<br />Flip a coin. If heads, this attack does 30 more damage.</div>
+                <div class="cfoot"><span>★ HOLO RARE</span><span>087/150</span></div>
+                <img id="foilOv" src="assets/foil.png" alt="" />
+                <div id="sheen"></div><div id="cgrid"></div>
+              </div></div>
             </div>
-            <div class="txt">Tide Surge — 60<br />Flip a coin. If heads, this attack does 30 more damage.</div>
-            <div class="foot"><span>★ HOLO RARE</span><span>087/150</span></div>
-            <div id="cgrid"></div>
+            <div id="beam"></div>
+            <div class="br" style="left:-50px;top:-50px;border-left-width:8px;border-top-width:8px"></div>
+            <div class="br" style="right:-50px;top:-50px;border-right-width:8px;border-top-width:8px"></div>
+            <div class="br" style="left:-50px;bottom:-50px;border-left-width:8px;border-bottom-width:8px"></div>
+            <div class="br" style="right:-50px;bottom:-50px;border-right-width:8px;border-bottom-width:8px"></div>
+            <div class="lock" style="left:20px;top:20px"></div><div class="lock" style="left:520px;top:20px"></div>
+            <div class="lock" style="left:20px;top:736px"></div><div class="lock" style="left:520px;top:736px"></div>
           </div>
-          <div id="scan"></div>
-          <div class="br" style="left:-40px;top:-40px;border-left-width:8px;border-top-width:8px"></div>
-          <div class="br" style="right:-40px;top:-40px;border-right-width:8px;border-top-width:8px"></div>
-          <div class="br" style="left:-40px;bottom:-40px;border-left-width:8px;border-bottom-width:8px"></div>
-          <div class="br" style="right:-40px;bottom:-40px;border-right-width:8px;border-bottom-width:8px"></div>
-          <div class="xh" style="left:18px;top:30px"></div><div class="xh" style="left:482px;top:-4px"></div>
-          <div class="xh" style="left:30px;top:700px"></div><div class="xh" style="left:494px;top:668px"></div>
         </div>
+        <div id="idbar"><div class="t1">Card identified</div><div class="t2">Azure Drake</div></div>
+        <div class="panel" id="pA" style="left:70px;top:1270px;width:440px">Condition<b>NM · 9.2</b></div>
+        <div class="panel" id="pB" style="left:570px;top:1270px;width:440px">Market<b>€ <span id="mkt">0</span></b></div>
+        <div class="panel" id="pC" style="left:70px;top:1490px;width:940px">Demand · 30 days
+          <svg width="880" height="110" viewBox="0 0 880 110" style="display:block;margin-top:12px"><polyline id="spark" points="0,96 90,88 180,92 270,70 360,76 450,52 540,58 630,34 720,40 880,8" fill="none" stroke="#5ee0d4" stroke-width="6" stroke-linejoin="round" /></svg>
+        </div>
+      </div>
 
-        <div class="panel" id="p1" style="left:80px;top:1290px;width:440px">Condition<b>NM · 9.2</b></div>
-        <div class="panel" id="p2" style="left:560px;top:1290px;width:440px">Market<b>€ <span id="mkt">0.00</span></b></div>
-        <div class="panel" id="p3" style="left:80px;top:1480px;width:440px">Edition<b>1st · Holo</b></div>
-        <div class="panel" id="p4" style="left:560px;top:1480px;width:440px">Demand
-          <svg width="300" height="70" viewBox="0 0 300 70" style="display:block;margin-top:10px"><polyline id="spark" points="0,60 40,52 80,56 120,40 160,44 200,26 240,30 300,6" fill="none" stroke="#5ee0d4" stroke-width="5" /></svg>
-        </div>
-        <div id="match"><small>Match found · Tokyo</small><div>€ 220.00</div></div>
+      <!-- 2: city -->
+      <div id="city" class="clip" data-start="4.04" data-duration="2.3" data-track-index="0">
+        <img id="cityImg" class="full" src="assets/city.png" alt="" />
+        <div id="cityLayer" style="position:absolute;inset:0"></div>
+        <div id="target"></div>
+        <div id="match"><small>Match found · Tokyo</small><div class="row"><b>€ 220</b><span>Buyer ★ 4.9</span></div></div>
         <div id="sold">SOLD.</div>
       </div>
 
-      <!-- end card -->
-      <div id="end" class="clip" data-start="6.2" data-duration="1.8" data-track-index="0">
-        <svg id="mk" viewBox="100 60 600 720" style="position:absolute;left:390px;top:560px;width:300px;height:360px">
+      <!-- 3: end -->
+      <div id="end" class="clip" data-start="6.34" data-duration="1.66" data-track-index="0">
+        <img id="endFoil" class="full" src="assets/foil.png" alt="" style="opacity:.12;mix-blend-mode:screen" />
+        <svg id="mk" viewBox="100 60 600 720" style="position:absolute;left:400px;top:600px;width:280px;height:336px;filter:drop-shadow(0 0 40px rgba(94,224,212,.5))">
           <path d="M210,170 L640,70 L690,130 L605,690 Q600,725 560,730 L180,770 Q110,775 110,700 L150,230 Q155,180 210,170 Z" fill="#5ee0d4" />
           <path d="M435,258 L370,385 L345,410 Q330,440 340,490 Q350,525 380,525 L580,525 L565,640 Q562,648 550,648 L320,648 Q240,640 210,560 Q195,520 205,420 Q220,350 280,320 Z" fill="#0a1118" />
           <path d="M495,238 L610,238 Q620,240 612,252 L548,375 Q540,385 528,385 L420,385 Q410,383 415,372 Z" fill="#00877a" />
         </svg>
-        <img id="word" src="assets/wordmark-dark.png" alt="cardmarket.pro" style="position:absolute;left:90px;top:1010px;width:900px;mix-blend-mode:lighten" />
+        <img id="word" src="assets/wordmark-dark.png" alt="cardmarket.pro" style="position:absolute;left:120px;top:1020px;width:840px;mix-blend-mode:lighten" />
         <div id="tagline">SCAN · LIST · SELL</div>
       </div>
-      <div id="flash" class="clip" data-start="0" data-duration="8" data-track-index="9"></div>
 
-      <audio id="music" src="assets/music.mp3" data-start="0" data-duration="8" data-volume="0.6" data-fade-out="0.8" data-track-index="5"></audio>
-      <audio id="bp1" src="assets/beep.wav" data-start="1.0" data-duration="0.06" data-volume="0.5" data-track-index="6"></audio>
-      <audio id="bp2" src="assets/beep.wav" data-start="1.15" data-duration="0.06" data-volume="0.5" data-track-index="6"></audio>
-      <audio id="bp3" src="assets/beep.wav" data-start="1.3" data-duration="0.06" data-volume="0.5" data-track-index="6"></audio>
-      <audio id="bp4" src="assets/beep.wav" data-start="1.45" data-duration="0.06" data-volume="0.5" data-track-index="6"></audio>
-      <audio id="tk1" src="assets/tick.wav" data-start="2.1" data-duration="0.04" data-volume="0.5" data-track-index="7"></audio>
-      <audio id="tk2" src="assets/tick.wav" data-start="2.45" data-duration="0.04" data-volume="0.5" data-track-index="7"></audio>
-      <audio id="tk3" src="assets/tick.wav" data-start="2.8" data-duration="0.04" data-volume="0.5" data-track-index="7"></audio>
-      <audio id="tk4" src="assets/tick.wav" data-start="3.15" data-duration="0.04" data-volume="0.5" data-track-index="7"></audio>
-      <audio id="wh" src="assets/whoosh.wav" data-start="4.75" data-duration="0.35" data-volume="0.6" data-track-index="8"></audio>
-      <audio id="mt" src="assets/match.wav" data-start="4.6" data-duration="0.37" data-volume="0.7" data-track-index="8"></audio>
-      <audio id="bm" src="assets/boom.wav" data-start="5.6" data-duration="0.9" data-volume="0.8" data-track-index="8"></audio>
+      <!-- global HUD + fx -->
+      <div id="hudL" class="clip" data-start="0" data-duration="6.34" data-track-index="2" style="pointer-events:none">
+        <div class="hud" style="left:70px;top:120px"><span id="rec" style="display:inline-block;width:16px;height:16px;border-radius:50%;background:#ff4d4d;margin-right:14px;vertical-align:middle"></span>Scan mode</div>
+        <div class="hud mint" id="tc" style="right:70px;top:120px">00:00:00</div>
+        <div class="hud" id="status" style="left:70px;top:178px;color:#9fd8d1;font-size:22px">Booting optics…</div>
+        <div style="position:absolute;left:70px;right:70px;top:222px;height:4px;background:rgba(94,224,212,.15)"><div id="prog" style="position:absolute;inset:0;background:var(--mint);transform-origin:left;transform:scaleX(0)"></div></div>
+        <div class="hud" style="left:70px;bottom:110px;font-size:20px;color:#6f9a96">ISO 800 · f/1.8 · 4K</div>
+        <div class="hud" style="right:70px;bottom:110px;font-size:20px;color:#6f9a96">CARDMARKET.PRO</div>
+      </div>
+      <div id="glitch" data-layout-ignore class="clip" data-start="0" data-duration="8" data-track-index="3"></div>
+      <div id="vig" data-layout-ignore class="clip" data-start="0" data-duration="8" data-track-index="4"></div>
+      <svg id="grain" data-layout-ignore class="clip" data-start="0" data-duration="8" data-track-index="5" width="1200" height="2040"><rect width="1200" height="2040" filter="url(#nz)" /></svg>
+      <div id="flash" data-layout-ignore class="clip" data-start="0" data-duration="8" data-track-index="9"></div>
+
+      <audio id="music" src="assets/synth.mp3" data-start="0" data-duration="8" data-volume="1" data-fade-out="0.5" data-track-index="10"></audio>
+      <audio id="bp1" src="assets/beep.wav" data-start="1.54" data-duration="0.06" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="bp2" src="assets/beep.wav" data-start="1.66" data-duration="0.06" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="bp3" src="assets/beep.wav" data-start="1.78" data-duration="0.06" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="bp4" src="assets/beep.wav" data-start="1.9" data-duration="0.06" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="wh1" src="assets/whoosh.wav" data-start="3.85" data-duration="0.35" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="mt" src="assets/match.wav" data-start="5.04" data-duration="0.37" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="bm" src="assets/boom.wav" data-start="6.04" data-duration="0.9" data-volume="0.7" data-track-index="13"></audio>
     </div>
 
     <script>
-      // world-ish dot map (deterministic ellipse field with gaps)
-      const map = document.getElementById("map");
-      for (let y = 380; y < 1460; y += 26) for (let x = 60; x < 1020; x += 26) {
-        const nx = (x - 540) / 480, ny = (y - 920) / 540;
-        const land = Math.sin(nx * 7.1 + ny * 3.3) + Math.cos(nx * 4.2 - ny * 6.7) + 0.6 * Math.sin(nx * 13 + ny * 11);
-        if (nx * nx + ny * ny < 1 && land > 0.35) { const d = document.createElement("div"); d.className = "dot"; d.style.left = x + "px"; d.style.top = y + "px"; map.appendChild(d); }
-      }
-      const CITIES = [["Berlin", 560, 650], ["New York", 250, 780], ["São Paulo", 360, 1200], ["Tokyo", 880, 830], ["Sydney", 860, 1260]];
-      const HOME = [540, 900];
-      CITIES.forEach(([n, x, y], i) => {
-        const dx = x - HOME[0], dy = y - HOME[1];
-        map.insertAdjacentHTML("beforeend", `<div class="route" id="rt${i}" style="left:${HOME[0]}px;top:${HOME[1]}px;width:${Math.hypot(dx, dy)}px;transform:rotate(${Math.atan2(dy, dx)}rad) scaleX(0)"></div>` +
-          `<div class="pring" id="pr${i}" style="left:${x}px;top:${y}px"></div><div class="ping" id="pg${i}" style="left:${x}px;top:${y}px"></div>` +
-          `<div class="city" id="ct${i}" style="left:${x + 22}px;top:${y - 34}px">${n}</div>`);
+      const B = (k) => 0.04 + 0.5 * k; // beat grid (120 bpm)
+      // city pings
+      const PINGS = [["Berlin", 300, 560], ["New York", 180, 1000], ["Seoul", 640, 480], ["Tokyo", 760, 760], ["São Paulo", 430, 1180]];
+      const O = [540, 960], layer = document.getElementById("cityLayer");
+      PINGS.forEach(([n, x, y], i) => {
+        const dx = x - O[0], dy = y - O[1];
+        layer.insertAdjacentHTML("beforeend", `<div class="route" id="rt${i}" style="left:${O[0]}px;top:${O[1]}px;width:${Math.hypot(dx, dy)}px;transform:rotate(${Math.atan2(dy, dx)}rad) scaleX(0)"></div>` +
+          `<div class="pring" id="pr${i}" style="left:${x}px;top:${y}px"></div><div class="ping" id="pg${i}" style="left:${x}px;top:${y}px"></div><div class="plab" id="pl${i}" style="left:${x + 26}px;top:${y - 40}px">${n}</div>`);
       });
+      // glitch bars
+      const gEl = document.getElementById("glitch");
+      for (let i = 0; i < 10; i++) gEl.insertAdjacentHTML("beforeend", `<div class="gl" id="g${i}"></div>`);
+      const hash = (a, b) => { const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return s - Math.floor(s); };
+      const GLITCH = [[0.5, 0.1], [B(4) - 0.04, 0.12], [B(8) - 0.06, 0.14], [B(11), 0.4], [B(12) - 0.02, 0.1]];
 
       const tl = gsap.timeline({ paused: true });
-      const st = { t: 0 }, tc = document.getElementById("tc"), mkt = document.getElementById("mkt"), status = document.getElementById("status");
+      const st = { t: 0 }, $ = (id) => document.getElementById(id);
       tl.to(st, { t: 8, duration: 8, ease: "none", onUpdate: () => {
         const t = st.t, f = Math.floor(t * 30);
-        tc.textContent = `00:${String(Math.floor(t)).padStart(2, "0")}:${String(f % 30).padStart(2, "0")}`;
-        document.getElementById("recdot").style.opacity = Math.floor(t * 2.5) % 2 ? 0.25 : 1;
-        status.textContent = t < 2 ? "Analyzing card…" : t < 3.6 ? "Card identified" : t < 4.6 ? "Searching buyers worldwide…" : "Buyer found";
-        mkt.textContent = (214 * Math.min(1, Math.max(0, (t - 2.45) / 0.6))).toFixed(2);
+        $("tc").textContent = `00:${String(Math.floor(t)).padStart(2, "0")}:${String(f % 30).padStart(2, "0")}`;
+        $("rec").style.opacity = Math.floor(t * 2) % 2 ? 0.2 : 1;
+        $("status").textContent = t < B(1) ? "Booting optics…" : t < B(3) ? "Scanning surface…" : t < B(8) ? "Card identified · grading…" : t < B(10) ? "Searching buyers worldwide…" : "Buyer locked";
+        $("mkt").textContent = Math.round(214 * Math.min(1, Math.max(0, (t - B(6)) / 0.35)));
+        // grain jitter
+        $("grain").style.transform = `translate(${(hash(f, 1) - .5) * 60}px, ${(hash(2, f) - .5) * 60}px)`;
+        // glitch windows
+        let on = 0; GLITCH.forEach(([g0, d]) => { if (t >= g0 && t < g0 + d) on = 1; });
+        gEl.style.opacity = on;
+        if (on) for (let i = 0; i < 10; i++) { const b = $("g" + i); b.style.top = Math.floor(hash(f, i) * 1900) + "px"; b.style.height = 4 + Math.floor(hash(i, f) * 40) + "px";
+          b.style.transform = `translateX(${(hash(f + 7, i) - .5) * 200}px)`; b.style.opacity = hash(i + 3, f) > .4 ? 1 : 0; }
       } }, 0);
 
-      // intro
-      tl.fromTo(".br", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "expo.out", stagger: 0.05 }, 0.1);
-      tl.fromTo("#card", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.05);
-      tl.fromTo("#holo", { xPercent: -80 }, { xPercent: 80, duration: 2.2, ease: "sine.inOut" }, 0);
-      tl.fromTo("#barFill", { scaleX: 0 }, { scaleX: 1, duration: 3.4, ease: "power1.inOut" }, 0.4);
-      // scan
-      tl.fromTo("#scan", { opacity: 0, y: 0 }, { opacity: 1, duration: 0.1 }, 0.55);
-      tl.fromTo("#scan", { y: 0 }, { y: 700, duration: 0.7, ease: "power1.inOut", yoyo: true, repeat: 1, immediateRender: false }, 0.6);
-      tl.to("#scan", { opacity: 0, duration: 0.15 }, 2.0);
-      tl.fromTo("#cgrid", { opacity: 0 }, { opacity: 0.6, duration: 0.3 }, 0.7);
-      tl.fromTo(".xh", { scale: 2.5, opacity: 0, rotation: 90 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.25, ease: "back.out(2)", stagger: 0.15 }, 1.0);
-      // data panels
-      ["1", "2", "3", "4"].forEach((n, i) => {
-                tl.fromTo(`#p${n}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.25, ease: "expo.out" }, 2.1 + i * 0.35);
+      // ---- cold open ----
+      tl.fromTo("#openFoil", { scale: 1.6, rotation: -6 }, { scale: 1.1, rotation: 0, duration: 0.54, ease: "power2.out" }, 0);
+      tl.fromTo("#boot", { opacity: 0 }, { opacity: 1, duration: 0.05, repeat: 3, yoyo: true }, 0.1);
+      tl.fromTo("#prog", { scaleX: 0 }, { scaleX: 1, duration: 6.2, ease: "power1.inOut" }, 0);
+      // ---- scan scene ----
+      tl.fromTo("#flash", { opacity: 0.7 }, { opacity: 0, duration: 0.18, immediateRender: false }, B(1));
+      tl.fromTo("#cam", { scale: 1.18 }, { scale: 1, duration: 3.5, ease: "power2.out" }, B(1));
+      tl.fromTo("#desk", { scale: 1.25, filter: "blur(6px)" }, { scale: 1.05, filter: "blur(2px)", duration: 3.5, ease: "power1.out" }, B(1));
+      tl.fromTo("#card", { rotationX: 38, rotationY: -24, rotationZ: -8, y: 120, z: -300 }, { rotationX: 8, rotationY: 10, rotationZ: -3, y: 0, z: 0, duration: 1.0, ease: "expo.out" }, B(1));
+      tl.to("#card", { rotationY: -8, rotationX: 4, duration: 2.4, ease: "sine.inOut" }, B(1) + 1.0);
+      tl.fromTo("#sheen", { xPercent: -70 }, { xPercent: 70, duration: 1.2, ease: "power2.inOut", repeat: 2 }, B(1));
+      tl.fromTo("#foilOv", { x: -80, y: -40 }, { x: 80, y: 40, duration: 3.5, ease: "sine.inOut" }, B(1));
+      tl.fromTo(".br", { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "expo.out", stagger: 0.04 }, B(1) + 0.05);
+      // beam on B2
+      tl.fromTo("#beam", { opacity: 0 }, { opacity: 1, duration: 0.05 }, B(2));
+      tl.fromTo("#beam", { y: -20 }, { y: 776, duration: 0.5, ease: "power2.inOut", immediateRender: false }, B(2));
+      tl.to("#beam", { opacity: 0, duration: 0.08 }, B(3));
+      tl.fromTo("#cgrid", { opacity: 0 }, { opacity: 0.55, duration: 0.25 }, B(2) + 0.1);
+      // locks B3
+      tl.fromTo(".lock", { scale: 3, opacity: 0, rotation: 45 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.12, ease: "expo.out", stagger: 0.12 }, B(3));
+      tl.fromTo("#idbar", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, ease: "expo.out" }, B(3) + 0.1);
+      // punch-in B4 into art
+      tl.to("#cam", { scale: 1.7, y: 360, duration: 0.45, ease: "expo.inOut" }, B(4));
+      tl.to("#idbar", { opacity: 0, duration: 0.15 }, B(4));
+      tl.to("#cam", { scale: 0.86, y: -170, duration: 0.5, ease: "expo.inOut" }, B(5) - 0.08);
+      tl.to("#cgrid", { opacity: 0.25, duration: 0.3 }, B(5));
+      // panels on beats
+      tl.fromTo("#pA", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.22, ease: "expo.out" }, B(5));
+      tl.fromTo("#pB", { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.22, ease: "expo.out" }, B(6));
+      tl.fromTo("#pC", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.22, ease: "expo.out" }, B(7));
+      tl.fromTo("#spark", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, B(7) + 0.05);
+      // exit: card flies up into the sky
+      tl.to("#card", { rotationX: 70, y: -900, z: -600, duration: 0.45, ease: "power3.in" }, B(8) - 0.4);
+      tl.to(["#pA", "#pB", "#pC"], { opacity: 0, y: 60, duration: 0.25, ease: "power2.in" }, B(8) - 0.35);
+      // ---- city ----
+      tl.fromTo("#flash", { opacity: 0.5 }, { opacity: 0, duration: 0.2, immediateRender: false }, B(8));
+      tl.fromTo("#cityImg", { scale: 1.7, rotation: 4 }, { scale: 1.08, rotation: 0, duration: 2.3, ease: "expo.out" }, B(8));
+      PINGS.forEach((p, i) => {
+        const t0 = B(8) + 0.12 + i * 0.16;
+        tl.fromTo(`#rt${i}`, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, t0);
+        tl.fromTo(`#pg${i}`, { scale: 0 }, { scale: 1, duration: 0.18, ease: "back.out(3)" }, t0 + 0.2);
+        tl.fromTo(`#pr${i}`, { scale: 1, opacity: 1 }, { scale: 5, opacity: 0, duration: 0.6, ease: "power2.out", repeat: 2 }, t0 + 0.2);
+        tl.fromTo(`#pl${i}`, { opacity: 0 }, { opacity: 1, duration: 0.15 }, t0 + 0.25);
+        if (i !== 3) tl.to([`#rt${i}`, `#pg${i}`, `#pl${i}`], { opacity: 0.18, duration: 0.2 }, B(10));
       });
-      tl.fromTo("#spark", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.4, ease: "power2.out" }, 3.2);
-      // map phase
-      tl.to(["#p1", "#p2", "#p3", "#p4", ".xh", "#cgrid"], { opacity: 0, duration: 0.25 }, 3.6);
-      tl.to("#cardWrap", { scale: 0.28, y: 130, duration: 0.5, ease: "expo.inOut" }, 3.6);
-      tl.to(".br", { opacity: 0, duration: 0.2 }, 3.6);
-      tl.fromTo("#map", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 3.7);
-      CITIES.forEach((c, i) => {
-        tl.fromTo(`#rt${i}`, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 3.85 + i * 0.12);
-        tl.fromTo(`#pg${i}`, { scale: 0 }, { scale: 1, duration: 0.2, ease: "back.out(3)" }, 4.0 + i * 0.12);
-        tl.fromTo(`#pr${i}`, { scale: 1, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.7, ease: "power2.out", repeat: 2 }, 4.0 + i * 0.12);
-        tl.fromTo(`#ct${i}`, { opacity: 0 }, { opacity: i === 3 ? 1 : 0.6, duration: 0.2 }, 4.05 + i * 0.12);
-      });
-      // match: Tokyo
-      tl.to(["#rt0", "#rt1", "#rt2", "#rt4", "#pg0", "#pg1", "#pg2", "#pg4", "#ct0", "#ct1", "#ct2", "#ct4"], { opacity: 0.15, duration: 0.2 }, 4.6);
-      tl.to("#pg3", { scale: 2.2, duration: 0.3, ease: "back.out(3)" }, 4.6);
-      tl.fromTo("#match", { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.25, ease: "expo.out" }, 4.6);
-      tl.to("#cardWrap", { x: 340, y: -70, scale: 0.05, rotation: 20, duration: 0.6, ease: "power3.in" }, 4.8);
-      // sold
-      tl.fromTo("#sold", { opacity: 0, scale: 3, rotation: -8 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.25, ease: "expo.out" }, 5.6);
-      tl.fromTo("#flash", { opacity: 0.8 }, { opacity: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, 5.6);
-      tl.fromTo("#flash", { opacity: 0.6 }, { opacity: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, 6.2);
-      // end
-      tl.fromTo("#mk", { scale: 0.6, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, 6.25);
-      tl.fromTo("#word", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 6.45);
-      tl.fromTo("#tagline", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 6.65);
+      tl.fromTo("#target", { scale: 3, opacity: 0, rotation: 90 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.35, ease: "expo.out" }, B(10));
+      tl.to("#target", { rotation: 45, duration: 1.0, ease: "power2.inOut" }, B(10) + 0.35);
+      tl.to("#cityImg", { scale: 1.3, xPercent: -8, yPercent: 3, duration: 1.0, ease: "expo.inOut" }, B(10));
+      tl.fromTo("#match", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.25, ease: "expo.out" }, B(10) + 0.05);
+      tl.to("#cityLayer", { x: -120, y: 60, duration: 1.0, ease: "expo.inOut" }, B(10));
+      // build-up shake B11
+      [0, 1, 2, 3, 4, 5, 6, 7].forEach((k) => tl.to("#city", { x: (k % 2 ? -1 : 1) * (4 + k * 2), duration: 0.06, ease: "none" }, B(11) + k * 0.06));
+      // impact B12
+      tl.set("#city", { x: 0 }, B(12));
+      tl.fromTo("#flash", { opacity: 1 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, B(12));
+      tl.fromTo("#sold", { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: 0.18, ease: "expo.out" }, B(12));
+      tl.to(["#match", "#target", "#cityLayer"], { opacity: 0, duration: 0.1 }, B(12));
+      tl.to("#cityImg", { scale: 1.5, filter: "blur(8px) brightness(.5)", duration: 0.3, ease: "power2.out" }, B(12));
+      // ---- end ----
+      tl.fromTo("#mk", { scale: 0.4, opacity: 0, rotation: -20 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: "expo.out" }, 6.38);
+      tl.fromTo("#word", { opacity: 0, y: 30, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, 6.6);
+      tl.fromTo("#tagline", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 6.85);
+      tl.fromTo("#endFoil", { scale: 1.2 }, { scale: 1, duration: 1.66, ease: "none" }, 6.34);
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
       tl.seek(0);
