@@ -37,7 +37,7 @@
         <div class="slot" style="left:88px;top:964px"><div class="card" id="c2"><div class="face" data-layout-ignore id="c2a"></div><div class="face" data-layout-ignore id="c2b"></div></div></div>
         <div class="slot" style="left:552px;top:964px"><div class="card" id="c3"><div class="face" data-layout-ignore id="c3a"></div><div class="face" data-layout-ignore id="c3b"></div></div></div>
       </div>
-      <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="1" style="inset:auto;left:0;right:0;top:1660px;opacity:0">Flip it on <span>cardmarket.pro</span></div>
+      <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="1" style="inset:auto;left:0;right:0;top:1660px;opacity:0">The card exchange<br /><span>cardmarket.pro</span></div>
 
       <audio id="music" src="assets/synth.mp3" data-start="0" data-duration="8" data-volume="1" data-fade-out="0.5" data-track-index="5"></audio>
       <audio id="f0" src="assets/flick.wav" data-start="0.540" data-duration="0.12" data-volume="0.55" data-track-index="6"></audio>
@@ -63,10 +63,10 @@
       // content per state per card: [html, bg, fg]
       const rot = (t) => `<div class="w rot" style="font-size:${Math.min(250, Math.round(880 / t.length))}px">${t}</div>`, cor = (t) => `<div class="w cor">${t}</div>`, corb = (t) => `<div class="w corb">${t}</div>`;
       const STATES = [
-        [[rot("Flip"), DEEP, MINT], [cor("It"), MINT, GR], [rot("Buy"), GR, PALE], [corb("Low"), TEAL, W]],
-        [[rot("Flip"), GR, MINT], [corb("It"), W, TEAL], [rot("Buy"), DEEP, W], [cor("Low"), MINT, GR]],
-        [[rot("Sell"), MINT, GR], [cor("High"), GR, MINT], [rot("Flip"), TEAL, W], [corb("It"), DEEP, PALE]],
-        [[rot("Trade"), W, GR], [corb("Up"), TEAL, W], [rot("Swap"), GR, MINT], [cor("It"), MINT, GR]],
+        [[rot("Check"), DEEP, MINT], [cor("It"), MINT, GR], [rot("Buy"), GR, PALE], [corb("Low"), TEAL, W]],
+        [[rot("Check"), GR, MINT], [corb("Price"), W, TEAL], [rot("Buy"), DEEP, W], [cor("Low"), MINT, GR]],
+        [[rot("Sell"), MINT, GR], [cor("High"), GR, MINT], [rot("Check"), TEAL, W], [corb("It"), DEEP, PALE]],
+        [[rot("Trade"), W, GR], [corb("Up"), TEAL, W], [rot("Track"), GR, MINT], [cor("It"), MINT, GR]],
         [[`<svg class="mk"><use href="#mkC" /></svg><div class="mono">cardmarket</div>`, GR, MINT], [rot("Buy"), MINT, GR], [rot("Sell"), TEAL, W], [rot("Trade"), W, GR]],
       ];
       // flip schedule on the 120 bpm beat grid: state k starts at beat time, cards staggered by a 16th
@@ -106,8 +106,7 @@
       const tl = gsap.timeline({ paused: true });
       tl.to(st, { t: 8, duration: 8, ease: "none", onUpdate: () => render(st.t) }, 0);
       tl.fromTo("#grid", { scale: 0.92, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 0);
-      tl.to("#grid", { y: -40, duration: 0.6, ease: "power3.inOut" }, B(12) + 0.4);
-      tl.fromTo("#tag", { opacity: 0, y: 30 }, { opacity: 1, y: -40, duration: 0.5, ease: "power3.out" }, B(12) + 0.5);
+            tl.fromTo("#tag", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, B(12) + 0.5);
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
       tl.seek(0); render(0);
