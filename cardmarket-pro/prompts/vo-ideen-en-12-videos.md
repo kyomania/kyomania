@@ -1,4 +1,4 @@
-# English voiceover ideas – 12 videos (Arthur)
+# English voiceover ideas – 11 videos (Arthur)
 Every text ends with: "cardmarket dot pro. We love cards."
 Speaking pace ~2.4 words/s; word budget shown per video.
 
@@ -15,9 +15,6 @@ Speaking pace ~2.4 words/s; word budget shown per video.
 
 ### N4 · 114344 (20 s) – eye with card, duel table, friends trading
 "You know that look. The moment you see the card you've been searching for. The trade that makes your day. The friend who gets it. That's what collecting is about. cardmarket dot pro. We love cards."
-
-### N5 · 125322 (15 s) – dragon card, card tunnel, app with list
-"Fire, ice, dragons, legends. Thousands of cards, all in one place, right in your pocket. cardmarket dot pro. We love cards."
 
 ### N6 · 1125 (16 s) – boy with binder, man finds buried box, logo card
 "He was ten when he buried it. Thirty years later, he dug it up again. Some treasures never lose their value. cardmarket dot pro. We love cards."
