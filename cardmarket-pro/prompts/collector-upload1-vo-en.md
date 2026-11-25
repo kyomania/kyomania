@@ -29,3 +29,10 @@ Kosten je Aufnahme ca. 0,46–0,92 Credits (Schätzung vor Start).
 1) "Meet Collector. Snap a card, we find the print. Condition, language, price, done in seconds. Then watch your collection grow, every day. cardmarket dot pro. We love cards."
 2) "That box in the corner? With Collector, it's a museum. Every card gets its value, its history, its place. Daily prices from multiple sources. cardmarket dot pro. We love cards."
 3) "Collector keeps your slabs apart. PSA, BGS, CGC, valued by sales of the same grade. And what you buy here lands in your collection automatically. cardmarket dot pro. We love cards."
+
+# Collector 4 (hf_201900, 15 s) – Toploader, Handy-Scan, Tablet-Dashboard, Figuren
+Überschriften maskiert: Handy "Matriy Collector" → "Collector", Leiste "Caslorters" → "Collection", Tablet → "Portfolio / Collector".
+Endkarte wie Collector 1–3 (Wortmarke + "Collector" unter Logo, ab ~14,4 s).
+A) "Your cards, your Collector. Scan one, and it's in. Every printing, every holo, every value. Your whole collection on one screen. cardmarket dot pro. We love cards."
+B) "Collector turns a stack of toploaders into a portfolio. Scan, tap, done. Watch your collection's value, day by day. cardmarket dot pro. We love cards."
+C) "Meet Collector. Your phone scans it. Your tablet tracks it. Your shelf just got a value. cardmarket dot pro. We love cards."
