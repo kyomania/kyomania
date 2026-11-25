@@ -44,3 +44,6 @@ Bevor ein Ergebnis an den Nutzer geht, wird es auf Zielerreichung geprüft:
 Sprachaufnahmen IMMER mit ElevenLabs v4 erzeugen (Higgsfield-Modell `elevenlabs_v4`),
 nie mit Seed Audio oder anderen Engines. Texte sind deutsch und müssen akzentfrei
 deutsch klingen. Die Kostenregel oben gilt trotzdem: vorher Kosten nennen und Ja abwarten.
+
+## Claim / Endsatz (IMMER)
+Letzter Satz jeder Vertonung immer in der Sprache der Fassung: EN "We love cards.", DE "Wir lieben Karten.", ES "Amamos las cartas.", FR "On aime les cartes.", IT "Amiamo le carte.", NL "Wij houden van kaarten." Fertige Aufnahmen: cardmarket-pro/audio/claim/claim-<LANG>.mp3
