@@ -24,3 +24,8 @@ B) "The package arrives. The card's already in your collection. Price, condition
 
 Hinweis: 3A ist mit ~31 Wörtern am Limit (evtl. Endkarte etwas länger halten).
 Kosten je Aufnahme ca. 0,46–0,92 Credits (Schätzung vor Start).
+
+## Neu (Collector direkt genannt)
+1) "Meet Collector. Snap a card, we find the print. Condition, language, price, done in seconds. Then watch your collection grow, every day. cardmarket dot pro. We love cards."
+2) "That box in the corner? With Collector, it's a museum. Every card gets its value, its history, its place. Daily prices from multiple sources. cardmarket dot pro. We love cards."
+3) "Collector keeps your slabs apart. PSA, BGS, CGC, valued by sales of the same grade. And what you buy here lands in your collection automatically. cardmarket dot pro. We love cards."
