@@ -106,8 +106,7 @@
 
       <!-- END CTA (49.6–52.06) -->
       <div id="end" class="clip stop" data-start="49.6" data-duration="2.46" data-track-index="2">
-        <div id="cta"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#071014" stroke-width="2.4"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M3 9h18M9 20v-6h6v6"/></svg>Jetzt verkaufen</div>
-        <div id="url">CARDMARKET.PRO</div>
+        <img id="wm" src="assets/wordmark-alpha.png" alt="cardmarket.pro" style="position:absolute;left:170px;top:960px;width:740px;height:auto" />
       </div>
 
       <audio id="vo1" src="assets/vo1.mp3" data-start="0.3" data-duration="4.37" data-volume="1.25" data-track-index="6"></audio>
@@ -154,8 +153,7 @@
       tl.fromTo("#fertig", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)" }, 47.65);
       outAll("#s4 > *", 48.55);
       // END
-      tl.fromTo("#cta", { opacity: 0, y: 30, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 49.7);
-      up("#url", 50.0);
+      up("#wm", 49.75, 0.6);
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
       tl.seek(0);
