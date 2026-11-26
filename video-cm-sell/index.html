@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root { --mint: #5ee0d4; --teal: #00877a; --bg: #0b141a; --panel: rgba(12,22,28,.9); --line: rgba(94,224,212,.28); --mute: #8fa6ad; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1350px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Inter Tight", sans-serif; color: #fff; }
+      .clip { position: absolute; inset: 0; }
+      #base { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 45%; }
+      #veil { background: radial-gradient(120% 90% at 50% 40%, rgba(5,10,13,.35), rgba(5,10,13,.82)); opacity: 0; pointer-events: none; }
+      .stop { pointer-events: none; }
+      .kicker { position: absolute; left: 80px; top: 80px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 24px; letter-spacing: .3em; color: var(--mint); }
+      .head { position: absolute; left: 80px; right: 80px; top: 124px; font-weight: 800; font-size: 64px; line-height: 1.02; letter-spacing: -.03em; }
+      .panel { position: absolute; background: var(--panel); border: 2px solid var(--line); border-radius: 30px; backdrop-filter: blur(12px);
+        box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+      /* stop 1 stats */
+      .stat { left: 80px; right: 80px; height: 200px; padding: 34px 44px; display: flex; align-items: center; gap: 40px; }
+      .stat .num { font-weight: 900; font-size: 112px; letter-spacing: -.05em; color: var(--mint); min-width: 400px; font-variant-numeric: tabular-nums; }
+      .stat .lab { font-size: 34px; font-weight: 600; line-height: 1.2; color: #dfeceb; }
+      /* stop 2 flow */
+      .chip { position: absolute; height: 92px; padding: 0 30px 0 22px; display: flex; align-items: center; gap: 18px; border-radius: 46px;
+        background: var(--panel); border: 2px solid var(--line); font-weight: 700; font-size: 32px; }
+      .ico { width: 54px; height: 54px; border-radius: 50%; background: rgba(94,224,212,.14); display: flex; align-items: center; justify-content: center; color: var(--mint); font-size: 26px; font-weight: 800; }
+      .arrow { position: absolute; width: 4px; background: linear-gradient(var(--line), var(--mint)); transform-origin: top center; }
+      .sc-head { display: flex; align-items: center; gap: 18px; padding: 30px 34px; border-bottom: 2px solid rgba(94,224,212,.15); font-weight: 800; font-size: 40px; }
+      .sc-badge { width: 64px; height: 64px; border-radius: 16px; background: var(--mint); display: flex; align-items: center; justify-content: center; }
+      .row { margin: 18px 26px 0; height: 104px; border-radius: 20px; background: rgba(255,255,255,.04); display: flex; align-items: center; gap: 22px; padding: 0 26px; font-size: 34px; font-weight: 700; }
+      .row .r { margin-left: auto; }
+      .ok { font-size: 24px; font-weight: 700; color: var(--mint); background: rgba(94,224,212,.14); padding: 10px 18px; border-radius: 14px; }
+      /* stop 3 */
+      .pill { position: absolute; left: 140px; right: 140px; height: 130px; display: flex; align-items: center; gap: 26px; padding: 0 36px;
+        border-radius: 34px; background: var(--panel); border: 2px solid var(--line); font-weight: 800; font-size: 46px; }
+      .pill .ico { width: 72px; height: 72px; font-size: 34px; }
+      .pill small { display: block; font-size: 24px; font-weight: 600; color: var(--mute); margin-top: 4px; }
+      /* stop 4 */
+      .who { top: 290px; width: 440px; height: 290px; padding: 34px; }
+      .tag { display: inline-block; font-size: 24px; font-weight: 700; color: var(--mint); border: 2px solid var(--line); border-radius: 20px; padding: 6px 18px; }
+      .who h3 { font-size: 42px; font-weight: 800; margin-top: 22px; letter-spacing: -.02em; }
+      .who p { font-size: 24px; color: var(--mute); margin-top: 10px; line-height: 1.35; }
+      .step { position: absolute; left: 80px; right: 80px; height: 120px; display: flex; align-items: center; gap: 30px; }
+      .dot { width: 84px; height: 84px; border-radius: 50%; background: var(--mint); color: #071014; font-weight: 900; font-size: 40px; display: flex; align-items: center; justify-content: center; flex: none; }
+      .step b { font-size: 42px; font-weight: 800; letter-spacing: -.02em; }
+      .step span { display: block; font-size: 24px; color: var(--mute); margin-top: 6px; font-weight: 500; }
+      #fertig { position: absolute; right: 90px; top: 1130px; font-weight: 900; font-size: 64px; color: #071014; background: var(--mint); padding: 10px 34px; border-radius: 24px; transform: rotate(-4deg); }
+      .note { position: absolute; left: 80px; right: 80px; bottom: 60px; font-size: 24px; color: var(--mute); text-align: center; }
+      /* end */
+      #cta { position: absolute; left: 50%; top: 1080px; width: 520px; margin-left: -260px; height: 110px; border-radius: 26px; background: var(--mint); color: #071014;
+        display: flex; align-items: center; justify-content: center; gap: 16px; font-weight: 800; font-size: 40px; box-shadow: 0 0 60px rgba(94,224,212,.35); }
+      #url { position: absolute; left: 0; right: 0; top: 1220px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: .2em; color: var(--mint); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="52.06" data-width="1080" data-height="1350">
+      <video id="base" class="clip" src="assets/base.mp4" data-has-audio="true" data-volume="1" playsinline data-start="0" data-duration="52.06" data-track-index="0"></video>
+      <div id="veil" class="clip stop" data-layout-ignore data-start="0" data-duration="52.06" data-track-index="1"></div>
+
+      <!-- STOP 1: catalog stats (7.6–16.4) -->
+      <div id="s1" class="clip stop" data-start="7.6" data-duration="8.8" data-track-index="2">
+        <div class="kicker">CARDMARKET.PRO</div>
+        <div class="head" id="s1h">Kein Hokuspokus.<br />Echte Daten.</div>
+        <div class="panel stat" id="st1" style="top:620px"><div class="num">22</div><div class="lab">Spiele<br />im Katalog</div></div>
+        <div class="panel stat" id="st2" style="top:840px"><div class="num" id="cnt">0</div><div class="lab">Karten<br />zum Einstellen</div></div>
+        <div class="panel stat" id="st3" style="top:1060px"><div class="num">7</div><div class="lab">Sprachen für<br />deine Angebote</div></div>
+      </div>
+
+      <!-- STOP 2: listing flow -> seller center (19.0–29.1) -->
+      <div id="s2" class="clip stop" data-start="19.0" data-duration="10.1" data-track-index="2">
+        <div class="kicker">ANGEBOTE ANLEGEN</div>
+        <div class="chip" id="c1" style="left:80px;top:140px"><div class="ico">◎</div>Scan</div>
+        <div class="chip" id="c2" style="left:330px;top:140px"><div class="ico">↑</div>CSV-Import</div>
+        <div class="chip" id="c3" style="left:700px;top:140px"><div class="ico">+</div>Von Hand</div>
+        <div class="arrow" id="ar" style="left:538px;top:250px;height:110px"></div>
+        <div class="panel" id="sc" style="left:120px;right:120px;top:380px;height:540px">
+          <div class="sc-head"><div class="sc-badge"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#071014" stroke-width="2.4"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M3 9h18M9 20v-6h6v6"/></svg></div>Seller Center</div>
+          <div class="row" id="r1"><div class="ico">≡</div>Bestand</div>
+          <div class="row" id="r2"><div class="ico">↗</div>Preisregeln<svg class="r" width="130" height="40" viewBox="0 0 130 40"><polyline points="0,32 26,24 46,30 70,14 92,20 130,4" fill="none" stroke="#5ee0d4" stroke-width="4"/></svg></div>
+          <div class="row" id="r3"><div class="ico">⇢</div>Bestellungen<span class="r ok">✓ Versendet</span></div>
+        </div>
+      </div>
+
+      <!-- STOP 3: where you sell (32.9–38.4) -->
+      <div id="s3" class="clip stop" data-start="32.9" data-duration="5.5" data-track-index="2">
+        <div class="kicker">VERKAUFEN</div>
+        <div class="head">Drei Wege<br />zum Käufer.</div>
+        <div class="pill" id="p1" style="top:560px"><div class="ico">🛒</div><div>Marktplatz</div></div>
+        <div class="pill" id="p2" style="top:720px"><div class="ico">◉</div><div>Live-Verkauf</div></div>
+        <div class="pill" id="p3" style="top:880px"><div class="ico">▦</div><div>Tables</div></div>
+      </div>
+
+      <!-- STOP 4: private or shop + 3 steps (41.9–48.9) -->
+      <div id="s4" class="clip stop" data-start="41.9" data-duration="7.0" data-track-index="2">
+        <div class="kicker">PRIVAT ODER ALS SHOP</div>
+        <div class="head">Beides geht.</div>
+        <div class="panel who" id="w1" style="left:80px"><span class="tag">Privat</span><h3>Sammlung ausdünnen</h3><p>Doppelte abgeben, direkt aus dem Collector verkaufen.</p></div>
+        <div class="panel who" id="w2" style="left:560px"><span class="tag">Shop</span><h3>Bestand in Mengen</h3><p>Preise automatisch regeln, Belege im eigenen Namen.</p></div>
+        <div class="step" id="k1" style="top:620px"><div class="dot">1</div><div><b>Konto verifizieren</b><span>Das Team prüft jedes Verkäuferkonto</span></div></div>
+        <div class="step" id="k2" style="top:770px"><div class="dot">2</div><div><b>Karten einstellen</b><span>Zustand, Sprache und Finish getrennt</span></div></div>
+        <div class="step" id="k3" style="top:920px"><div class="dot">3</div><div><b>Verkaufen, versenden, abrechnen</b><span>Auszahlung auf dein Bankkonto</span></div></div>
+        <div id="fertig">Fertig.</div>
+      </div>
+
+      <!-- END CTA (49.6–52.06) -->
+      <div id="end" class="clip stop" data-start="49.6" data-duration="2.46" data-track-index="2">
+        <div id="cta"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#071014" stroke-width="2.4"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M3 9h18M9 20v-6h6v6"/></svg>Jetzt verkaufen</div>
+        <div id="url">CARDMARKET.PRO</div>
+      </div>
+
+      <audio id="vo1" src="assets/vo1.mp3" data-start="0.3" data-duration="4.37" data-volume="1.25" data-track-index="6"></audio>
+      <audio id="vo2" src="assets/vo2.mp3" data-start="5.2" data-duration="2.2" data-volume="1.25" data-track-index="7"></audio>
+      <audio id="vo3" src="assets/vo3.mp3" data-start="7.75" data-duration="8.44" data-volume="1.25" data-track-index="6"></audio>
+      <audio id="vo4" src="assets/vo4.mp3" data-start="16.9" data-duration="1.73" data-volume="1.25" data-track-index="7"></audio>
+      <audio id="vo5" src="assets/vo5.mp3" data-start="19.2" data-duration="9.64" data-volume="1.25" data-track-index="6"></audio>
+      <audio id="vo6" src="assets/vo6.mp3" data-start="29.2" data-duration="4.13" data-volume="1.25" data-track-index="7"></audio>
+      <audio id="vo7" src="assets/vo7.mp3" data-start="33.6" data-duration="4.52" data-volume="1.25" data-track-index="6"></audio>
+      <audio id="vo8" src="assets/vo8.mp3" data-start="39.4" data-duration="2.12" data-volume="1.25" data-track-index="7"></audio>
+      <audio id="vo9" src="assets/vo9.mp3" data-start="42.1" data-duration="6.19" data-volume="1.25" data-track-index="6"></audio>
+      <audio id="vo10" src="assets/vo10.mp3" data-start="48.6" data-duration="3.32" data-volume="1.25" data-track-index="7"></audio>
+    </div>
+
+    <script>
+      const FZ = [[7.6, 16.4], [19.0, 29.1], [32.9, 38.4], [41.9, 48.9]];
+      const tl = gsap.timeline({ paused: true });
+      const up = (sel, t, d = 0.5) => tl.fromTo(sel, { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: d, ease: "power3.out" }, t);
+      const outAll = (sel, t) => tl.to(sel, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, t);
+      // freeze treatment: dim veil + slow push-in on the frozen frame
+      FZ.forEach(([a, b], i) => {
+        tl.fromTo("#veil", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out", immediateRender: i === 0 }, a);
+        tl.to("#veil", { opacity: 0, duration: 0.35, ease: "power2.in" }, b - 0.3);
+        tl.fromTo("#base", { scale: 1 }, { scale: 1.06, duration: b - a, ease: "sine.inOut", immediateRender: false }, a);
+        tl.set("#base", { scale: 1 }, b);
+      });
+      // STOP 1
+      up("#s1 .kicker", 7.7); up("#s1h", 7.85);
+      up("#st1", 10.4); up("#st2", 12.0); up("#st3", 14.7);
+      const c = { v: 0 }; tl.fromTo(c, { v: 0 }, { v: 451925, duration: 1.6, ease: "expo.out", onUpdate: () => (document.getElementById("cnt").textContent = Math.round(c.v).toLocaleString("de-DE")) }, 12.1);
+      outAll("#s1 > *", 16.05);
+      // STOP 2 (synced to "Scan, CSV-Import, von Hand ... Seller Center: Bestand, Preisregeln, Bestellungen")
+      up("#s2 .kicker", 19.1); up("#c1", 19.35, 0.4); up("#c2", 20.85, 0.4); up("#c3", 22.2, 0.4);
+      tl.fromTo("#ar", { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: "power2.out" }, 23.4);
+      up("#sc", 23.8); up("#r1", 25.95, 0.4); up("#r2", 26.85, 0.4); up("#r3", 27.6, 0.4);
+      outAll("#s2 > *", 28.75);
+      // STOP 3 ("Marktplatz, live, oder in Tables")
+      up("#s3 .kicker", 33.0); up("#s3 .head", 33.15);
+      up("#p1", 34.6, 0.45); up("#p2", 35.75, 0.45); up("#p3", 36.75, 0.45);
+      outAll("#s3 > *", 38.05);
+      // STOP 4 ("Beides. Konto verifizieren, Karten einstellen, verkaufen. Fertig.")
+      up("#s4 .kicker", 42.0); up("#s4 .head", 42.15); up("#w1", 42.35); up("#w2", 42.5);
+      up("#k1", 43.3, 0.4); up("#k2", 45.0, 0.4); up("#k3", 46.5, 0.4);
+      tl.fromTo("#fertig", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)" }, 47.65);
+      outAll("#s4 > *", 48.55);
+      // END
+      tl.fromTo("#cta", { opacity: 0, y: 30, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 49.7);
+      up("#url", 50.0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
