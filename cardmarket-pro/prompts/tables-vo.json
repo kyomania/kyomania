@@ -1,0 +1,17 @@
+{
+"EN":{"main":"Show your cards. Find your people. Your own Table: share cards from your Collector, offers by table post, meet live with video and sound. Free. cardmarket dot pro. We love cards.",
+ "x1":"One photo, and your card is on your Table.","x2":"Like something? Add a card.","x3":"And then: everyone at one table.","x4":"Trade confirmed.",
+ "cards":["Your own Table, for good","Table post & offers","Live with video & sound","Free"]},
+"ES":{"main":"Enseña tus cartas. Encuentra a tu gente. Tu propio Table: comparte cartas desde el Collector, ofertas por correo de mesa, encuentros en directo con vídeo y sonido. Gratis. cardmarket punto pro. Amamos las cartas.",
+ "x1":"Una foto, y tu carta ya está en tu Table.","x2":"¿Te gusta algo? Añade una carta.","x3":"Y luego: todos a una mesa.","x4":"Intercambio confirmado.",
+ "cards":["Tu propio Table, para siempre","Correo de mesa y ofertas","En directo con vídeo y sonido","Gratis"]},
+"FR":{"main":"Montre tes cartes. Trouve tes gens. Ton propre Table : partage des cartes depuis le Collector, des offres par courrier de table, des rencontres en direct avec vidéo et son. Gratuit. cardmarket point pro. On aime les cartes.",
+ "x1":"Une photo, et ta carte est sur ton Table.","x2":"Quelque chose te plaît ? Ajoute une carte.","x3":"Et ensuite : tous à la même table.","x4":"Échange confirmé.",
+ "cards":["Ton propre Table, durable","Courrier de table & offres","En direct, vidéo & son","Gratuit"]},
+"IT":{"main":"Mostra le tue carte. Trova la tua gente. Il tuo Table: condividi carte dal Collector, offerte tramite posta del tavolo, incontri dal vivo con video e audio. Gratis. cardmarket punto pro. Amiamo le carte.",
+ "x1":"Una foto, e la tua carta è sul tuo Table.","x2":"Ti piace qualcosa? Aggiungi una carta.","x3":"E poi: tutti allo stesso tavolo.","x4":"Scambio confermato.",
+ "cards":["Il tuo Table, per sempre","Posta del tavolo & offerte","Dal vivo con video & audio","Gratis"]},
+"NL":{"main":"Laat je kaarten zien. Vind je mensen. Je eigen Table: kaarten delen vanuit de Collector, aanbiedingen via tafelpost, live afspreken met video en geluid. Gratis. cardmarket punt pro. Wij houden van kaarten.",
+ "x1":"Eén foto, en je kaart ligt op je Table.","x2":"Zie je iets leuks? Leg een kaart bij.","x3":"En dan: iedereen aan één tafel.","x4":"Ruil bevestigd.",
+ "cards":["Je eigen Table, blijvend","Tafelpost & aanbiedingen","Live met video & geluid","Gratis"]}
+}
