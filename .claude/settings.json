@@ -5,8 +5,6 @@
       "mcp__Higgsfield__generate_video_batch",
       "mcp__Higgsfield__generate_image",
       "mcp__Higgsfield__generate_image_batch",
-      "mcp__Higgsfield__generate_audio",
-      "mcp__Higgsfield__generate_audio_batch",
       "mcp__Higgsfield__generate_3d",
       "mcp__Higgsfield__execute_preset",
       "mcp__Higgsfield__upscale_image",
@@ -35,6 +33,10 @@
       "mcp__HyperFrames_by_HeyGen__compose",
       "mcp__HyperFrames_by_HeyGen__render_video",
       "mcp__HyperFrames_by_HeyGen__render_project_with_variables"
+    ],
+    "allow": [
+      "mcp__Higgsfield__generate_audio",
+      "mcp__Higgsfield__generate_audio_batch"
     ]
   }
 }

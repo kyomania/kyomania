@@ -15,6 +15,11 @@ Eine frühere Zustimmung gilt nicht für weitere Generierungen.
 Formulierungen wie „mach das“, „erstell vergleichbare Videos“ oder „nutze alle Skills“
 sind KEINE Freigabe für Kosten. Im Zweifel: Prompt schreiben und fragen.
 
+Ausnahme (vom Nutzer freigegeben, 27.11.2026): Higgsfield-AUDIO (Sprachaufnahmen mit
+ElevenLabs v4 über generate_audio / generate_audio_batch) darf ohne Rückfrage erzeugt werden.
+Kosten trotzdem im Ergebnis nennen. Gilt ausschließlich für Audio – Bilder, Videos, Upscales,
+3D, GPU usw. weiterhin nur nach ausdrücklichem „Ja“.
+
 Ohne Rückfrage erlaubt: Prompts und Pläne schreiben, vom Nutzer gelieferte Dateien
 lokal schneiden und bearbeiten, Dateien im Repo ändern, Kosten schätzen.
 
