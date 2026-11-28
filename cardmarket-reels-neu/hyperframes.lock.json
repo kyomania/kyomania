@@ -1,0 +1,11 @@
+{
+  "assets/avatar.jpg": "a300f59c31d2ea16195a2ff9a9af50b29c6aecc05d505d69f2a2132a53b99032",
+  "assets/sfx-production.wav": "1f67e32b14a9ed2e9445c6031859054d3ab9b30194f8dd2a03b86aef52635ad9",
+  "compositions/apple-money-count.html": "689aa4fc8e0b8565cc4042178b4fd8300a52bcc17552e34e93f15745496f53d0",
+  "compositions/components/avatar-cloud.html": "f69c3d95ce928b43c40426f15368e00cfc4effc252948e9c046b29e08738980b",
+  "compositions/components/chat-message.html": "fe9b9e0dd4c886843713116811688565c6fea3995cbb52f8c2e044106072715a",
+  "compositions/components/mk-usage-arc.html": "dbe839b190f764231fbfbbeb64de605eabce8d2c5574b3c6550233f061b17085",
+  "compositions/components/notification-pileup.html": "581e2e6b75c8e2f0354ec9b2ade88017de5b540700259ff7823b1b67e24b0973",
+  "compositions/components/tabs-slide-indicator.html": "fddf7cf3ef477c90eba29c945e1a277d41092b4bc24f535470797f1ee7537ee5",
+  "compositions/instagram-follow.html": "88af01bf9f4d90c956254c7b0373757194c2b508fcabafee8492e71b8ec2f68c"
+}

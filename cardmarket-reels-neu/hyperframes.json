@@ -8,5 +8,42 @@
   },
   "media": {
     "autoProxy": true
-  }
+  },
+  "registryItems": [
+    {
+      "name": "tabs-slide-indicator",
+      "type": "hyperframes:component",
+      "target": "compositions/components/tabs-slide-indicator.html"
+    },
+    {
+      "name": "avatar-cloud",
+      "type": "hyperframes:component",
+      "target": "compositions/components/avatar-cloud.html"
+    },
+    {
+      "name": "chat-message",
+      "type": "hyperframes:component",
+      "target": "compositions/components/chat-message.html"
+    },
+    {
+      "name": "mk-usage-arc",
+      "type": "hyperframes:component",
+      "target": "compositions/components/mk-usage-arc.html"
+    },
+    {
+      "name": "notification-pileup",
+      "type": "hyperframes:component",
+      "target": "compositions/components/notification-pileup.html"
+    },
+    {
+      "name": "instagram-follow",
+      "type": "hyperframes:block",
+      "target": "compositions/instagram-follow.html"
+    },
+    {
+      "name": "apple-money-count",
+      "type": "hyperframes:block",
+      "target": "compositions/apple-money-count.html"
+    }
+  ]
 }
