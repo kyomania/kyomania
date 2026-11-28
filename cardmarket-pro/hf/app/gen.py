@@ -19,4 +19,10 @@ h=h.replace('lang="de"' if False else '<html lang="%%LANG%%"','<html lang="%s"'%
 if F=='4x5':
   for a,b in [('height=1920','height=1350'),('data-height="1920"','data-height="1350"'),('height:1920px','height:1350px'),('assets/freeze.png','assets/freeze45.png'),('assets/rawend.png','assets/rawend45.png')]: h=h.replace(a,b)
   h=h.replace('</style>','#title{top:200px}#grid{top:310px}#foot{top:918px}#wm{left:260px;top:1000px;width:560px}\n</style>')
+import sys as _s;_s.path.insert(0,'../tools');from pills import inject
+ICS=[ '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+x+'</svg>' for x in IC]
+top=1690 if F!='4x5' else 1175
+pl=[('p0',9.7,12.15,top,ICS[1],esc(S['tiles'][1][0]),esc(S['tiles'][1][1])),('p1',12.75,14.55,top,ICS[2],esc(S['tiles'][2][0]),esc(S['tiles'][2][1])),('p2',14.8,16.35,top,ICS[0],esc(S['tiles'][0][0]),esc(S['tiles'][0][1]))]
+h=inject(h,pl,(22,16,40,80,40,29))
+h=h.replace('src="raw.mp4" muted playsinline data-start="0"','src="raw_en.mp4" muted playsinline data-start="0"')
 open('index.html','w').write(h);print(vo)
