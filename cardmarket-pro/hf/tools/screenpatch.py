@@ -86,3 +86,21 @@ def apply(frames,Ws,ref,P,M,occ=35):
         if TD: base=base+(Pw-Rw)*(Mw*o*TD)[:,:,None]
         out.append(np.clip(base,0,255).astype(np.uint8))
     return out
+def track_sift(frames,ref_i,rect):
+    x,y,w,h=rect;sift=cv2.SIFT_create(3000)
+    G=lambda f:cv2.cvtColor(f,cv2.COLOR_BGR2GRAY)
+    R=G(frames[ref_i]);m=np.zeros(R.shape,np.uint8);m[y:y+h,x:x+w]=255
+    kr,dr=sift.detectAndCompute(R,m);bf=cv2.BFMatcher()
+    Ws=[];crit=(cv2.TERM_CRITERIA_EPS|cv2.TERM_CRITERIA_COUNT,100,1e-5);prev=np.eye(3,dtype=np.float32)
+    for i,f in enumerate(frames):
+        g=G(f);kf,df=sift.detectAndCompute(g,None);H=None
+        if df is not None and len(kf)>8:
+            ms=[a for a,b in bf.knnMatch(dr,df,k=2) if a.distance<0.75*b.distance]
+            if len(ms)>=12:
+                H,inl=cv2.findHomography(np.float32([kr[a.queryIdx].pt for a in ms]),np.float32([kf[a.trainIdx].pt for a in ms]),cv2.RANSAC,2.0)
+        if H is None: H=prev
+        H=H.astype(np.float32)
+        try: _,H=cv2.findTransformECC(R.astype(np.float32),g.astype(np.float32),H,cv2.MOTION_HOMOGRAPHY,crit,m,5)
+        except cv2.error: pass
+        Ws.append(H);prev=H
+    return Ws

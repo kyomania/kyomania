@@ -56,7 +56,7 @@ body{font-family:"InterL",sans-serif;color:#fff;-webkit-font-smoothing:antialias
 </head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="27" data-width="1080" data-height="1920">
- <video id="segA" class="clip full" src="raw.mp4" muted playsinline data-start="0" data-duration="17.9" data-media-start="0" data-track-index="0"></video>
+ <video id="segA" class="clip full" src="raw_en.mp4" muted playsinline data-start="0" data-duration="17.9" data-media-start="0" data-track-index="0"></video>
  <audio id="musA" src="raw.mp4" data-start="0" data-duration="17.9" data-media-start="0" data-track-index="5" data-volume="1"></audio>
  <img id="freeze" class="clip full" src="assets/freeze.png" data-start="17.9" data-duration="4.85" data-track-index="0">
  <audio id="musB" src="raw.mp4" data-start="17.9" data-duration="4.85" data-media-start="8.0" data-track-index="6" data-volume="0.8"></audio>
