@@ -18,6 +18,19 @@ sind KEINE Freigabe für Kosten. Im Zweifel: Prompt schreiben und fragen.
 Ohne Rückfrage erlaubt: Prompts und Pläne schreiben, vom Nutzer gelieferte Dateien
 lokal schneiden und bearbeiten, Dateien im Repo ändern, Kosten schätzen.
 
+### Ausnahme: Sounds über Higgsfield
+
+Soundeffekte und Musik über Higgsfield dürfen ohne vorherige Rückfrage direkt erzeugt
+werden. Nenne danach kurz, was erzeugt wurde und was es gekostet hat.
+Sprachaufnahmen (Voiceover) fallen NICHT unter diese Ausnahme: dafür gilt weiter
+die Kostenregel oben (Kosten nennen, Ja abwarten).
+
+## Videos: erst Vorschau (IMMER)
+
+Jedes Video wird zuerst als Vorschau gezeigt (Standbilder oder ein Vorschau-Render),
+bevor es als finale Version gerendert oder fertiggestellt wird. Erst nach dem Okay
+des Nutzers zur Vorschau kommt der finale Export.
+
 ## Stimmen / Voiceover (IMMER)
 
 Sprachaufnahmen IMMER mit ElevenLabs v4 erzeugen (Higgsfield-Modell `elevenlabs_v4`),
