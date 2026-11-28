@@ -1,1 +1,5 @@
 cardmarket-pro/videos/*.zip
+cardmarket-pro/hf/*/raw.mp4
+cardmarket-pro/hf/*/out/
+cardmarket-pro/hf/*/.hyperframes/
+cardmarket-pro/hf/*/node_modules/

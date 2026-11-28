@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="%%LANG%%" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"InterL";src:url(assets/fonts/Inter-Regular.otf);font-weight:400}
+@font-face{font-family:"InterL";src:url(assets/fonts/Inter-Medium.otf);font-weight:500}
+@font-face{font-family:"InterL";src:url(assets/fonts/Inter-SemiBold.otf);font-weight:600}
+@font-face{font-family:"InterL";src:url(assets/fonts/Inter-Bold.otf);font-weight:700}
+@font-face{font-family:"InterD";src:url(assets/fonts/InterDisplay-Bold.otf);font-weight:700}
+@font-face{font-family:"InterD";src:url(assets/fonts/InterDisplay-SemiBold.otf);font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+body{font-family:"InterL",sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.glass{position:absolute;border-radius:30px;background:linear-gradient(140deg,rgba(18,44,44,.78),rgba(8,20,22,.72));
+ backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
+ box-shadow:0 24px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.10);overflow:hidden}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;
+ background:linear-gradient(135deg,rgba(94,234,212,.85),rgba(45,212,191,.15) 45%,rgba(94,234,212,.55));
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.sheen{position:absolute;top:0;bottom:0;width:40%;left:0;transform:translateX(-150%);background:linear-gradient(100deg,transparent,rgba(255,255,255,.13),transparent)}
+.ib{position:absolute;width:92px;height:92px;border-radius:24px;background:linear-gradient(145deg,#2dd4bf,#0f766e);
+ color:#04201d;display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(45,212,191,.45)}
+.ib svg{width:50px;height:50px;stroke-width:2.2}
+#title{position:absolute;left:0;width:1080px;top:440px;text-align:center;font-family:"InterD";font-weight:700;font-size:64px;color:#5eead4;letter-spacing:-.5px}
+#grid{position:absolute;left:88px;top:560px;width:904px;height:584px}
+.tile{width:440px;height:280px}
+.tile .ib{left:30px;top:30px;width:84px;height:84px}
+.tile .ib svg{width:46px;height:46px}
+.tile .n{position:absolute;left:32px;top:140px;font-family:"InterD";font-weight:700;font-size:46px}
+.tile .s{position:absolute;left:32px;right:24px;top:200px;font-size:28px;line-height:1.25;color:rgba(224,255,250,.8)}
+#t0{left:0;top:0}#t1{left:464px;top:0}#t2{left:0;top:304px}#t3{left:464px;top:304px}
+#foot{position:absolute;left:0;width:1080px;top:1168px;text-align:center;font-size:28px;color:rgba(224,255,250,.7)}
+#freeze{filter:blur(22px) brightness(.55);transform:scale(1.08)}
+#wm{position:absolute;left:190px;top:1390px;width:700px}
+#fade{position:absolute;inset:0;background:#000;opacity:0}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="28.48" data-width="1080" data-height="1920">
+ <video id="segA" class="clip full" src="raw.mp4" muted playsinline data-start="0" data-duration="16.42" data-media-start="0" data-track-index="0"></video>
+ <audio id="musA" src="raw.mp4" data-start="0" data-duration="16.42" data-media-start="0" data-track-index="5" data-volume="1"></audio>
+ <img id="freeze" class="clip full" src="assets/freeze.png" data-start="16.42" data-duration="6.33" data-track-index="0">
+ <audio id="musB" src="raw.mp4" data-start="16.42" data-duration="6.33" data-media-start="7.0" data-track-index="6" data-volume="0.8"></audio>
+ <video id="segD" class="clip full" src="raw.mp4" muted playsinline data-start="22.75" data-duration="3.6" data-media-start="16.42" data-track-index="0"></video>
+ <audio id="musD" src="raw.mp4" data-start="22.75" data-duration="3.6" data-media-start="16.42" data-track-index="7" data-volume="1"></audio>
+ <img id="hold" class="clip full" src="assets/rawend.png" data-start="26.35" data-duration="2.13" data-track-index="0">
+%%AUDIO%%
+ <div id="title" class="clip" data-start="16.9" data-duration="5.6" data-track-index="1">%%title%%</div>
+ <div id="grid" class="clip" data-start="16.9" data-duration="5.6" data-track-index="2">%%TILES%%</div>
+ <div id="foot" class="clip" data-start="16.9" data-duration="5.6" data-track-index="3">%%foot%%</div>
+ <img id="wm" class="clip" src="assets/wordmark.png" data-start="25.3" data-duration="3.18" data-track-index="2" style="mix-blend-mode:screen">
+ <div id="fade" class="clip" data-start="28.08" data-duration="0.4" data-track-index="9"></div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.fromTo("#freeze",{opacity:0},{opacity:1,duration:.4},16.42);
+tl.fromTo("#title",{opacity:0,y:40,filter:"blur(12px)"},{opacity:1,y:0,filter:"blur(0px)",duration:.6,ease:"power3.out"},17.0);
+[17.16,18.26,19.0,19.84].forEach((t,i)=>{
+ tl.fromTo("#t"+i,{opacity:0,y:50,scale:.9,rotationX:-25,filter:"blur(10px)"},{opacity:1,y:0,scale:1,rotationX:0,filter:"blur(0px)",duration:.55,ease:"back.out(1.6)"},t-.1);
+ tl.fromTo("#t"+i+" .sheen",{xPercent:-150},{xPercent:330,duration:.9,ease:"power2.inOut"},t+.2);
+ tl.fromTo("#t"+i+" .ib",{scale:.5},{scale:1,duration:.5,ease:"back.out(2.5)"},t);});
+tl.fromTo("#foot",{opacity:0},{opacity:1,duration:.5},20.6);
+tl.to(["#title","#grid","#foot"],{opacity:0,scale:1.03,filter:"blur(10px)",duration:.4,ease:"power2.in"},22.1);
+tl.to("#freeze",{opacity:0,duration:.25},22.5);
+tl.fromTo("#wm",{opacity:0,y:30,filter:"blur(12px)"},{opacity:1,y:0,filter:"blur(0px)",duration:.6,ease:"power3.out"},25.3);
+tl.fromTo("#fade",{opacity:0},{opacity:1,duration:.4},28.08);
+window.__timelines=window.__timelines||{}; window.__timelines["main"]=tl;
+</script>
+</body>
+</html>
