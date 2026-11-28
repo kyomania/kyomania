@@ -1,2 +1,3 @@
 .hyperframes/
-renders/*.tmp
+renders/work-*/
+renders/.*
