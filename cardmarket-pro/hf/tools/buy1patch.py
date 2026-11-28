@@ -7,7 +7,7 @@ while True:
     if not ok:break
     F.append(f)
 a,b,ri=248,309,264
-bx=[dict(box=(180,365,242,384),pad=1,text='Collector',f='m',size=11.3,color=(245,250,250),w=90,rot=-6)]
+bx=[dict(box=(180,365,242,384),pad=1,text='Collector',f='m',size=9.6,color=(225,236,236),w=90,rot=-8.7)]
 W=list(np.load(Wf));ref=F[ri];P,M=render_patch(ref,bx)
 F[a:b]=apply(F[a:b],W,ref,P,M)
 h,w=F[0].shape[:2]
