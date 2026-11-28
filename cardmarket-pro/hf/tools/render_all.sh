@@ -1,7 +1,7 @@
 set -e
 cd /home/user/kyomania/cardmarket-pro/hf
 R="npx --yes hyperframes@0.9.104 render -f 24 -q delivery -w 2"
-D=../videos/Final4_5
+D=/home/user/kyomania/cardmarket-pro/videos/Final4_5
 E="-c:v libx264 -crf 17 -preset medium -pix_fmt yuv420p -c:a aac -b:a 192k -ar 48000 -ac 2"
 cd seller
 for L in DE EN ES FR IT NL; do python3 gen.py $L >/dev/null; $R -o out/SELLER_${L}_3x4.mp4 >/dev/null 2>&1; I=out/SELLER_${L}_3x4.mp4
