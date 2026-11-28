@@ -1,0 +1,135 @@
+cardmarket.pro - Werbevideos
+Struktur: Kategorie / Video / Sprache / VIDEO_SPRACHE_FORMAT.mp4
+Formate: 9x16 = Reels/Stories/TikTok, 4x5 = Feed, 3x4 = Feed (Rohformat)
+Alle Dateien: H.264, AAC Stereo 48 kHz
+
+01_Kaufen/COLLECTOR_BUY_1
+   DE: 4x5, 9x16
+   EN: 4x5, 9x16
+   ES: 4x5, 9x16
+   FR: 4x5, 9x16
+   IT: 4x5, 9x16
+   NL: 4x5, 9x16
+01_Kaufen/COLLECTOR_BUY_2
+   EN: 3x4, 4x5, 9x16
+   ES: 3x4, 4x5, 9x16
+   FR: 3x4, 4x5, 9x16
+   IT: 3x4, 4x5, 9x16
+   NL: 3x4, 4x5, 9x16
+02_App-Launch/APP_LAUNCH_1
+   DE: 4x5, 9x16
+   EN: 4x5, 9x16
+   ES: 4x5, 9x16
+   FR: 4x5, 9x16
+   IT: 4x5, 9x16
+   NL: 4x5, 9x16
+03_Verkaufen_Seller-Center/SELLER_CENTER_1
+   DE: 4x5, 9x16
+   EN: 4x5, 9x16
+   ES: 4x5, 9x16
+   FR: 4x5, 9x16
+   IT: 4x5, 9x16
+   NL: 4x5, 9x16
+04_Tables/SHARED_TABLE
+   EN: 9x16
+04_Tables/STONE_TRADE
+   EN: 3x4
+04_Tables/TABLE
+   EN: 3x4
+04_Tables/TABLE2
+   EN: 3x4
+04_Tables/TABLES
+   DE: 3x4, 4x5, 9x16
+   EN: 3x4, 4x5, 9x16
+   ES: 3x4, 4x5, 9x16
+   FR: 3x4, 4x5, 9x16
+   IT: 3x4, 4x5, 9x16
+   NL: 3x4, 4x5, 9x16
+05_Collector/COLLECTOR_0
+   DE: 3x4, 4x5, 9x16
+05_Collector/COLLECTOR_1
+   EN: 3x4
+05_Collector/COLLECTOR_2
+   EN: 3x4
+05_Collector/COLLECTOR_3
+   EN: 3x4
+05_Collector/COLLECTOR_4
+   EN: 3x4
+06_Feed/FEED_01
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_02
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_03
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_04
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_05
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_06
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_07
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_08
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_09
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_10
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_11
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+06_Feed/FEED_12
+   DE: 3x4
+   EN: 3x4
+   ES: 3x4
+   FR: 3x4
+   IT: 3x4
+   NL: 3x4
+07_Sonstiges/SEITENHIEB
+   DE: 4x5, 9x16
